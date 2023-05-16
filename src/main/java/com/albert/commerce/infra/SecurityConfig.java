@@ -11,8 +11,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .mvcMatchers("/users/joinForm").permitAll();
-
+                .mvcMatchers("/users/joinForm", "/").permitAll();
         return httpSecurity.build();
     }
 
