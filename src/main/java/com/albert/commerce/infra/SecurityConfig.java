@@ -11,7 +11,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .mvcMatchers("/users/joinForm", "/").permitAll();
+                .mvcMatchers("/users", "/users/joinForm", "/").permitAll()
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/users");
         return httpSecurity.build();
     }
 
