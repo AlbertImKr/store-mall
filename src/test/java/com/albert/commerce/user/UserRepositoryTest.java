@@ -13,7 +13,6 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class UserRepositoryTest {
 
-    public static final long TEST_ID = 100L;
     public static final String TEST_NICKNAME = "jack";
     public static final String TEST_EMAIL = "jack@email.com";
     public static final String TEST_PASSWORD = "testPassword";
@@ -26,7 +25,6 @@ public class UserRepositoryTest {
     void saveUser() {
         // given
         User user = User.builder()
-                .id(TEST_ID)
                 .nickname(TEST_NICKNAME)
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -37,7 +35,6 @@ public class UserRepositoryTest {
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-                    softly.assertThat(savedUser.getId()).isEqualTo(TEST_ID);
                     softly.assertThat(savedUser.getNickname()).isEqualTo(TEST_NICKNAME);
                     softly.assertThat(savedUser.getPassword()).isEqualTo(TEST_PASSWORD);
                     softly.assertThat(savedUser.getEmail()).isEqualTo(TEST_EMAIL);
