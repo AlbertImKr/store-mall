@@ -1,11 +1,11 @@
 package com.albert.commerce.user;
 
-import com.albert.commerce.infra.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,9 +13,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
-@Import(SecurityConfig.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 public class UserControllerTest {
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     MockMvc mockMvc;
@@ -37,5 +40,14 @@ public class UserControllerTest {
                         .param("confirmPassword", "testPassword"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+    }
+
+
+    @WithMockUser
+    @DisplayName("로그인 하여야 profile 를 볼수 있다")
+    @Test
+    void getProfile() throws Exception {
+        mockMvc.perform(get("/users/" + 1))
+                .andExpect(status().isOk());
     }
 }

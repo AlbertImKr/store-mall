@@ -15,7 +15,7 @@ class JoinRequestTest {
     @Test
     void toUser() {
         // given
-        JoinRequest joinRequest = new JoinRequest(TEST_NICKANME, TEST_PASSWORD, TEST_EMAIL);
+        JoinRequest joinRequest = new JoinRequest(TEST_NICKANME, TEST_PASSWORD, TEST_EMAIL, TEST_EMAIL);
 
         // when
         User user = joinRequest.toUser();

@@ -2,18 +2,16 @@ package com.albert.commerce.user.dto;
 
 import com.albert.commerce.user.User;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class JoinRequest {
+    private final String email;
     private final String nickname;
     private final String password;
-    private final String email;
+    private final String confirmPassword;
 
-    public JoinRequest(String nickname, String password, String email) {
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-    }
 
     public User toUser() {
         return User.builder()
