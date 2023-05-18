@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,12 +22,19 @@ public class User {
     private String nickname;
     private String password;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @Enumerated(EnumType.STRING)
+    private EncryptionAlgorithm algorithm;
+
 
     @Builder
-    public User(String nickname, String password, String email) {
+    public User(String nickname, String password, String email,EncryptionAlgorithm algorithm,Role role) {
         this.id = idGenerator.incrementAndGet();
         this.nickname = nickname;
         this.password = password;
         this.email = email;
+        this.algorithm = algorithm;
+        this.role = role;
     }
 }

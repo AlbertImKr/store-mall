@@ -1,6 +1,7 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
+import com.albert.commerce.user.dto.ProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,7 @@ public class UserController {
 
     @GetMapping("/users/joinForm")
     public String viewJoinForm(@ModelAttribute JoinRequest joinRequest) {
-        return "users/joinForm";
+        return "user/joinForm";
     }
 
     @PostMapping("/users")
@@ -29,9 +30,9 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String viewProfile(@PathVariable long userId, Model model) {
-        User user = userService.findById(userId);
+        ProfileResponse user = userService.findById(userId);
         model.addAttribute(user);
-        return "users/profile";
+        return "user/profile";
     }
 
 }

@@ -1,5 +1,6 @@
 package com.albert.commerce.infra;
 
+import com.albert.commerce.user.AuthenticationProviderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,25 +17,30 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
-
     private final DataSource dataSource;
+    private final AuthenticationProviderService authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/users", "/users/joinForm", "/").permitAll()
+                .mvcMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login", "/login1").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/users")
+                .ignoringAntMatchers("/users", "/login")
                 .and()
-                .formLogin().loginPage("/login").permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/", true)
                 .and()
                 .logout().logoutSuccessUrl("/")
                 .and()
+                .authenticationProvider(authenticationProvider)
                 .rememberMe()
                 .userDetailsService(userDetailsService)
                 .tokenRepository(tokenRepository());
+
         return httpSecurity.build();
     }
 
