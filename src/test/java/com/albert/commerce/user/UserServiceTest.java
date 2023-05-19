@@ -11,7 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -20,6 +23,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
+    public static final String TEST_EMAIL = "jack@email.com";
     UserService userService;
     @Mock
     UserRepository userRepository;
@@ -30,7 +34,7 @@ public class UserServiceTest {
     }
 
 
-    @DisplayName("joinRequest 를 받고 userRepository 를 통해 User 를 저장한다")
+    @DisplayName("joinRequest를 받고 userRepository를 통해 User를 저장한다")
     @Test
     void saveUser() {
         // given
@@ -50,7 +54,7 @@ public class UserServiceTest {
     @Test
     void login() {
         // given
-        User user = new User("jack", "testPassword", "jack@email.com", EncryptionAlgorithm.BCRYPT, Role.USER);
+        User user = new User("jack", "testPassword", TEST_EMAIL, EncryptionAlgorithm.BCRYPT, Role.USER);
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
 
         // when
@@ -60,4 +64,28 @@ public class UserServiceTest {
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
     }
 
+    @DisplayName("email로 user 조회 시 Repository를 통하여 조회하고 user가 존재하면 user를 리턴한다")
+    @Test
+    void findByEmailSuccess() {
+        // given
+        User user = mock(User.class);
+        given(userRepository.findByEmail(TEST_EMAIL)).willReturn(Optional.of(user));
+
+        // when
+        User findedUser = userService.findByEmail(TEST_EMAIL);
+
+        // then
+        assertThat(findedUser).isEqualTo(user);
+        verify(userRepository).findByEmail(TEST_EMAIL);
+    }
+
+    @DisplayName("email로 user 조회 시 Repository를 통하여 조회하고 값이 없으면 에러를 던진다")
+    @Test
+    void findByEmailFailed() {
+        // given
+        given(userRepository.findByEmail(TEST_EMAIL)).willReturn(Optional.empty());
+
+        // when,then
+        assertThatThrownBy(() -> userService.findByEmail(TEST_EMAIL));
+    }
 }

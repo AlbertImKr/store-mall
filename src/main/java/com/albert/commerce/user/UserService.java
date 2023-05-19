@@ -18,7 +18,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User save(JoinRequest joinRequest) {
-        return userRepository.save(joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT,Role.USER));
+        return userRepository.save(joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT, Role.USER));
     }
 
     public void login(User user) {
@@ -29,5 +29,9 @@ public class UserService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow();
     }
 }
