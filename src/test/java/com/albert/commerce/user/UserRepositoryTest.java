@@ -13,9 +13,9 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class UserRepositoryTest {
 
-    public static final String TEST_NICKNAME = "jack";
-    public static final String TEST_EMAIL = "jack@email.com";
-    public static final String TEST_PASSWORD = "testPassword";
+    public static final String RIGHT_EMAIL = "jack@email.com";
+    public static final String RIGHT_8_PASSWORD = "kkkkk!1S";
+    public static final String RIGHT_3_NICKNAME = "kim";
 
     @Autowired
     private UserRepository userRepository;
@@ -25,9 +25,9 @@ public class UserRepositoryTest {
     void saveUser() {
         // given
         User user = User.builder()
-                .nickname(TEST_NICKNAME)
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
+                .nickname(RIGHT_3_NICKNAME)
+                .email(RIGHT_EMAIL)
+                .password(RIGHT_8_PASSWORD)
                 .build();
 
         // when
@@ -35,9 +35,9 @@ public class UserRepositoryTest {
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-                    softly.assertThat(savedUser.getNickname()).isEqualTo(TEST_NICKNAME);
-                    softly.assertThat(savedUser.getPassword()).isEqualTo(TEST_PASSWORD);
-                    softly.assertThat(savedUser.getEmail()).isEqualTo(TEST_EMAIL);
+                    softly.assertThat(savedUser.getNickname()).isEqualTo(RIGHT_3_NICKNAME);
+                    softly.assertThat(savedUser.getPassword()).isEqualTo(RIGHT_8_PASSWORD);
+                    softly.assertThat(savedUser.getEmail()).isEqualTo(RIGHT_EMAIL);
                 }
         );
     }

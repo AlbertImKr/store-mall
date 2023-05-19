@@ -63,7 +63,10 @@
                    th:field="*{confirmPassword}" th:if="!${#fields.hasErrors('confirmPassword')}"
                    type="password">
             <div class="invalid-feedback" th:errors="*{confirmPassword}">
-                두 비밀번호가 일치하지 않습니다.
+                비밀번호가 일치하지 않습니다.
+            </div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('${joinRequest}')}">
+                비밀번호가 일치하지 않습니다.
             </div>
         </div>
     </div>

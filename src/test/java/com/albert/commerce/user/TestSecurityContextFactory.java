@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 
 @RequiredArgsConstructor
 public class TestSecurityContextFactory implements WithSecurityContextFactory<WithTestUser> {
+    public static final String RIGHT_8_PASSWORD = "kkkkk!1S";
 
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
@@ -22,8 +23,8 @@ public class TestSecurityContextFactory implements WithSecurityContextFactory<Wi
         JoinRequest joinRequest = new JoinRequest(
                 username + "@email.com",
                 username,
-                "testPassword",
-                "testPassword");
+                RIGHT_8_PASSWORD,
+                RIGHT_8_PASSWORD);
         userService.save(joinRequest);
 
         // 로그인 username을 email로 설정
