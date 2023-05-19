@@ -23,7 +23,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .mvcMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login", "/login1").permitAll()
+                .antMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .csrf()

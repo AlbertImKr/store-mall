@@ -1,21 +1,28 @@
 package com.albert.commerce.user;
 
+import com.albert.commerce.user.dto.JoinRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
 public class UserControllerTest {
+
+    public static final String TEST_EMAIL = "jack@email.com";
+    public static final String TEST_NICKNAME = "jack";
+    public static final String TEST_PASSWORD = "testPassword";
 
     @Autowired
     UserService userService;
@@ -34,20 +41,52 @@ public class UserControllerTest {
     @Test
     void addUser() throws Exception {
         mockMvc.perform(post("/users")
-                        .param("email", "jack@email.com")
-                        .param("nickname", "jack")
-                        .param("password", "testPassword")
-                        .param("confirmPassword", "testPassword"))
+                        .param("email", TEST_EMAIL)
+                        .param("nickname", TEST_NICKNAME)
+                        .param("password", TEST_PASSWORD)
+                        .param("confirmPassword", TEST_PASSWORD))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }
 
 
-    @WithMockUser
-    @DisplayName("로그인 하여야 profile 를 볼수 있다")
+    @DisplayName("로그인 한 사용자는 자신의 profile를 볼수 있다")
+    @WithTestUser(username = TEST_NICKNAME)
     @Test
-    void getProfile() throws Exception {
-        mockMvc.perform(get("/users/" + 1))
+    void getMyProfileSuccess() throws Exception {
+        mockMvc.perform(get("/users/profile"))
                 .andExpect(status().isOk());
     }
+
+    @DisplayName("로그인 하지 않는 사용자는 profile를 접근할 수 없고 login 페이지로 redirect 한다")
+    @Test
+    void getMyProfileFailed() throws Exception {
+        String testServerUrl = "http://localhost";
+
+        mockMvc.perform(get("/users/profile"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(testServerUrl + "/login"));
+    }
+
+
+    @DisplayName("이메일로 로그인 성공하면 메인페이지로 리다이렉트 한다")
+    @Test
+    void loginByEmail() throws Exception {
+        // given
+        JoinRequest joinRequest = new JoinRequest(
+                TEST_EMAIL,
+                TEST_NICKNAME,
+                TEST_PASSWORD,
+                TEST_PASSWORD);
+        userService.save(joinRequest);
+
+        // when
+        mockMvc.perform(post("/login")
+                        .param("username", TEST_EMAIL)
+                        .param("password", TEST_PASSWORD))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated());
+    }
+
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -28,10 +27,10 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/users/{userId}")
-    public String viewProfile(@PathVariable long userId, Model model) {
-        ProfileResponse user = userService.findById(userId);
-        model.addAttribute(user);
+    @GetMapping("/users/profile")
+    public String viewProfile(@CurrentUser User user, Model model) {
+        ProfileResponse profileResponse = ProfileResponse.from(user);
+        model.addAttribute(profileResponse);
         return "user/profile";
     }
 
