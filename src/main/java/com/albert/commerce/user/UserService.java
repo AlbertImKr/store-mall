@@ -1,7 +1,6 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
-import com.albert.commerce.user.dto.ProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,14 +25,9 @@ public class UserService {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new CustomUserDetails(user),
                 user.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(new SimpleGrantedAuthority(user.getRole().getKey()))
         );
 
         SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    public ProfileResponse findById(long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        return ProfileResponse.from(user);
     }
 }
