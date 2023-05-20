@@ -1,6 +1,7 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
+import com.albert.commerce.user.exception.EmailAlreadyExistsException;
 import com.albert.commerce.user.exception.EmailNotFoundException;
 import com.albert.commerce.user.oauth2.OAuthAttributes;
 import com.albert.commerce.user.security.CustomUserDetails;
@@ -21,7 +22,15 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User save(JoinRequest joinRequest) {
-        return userRepository.save(joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT, Role.USER));
+        if (isExistsEmail(joinRequest.getEmail())) {
+            throw new EmailAlreadyExistsException("이메일이 이미 존재합니다.");
+        }
+        User user = joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT, Role.USER);
+        return userRepository.save(user);
+    }
+
+    private boolean isExistsEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     public void login(User user) {

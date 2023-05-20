@@ -1,6 +1,7 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
+import com.albert.commerce.user.exception.EmailAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,7 +80,7 @@ public class UserServiceTest {
         verify(userRepository).findByEmail(TEST_EMAIL);
     }
 
-    @DisplayName("email로 user 조회 시 Repository를 통하여 조회하고 값이 없으면 에러를 던진다")
+    @DisplayName("email로 user 조회 시 Repository를 통하여 조회하고 값이 없으면 예외를 던진다")
     @Test
     void findByEmailFailed() {
         // given
@@ -87,5 +88,20 @@ public class UserServiceTest {
 
         // when,then
         assertThatThrownBy(() -> userService.findByEmail(TEST_EMAIL));
+    }
+
+    @DisplayName("중복된 email를 저장시 예외를 던진다")
+    @Test
+    void saveSameEmailThrowException() {
+        // given
+        JoinRequest joinRequest = mock(JoinRequest.class);
+        User user = mock(User.class);
+        given(joinRequest.toUser(any(PasswordEncoder.class), any(EncryptionAlgorithm.class), any(Role.class)))
+                .willReturn(user);
+        userService.save(joinRequest);
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
+
+        // when ,then
+        assertThatThrownBy(() -> userService.save(joinRequest)).isInstanceOf(EmailAlreadyExistsException.class);
     }
 }
