@@ -1,7 +1,5 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.dto;
 
-import com.albert.commerce.user.dto.JoinRequest;
-import com.albert.commerce.user.dto.PasswordMatches;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;

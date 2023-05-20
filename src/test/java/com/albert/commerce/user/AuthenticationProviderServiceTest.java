@@ -2,6 +2,9 @@ package com.albert.commerce.user;
 
 import com.albert.commerce.user.exception.EmailTypeMismatchException;
 import com.albert.commerce.user.exception.PasswordTypeMismatchException;
+import com.albert.commerce.user.security.AuthenticationProviderService;
+import com.albert.commerce.user.security.CustomUserDetails;
+import com.albert.commerce.user.security.CustomUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

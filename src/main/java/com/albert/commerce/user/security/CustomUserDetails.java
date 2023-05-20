@@ -1,6 +1,8 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.security;
 
 
+import com.albert.commerce.user.EncryptionAlgorithm;
+import com.albert.commerce.user.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,8 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
+import com.albert.commerce.user.security.CustomUserDetails;
+import com.albert.commerce.user.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

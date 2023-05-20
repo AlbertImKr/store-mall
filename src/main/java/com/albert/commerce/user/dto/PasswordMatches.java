@@ -1,7 +1,5 @@
 package com.albert.commerce.user.dto;
 
-import com.albert.commerce.user.PasswordMatchesValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Retention;

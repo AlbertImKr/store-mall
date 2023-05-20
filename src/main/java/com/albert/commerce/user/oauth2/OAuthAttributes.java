@@ -1,5 +1,8 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.oauth2;
 
+import com.albert.commerce.user.EncryptionAlgorithm;
+import com.albert.commerce.user.Role;
+import com.albert.commerce.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,10 +12,10 @@ import java.util.UUID;
 
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes;
-    private String nameAttributeKey;
-    private String name;
-    private String email;
+    private final Map<String, Object> attributes;
+    private final String nameAttributeKey;
+    private final String name;
+    private final String email;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email) {

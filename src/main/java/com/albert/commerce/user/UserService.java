@@ -2,6 +2,8 @@ package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
 import com.albert.commerce.user.exception.EmailNotFoundException;
+import com.albert.commerce.user.oauth2.OAuthAttributes;
+import com.albert.commerce.user.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

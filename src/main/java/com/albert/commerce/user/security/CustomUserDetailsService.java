@@ -1,5 +1,7 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.security;
 
+import com.albert.commerce.user.User;
+import com.albert.commerce.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

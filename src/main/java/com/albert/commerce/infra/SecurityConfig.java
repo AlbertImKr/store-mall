@@ -1,7 +1,7 @@
 package com.albert.commerce.infra;
 
-import com.albert.commerce.user.AuthenticationProviderService;
-import com.albert.commerce.user.CustomOAuth2UserService;
+import com.albert.commerce.user.security.AuthenticationProviderService;
+import com.albert.commerce.user.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

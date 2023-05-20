@@ -1,5 +1,7 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.oauth2;
 
+import com.albert.commerce.user.User;
+import com.albert.commerce.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

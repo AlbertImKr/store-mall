@@ -1,4 +1,4 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.security;
 
 import com.albert.commerce.user.exception.EmailTypeMismatchException;
 import com.albert.commerce.user.exception.PasswordTypeMismatchException;
