@@ -1,6 +1,7 @@
 package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
+import com.albert.commerce.user.exception.EmailNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +33,6 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow();
+        return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("이메일 존재하지 않습니다"));
     }
 }

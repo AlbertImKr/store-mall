@@ -40,6 +40,7 @@ public class UserControllerTest {
     public static final String RIGHT_10_NICKNAME = "lonickname";
     public static final String WRONG_SHORT_2_NICKNAME = "kk";
     public static final String WRONG_LONG_11_NICKNAME = "loonickname";
+    public static final String OTHER_EMAIL = "other@email.com";
 
     @Autowired
     UserService userService;
@@ -131,7 +132,7 @@ public class UserControllerTest {
 
     @DisplayName("이메일로 로그인 성공하면 '/'페이지로 redirect 한다")
     @Test
-    void loginByEmail() throws Exception {
+    void loginByEmailSuccess() throws Exception {
         // given
         JoinRequest joinRequest = new JoinRequest(
                 RIGHT_EMAIL,
@@ -147,5 +148,55 @@ public class UserControllerTest {
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(authenticated());
+    }
+
+
+    @DisplayName("로그인 시 비번이 일치하지 않으면 '/login?error' 페이지로 redirect 한다")
+    @Test
+    void loginByEmailFailedByPassword() throws Exception {
+        // given
+        JoinRequest joinRequest = new JoinRequest(
+                RIGHT_EMAIL,
+                RIGHT_3_NICKNAME,
+                RIGHT_8_PASSWORD,
+                RIGHT_8_PASSWORD);
+        userService.save(joinRequest);
+
+        // when,then
+        mockMvc.perform(post("/login")
+                        .param("username", RIGHT_EMAIL)
+                        .param("password", WRONG_LONG_11_NICKNAME))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/login?error"));
+    }
+
+    @DisplayName("로그인 시 이메일이 존재하지 않으면 '/login?error' 페이지로 redirect 한다")
+    @Test
+    void loginByEmailFailedByEmail() throws Exception {
+        mockMvc.perform(post("/login")
+                        .param("username", OTHER_EMAIL)
+                        .param("password", RIGHT_8_PASSWORD))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/login?error"));
+    }
+
+    @DisplayName("로그인 시 이메일 형식 맞지 않으면 DB에 접근하지 않고 '/login?error' 페이지로 redirect 한다")
+    @Test
+    void loginByEmailFailedByEmailType() throws Exception {
+        mockMvc.perform(post("/login")
+                        .param("username", WRONG_EMAIL)
+                        .param("password", RIGHT_8_PASSWORD))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/login?error"));
+    }
+
+    @DisplayName("로그인 시 비번 형식 맞지 않으면 DB에 접근하지 않고 '/login?error' 페이지로 redirect 한다")
+    @Test
+    void loginByEmailFailedByPasswordType() throws Exception {
+        mockMvc.perform(post("/login")
+                        .param("username", RIGHT_EMAIL)
+                        .param("password", WRONG_LONG_11_NICKNAME))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/login?error"));
     }
 }

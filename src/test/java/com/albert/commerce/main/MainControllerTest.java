@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -17,10 +18,19 @@ class MainControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @DisplayName("누구나 메인 페이지를 접근 가능하다")
+    @DisplayName("누구나 메인 페이지에 접근이 가능하다")
     @Test
     void viewMain() throws Exception {
         mockMvc.perform(get("/"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(view().name("main/welcome"));
+    }
+
+    @DisplayName("누구나 로그인 페이지에 접근이 가능하다")
+    @Test
+    void longin() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("main/login"));
     }
 }
