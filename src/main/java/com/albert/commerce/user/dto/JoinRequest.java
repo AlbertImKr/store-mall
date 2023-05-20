@@ -4,7 +4,6 @@ import com.albert.commerce.user.EncryptionAlgorithm;
 import com.albert.commerce.user.Role;
 import com.albert.commerce.user.User;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
@@ -12,16 +11,23 @@ import javax.validation.constraints.Size;
 
 @PasswordMatches
 @Getter
-@RequiredArgsConstructor
 public class JoinRequest {
     @Email
-    private final String email;
+    private String email;
     @Size(min = 3, max = 10)
-    private final String nickname;
+    private String nickname;
     @PasswordPattern
-    private final String password;
+    private String password;
     @PasswordPattern
-    private final String confirmPassword;
+    private String confirmPassword;
+
+    public JoinRequest(String email, String nickname, String password, String confirmPassword) {
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
 
     public User toUser(PasswordEncoder passwordEncoder, EncryptionAlgorithm algorithm, Role role) {
         return User.builder()

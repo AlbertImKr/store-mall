@@ -18,15 +18,21 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users/joinForm")
+    @GetMapping("/users/new")
     public String viewJoinForm(@ModelAttribute JoinRequest joinRequest) {
-        return "user/joinForm";
+        return "user/sign-in-form";
+    }
+
+    @GetMapping(value = "/users/new", params = "error")
+    public String viewJoinForm(@ModelAttribute JoinRequest joinRequest, Model model) {
+        model.addAttribute("error");
+        return "user/sign-in-form";
     }
 
     @PostMapping("/users")
     public String addUser(@Valid JoinRequest joinRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "user/joinForm";
+            return "user/sign-in-form";
         }
         User user = userService.save(joinRequest);
         userService.login(user);

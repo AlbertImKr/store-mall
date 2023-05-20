@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 public class OAuthAttributes {
+    public static final String PREFIX = "Aa1!";
     private final Map<String, Object> attributes;
     private final String nameAttributeKey;
     private final String name;
@@ -42,9 +43,13 @@ public class OAuthAttributes {
         return User.builder()
                 .nickname(name)
                 .email(email)
-                .password(bCryptPasswordEncoder.encode("Aa1!"+ UUID.randomUUID()))
+                .password(bCryptPasswordEncoder.encode(getRandomPassword()))
                 .algorithm(algorithm)
                 .role(role)
                 .build();
+    }
+
+    private static String getRandomPassword() {
+        return PREFIX + UUID.randomUUID();
     }
 }

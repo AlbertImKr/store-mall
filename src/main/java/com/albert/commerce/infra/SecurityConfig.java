@@ -25,12 +25,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login", "/oauth2/**").permitAll()
+                .antMatchers("/users", "/users/new", "/", "/css/**", "/js/**", "/login", "/oauth2/**").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .csrf()
                 .ignoringAntMatchers("/users", "/login")
                 .and()
+                // formLogin 설정
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
@@ -43,6 +44,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .tokenRepository(tokenRepository())
                 .and()
+                // oauth2Login 설정
                 .oauth2Login()
                 .defaultSuccessUrl("/")
                 .loginPage("/login")
