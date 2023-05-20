@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 @Service
 public class AuthenticationProviderService implements AuthenticationProvider {
 
+    private static final String EMAIL_PATTERN = "^(.+)@(.+)$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$";
     private final CustomUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SCryptPasswordEncoder sCryptPasswordEncoder;
@@ -33,25 +35,23 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
         CustomUserDetails user = userDetailsService.loadUserByUsername(username);
 
-        switch (user.getUser().getAlgorithm()) {
+        switch (user.getAlgorithm()) {
             case BCRYPT:
                 return checkPassword(user, password, bCryptPasswordEncoder);
             case SCRYPT:
                 return checkPassword(user, password, sCryptPasswordEncoder);
         }
-        throw new BadCredentialsException("Bad credentials");
+        throw new BadCredentialsException("BCRYPT,SCRYPT EncoderAlgorithm만 처리 할 수 있습니다");
     }
 
     private void validPasswordType(String password) {
-        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$";
-        if (!Pattern.matches(regex, password)) {
+        if (!Pattern.matches(PASSWORD_PATTERN, password)) {
             throw new PasswordTypeMismatchException("Password Type가 맞지 않습니다");
         }
     }
 
     private void validEmailType(String email) {
-        String regex = "^(.+)@(.+)$";
-        if (!Pattern.matches(regex, email)) {
+        if (!Pattern.matches(EMAIL_PATTERN, email)) {
             throw new EmailTypeMismatchException("Email Type가 맞지 않습니다");
         }
     }
@@ -64,7 +64,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
                     user.getAuthorities()
             );
         } else {
-            throw new BadCredentialsException("Bad credentials");
+            throw new BadCredentialsException("비번이 일치하지 않습니다.");
         }
     }
 
