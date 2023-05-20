@@ -1,6 +1,7 @@
 package com.albert.commerce.infra;
 
 import com.albert.commerce.user.AuthenticationProviderService;
+import com.albert.commerce.user.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +20,12 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
     private final AuthenticationProviderService authenticationProvider;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login").permitAll()
+                .antMatchers("/users", "/users/joinForm", "/", "/css/**", "/js/**", "/login", "/oauth2/**").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .csrf()
@@ -39,7 +41,13 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .rememberMe()
                 .userDetailsService(userDetailsService)
-                .tokenRepository(tokenRepository());
+                .tokenRepository(tokenRepository())
+                .and()
+                .oauth2Login()
+                .defaultSuccessUrl("/")
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
 
         return httpSecurity.build();
     }

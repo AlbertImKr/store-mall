@@ -35,4 +35,10 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("이메일 존재하지 않습니다"));
     }
+
+    public User oAth2login(OAuthAttributes attributes) {
+        User user = userRepository.findByEmail(attributes.getEmail())
+                .orElse(attributes.toEntity(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT, Role.USER));
+        return userRepository.save(user);
+    }
 }
