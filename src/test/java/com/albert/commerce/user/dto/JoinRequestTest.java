@@ -21,18 +21,22 @@ class JoinRequestTest {
     @Test
     void toUser() {
         // given
-        JoinRequest joinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_8_PASSWORD);
+        JoinRequest joinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD,
+                RIGHT_8_PASSWORD);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         // when
-        User user = joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT, Role.USER);
+        User user = joinRequest.toUser(bCryptPasswordEncoder, EncryptionAlgorithm.BCRYPT,
+                Role.USER);
 
         // then
         SoftAssertions.assertSoftly(
                 softAssertions -> {
-                    softAssertions.assertThat(bCryptPasswordEncoder.matches(joinRequest.getPassword(),
-                            user.getPassword())).isTrue();
-                    softAssertions.assertThat(user.getNickname()).isEqualTo(joinRequest.getNickname());
+                    softAssertions.assertThat(
+                            bCryptPasswordEncoder.matches(joinRequest.getPassword(),
+                                    user.getPassword())).isTrue();
+                    softAssertions.assertThat(user.getNickname())
+                            .isEqualTo(joinRequest.getNickname());
                     softAssertions.assertThat(user.getEmail()).isEqualTo(joinRequest.getEmail());
                     softAssertions.assertThat(user.getId()).isNotNull();
                 }
@@ -43,9 +47,11 @@ class JoinRequestTest {
     @Test
     void isSamePassword() {
         // given
-        JoinRequest samePasswordJoinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD,
+        JoinRequest samePasswordJoinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME,
+                RIGHT_8_PASSWORD,
                 RIGHT_8_PASSWORD);
-        JoinRequest differentPasswordJoinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD,
+        JoinRequest differentPasswordJoinRequest = new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME,
+                RIGHT_8_PASSWORD,
                 DIFFERENT_PASSWORD);
 
         // when,then

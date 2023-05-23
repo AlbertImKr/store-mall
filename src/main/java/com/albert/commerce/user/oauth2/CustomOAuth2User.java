@@ -12,8 +12,9 @@ public class CustomOAuth2User extends DefaultOAuth2User {
 
     private final User user;
 
-    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes,
-                            String nameAttributeKey, User user) {
+    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities,
+            Map<String, Object> attributes,
+            String nameAttributeKey, User user) {
         super(authorities, attributes, nameAttributeKey);
         this.user = user;
     }

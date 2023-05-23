@@ -13,9 +13,9 @@ import javax.validation.Payload;
 @Constraint(validatedBy = PasswordMatchesValidator.class)
 public @interface PasswordMatches {
 
-  String message() default "비밀 번호가 일치하지 않습니다.";
+    String message() default "비밀 번호가 일치하지 않습니다.";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 }

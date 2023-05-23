@@ -12,6 +12,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 
 @RequiredArgsConstructor
 public class TestSecurityContextFactory implements WithSecurityContextFactory<WithTestUser> {
+
     public static final String RIGHT_8_PASSWORD = "kkkkk!1S";
 
     private final UserService userService;
@@ -30,9 +31,11 @@ public class TestSecurityContextFactory implements WithSecurityContextFactory<Wi
         userService.save(joinRequest);
 
         // 로그인 username을 email로 설정
-        CustomUserDetails principal = customUserDetailsService.loadUserByUsername(username + "@email.com");
+        CustomUserDetails principal = customUserDetailsService.loadUserByUsername(
+                username + "@email.com");
         Authentication token =
-                new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
+                new UsernamePasswordAuthenticationToken(principal, principal.getPassword(),
+                        principal.getAuthorities());
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(token);

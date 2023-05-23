@@ -1,9 +1,13 @@
 package com.albert.commerce.user;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.albert.commerce.user.exception.EmailTypeMismatchException;
 import com.albert.commerce.user.exception.PasswordTypeMismatchException;
@@ -24,6 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 class AuthenticationProviderServiceTest {
+
     public static final String RIGHT_EMAIL = "jack@email.com";
     public static final String WRONG_EMAIL = "erroremail";
     public static final String RIGHT_8_PASSWORD = "kkkkk!1S";
@@ -54,10 +59,11 @@ class AuthenticationProviderServiceTest {
     @Test
     void authenticateFailedByEmailType() {
         // given
-        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, WRONG_EMAIL, EncryptionAlgorithm.BCRYPT, Role.USER);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(new CustomUserDetails(user),
+        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, WRONG_EMAIL,
+                EncryptionAlgorithm.BCRYPT, Role.USER);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new CustomUserDetails(user),
                 user.getPassword(), List.of(new SimpleGrantedAuthority(Role.USER.getKey())));
-
 
         // when,then
         assertThatThrownBy(() -> authenticationProviderService.authenticate(authentication))
@@ -67,12 +73,15 @@ class AuthenticationProviderServiceTest {
 
     @DisplayName("password가 password패턴과 일치하지 않을 때 예외를 던진다")
     @ParameterizedTest
-    @ValueSource(strings = {WRONG_LONG_21_PASSWORD, WRONG_SHORT_7_PASSWORD, WRONG_NOT_CONTAIN_LOWERCASE_PASSWORD,
+    @ValueSource(strings = {WRONG_LONG_21_PASSWORD, WRONG_SHORT_7_PASSWORD,
+            WRONG_NOT_CONTAIN_LOWERCASE_PASSWORD,
             WRONG_NOT_CONTAIN_UPPERCASE_PASSWORD, WRONG_NOT_CONTAIN_SPECIAL_SYMBOLS_PASSWORD})
     void authenticateFailedByPasswordType(String password) {
         // given
-        User user = new User(RIGHT_3_NICKNAME, password, RIGHT_EMAIL, EncryptionAlgorithm.BCRYPT, Role.USER);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(new CustomUserDetails(user),
+        User user = new User(RIGHT_3_NICKNAME, password, RIGHT_EMAIL, EncryptionAlgorithm.BCRYPT,
+                Role.USER);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new CustomUserDetails(user),
                 user.getPassword(), List.of(new SimpleGrantedAuthority(Role.USER.getKey())));
 
         // when,then
@@ -85,8 +94,10 @@ class AuthenticationProviderServiceTest {
     @Test
     void authenticateFailedByMisMatchPassword() {
         // given
-        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_EMAIL, EncryptionAlgorithm.BCRYPT, Role.USER);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(new CustomUserDetails(user),
+        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_EMAIL,
+                EncryptionAlgorithm.BCRYPT, Role.USER);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new CustomUserDetails(user),
                 user.getPassword(), List.of(new SimpleGrantedAuthority(Role.USER.getKey())));
         User findedUser = mock(User.class);
         given(userService.findByEmail(RIGHT_EMAIL)).willReturn(findedUser);
@@ -103,8 +114,10 @@ class AuthenticationProviderServiceTest {
     @Test
     void authenticateSuccess() {
         // given
-        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_EMAIL, EncryptionAlgorithm.SCRYPT, Role.USER);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(new CustomUserDetails(user),
+        User user = new User(RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_EMAIL,
+                EncryptionAlgorithm.SCRYPT, Role.USER);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new CustomUserDetails(user),
                 user.getPassword(), List.of(new SimpleGrantedAuthority(Role.USER.getKey())));
         User findedUser = mock(User.class);
         given(userService.findByEmail(RIGHT_EMAIL)).willReturn(findedUser);
@@ -113,7 +126,8 @@ class AuthenticationProviderServiceTest {
         given(findedUser.getRole()).willReturn(Role.USER);
 
         // when,then
-        assertThatCode(() -> authenticationProviderService.authenticate(authentication)).doesNotThrowAnyException();
+        assertThatCode(() -> authenticationProviderService.authenticate(
+                authentication)).doesNotThrowAnyException();
     }
 
 }

@@ -54,4 +54,8 @@ public class CustomUserDetails implements UserDetails {
     public EncryptionAlgorithm getAlgorithm() {
         return user.getAlgorithm();
     }
+
+    public boolean isAnonymous() {
+        return user == null;
+    }
 }

@@ -40,7 +40,8 @@ public class UserServiceTest {
         // given
         JoinRequest joinRequest = mock(JoinRequest.class);
         User user = mock(User.class);
-        given(joinRequest.toUser(any(PasswordEncoder.class), any(EncryptionAlgorithm.class), any(Role.class)))
+        given(joinRequest.toUser(any(PasswordEncoder.class), any(EncryptionAlgorithm.class),
+                any(Role.class)))
                 .willReturn(user);
 
         // when
@@ -54,7 +55,8 @@ public class UserServiceTest {
     @Test
     void login() {
         // given
-        User user = new User("jack", "testPassword", TEST_EMAIL, EncryptionAlgorithm.BCRYPT, Role.USER);
+        User user = new User("jack", "testPassword", TEST_EMAIL, EncryptionAlgorithm.BCRYPT,
+                Role.USER);
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
 
         // when
@@ -95,12 +97,14 @@ public class UserServiceTest {
         // given
         JoinRequest joinRequest = mock(JoinRequest.class);
         User user = mock(User.class);
-        given(joinRequest.toUser(any(PasswordEncoder.class), any(EncryptionAlgorithm.class), any(Role.class)))
+        given(joinRequest.toUser(any(PasswordEncoder.class), any(EncryptionAlgorithm.class),
+                any(Role.class)))
                 .willReturn(user);
         userService.save(joinRequest);
-        given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
+        given(userRepository.existsByEmail(any())).willReturn(true);
 
         // when ,then
-        assertThatThrownBy(() -> userService.save(joinRequest)).isInstanceOf(EmailAlreadyExistsException.class);
+        assertThatThrownBy(() -> userService.save(joinRequest)).isInstanceOf(
+                EmailAlreadyExistsException.class);
     }
 }

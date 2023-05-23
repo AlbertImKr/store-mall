@@ -3,7 +3,11 @@ package com.albert.commerce.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.albert.commerce.user.dto.JoinRequest;
 import java.util.stream.Stream;
@@ -53,6 +57,7 @@ public class UserControllerTest {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     class SignInTest {
+
         @DisplayName("누구나 회원 가입 페이지를 접근할 수 있다")
         @Test
         void getJoinForm() throws Exception {
@@ -80,9 +85,11 @@ public class UserControllerTest {
             EncryptionAlgorithm algorithm = user.getAlgorithm();
             switch (algorithm) {
                 case SCRYPT:
-                    softAssertions.assertThat(new SCryptPasswordEncoder().matches(RIGHT_8_PASSWORD, user.getPassword())).isTrue();
+                    softAssertions.assertThat(new SCryptPasswordEncoder().matches(RIGHT_8_PASSWORD,
+                            user.getPassword())).isTrue();
                 case BCRYPT:
-                    softAssertions.assertThat(new BCryptPasswordEncoder().matches(RIGHT_8_PASSWORD, user.getPassword())).isTrue();
+                    softAssertions.assertThat(new BCryptPasswordEncoder().matches(RIGHT_8_PASSWORD,
+                            user.getPassword())).isTrue();
             }
             softAssertions.assertAll();
         }
@@ -92,7 +99,8 @@ public class UserControllerTest {
         @Test
         void addUserFailedBy() throws Exception {
             // given
-            userService.save(new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD, RIGHT_8_PASSWORD));
+            userService.save(new JoinRequest(RIGHT_EMAIL, RIGHT_3_NICKNAME, RIGHT_8_PASSWORD,
+                    RIGHT_8_PASSWORD));
 
             // when, then
             mockMvc.perform(post("/users")
@@ -107,8 +115,9 @@ public class UserControllerTest {
         @DisplayName("가입 요청시 이메일,닉네임,비밀번호 및 확인비빌번호를 잘못 입력하면 다시 가입 페이지로 redirect 한다")
         @ParameterizedTest
         @MethodSource("provideStringsForIsBlank")
-        void addUserFailedByAlreadyExistsEmail(String email, String nickname, String password, String confirmPassword,
-                                               int count) throws Exception {
+        void addUserFailedByAlreadyExistsEmail(String email, String nickname, String password,
+                String confirmPassword,
+                int count) throws Exception {
             // given,when
             mockMvc.perform(post("/users")
                             .param("email", email)
@@ -124,12 +133,17 @@ public class UserControllerTest {
         private Stream<Arguments> provideStringsForIsBlank() {
             return Stream.of(
                     Arguments.of(
-                            WRONG_EMAIL, WRONG_SHORT_2_NICKNAME, WRONG_SHORT_7_PASSWORD, WRONG_LONG_21_PASSWORD, 5),
+                            WRONG_EMAIL, WRONG_SHORT_2_NICKNAME, WRONG_SHORT_7_PASSWORD,
+                            WRONG_LONG_21_PASSWORD, 5),
                     Arguments.of(
-                            WRONG_EMAIL, WRONG_LONG_11_NICKNAME, WRONG_NOT_CONTAIN_LOWERCASE_PASSWORD, WRONG_NOT_CONTAIN_UPPERCASE_PASSWORD, 5),
+                            WRONG_EMAIL, WRONG_LONG_11_NICKNAME,
+                            WRONG_NOT_CONTAIN_LOWERCASE_PASSWORD,
+                            WRONG_NOT_CONTAIN_UPPERCASE_PASSWORD, 5),
                     Arguments.of(
-                            RIGHT_EMAIL, RIGHT_3_NICKNAME, WRONG_NOT_CONTAIN_SPECIAL_SYMBOLS_PASSWORD, RIGHT_8_PASSWORD, 2),
-                    Arguments.of(RIGHT_EMAIL, RIGHT_10_NICKNAME, RIGHT_8_PASSWORD, RIGHT_20_PASSWORD, 1)
+                            RIGHT_EMAIL, RIGHT_3_NICKNAME,
+                            WRONG_NOT_CONTAIN_SPECIAL_SYMBOLS_PASSWORD, RIGHT_8_PASSWORD, 2),
+                    Arguments.of(RIGHT_EMAIL, RIGHT_10_NICKNAME, RIGHT_8_PASSWORD,
+                            RIGHT_20_PASSWORD, 1)
             );
         }
 
@@ -138,6 +152,7 @@ public class UserControllerTest {
     @DisplayName("로그인")
     @Nested
     class LoginTest {
+
         @DisplayName("로그인 한 사용자는 자신의 profile를 볼수 있다")
         @WithTestUser(username = RIGHT_3_NICKNAME)
         @Test

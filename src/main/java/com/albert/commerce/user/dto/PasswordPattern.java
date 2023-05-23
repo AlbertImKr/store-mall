@@ -14,6 +14,7 @@ import javax.validation.constraints.Pattern;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
 public @interface PasswordPattern {
+
     String message() default "비밀번호는 대소문자,특수문자 @#$%^&+=!,숫자가 적어도 하나가 있어야 하며 공백이 아닌 8~20자이여야 한다";
 
     Class<?>[] groups() default {};

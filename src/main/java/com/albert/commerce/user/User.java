@@ -28,7 +28,8 @@ public class User {
 
 
     @Builder
-    public User(String nickname, String password, String email,EncryptionAlgorithm algorithm,Role role) {
+    public User(String nickname, String password, String email, EncryptionAlgorithm algorithm,
+            Role role) {
         this.id = idGenerator.incrementAndGet();
         this.nickname = nickname;
         this.password = password;

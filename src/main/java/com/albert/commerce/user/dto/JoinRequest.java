@@ -11,13 +11,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @PasswordMatches
 @Getter
 public class JoinRequest {
-  @Email private final String email;
 
-  @Size(min = 3, max = 10)
-  private final String nickname;
+    @Email
+    private final String email;
 
-  @PasswordPattern private final String password;
-  @PasswordPattern private final String confirmPassword;
+    @Size(min = 3, max = 10)
+    private final String nickname;
+
+    @PasswordPattern
+    private final String password;
+    @PasswordPattern
+    private final String confirmPassword;
 
     public JoinRequest(String email, String nickname, String password, String confirmPassword) {
         this.email = email;
