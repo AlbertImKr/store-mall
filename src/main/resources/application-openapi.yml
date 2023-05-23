@@ -1,0 +1,106 @@
+openapi: 3.0.0
+servers:
+  - description: local
+    url: http://localhost:8080
+info:
+  description: This is Albert's commerce-project API
+  version: "1.0.0"
+  title: simple-commerce
+  contact:
+    email: guang7226961@naver.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /login:
+    post:
+      tags:
+        - developers
+      summary: 로그인
+      operationId: login
+      description: 로그인 요청을 한다
+      responses:
+        '200':
+          description: 로그인 성공
+        '400':
+          description: 잘못 입력했습니다.
+        '401':
+          description: 비번 혹은 이메일을 잘못 입력했습니다.
+  /users:
+    post:
+      tags:
+        - developers
+      summary: add user
+      operationId: addUser
+      description: 유저를 추가한다
+      responses:
+        '201':
+          description: 유저 추가 성공
+        '400':
+          description: 잘못 입력했습니다
+        '409':
+          description: 이미 존재하는 유저이다
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinRequest'
+        description: User user to add
+  /users/profile:
+    get:
+      tags:
+        - developers
+      summary: 현재 로그인한 유저의 profile를 가져온다
+      operationId: getUserProfile
+      description: 현재 로그인한 유저의 profile를 가져온다
+      responses:
+        '200':
+          description: 성공적으로 유저 profile를 가져오기 성공
+        '401':
+          description: 사용자 인증 실패
+components:
+  schemas:
+    JoinRequest:
+      type: object
+      required:
+        - email
+        - nickname
+        - password
+        - confirmPassword
+      properties:
+        email:
+          type: string
+          format: email
+          example: example@email.com
+        nickname:
+          type: string
+          format: 길이가 min =3, max =10
+          example: jack
+        password:
+          type: string
+          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          example: aA!123456789
+        confirmPassword:
+          type: string
+          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          example: aA!123456789
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          format: email
+          example: example@email.com
+        password:
+          type: string
+          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          example: aA!123456789
+
