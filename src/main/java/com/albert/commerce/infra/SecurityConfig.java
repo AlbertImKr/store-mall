@@ -1,6 +1,5 @@
 package com.albert.commerce.infra;
 
-import com.albert.commerce.user.oauth2.CustomOAuth2UserService;
 import com.albert.commerce.user.security.AuthenticationProviderService;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +18,16 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
     private final AuthenticationProviderService authenticationProvider;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/users", "/users/new", "/", "/css/**", "/js/**", "/login",
+                .requestMatchers("/users", "/users/new", "/", "/css/**", "/js/**", "/login",
                         "/oauth2/**").permitAll()
-                .antMatchers("**").authenticated()
+                .requestMatchers("**").authenticated()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/users", "/login")
+                .ignoringRequestMatchers("/users", "/login")
                 .and()
                 // formLogin 설정
                 .formLogin()
@@ -42,15 +40,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .rememberMe()
                 .userDetailsService(userDetailsService)
-                .tokenRepository(tokenRepository())
-                .and()
-                // oauth2Login 설정
-                .oauth2Login()
-                .defaultSuccessUrl("/")
-                .loginPage("/login")
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
-
+                .tokenRepository(tokenRepository());
         return httpSecurity.build();
     }
 

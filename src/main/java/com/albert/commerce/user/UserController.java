@@ -2,7 +2,7 @@ package com.albert.commerce.user;
 
 import com.albert.commerce.user.dto.JoinRequest;
 import com.albert.commerce.user.dto.ProfileResponse;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

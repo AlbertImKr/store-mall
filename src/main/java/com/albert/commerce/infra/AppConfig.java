@@ -15,6 +15,6 @@ public class AppConfig {
 
     @Bean
     public SCryptPasswordEncoder sCryptPasswordEncoder() {
-        return new SCryptPasswordEncoder();
+        return SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8();
     }
 }

@@ -6,7 +6,6 @@ import static com.albert.commerce.user.Role.USER;
 import com.albert.commerce.user.dto.JoinRequest;
 import com.albert.commerce.user.exception.EmailAlreadyExistsException;
 import com.albert.commerce.user.exception.EmailNotFoundException;
-import com.albert.commerce.user.oauth2.OAuthAttributes;
 import com.albert.commerce.user.security.CustomUserDetails;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,13 +48,5 @@ public class UserService {
         return userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException("이메일 존재하지 않습니다"));
-    }
-
-    public User oAuth2login(OAuthAttributes attributes) {
-        return userRepository
-                .findByEmail(attributes.getEmail())
-                .orElseGet(
-                        () -> userRepository.save(
-                                attributes.toEntity(bCryptPasswordEncoder, BCRYPT, USER)));
     }
 }
