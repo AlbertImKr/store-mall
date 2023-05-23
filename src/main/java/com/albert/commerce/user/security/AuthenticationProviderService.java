@@ -30,9 +30,9 @@ public class AuthenticationProviderService implements AuthenticationProvider {
             throws AuthenticationException {
 
         String username = authentication.getName();
-        validEmailType(username);
+        validateEmailType(username);
         String password = authentication.getCredentials().toString();
-        validPasswordType(password);
+        validatePasswordType(password);
 
         CustomUserDetails user = userDetailsService.loadUserByUsername(username);
 
@@ -45,13 +45,13 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         throw new BadCredentialsException("BCRYPT,SCRYPT EncoderAlgorithm만 처리 할 수 있습니다");
     }
 
-    private void validPasswordType(String password) {
+    private void validatePasswordType(String password) {
         if (!Pattern.matches(PASSWORD_PATTERN, password)) {
             throw new PasswordTypeMismatchException("Password Type가 맞지 않습니다");
         }
     }
 
-    private void validEmailType(String email) {
+    private void validateEmailType(String email) {
         if (!Pattern.matches(EMAIL_PATTERN, email)) {
             throw new EmailTypeMismatchException("Email Type가 맞지 않습니다");
         }

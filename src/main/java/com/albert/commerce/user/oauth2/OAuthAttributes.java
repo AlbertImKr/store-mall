@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 public class OAuthAttributes {
 
-    public static final String PREFIX = "Aa1!";
+    private static final String PASSWORD_PREFIX = "Aa1!";
     private final Map<String, Object> attributes;
     private final String nameAttributeKey;
     private final String name;
@@ -27,8 +27,7 @@ public class OAuthAttributes {
         this.email = email;
     }
 
-    public static OAuthAttributes of(
-            String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes of(String userNameAttributeName, Map<String, Object> attributes) {
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -43,7 +42,7 @@ public class OAuthAttributes {
     }
 
     private static String getRandomPassword() {
-        return PREFIX + UUID.randomUUID();
+        return PASSWORD_PREFIX + UUID.randomUUID();
     }
 
     public User toEntity(PasswordEncoder passwordEncoder, EncryptionAlgorithm algorithm,

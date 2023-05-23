@@ -14,7 +14,7 @@
       </button>
       <button class="d-flex btn btn-outline-success me-2 nav-item"
               th:if="${session.user == null && #httpServletRequest.requestURI != '/users/joinForm'}"
-              th:onclick="|location.href='@{/users/joinForm}'|">회원가입
+              th:onclick="|location.href='@{/users/new}'|">회원가입
       </button>
       <button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
               data-bs-toggle="dropdown"
@@ -28,7 +28,7 @@
           </a>
         </li>
         <li>
-          <a class="dropdown-item" th:href="@{/users/{id}(id = ${session.user.id})}">개인정보</a>
+          <a class="dropdown-item" th:href="@{/users/profile}">개인정보</a>
         </li>
         <li>
           <a class="dropdown-item" th:href="@{/posts/form}">글쓰기</a>

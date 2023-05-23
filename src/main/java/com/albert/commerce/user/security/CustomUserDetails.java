@@ -3,7 +3,7 @@ package com.albert.commerce.user.security;
 import com.albert.commerce.user.EncryptionAlgorithm;
 import com.albert.commerce.user.User;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().getKey()));
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getKey()));
     }
 
     @Override

@@ -28,7 +28,7 @@ class MainControllerTest {
 
     @DisplayName("누구나 로그인 페이지에 접근이 가능하다")
     @Test
-    void longin() throws Exception {
+    void longIn() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("main/login"));
