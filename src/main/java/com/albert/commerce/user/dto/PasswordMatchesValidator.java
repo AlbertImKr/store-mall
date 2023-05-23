@@ -1,9 +1,8 @@
 package com.albert.commerce.user.dto;
 
-import org.springframework.stereotype.Component;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, JoinRequest> {

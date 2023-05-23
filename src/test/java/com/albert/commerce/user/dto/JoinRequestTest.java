@@ -1,5 +1,7 @@
 package com.albert.commerce.user.dto;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.albert.commerce.user.EncryptionAlgorithm;
 import com.albert.commerce.user.Role;
 import com.albert.commerce.user.User;
@@ -7,8 +9,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class JoinRequestTest {
 

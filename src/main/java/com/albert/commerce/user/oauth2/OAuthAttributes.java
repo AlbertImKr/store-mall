@@ -3,12 +3,11 @@ package com.albert.commerce.user.oauth2;
 import com.albert.commerce.user.EncryptionAlgorithm;
 import com.albert.commerce.user.Role;
 import com.albert.commerce.user.User;
+import java.util.Map;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Map;
-import java.util.UUID;
 
 @Getter
 public class OAuthAttributes {
@@ -30,26 +29,28 @@ public class OAuthAttributes {
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
-        return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
-                .attributes(attributes)
-                .nameAttributeKey(userNameAttributeName)
-                .build();
-    }
+  private static OAuthAttributes ofGoogle(
+      String userNameAttributeName, Map<String, Object> attributes) {
+    return OAuthAttributes.builder()
+        .name((String) attributes.get("name"))
+        .email((String) attributes.get("email"))
+        .attributes(attributes)
+        .nameAttributeKey(userNameAttributeName)
+        .build();
+  }
 
-    public User toEntity(BCryptPasswordEncoder bCryptPasswordEncoder, EncryptionAlgorithm algorithm, Role role) {
-        return User.builder()
-                .nickname(name)
-                .email(email)
-                .password(bCryptPasswordEncoder.encode(getRandomPassword()))
-                .algorithm(algorithm)
-                .role(role)
-                .build();
-    }
+  private static String getRandomPassword() {
+    return PREFIX + UUID.randomUUID();
+  }
 
-    private static String getRandomPassword() {
-        return PREFIX + UUID.randomUUID();
-    }
+  public User toEntity(
+      BCryptPasswordEncoder bCryptPasswordEncoder, EncryptionAlgorithm algorithm, Role role) {
+    return User.builder()
+        .nickname(name)
+        .email(email)
+        .password(bCryptPasswordEncoder.encode(getRandomPassword()))
+        .algorithm(algorithm)
+        .role(role)
+        .build();
+  }
 }

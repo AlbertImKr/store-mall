@@ -1,7 +1,8 @@
 package com.albert.commerce.infra;
 
-import com.albert.commerce.user.security.AuthenticationProviderService;
 import com.albert.commerce.user.oauth2.CustomOAuth2UserService;
+import com.albert.commerce.user.security.AuthenticationProviderService;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
-import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor

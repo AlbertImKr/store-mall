@@ -2,6 +2,7 @@ package com.albert.commerce.user.security;
 
 import com.albert.commerce.user.exception.EmailTypeMismatchException;
 import com.albert.commerce.user.exception.PasswordTypeMismatchException;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service

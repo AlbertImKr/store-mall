@@ -3,23 +3,21 @@ package com.albert.commerce.user.dto;
 import com.albert.commerce.user.EncryptionAlgorithm;
 import com.albert.commerce.user.Role;
 import com.albert.commerce.user.User;
-import lombok.Getter;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @PasswordMatches
 @Getter
 public class JoinRequest {
-    @Email
-    private String email;
-    @Size(min = 3, max = 10)
-    private String nickname;
-    @PasswordPattern
-    private String password;
-    @PasswordPattern
-    private String confirmPassword;
+  @Email private final String email;
+
+  @Size(min = 3, max = 10)
+  private final String nickname;
+
+  @PasswordPattern private final String password;
+  @PasswordPattern private final String confirmPassword;
 
     public JoinRequest(String email, String nickname, String password, String confirmPassword) {
         this.email = email;

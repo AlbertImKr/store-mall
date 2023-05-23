@@ -1,10 +1,16 @@
 package com.albert.commerce.user;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
 import com.albert.commerce.user.exception.EmailTypeMismatchException;
 import com.albert.commerce.user.exception.PasswordTypeMismatchException;
 import com.albert.commerce.user.security.AuthenticationProviderService;
 import com.albert.commerce.user.security.CustomUserDetails;
 import com.albert.commerce.user.security.CustomUserDetailsService;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,13 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 class AuthenticationProviderServiceTest {
     public static final String RIGHT_EMAIL = "jack@email.com";

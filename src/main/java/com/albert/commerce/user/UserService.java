@@ -5,14 +5,13 @@ import com.albert.commerce.user.exception.EmailAlreadyExistsException;
 import com.albert.commerce.user.exception.EmailNotFoundException;
 import com.albert.commerce.user.oauth2.OAuthAttributes;
 import com.albert.commerce.user.security.CustomUserDetails;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
