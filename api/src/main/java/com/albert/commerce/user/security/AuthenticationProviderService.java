@@ -36,13 +36,10 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
         CustomUserDetails user = userDetailsService.loadUserByUsername(username);
 
-        switch (user.getAlgorithm()) {
-            case BCRYPT:
-                return checkPassword(user, password, bCryptPasswordEncoder);
-            case SCRYPT:
-                return checkPassword(user, password, sCryptPasswordEncoder);
-        }
-        throw new BadCredentialsException("BCRYPT,SCRYPT EncoderAlgorithm만 처리 할 수 있습니다");
+        return switch (user.getAlgorithm()) {
+            case BCRYPT -> checkPassword(user, password, bCryptPasswordEncoder);
+            case SCRYPT -> checkPassword(user, password, sCryptPasswordEncoder);
+        };
     }
 
     private void validatePasswordType(String password) {
