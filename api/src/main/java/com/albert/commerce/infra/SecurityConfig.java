@@ -21,8 +21,6 @@ public class SecurityConfig {
     private final DataSource dataSource;
     private final AuthenticationProviderService authenticationProvider;
 
-//    private final AuthenticationManager authenticationManager;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(
@@ -39,18 +37,6 @@ public class SecurityConfig {
                         .userDetailsService(userDetailsService));
         return httpSecurity.build();
     }
-
-//    @Bean
-//    public ClientRegistrationRepository inMemoryClientRegistrationRepository() {
-//        return new InMemoryClientRegistrationRepository(
-//                ClientRegistration.withRegistrationId("inMemory")
-//                        .clientId("test")
-//                        .clientSecret("password")
-//                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-//                        .scope(OidcScopes.PROFILE, OidcScopes.OPENID)
-//                        .build()
-//        );
-//    }
 
     @Bean
     public PersistentTokenRepository tokenRepository() {
