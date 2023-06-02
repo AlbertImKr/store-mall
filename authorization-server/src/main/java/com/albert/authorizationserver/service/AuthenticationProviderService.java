@@ -27,12 +27,12 @@ public class AuthenticationProviderService implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
 
-        String username = authentication.getName();
-        validateEmailType(username);
+        String email = authentication.getName();
+        validateEmailType(email);
         String password = authentication.getCredentials().toString();
         validatePasswordType(password);
 
-        CustomUserDetails user = userDetailsService.loadUserByUsername(username);
+        CustomUserDetails user = userDetailsService.loadUserByEmail(email);
 
         return switch (user.getAlgorithm()) {
             case BCRYPT -> checkPassword(user, password, bCryptPasswordEncoder);
@@ -55,7 +55,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
             CustomUserDetails user, String password, PasswordEncoder passwordEncoder) {
         if (passwordEncoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
-                    user.getUsername(), user.getPassword(), user.getAuthorities());
+                    user.getEmail(), user.getPassword(), user.getAuthorities());
         } else {
             throw new BadCredentialsException("비번이 일치하지 않습니다.");
         }
