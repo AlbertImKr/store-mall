@@ -41,13 +41,13 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
     private void validatePasswordType(String password) {
         if (!Pattern.matches(PASSWORD_PATTERN, password)) {
-            throw new EmailTypeMismatchException("Password Type가 맞지 않습니다");
+            throw new PasswordTypeMismatchException("Password Type가 맞지 않습니다");
         }
     }
 
     private void validateEmailType(String email) {
         if (!Pattern.matches(EMAIL_PATTERN, email)) {
-            throw new PasswordTypeMismatchException("Email Type가 맞지 않습니다");
+            throw new EmailTypeMismatchException("Email Type가 맞지 않습니다");
         }
     }
 

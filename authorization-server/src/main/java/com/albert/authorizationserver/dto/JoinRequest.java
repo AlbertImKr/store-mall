@@ -6,24 +6,28 @@ import com.albert.authorizationserver.model.Role;
 import com.albert.authorizationserver.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @PasswordMatches
 @Getter
+@NoArgsConstructor
 public class JoinRequest {
 
     @Email
-    private final String email;
+    private String email;
 
     @Size(min = 3, max = 10)
-    private final String nickname;
+    private String nickname;
 
     @PasswordPattern
-    private final String password;
+    private String password;
     @PasswordPattern
-    private final String confirmPassword;
+    private String confirmPassword;
 
+    @Builder
     public JoinRequest(String email, String nickname, String password, String confirmPassword) {
         this.email = email;
         this.nickname = nickname;
