@@ -1,4 +1,4 @@
-package com.albert.authorizationserver;
+package com.albert.authorizationserver.service;
 
 
 import static com.albert.authorizationserver.model.EncryptionAlgorithm.BCRYPT;
@@ -7,7 +7,7 @@ import static com.albert.authorizationserver.model.Role.USER;
 import com.albert.authorizationserver.dto.JoinRequest;
 import com.albert.authorizationserver.exception.EmailNotFoundException;
 import com.albert.authorizationserver.model.User;
-import com.albert.authorizationserver.service.CustomUserDetails;
+import com.albert.authorizationserver.repositories.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,6 +1,5 @@
 package com.albert.authorizationserver.service;
 
-import com.albert.authorizationserver.UserService;
 import com.albert.authorizationserver.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

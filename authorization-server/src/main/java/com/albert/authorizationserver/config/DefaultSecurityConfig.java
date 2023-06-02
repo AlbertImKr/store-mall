@@ -1,4 +1,4 @@
-package com.albert.authorizationserver;
+package com.albert.authorizationserver.config;
 
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;

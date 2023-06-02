@@ -1,4 +1,4 @@
-package com.albert.authorizationserver;
+package com.albert.authorizationserver.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

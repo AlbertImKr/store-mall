@@ -1,4 +1,4 @@
-package com.albert.authorizationserver;
+package com.albert.authorizationserver.repositories;
 
 import com.albert.authorizationserver.model.User;
 import java.util.Optional;

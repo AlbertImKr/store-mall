@@ -1,9 +1,9 @@
 package com.albert.authorizationserver.controller;
 
 
-import com.albert.authorizationserver.UserService;
 import com.albert.authorizationserver.dto.JoinRequest;
 import com.albert.authorizationserver.model.User;
+import com.albert.authorizationserver.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
