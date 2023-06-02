@@ -5,6 +5,7 @@ import static com.albert.authorizationserver.model.EncryptionAlgorithm.BCRYPT;
 import static com.albert.authorizationserver.model.Role.USER;
 
 import com.albert.authorizationserver.dto.JoinRequest;
+import com.albert.authorizationserver.exception.EmailAlreadyExistsException;
 import com.albert.authorizationserver.exception.EmailNotFoundException;
 import com.albert.authorizationserver.model.User;
 import com.albert.authorizationserver.repositories.UserRepository;
@@ -45,9 +46,9 @@ public class UserService {
     }
 
     public User save(JoinRequest joinRequest) {
-//        if (isEmailExists(joinRequest.getEmail())) {
-//            throw new EmailAlreadyExistsException("이메일이 이미 존재합니다.");
-//        }
+        if (isEmailExists(joinRequest.getEmail())) {
+            throw new EmailAlreadyExistsException("이메일이 이미 존재합니다.");
+        }
         User user = joinRequest.toUser(bCryptPasswordEncoder, BCRYPT, USER);
         return userRepository.save(user);
     }
