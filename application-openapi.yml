@@ -1,7 +1,8 @@
 openapi: 3.0.0
 servers:
-  - description: local
-    url: http://localhost:8080
+  - description: authorizationServer
+    url: http://localhost:9000
+
 info:
   description: This is Albert's commerce-project API
   version: "1.0.0"
@@ -12,32 +13,22 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: admins
-    description: Secured Admin-only calls
-  - name: developers
+  - name: authorizationServer
+    description: oAuth2 Authorization Server
+  - name: ApiApplication
     description: Operations available to regular developers
 paths:
-  /login:
-    post:
-      tags:
-        - developers
-      summary: 로그인
-      operationId: login
-      description: 로그인 요청을 한다
-      responses:
-        '200':
-          description: 로그인 성공
-        '400':
-          description: 잘못 입력했습니다.
-        '401':
-          description: 비번 혹은 이메일을 잘못 입력했습니다.
   /users:
     post:
       tags:
-        - developers
-      summary: add user
-      operationId: addUser
+        - authorizationServer
+      summary: 유저를 추가한다
       description: 유저를 추가한다
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinRequest'
       responses:
         '201':
           description: 유저 추가 성공
@@ -45,24 +36,81 @@ paths:
           description: 잘못 입력했습니다
         '409':
           description: 이미 존재하는 유저이다
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/JoinRequest'
-        description: User user to add
-  /users/profile:
+  /oauth2/authorize:
     get:
       tags:
-        - developers
-      summary: 현재 로그인한 유저의 profile를 가져온다
-      operationId: getUserProfile
-      description: 현재 로그인한 유저의 profile를 가져온다
+        - authorizationServer
+      summary: authorize 토큰 요청 페이지
+      description: 로그인 후 요청 해야 합니다. 브라우저에서 요청을 해야한다 http://localhost:9000/oauth2/authorize?response_type=code&client_id=oidc-client&scope=openid profile&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client
+      parameters:
+        - name: response_type
+          in: query
+          description: response type
+          required: true
+          schema:
+            type: string
+            example: code
+        - name: client_id
+          in: query
+          description: Client ID
+          required: true
+          schema:
+            type: string
+            example: oidc-client
+        - name: scope
+          in: query
+          description: scope
+          required: true
+          schema:
+            type: string
+            example: openid profile
+        - name: redirect_uri
+          in: query
+          description: redirect_uri
+          required: true
+          schema:
+            type: string
+            example: http://127.0.0.1:8080/login/oauth2/code/oidc-client
       responses:
         '200':
-          description: 성공적으로 유저 profile를 가져오기 성공
+          description: 권한 부여 페이지 혹은 권한 부여 페이지
+  /token:
+    post:
+      tags:
+        - authorizationServer
+      summary: Token를 요청한다
+      description: AccessToken,RefreshToken,IdToken을 요청한다
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: AccessToken,RefreshToken,IdToken
+        '400':
+          description: 발급 실패
+  /userinfo:
+    get:
+      tags:
+        - authorizationServer
+      summary: UserInfo 요청한다
+      description: Token이 필요한다 UserInfo를 요청한다
+      responses:
+        '200':
+          description: 요청 성공
         '401':
-          description: 사용자 인증 실패
+          description: 권한이 없다
+  /.well-known/openid-configuration:
+    get:
+      tags:
+        - authorizationServer
+      summary: issuer를 요청한다
+      description: 서버의 허용하는 리스트
+      responses:
+        '200':
+          description: 요청 성공
+
 components:
   schemas:
     JoinRequest:
@@ -79,15 +127,15 @@ components:
           example: example@email.com
         nickname:
           type: string
-          format: 길이가 min =3, max =10
+          description: 길이가 min =3, max =10
           example: jack
         password:
           type: string
-          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          description: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
           example: aA!123456789
         confirmPassword:
           type: string
-          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          description: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
           example: aA!123456789
     LoginRequest:
       type: object
@@ -101,6 +149,29 @@ components:
           example: example@email.com
         password:
           type: string
-          format: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
+          description: 대문자,소문자,숫자가 포함해야 한다(min=8,max=20)
           example: aA!123456789
-
+    TokenRequest:
+      type: object
+      required:
+        - code
+        - redirect_uri
+        - grant_type
+        - client_id
+        - client_secret
+      properties:
+        code:
+          type: string
+          description: authorize code (/oauth2/authorize)에서 가져온다
+        redirect_uri:
+          type: string
+          example: http://127.0.0.1:8080/login/oauth2/code/oidc-client
+        grant_type:
+          type: string
+          example: authorization_code
+        client_id:
+          type: string
+          example: oidc-client
+        client_secret:
+          type: string
+          example: secret
