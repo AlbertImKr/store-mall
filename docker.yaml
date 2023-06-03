@@ -36,3 +36,13 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+  keycloak:
+    image: keycloak/keycloak:latest
+    ports:
+      - 9001:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    command:
+      - start-dev
+

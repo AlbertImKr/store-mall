@@ -18,9 +18,9 @@ spring:
             client-authentication-method: client_secret_post
             scope: openid,profile
           keycloak:
-            client-id: oauth2-client-app
-            client-secret: leRro2potl2pTr6Nmhl9hCJbEdopHySe
-            client-name: oauth2-client-app
+            client-id: keycloak
+            client-secret: bTCHNXGD5mQzmoa7Bw5QwyTZEkoo2b7v
+            client-name: keycloak
             redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
@@ -30,7 +30,7 @@ spring:
             issuer-uri: http://localhost:9000
             user-name-attribute: sub
           keycloak:
-            issuer-uri: http://localhost:8082/realms/oauth2
+            issuer-uri: http://localhost:9001/realms/kc-oauth2
             user-name-attribute: preferred_username
 
 
