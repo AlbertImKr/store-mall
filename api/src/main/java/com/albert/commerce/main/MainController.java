@@ -1,27 +1,21 @@
 package com.albert.commerce.main;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @Controller
 public class MainController {
 
-    @GetMapping
+    @GetMapping("/")
     public String viewMain() {
-        return "main/welcome";
+        return "welcome";
     }
 
-
-    @GetMapping("/login")
-    public String login() {
-        return "main/login";
-    }
-
-    @GetMapping(path = "/login", params = "error")
-    public String loginFailed(Model model) {
-        model.addAttribute("error", "wrong");
-        return "main/login";
+    @GetMapping("/index")
+    public String index() {
+        return "welcome";
     }
 
 }

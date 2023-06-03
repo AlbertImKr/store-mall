@@ -1,49 +1,21 @@
 package com.albert.commerce.infra;
 
-import com.albert.commerce.user.security.AuthenticationProviderService;
-import javax.sql.DataSource;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-@Configuration
-@RequiredArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig {
-
-    private final UserDetailsService userDetailsService;
-    private final DataSource dataSource;
-    private final AuthenticationProviderService authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(
-                        requestMatcherRegistry -> requestMatcherRegistry
-                                .requestMatchers("/users", "/users/new", "/", "/css/**", "/js/**",
-                                        "/login", "/oauth2/**").permitAll()
-                                .requestMatchers("**").authenticated()
+        httpSecurity.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
+                        .requestMatchers("/index").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
-                .authenticationProvider(authenticationProvider)
-                .rememberMe(rememberMeConfigurer -> rememberMeConfigurer
-                        .tokenRepository(tokenRepository())
-                        .userDetailsService(userDetailsService));
+                .oauth2Login(Customizer.withDefaults());
         return httpSecurity.build();
     }
-
-    @Bean
-    public PersistentTokenRepository tokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(dataSource);
-        return jdbcTokenRepository;
-    }
-
-
 }

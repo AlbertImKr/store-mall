@@ -50,7 +50,6 @@ public class AppConfig {
                 .clientId("oidc-client")
                 .clientSecret(bCryptPasswordEncoder().encode("secret"))
                 .clientName("oidc-client")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
