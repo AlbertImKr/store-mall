@@ -1,5 +1,6 @@
 package com.albert.commerce.user;
 
+import com.albert.commerce.user.dto.UserProfile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,16 @@ public class UserController {
         return oAuth2User;
     }
 
+    @GetMapping("/users/profile")
+    public UserProfile getUserInfo(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        String email = oAuth2User.getName();
+        return userService.findByEmail(email);
+    }
+
 
     @GetMapping("/newAccessToken")
     public OAuth2AccessToken newAccessToken(OAuth2AuthenticationToken authentication,
             HttpServletRequest request, HttpServletResponse response) {
-
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
                 authentication.getAuthorizedClientRegistrationId(),
                 authentication.getName());
