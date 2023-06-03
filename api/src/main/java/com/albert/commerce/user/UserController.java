@@ -1,6 +1,6 @@
 package com.albert.commerce.user;
 
-import com.albert.commerce.user.dto.UserProfile;
+import com.albert.commerce.user.dto.UserProfileResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/users/profile")
-    public UserProfile getUserInfo(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public UserProfileResponse getUserInfo(@AuthenticationPrincipal OAuth2User oAuth2User) {
         String email = oAuth2User.getName();
         return userService.findByEmail(email);
     }

@@ -1,7 +1,9 @@
 package com.albert.commerce.user;
 
 
-import com.albert.commerce.user.dto.UserProfile;
+import static com.albert.commerce.user.Role.USER;
+
+import com.albert.commerce.user.dto.UserProfileResponse;
 import com.albert.commerce.user.exception.EmailNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,16 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             return;
         }
-        User user = User.builder().email(email).build();
+        User user = User.builder()
+                .email(email)
+                .role(USER)
+                .build();
         userRepository.save(user);
     }
 
-    public UserProfile findByEmail(String email) {
+    public UserProfileResponse findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException("존재하지 않은 이메일입니다."));
-        return UserProfile.from(user);
+        return UserProfileResponse.from(user);
     }
 }

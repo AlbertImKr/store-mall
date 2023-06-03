@@ -6,20 +6,20 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserProfile {
+public class UserProfileResponse {
 
     private String nickname;
     private String email;
 
-    public UserProfile() {
+    public UserProfileResponse() {
     }
 
-    public UserProfile(String nickname, String email) {
+    public UserProfileResponse(String nickname, String email) {
         this.nickname = nickname;
         this.email = email;
     }
 
-    public static UserProfile from(User user) {
-        return new UserProfile(user.getNickname(), user.getEmail());
+    public static UserProfileResponse from(User user) {
+        return new UserProfileResponse(user.getNickname(), user.getEmail());
     }
 }
