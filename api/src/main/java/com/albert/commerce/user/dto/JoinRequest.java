@@ -37,7 +37,6 @@ public class JoinRequest {
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .role(role)
-                .algorithm(algorithm)
                 .build();
     }
 
