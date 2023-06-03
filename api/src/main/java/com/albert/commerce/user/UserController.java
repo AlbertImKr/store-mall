@@ -35,8 +35,6 @@ public class UserController {
 
     @GetMapping("/")
     public OAuth2User mainPage(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getName();
-        userService.init(email);
         return oAuth2User;
     }
 
