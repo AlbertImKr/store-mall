@@ -1,4 +1,4 @@
 spring:
   profiles:
-    include: test,oauth2
+    include: testdb,oauth2
 
