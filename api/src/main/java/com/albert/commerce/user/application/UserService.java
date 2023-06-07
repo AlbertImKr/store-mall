@@ -1,10 +1,11 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.application;
 
 
-import static com.albert.commerce.user.Role.USER;
+import static com.albert.commerce.user.command.domain.Role.USER;
 
-import com.albert.commerce.user.dto.UserProfileResponse;
-import com.albert.commerce.user.exception.EmailNotFoundException;
+import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.command.domain.UserRepository;
+import com.albert.commerce.user.query.dto.UserProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

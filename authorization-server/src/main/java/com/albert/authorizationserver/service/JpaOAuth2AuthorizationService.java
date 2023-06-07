@@ -1,5 +1,13 @@
 package com.albert.authorizationserver.service;
 
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.CODE;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.DEVICE_CODE;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.STATE;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.USER_CODE;
+import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
+
 import com.albert.authorizationserver.model.Authorization;
 import com.albert.authorizationserver.repositories.AuthorizationRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,9 +26,7 @@ import org.springframework.security.oauth2.core.OAuth2DeviceCode;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.OAuth2UserCode;
-import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -91,25 +97,22 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         Assert.hasText(token, "token cannot be empty");
 
         Optional<Authorization> result;
+
         if (tokenType == null) {
-            result = this.authorizationRepository.findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValueOrOidcIdTokenValueOrUserCodeValueOrDeviceCodeValue(
-                    token);
-        } else if (OAuth2ParameterNames.STATE.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByState(token);
-        } else if (OAuth2ParameterNames.CODE.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByAuthorizationCodeValue(token);
-        } else if (OAuth2ParameterNames.ACCESS_TOKEN.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByAccessTokenValue(token);
-        } else if (OAuth2ParameterNames.REFRESH_TOKEN.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByRefreshTokenValue(token);
-        } else if (OidcParameterNames.ID_TOKEN.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByOidcIdTokenValue(token);
-        } else if (OAuth2ParameterNames.USER_CODE.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByUserCodeValue(token);
-        } else if (OAuth2ParameterNames.DEVICE_CODE.equals(tokenType.getValue())) {
-            result = this.authorizationRepository.findByDeviceCodeValue(token);
+            result = this.authorizationRepository
+                    .findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValueOrOidcIdTokenValueOrUserCodeValueOrDeviceCodeValue(
+                            token);
         } else {
-            result = Optional.empty();
+            result = switch (tokenType.getValue()) {
+                case STATE -> this.authorizationRepository.findByState(token);
+                case CODE -> this.authorizationRepository.findByAuthorizationCodeValue(token);
+                case ACCESS_TOKEN -> this.authorizationRepository.findByAccessTokenValue(token);
+                case REFRESH_TOKEN -> this.authorizationRepository.findByRefreshTokenValue(token);
+                case ID_TOKEN -> this.authorizationRepository.findByOidcIdTokenValue(token);
+                case USER_CODE -> this.authorizationRepository.findByUserCodeValue(token);
+                case DEVICE_CODE -> this.authorizationRepository.findByDeviceCodeValue(token);
+                default -> Optional.empty();
+            };
         }
 
         return result.map(this::toObject).orElse(null);
@@ -133,7 +136,7 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
                 .authorizedScopes(StringUtils.commaDelimitedListToSet(entity.getAuthorizedScopes()))
                 .attributes(attributes -> attributes.putAll(parseMap(entity.getAttributes())));
         if (entity.getState() != null) {
-            builder.attribute(OAuth2ParameterNames.STATE, entity.getState());
+            builder.attribute(STATE, entity.getState());
         }
 
         if (entity.getAuthorizationCodeValue() != null) {
@@ -205,7 +208,7 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         entity.setAuthorizedScopes(
                 StringUtils.collectionToDelimitedString(authorization.getAuthorizedScopes(), ","));
         entity.setAttributes(writeMap(authorization.getAttributes()));
-        entity.setState(authorization.getAttribute(OAuth2ParameterNames.STATE));
+        entity.setState(authorization.getAttribute(STATE));
 
         OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode =
                 authorization.getToken(OAuth2AuthorizationCode.class);

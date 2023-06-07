@@ -1,7 +1,6 @@
-package com.albert.authorizationserver.service;
+package com.albert.authorizationserver.repositories;
 
 import com.albert.authorizationserver.model.Client;
-import com.albert.authorizationserver.repositories.ClientRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -106,12 +105,12 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
                         clientAuthenticationMethods.forEach(authenticationMethod ->
                                 authenticationMethods.add(
                                         resolveClientAuthenticationMethod(authenticationMethod))))
-                .authorizationGrantTypes((grantTypes) ->
+                .authorizationGrantTypes(grantTypes ->
                         authorizationGrantTypes.forEach(grantType ->
                                 grantTypes.add(resolveAuthorizationGrantType(grantType))))
-                .redirectUris((uris) -> uris.addAll(redirectUris))
+                .redirectUris(uris -> uris.addAll(redirectUris))
                 .postLogoutRedirectUris((uris) -> uris.addAll(postLogoutRedirectUris))
-                .scopes((scopes) -> scopes.addAll(clientScopes));
+                .scopes(scopes -> scopes.addAll(clientScopes));
 
         Map<String, Object> clientSettingsMap = parseMap(client.getClientSettings());
         builder.clientSettings(ClientSettings.withSettings(clientSettingsMap).build());

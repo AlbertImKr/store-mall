@@ -1,4 +1,4 @@
-package com.albert.commerce.infra;
+package com.albert.commerce.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

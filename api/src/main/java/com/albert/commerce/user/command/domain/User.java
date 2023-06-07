@@ -1,4 +1,4 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.command.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,4 +1,4 @@
-package com.albert.commerce.user.exception;
+package com.albert.commerce.user.application;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 

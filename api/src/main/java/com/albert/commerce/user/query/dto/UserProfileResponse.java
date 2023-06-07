@@ -1,6 +1,6 @@
-package com.albert.commerce.user.dto;
+package com.albert.commerce.user.query.dto;
 
-import com.albert.commerce.user.User;
+import com.albert.commerce.user.command.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 

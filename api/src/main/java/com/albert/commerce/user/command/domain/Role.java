@@ -1,4 +1,4 @@
-package com.albert.commerce.user;
+package com.albert.commerce.user.command.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
