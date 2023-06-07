@@ -4,38 +4,46 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.albert'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+subprojects {
+    group = 'com.albert'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
+    repositories {
+        mavenCentral()
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    apply { pluginManager.apply "java" }
+    apply { pluginManager.apply "io.spring.dependency-management" }
+    apply { pluginManager.apply "org.springframework.boot" }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
+    dependencies {
+        // spring boot
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.hateoas:spring-hateoas'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    implementation 'org.projectlombok:lombok'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.69'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-}
+        // lombok
+        implementation 'org.projectlombok:lombok'
+        testImplementation 'org.projectlombok:lombok'
 
-tasks.named('test') {
-    useJUnitPlatform()
+        // mySql
+        runtimeOnly 'com.mysql:mysql-connector-j'
+
+        // test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }
