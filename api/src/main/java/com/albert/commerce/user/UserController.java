@@ -26,7 +26,7 @@ public class UserController {
     private final OAuth2AuthorizedClientService authorizedClientService;
 
     @GetMapping("/token")
-    public OAuth2AccessToken viewJoinForm(OAuth2AuthenticationToken authentication) {
+    public OAuth2AccessToken getToken(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient authorizedClient
                 = authorizedClientService.loadAuthorizedClient(
                 authentication.getAuthorizedClientRegistrationId(), authentication.getName());
