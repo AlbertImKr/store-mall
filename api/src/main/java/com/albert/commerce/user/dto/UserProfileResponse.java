@@ -11,9 +11,6 @@ public class UserProfileResponse {
     private String nickname;
     private String email;
 
-    public UserProfileResponse() {
-    }
-
     public UserProfileResponse(String nickname, String email) {
         this.nickname = nickname;
         this.email = email;
