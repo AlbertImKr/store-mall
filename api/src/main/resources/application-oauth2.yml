@@ -1,0 +1,38 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: trace
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          oidc-client:
+            client-id: oidc-client
+            client-secret: secret
+            client-name: oidc-client
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/oidc-client
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope: openid,profile
+          keycloak:
+            client-id: keycloak
+            client-secret: bTCHNXGD5mQzmoa7Bw5QwyTZEkoo2b7v
+            client-name: keycloak
+            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope: openid,profile
+        provider:
+          oidc-client:
+            issuer-uri: http://localhost:9000
+            user-name-attribute: sub
+          keycloak:
+            issuer-uri: http://localhost:9001/realms/kc-oauth2
+            user-name-attribute: preferred_username
+
+
+
+

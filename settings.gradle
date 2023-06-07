@@ -1,1 +1,2 @@
 rootProject.name = 'spring-boot-commerce-project'
+include 'api', 'authorization-server'
