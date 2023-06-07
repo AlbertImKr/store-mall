@@ -49,6 +49,7 @@ public class CustomAuthenticationSuccessHandler extends
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
+    @Override
     public void setRequestCache(RequestCache requestCache) {
         this.requestCache = requestCache;
     }
