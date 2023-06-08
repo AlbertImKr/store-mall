@@ -1,5 +1,6 @@
 package com.albert.commerce.user.command.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public class UserId implements Serializable {
         this.id = UUID.randomUUID();
     }
 
+    @JsonValue
     public UUID getId() {
         return id;
     }

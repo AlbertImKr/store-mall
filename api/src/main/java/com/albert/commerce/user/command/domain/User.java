@@ -4,13 +4,13 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @Entity
+@Table(name = "user")
 public class User {
 
     @EmbeddedId
@@ -19,6 +19,9 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {
+    }
 
     @Builder
     public User(String nickname, String email, Role role) {

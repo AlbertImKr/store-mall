@@ -1,7 +1,7 @@
 package com.albert.commerce.user.ui;
 
 import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.dto.UserProfileResponse;
+import com.albert.commerce.user.query.UserProfileResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
