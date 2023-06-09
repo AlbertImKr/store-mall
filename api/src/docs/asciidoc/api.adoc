@@ -13,7 +13,7 @@
 === 스토어 정보를 요청
 
 [[get_store_curl_request]]
-==== request
+==== curl request
 
 include::{snippets}/getMyStoreSuccess/curl-request.adoc[]
 
@@ -32,10 +32,24 @@ include::{snippets}/getMyStoreSuccess/http-request.adoc[]
 
 include::{snippets}/getMyStoreSuccess/http-response.adoc[]
 
+[[get_store_response_body]]
+==== response body
+
+include::{snippets}/getMyStoreSuccess/response-body.adoc[]
+
+[[get_store_response_field]]
+==== response filed
+
+include::{snippets}/getMyStoreSuccess/response-fields.adoc[]
+
 [[get_store_links]]
 ==== links
 
 include::{snippets}/getMyStoreSuccess/links.adoc[]
+
+
+
+
 
 
 

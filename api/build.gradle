@@ -27,10 +27,12 @@ asciidoctor {
     dependsOn test
 }
 
-
-bootJar {
+tasks.register('copyDucument', Copy) {
     dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
+    from file("build/docs/asciidoc/")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDucument
 }

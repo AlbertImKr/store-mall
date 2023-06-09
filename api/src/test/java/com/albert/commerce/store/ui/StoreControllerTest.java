@@ -4,6 +4,8 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.ha
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
@@ -116,19 +118,20 @@ class StoreControllerTest {
                 .andExpect(jsonPath("_links.other-store").exists())
                 //restDocs
                 .andDo(document(
-                        "getMyStoreSuccess",
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("My 스토어 연결한다"),
-                                linkWithRel("add-store").description("My 스토어를 만든다"),
-                                linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("storeId").description("스토어의 아이디"),
-                                fieldWithPath("storeName").description("스토어의 이름")
+                                "getMyStoreSuccess", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("My 스토어 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어의 아이디"),
+                                        fieldWithPath("storeName").description("스토어의 이름")
+                                )
                         )
-                ));
+                );
     }
 
     @DisplayName("스토어 정보를 가져올 스토어가 존재하지 않으면 에러 메시지를 응답한다")
