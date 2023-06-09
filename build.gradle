@@ -34,6 +34,7 @@ subprojects {
         // lombok
         implementation 'org.projectlombok:lombok'
         testImplementation 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
         // mySql
         runtimeOnly 'com.mysql:mysql-connector-j'

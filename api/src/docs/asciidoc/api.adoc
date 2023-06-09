@@ -9,25 +9,30 @@
 [[Store]]
 == Store
 
-[[Store-Get]]
+[[get_store]]
 === 스토어 정보를 요청
 
+[[get_store_curl_request]]
 ==== request
 
 include::{snippets}/getMyStoreSuccess/curl-request.adoc[]
 
-==== httpie-request
+[[get_store_httpie_requset]]
+==== httpie request
 
 include::{snippets}/getMyStoreSuccess/httpie-request.adoc[]
 
-==== http
+[[get_store_http_requset]]
+==== http request
 
 include::{snippets}/getMyStoreSuccess/http-request.adoc[]
 
+[[get_store_example_response]]
 ==== response(example)
 
 include::{snippets}/getMyStoreSuccess/http-response.adoc[]
 
+[[get_store_links]]
 ==== links
 
 include::{snippets}/getMyStoreSuccess/links.adoc[]
