@@ -1,0 +1,36 @@
+= Spring Boot Commerce
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[Store]]
+== Store
+
+[[Store-Get]]
+=== 스토어 정보를 요청
+
+==== request
+
+include::{snippets}/getMyStoreSuccess/curl-request.adoc[]
+
+==== httpie-request
+
+include::{snippets}/getMyStoreSuccess/httpie-request.adoc[]
+
+==== http
+
+include::{snippets}/getMyStoreSuccess/http-request.adoc[]
+
+==== response(example)
+
+include::{snippets}/getMyStoreSuccess/http-response.adoc[]
+
+==== links
+
+include::{snippets}/getMyStoreSuccess/links.adoc[]
+
+
+

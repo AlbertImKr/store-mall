@@ -1,5 +1,12 @@
 package com.albert.commerce.store.ui;
 
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -26,6 +34,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+@AutoConfigureRestDocs
 @WithMockUser("test@email.com")
 @Transactional
 @AutoConfigureMockMvc
@@ -59,7 +68,7 @@ class StoreControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
-                .andExpect(redirectedUrl("http://localhost/stores/my"));
+                .andExpect(redirectedUrl("http://localhost:8080/stores/my"));
     }
 
     @DisplayName("스토어가 이미 추가 되여 있으면 에러 메시지를 응답한다")
@@ -94,7 +103,9 @@ class StoreControllerTest {
         storeService.addStore(storeRequest);
 
         // when
-        mockMvc.perform(get("/stores/my"))
+        mockMvc.perform(get("/stores/my")
+                        .contentType(MediaTypes.HAL_JSON)
+                        .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 // then
                 .andExpect(status().isOk())
@@ -102,7 +113,22 @@ class StoreControllerTest {
                 .andExpect(jsonPath("storeName").exists())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists());
+                .andExpect(jsonPath("_links.other-store").exists())
+                //restDocs
+                .andDo(document(
+                        "getMyStoreSuccess",
+                        links(
+                                halLinks(),
+                                linkWithRel("self").description("My 스토어 연결한다"),
+                                linkWithRel("add-store").description("My 스토어를 만든다"),
+                                linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                        ),
+                        responseFields(
+                                subsectionWithPath("_links").ignored(),
+                                fieldWithPath("storeId").description("스토어의 아이디"),
+                                fieldWithPath("storeName").description("스토어의 이름")
+                        )
+                ));
     }
 
     @DisplayName("스토어 정보를 가져올 스토어가 존재하지 않으면 에러 메시지를 응답한다")

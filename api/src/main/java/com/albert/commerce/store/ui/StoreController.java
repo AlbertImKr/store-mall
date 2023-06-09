@@ -71,8 +71,8 @@ public class StoreController {
                 linkTo(methodOn(StoreController.class).getMyStore(null)).withSelfRel(),
                 linkTo(methodOn(StoreController.class).addStore(null, null, null))
                         .withRel("add-store"),
-                linkTo(methodOn(StoreController.class).getStore(null))
-                        .withRel("other-store"));
+                linkTo(methodOn(StoreController.class).getStore(null)).withRel("other-store")
+        );
         return ResponseEntity.ok().body(storeResponse);
     }
 
