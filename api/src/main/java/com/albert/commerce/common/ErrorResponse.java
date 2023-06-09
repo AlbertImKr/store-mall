@@ -1,7 +1,11 @@
 package com.albert.commerce.common;
 
-public class ErrorResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.RepresentationModel;
 
+public class ErrorResponse extends RepresentationModel<ErrorResponse> {
+
+    @JsonProperty(value = "error-message")
     private ErrorMessage errorMessage;
 
     public ErrorResponse() {

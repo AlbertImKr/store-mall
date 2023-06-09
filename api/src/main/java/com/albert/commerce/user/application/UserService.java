@@ -23,6 +23,7 @@ public class UserService {
         }
         User user = User.builder()
                 .email(email)
+                .nickname("user")
                 .role(USER)
                 .build();
         userRepository.save(user);

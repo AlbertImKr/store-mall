@@ -1,6 +1,5 @@
 package com.albert.commerce.store.command.domain;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -11,7 +10,6 @@ public class Store {
 
 
     @EmbeddedId
-    @JsonValue
     private StoreId storeId;
 
     private String storeName;
