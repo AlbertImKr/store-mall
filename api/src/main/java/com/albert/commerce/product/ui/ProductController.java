@@ -42,7 +42,8 @@ public class ProductController {
         UserProfileResponse user = userDataDao.findByEmail(email).orElseThrow();
         UserId id = user.getId();
         Store store = storeDao.findByStoreUserId(new StoreUserId(id)).orElseThrow();
-        ProductResponse productResponse = productService.addProduct(productRequest);
+        ProductResponse productResponse = productService
+                .addProduct(productRequest, store.getStoreId());
         ProductId productId = productResponse.getProductId();
         storeService.addProductId(store, productId);
         Link selfRel = linkTo(ProductController.class).slash(productId.getId()).withSelfRel();

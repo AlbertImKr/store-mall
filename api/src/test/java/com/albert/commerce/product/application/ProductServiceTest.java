@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
+import com.albert.commerce.store.command.domain.StoreId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,13 +28,14 @@ class ProductServiceTest {
     @Test
     void addProduct() {
         // given
+        StoreId storeId = new StoreId();
         ProductRequest productRequest = new ProductRequest("testProductName",
                 1000, "test", "testBrand", "test");
-        Product product = productRequest.toProduct();
+        Product product = productRequest.toProduct(storeId);
         given(productRepository.save(any(Product.class))).willReturn(product);
 
         // when
-        productService.addProduct(productRequest);
+        productService.addProduct(productRequest, storeId);
 
         // then
         verify(productRepository).save(any(Product.class));

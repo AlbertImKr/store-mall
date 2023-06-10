@@ -3,6 +3,7 @@ package com.albert.commerce.product.application;
 import com.albert.commerce.common.model.Money;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.store.command.domain.StoreId;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +27,9 @@ public class ProductRequest {
     }
 
 
-    public Product toProduct() {
+    public Product toProduct(StoreId storeId) {
         return Product.builder()
+                .storeId(storeId)
                 .productId(new ProductId())
                 .productName(productName)
                 .price(new Money(price))
