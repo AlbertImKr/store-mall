@@ -1,10 +1,13 @@
-package com.albert.commerce.store.command.domain;
+package com.albert.commerce.store.query;
 
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.command.domain.StoreUserId;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import java.util.HashSet;
@@ -14,8 +17,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "store")
-public class Store {
-
+public class StoreAndProduct {
 
     @EmbeddedId
     private StoreId storeId;
@@ -24,27 +26,13 @@ public class Store {
 
     private StoreUserId storeUserId;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "product",
             joinColumns = @JoinColumn(name = "store_id")
     )
     private Set<ProductId> productIds = new HashSet<>();
 
-    protected Store() {
-    }
-
-    public Store(String storeName, StoreUserId storeUserId) {
-        this.storeId = new StoreId();
-        this.storeName = storeName;
-        this.storeUserId = storeUserId;
-    }
-
-    public void addProductId(ProductId productId) {
-        productIds.add(productId);
-    }
-
-    public void removeProductId(ProductId productId) {
-        productIds.remove(productId);
+    public StoreAndProduct() {
     }
 }

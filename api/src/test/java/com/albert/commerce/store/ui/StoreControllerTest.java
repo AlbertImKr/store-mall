@@ -22,6 +22,7 @@ import com.albert.commerce.store.command.application.StoreService;
 import com.albert.commerce.user.application.UserService;
 import com.albert.commerce.user.query.UserProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +56,9 @@ class StoreControllerTest {
 
     @Autowired
     StoreService storeService;
+
+    @Autowired
+    EntityManager entityManager;
 
     @BeforeEach
     void saveTestUser() {
@@ -196,6 +200,7 @@ class StoreControllerTest {
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
         storeRequest.setUserId(userProfileResponse.getId());
         StoreResponse storeResponse = storeService.addStore(storeRequest);
+        entityManager.flush();
 
         mockMvc.perform(get("/stores/" + storeResponse.getStoreId().getValue()))
                 .andDo(print())
