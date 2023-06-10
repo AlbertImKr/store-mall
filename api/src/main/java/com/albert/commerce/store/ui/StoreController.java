@@ -92,4 +92,5 @@ public class StoreController {
                         .withRel("other-store"));
         return ResponseEntity.ok().body(storeResponse);
     }
+
 }
