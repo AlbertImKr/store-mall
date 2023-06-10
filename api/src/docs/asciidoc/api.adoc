@@ -10,7 +10,7 @@
 == Store
 
 [[get_my_store]]
-=== 스토어 정보를 요청
+=== My 스토어 정보를 요청
 
 [[get_my_store_curl_request]]
 ==== curl request
@@ -68,7 +68,7 @@ include::{snippets}/getMyStoreFailed/response-fields.adoc[]
 include::{snippets}/getMyStoreFailed/links.adoc[]
 
 [[get_store]]
-=== 스토어 정보를 요청
+=== Store Id로 스토어 정보를 요청
 
 [[get_store_curl_request]]
 ==== curl request

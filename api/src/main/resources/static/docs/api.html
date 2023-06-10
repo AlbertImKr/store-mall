@@ -2122,8 +2122,8 @@
     <ul class="sectlevel1">
       <li><a href="#Store">Store</a>
         <ul class="sectlevel2">
-          <li><a href="#get_my_store">스토어 정보를 요청</a></li>
-          <li><a href="#get_store">스토어 정보를 요청</a></li>
+          <li><a href="#get_my_store">My 스토어 정보를 요청</a></li>
+          <li><a href="#get_store">Store Id로 스토어 정보를 요청</a></li>
           <li><a href="#add_my_store">My Store를 만든다</a></li>
         </ul>
       </li>
@@ -2140,7 +2140,7 @@
     <h2 id="Store"><a class="link" href="#Store">Store</a></h2>
     <div class="sectionbody">
       <div class="sect2">
-        <h3 id="get_my_store"><a class="link" href="#get_my_store">스토어 정보를 요청</a></h3>
+        <h3 id="get_my_store"><a class="link" href="#get_my_store">My 스토어 정보를 요청</a></h3>
         <div class="sect3">
           <h4 id="get_my_store_curl_request"><a class="link" href="#get_my_store_curl_request">curl
             request</a></h4>
@@ -2192,7 +2192,7 @@ X-Frame-Options: DENY
 Content-Length: 359
 
 {
-  "storeId" : "b7ed4e08-1440-4b84-8653-a74dbb4ae926",
+  "storeId" : "ba4a3e28-b814-4497-80da-630fcd3493e9",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
@@ -2216,7 +2216,7 @@ Content-Length: 359
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "b7ed4e08-1440-4b84-8653-a74dbb4ae926",
+  "storeId" : "ba4a3e28-b814-4497-80da-630fcd3493e9",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
@@ -2429,13 +2429,13 @@ Content-Length: 343
         </div>
       </div>
       <div class="sect2">
-        <h3 id="get_store"><a class="link" href="#get_store">스토어 정보를 요청</a></h3>
+        <h3 id="get_store"><a class="link" href="#get_store">Store Id로 스토어 정보를 요청</a></h3>
         <div class="sect3">
           <h4 id="get_store_curl_request"><a class="link" href="#get_store_curl_request">curl
             request</a></h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/2e97a2bb-384f-4d77-ad07-e49488c30808' -i -X GET</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8' -i -X GET</code></pre>
             </div>
           </div>
         </div>
@@ -2444,7 +2444,7 @@ Content-Length: 343
             request</a></h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/2e97a2bb-384f-4d77-ad07-e49488c30808'</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8'</code></pre>
             </div>
           </div>
         </div>
@@ -2453,7 +2453,7 @@ Content-Length: 343
             request</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/2e97a2bb-384f-4d77-ad07-e49488c30808 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/ed7a011a-f237-42de-801e-f1333450f4c8 HTTP/1.1
 Host: localhost:8080</code></pre>
             </div>
           </div>
@@ -2474,11 +2474,11 @@ X-Frame-Options: DENY
 Content-Length: 468
 
 {
-  "storeId" : "2e97a2bb-384f-4d77-ad07-e49488c30808",
+  "storeId" : "ed7a011a-f237-42de-801e-f1333450f4c8",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/stores/2e97a2bb-384f-4d77-ad07-e49488c30808"
+      "href" : "http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8"
     },
     "my-store" : {
       "href" : "http://localhost:8080/stores/my"
@@ -2501,11 +2501,11 @@ Content-Length: 468
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "2e97a2bb-384f-4d77-ad07-e49488c30808",
+  "storeId" : "ed7a011a-f237-42de-801e-f1333450f4c8",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/stores/2e97a2bb-384f-4d77-ad07-e49488c30808"
+      "href" : "http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8"
     },
     "my-store" : {
       "href" : "http://localhost:8080/stores/my"
@@ -2775,11 +2775,11 @@ X-Frame-Options: DENY
 Content-Length: 209
 
 {
-  "storeId" : "1c333755-d414-4aaa-9aa1-23fc2ae0b82a",
+  "storeId" : "2a9536d6-e884-4367-8199-8f191a405c06",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/stores/1c333755-d414-4aaa-9aa1-23fc2ae0b82a"
+      "href" : "http://localhost:8080/stores/2a9536d6-e884-4367-8199-8f191a405c06"
     }
   }
 }</code></pre>
@@ -2792,11 +2792,11 @@ Content-Length: 209
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "1c333755-d414-4aaa-9aa1-23fc2ae0b82a",
+  "storeId" : "2a9536d6-e884-4367-8199-8f191a405c06",
   "storeName" : "testStore",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/stores/1c333755-d414-4aaa-9aa1-23fc2ae0b82a"
+      "href" : "http://localhost:8080/stores/2a9536d6-e884-4367-8199-8f191a405c06"
     }
   }
 }</code></pre>
@@ -3003,7 +3003,7 @@ Host: localhost:8080
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: http://localhost:8080/products/71048e38-927c-4ab1-aaa1-10a45ec848fe
+Location: http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a
 Content-Type: application/hal+json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -3014,7 +3014,7 @@ X-Frame-Options: DENY
 Content-Length: 592
 
 {
-  "productId" : "71048e38-927c-4ab1-aaa1-10a45ec848fe",
+  "productId" : "3b9f324d-9361-4ec1-9df8-fbcc40a9c78a",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3022,7 +3022,7 @@ Content-Length: 592
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/71048e38-927c-4ab1-aaa1-10a45ec848fe"
+      "href" : "http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a"
     },
     "my-store" : {
       "href" : "http://localhost:8080/stores/my"
@@ -3045,7 +3045,7 @@ Content-Length: 592
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "productId" : "71048e38-927c-4ab1-aaa1-10a45ec848fe",
+  "productId" : "3b9f324d-9361-4ec1-9df8-fbcc40a9c78a",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3053,7 +3053,7 @@ Content-Length: 592
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/71048e38-927c-4ab1-aaa1-10a45ec848fe"
+      "href" : "http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a"
     },
     "my-store" : {
       "href" : "http://localhost:8080/stores/my"
@@ -3181,7 +3181,7 @@ Content-Length: 592
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-06-10 17:57:43 +0900
+    Last updated 2023-06-10 21:36:41 +0900
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
