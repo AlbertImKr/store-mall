@@ -11,7 +11,7 @@ import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.application.UserService;
+import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
 import java.net.URI;
 import java.security.Principal;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StoreController {
 
     private final StoreService storeService;
-    private final UserService userService;
+    private final UserDataDao userDataDao;
     private final StoreDao storeDao;
 
     @PostMapping
@@ -43,7 +43,8 @@ public class StoreController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }
-        UserProfileResponse userProfileResponse = userService.findByEmail(principal.getName());
+        UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
+                .orElseThrow();
         storeRequest.setUserId(userProfileResponse.getId());
         StoreResponse storeResponse = storeService.addStore(storeRequest);
 
@@ -60,7 +61,8 @@ public class StoreController {
 
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
-        UserProfileResponse userProfileResponse = userService.findByEmail(principal.getName());
+        UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
+                .orElseThrow();
         Optional<Store> store = storeDao.findByStoreUserId(
                 new StoreUserId(userProfileResponse.getId()));
         if (store.isEmpty()) {

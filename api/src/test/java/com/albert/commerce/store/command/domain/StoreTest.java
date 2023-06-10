@@ -2,7 +2,7 @@ package com.albert.commerce.store.command.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.product.domain.ProductId;
+import com.albert.commerce.product.command.domain.ProductId;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

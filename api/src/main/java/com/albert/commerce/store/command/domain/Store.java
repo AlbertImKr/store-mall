@@ -1,6 +1,6 @@
 package com.albert.commerce.store.command.domain;
 
-import com.albert.commerce.product.domain.ProductId;
+import com.albert.commerce.product.command.domain.ProductId;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EmbeddedId;

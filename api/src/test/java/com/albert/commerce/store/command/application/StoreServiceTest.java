@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.albert.commerce.product.domain.ProductId;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.command.domain.StoreUserId;
