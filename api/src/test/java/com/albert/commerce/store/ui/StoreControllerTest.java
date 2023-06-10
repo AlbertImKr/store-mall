@@ -70,7 +70,16 @@ class StoreControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
-                .andExpect(redirectedUrl("http://localhost:8080/stores/my"));
+                .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
+                //restDocs
+                .andDo(document(
+                                "addStoreSuccess", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("소토어 추가 링크입니다.")
+                                )
+                        )
+                );
     }
 
     @DisplayName("스토어가 이미 추가 되여 있으면 에러 메시지를 응답한다")
@@ -92,7 +101,22 @@ class StoreControllerTest {
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists());
+                .andExpect(jsonPath("_links.other-store").exists())
+                //restDocs
+                .andDo(document(
+                                "addStoreFailed", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("error-message").description("예외 메시지")
+                                )
+                        )
+                );
     }
 
     @DisplayName("내 스토어 정보를 가져온다")
@@ -146,7 +170,22 @@ class StoreControllerTest {
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists());
+                .andExpect(jsonPath("_links.other-store").exists())
+                //restDocs
+                .andDo(document(
+                                "getMyStoreFailed", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("error-message").description("예외 메시지")
+                                )
+                        )
+                );
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")
@@ -161,10 +200,28 @@ class StoreControllerTest {
         mockMvc.perform(get("/stores/" + storeResponse.getStoreId().getValue()))
                 .andDo(print())
                 .andExpect(jsonPath("storeId").exists())
+                .andExpect(jsonPath("storeName").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists());
+                .andExpect(jsonPath("_links.other-store").exists())
+                //restDocs
+                .andDo(document(
+                                "getStoreSuccess", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
+                                        linkWithRel("self").description("현재 스토어에 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어 아이디"),
+                                        fieldWithPath("storeName").description("스토어 이름")
+                                )
+                        )
+                );
     }
 
     @DisplayName("스토어 아이디로 존재하지 않으면 에러 메시지를 응답한다")
@@ -176,6 +233,21 @@ class StoreControllerTest {
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists());
+                .andExpect(jsonPath("_links.other-store").exists())
+                //restDocs
+                .andDo(document(
+                                "getStoreFailed", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("error-message").description("예외 메시지")
+                                )
+                        )
+                );
     }
 }
