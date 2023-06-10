@@ -92,6 +92,8 @@ paths:
           description: 발급 실패
   /userinfo:
     get:
+      security:
+        - oAuth2: [ profile,openid ]
       tags:
         - authorizationServer
       summary: UserInfo 요청한다
@@ -175,3 +177,13 @@ components:
         client_secret:
           type: string
           example: secret
+  securitySchemes:
+    oAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://127.0.0.1:9000/oauth2/authorize
+          tokenUrl: http://127.0.0.1:9000/oauth2/token
+          scopes:
+            openid: id
+            profile: profile
