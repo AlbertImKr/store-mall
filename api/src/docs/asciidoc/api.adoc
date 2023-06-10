@@ -177,3 +177,44 @@ include::{snippets}/addStoreFailed/response-fields.adoc[]
 ==== failed response links
 
 include::{snippets}/addStoreFailed/links.adoc[]
+
+[[Product]]
+== Product
+
+[[add_product]]
+=== 상품을 추가한다
+
+[[add_product_curl_request]]
+==== curl request
+
+include::{snippets}/addProduct/curl-request.adoc[]
+
+[[add_product_httpie_requset]]
+==== httpie request
+
+include::{snippets}/addProduct/httpie-request.adoc[]
+
+[[add_product_http_requset]]
+==== http request
+
+include::{snippets}/addProduct/http-request.adoc[]
+
+[[add_product_success_response]]
+==== success response
+
+include::{snippets}/addProduct/http-response.adoc[]
+
+[[add_product_response_body]]
+==== success response body
+
+include::{snippets}/addProduct/response-body.adoc[]
+
+[[add_product_response_field]]
+==== success response filed
+
+include::{snippets}/addProduct/response-fields.adoc[]
+
+[[add_product_links]]
+==== success links
+
+include::{snippets}/addProduct/links.adoc[]

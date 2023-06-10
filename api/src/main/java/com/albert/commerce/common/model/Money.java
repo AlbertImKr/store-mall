@@ -1,15 +1,12 @@
 package com.albert.commerce.common.model;
 
-public class Money {
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    private int value;
+public record Money(long value) {
 
-    public Money(int value) {
-        this.value = value;
-    }
-
-
-    public int getValue() {
+    @Override
+    @JsonValue
+    public long value() {
         return value;
     }
 

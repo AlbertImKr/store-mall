@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate.ddl-auto:
       create-drop
+    # JPA 쿼리 로그 출력 설정
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

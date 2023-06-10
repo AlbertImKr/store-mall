@@ -1,10 +1,11 @@
-package com.albert.commerce.product.domain;
+package com.albert.commerce.product.command.domain;
 
 import com.albert.commerce.common.jpa.MoneyConverter;
 import com.albert.commerce.common.model.Money;
 import jakarta.persistence.Convert;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -24,6 +25,7 @@ public class Product {
     public Product() {
     }
 
+    @Builder
     public Product(ProductId productId, String productName, Money price, String description,
             String brand, String category) {
         this.productId = productId;
