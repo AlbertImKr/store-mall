@@ -1,4 +1,4 @@
-package com.albert.commerce.common;
+package com.albert.commerce.common.exception;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

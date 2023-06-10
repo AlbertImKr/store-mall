@@ -1,7 +1,7 @@
 package com.albert.commerce.store;
 
-import com.albert.commerce.common.AppException;
-import com.albert.commerce.common.ErrorMessage;
+import com.albert.commerce.common.exception.AppException;
+import com.albert.commerce.common.exception.ErrorMessage;
 
 public abstract class StoreException extends AppException {
 

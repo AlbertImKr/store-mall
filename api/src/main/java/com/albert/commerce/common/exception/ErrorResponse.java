@@ -1,4 +1,4 @@
-package com.albert.commerce.common;
+package com.albert.commerce.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.RepresentationModel;
