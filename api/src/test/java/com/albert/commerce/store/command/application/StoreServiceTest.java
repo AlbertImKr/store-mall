@@ -58,7 +58,7 @@ class StoreServiceTest {
 
         // when,then
         assertThatThrownBy(() -> storeService.addStore(storeRequest)).isInstanceOf(
-                StoreAlreadyExistsError.class);
+                StoreAlreadyExistsException.class);
     }
 
     @DisplayName("상품을 추가한다.")

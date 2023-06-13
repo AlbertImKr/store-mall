@@ -16,7 +16,7 @@ public class StoreService {
 
     public StoreResponse addStore(StoreRequest storeRequest) {
         if (storeDao.existsByStoreUserId(storeRequest.getStoreUserId())) {
-            throw new StoreAlreadyExistsError();
+            throw new StoreAlreadyExistsException();
         }
         Store store = storeRequest.toStore();
         Store savedStore = storeRepository.save(store);
