@@ -9,19 +9,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class StoreAndProductResponse extends RepresentationModel<StoreAndProductResponse> {
 
     private StoreId storeId;
     private String storeName;
-
-    public StoreAndProductResponse() {
-    }
 
     @Builder
     public StoreAndProductResponse(StoreId storeId, String storeName) {
@@ -30,7 +29,7 @@ public class StoreAndProductResponse extends RepresentationModel<StoreAndProduct
     }
 
     public static StoreAndProductResponse from(StoreAndProduct storeAndProduct) {
-        Set<Link> collect = storeAndProduct.getProductIds().stream()
+        Set<Link> links = storeAndProduct.getProductIds().stream()
                 .map(productId -> linkTo(ProductController.class).slash(productId.getId())
                         .withRel("product" + productId.getId()))
                 .collect(Collectors.toSet());
@@ -38,7 +37,7 @@ public class StoreAndProductResponse extends RepresentationModel<StoreAndProduct
                 .storeId(storeAndProduct.getStoreId())
                 .storeName(storeAndProduct.getStoreName())
                 .build()
-                .add(collect);
+                .add(links);
     }
 
 
