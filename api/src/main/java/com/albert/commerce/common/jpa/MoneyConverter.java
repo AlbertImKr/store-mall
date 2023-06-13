@@ -2,7 +2,9 @@ package com.albert.commerce.common.jpa;
 
 import com.albert.commerce.common.model.Money;
 import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
+@Converter
 public class MoneyConverter implements AttributeConverter<Money, Long> {
 
     @Override
