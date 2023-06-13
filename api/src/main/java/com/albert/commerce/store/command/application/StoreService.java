@@ -23,16 +23,14 @@ public class StoreService {
         return StoreResponse.from(savedStore);
     }
 
-    public StoreResponse addProductId(Store store, ProductId productId) {
+    public void addProductId(Store store, ProductId productId) {
         store.addProductId(productId);
-        Store save = storeRepository.save(store);
-        return StoreResponse.from(save);
+        storeRepository.save(store);
     }
 
-    public StoreResponse removeProductId(Store store, ProductId productId) {
+    public void removeProductId(Store store, ProductId productId) {
         store.removeProductId(productId);
-        Store save = storeRepository.save(store);
-        return StoreResponse.from(save);
+        storeRepository.save(store);
     }
 
 }
