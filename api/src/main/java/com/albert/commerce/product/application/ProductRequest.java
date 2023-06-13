@@ -4,27 +4,12 @@ import com.albert.commerce.common.model.Money;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class ProductRequest {
-
-    private String productName;
-    private long price;
-    private String description;
-    private String brand;
-    private String category;
-
-    public ProductRequest(String productName, long price, String description, String brand,
-            String category) {
-        this.productName = productName;
-        this.price = price;
-        this.description = description;
-        this.brand = brand;
-        this.category = category;
-    }
+public record ProductRequest(String productName,
+                             long price,
+                             String description,
+                             String brand,
+                             String category) {
 
 
     public Product toProduct(StoreId storeId) {
