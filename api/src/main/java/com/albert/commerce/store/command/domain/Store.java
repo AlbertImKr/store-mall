@@ -9,8 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "store")
@@ -30,9 +33,6 @@ public class Store {
             joinColumns = @JoinColumn(name = "store_id")
     )
     private Set<ProductId> productIds = new HashSet<>();
-
-    protected Store() {
-    }
 
     public Store(String storeName, StoreUserId storeUserId) {
         this.storeId = new StoreId();

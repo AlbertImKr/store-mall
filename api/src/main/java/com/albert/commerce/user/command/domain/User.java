@@ -5,9 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "user")
@@ -19,9 +22,6 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    protected User() {
-    }
 
     @Builder
     public User(String nickname, String email, Role role) {
