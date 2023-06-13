@@ -1,9 +1,5 @@
 package com.albert.commerce.store.ui;
 
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import com.albert.commerce.store.command.application.StoreAndProductResponse;
 import com.albert.commerce.store.command.application.StoreRequest;
 import com.albert.commerce.store.command.application.StoreResponse;
@@ -22,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -52,11 +49,12 @@ public class StoreController {
         storeRequest.setUserId(userProfileResponse.getId());
         StoreResponse storeResponse = storeService.addStore(storeRequest);
 
-        URI myStore = linkTo(methodOn(StoreController.class).getMyStore(principal))
+        URI myStore = WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(StoreController.class).getMyStore(principal))
                 .toUri();
         UUID storeId = storeResponse.getStoreId().getValue();
         storeResponse.add(
-                linkTo(StoreController.class)
+                WebMvcLinkBuilder.linkTo(StoreController.class)
                         .slash(storeId)
                         .withSelfRel()
         );
@@ -74,10 +72,18 @@ public class StoreController {
         }
         StoreResponse storeResponse = StoreResponse.from(store.get());
         storeResponse.add(
-                linkTo(methodOn(StoreController.class).getMyStore(null)).withSelfRel(),
-                linkTo(methodOn(StoreController.class).addStore(null, null, null))
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .getMyStore(null))
+                        .withSelfRel(),
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .addStore(null, null, null))
                         .withRel("add-store"),
-                linkTo(methodOn(StoreController.class).getStore(null)).withRel("other-store")
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .getStore(null))
+                        .withRel("other-store")
         );
         return ResponseEntity.ok().body(storeResponse);
     }
@@ -90,11 +96,18 @@ public class StoreController {
         }
         StoreAndProductResponse storeAndProductResponse = StoreAndProductResponse.from(store.get());
         storeAndProductResponse.add(
-                linkTo(StoreController.class).slash(storeId).withSelfRel(),
-                linkTo(methodOn(StoreController.class).getMyStore(null)).withRel("my-store"),
-                linkTo(methodOn(StoreController.class).addStore(null, null, null))
+                WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .getMyStore(null))
+                        .withRel("my-store"),
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .addStore(null, null, null))
                         .withRel("add-store"),
-                linkTo(methodOn(StoreController.class).getStore(null))
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .getStore(null))
                         .withRel("other-store"));
         return ResponseEntity.ok().body(storeAndProductResponse);
     }

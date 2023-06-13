@@ -1,8 +1,5 @@
 package com.albert.commerce.product.ui;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;
 import com.albert.commerce.product.application.ProductService;
@@ -19,6 +16,7 @@ import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,13 +44,20 @@ public class ProductController {
                 .addProduct(productRequest, store.getStoreId());
         ProductId productId = productResponse.getProductId();
         storeService.addProductId(store, productId);
-        Link selfRel = linkTo(ProductController.class).slash(productId.getId()).withSelfRel();
+        Link selfRel = WebMvcLinkBuilder
+                .linkTo(ProductController.class).slash(productId.getId()).withSelfRel();
 
         productResponse.add(selfRel,
-                linkTo(methodOn(StoreController.class).getMyStore(null)).withRel("my-store"),
-                linkTo(methodOn(StoreController.class).addStore(null, null, null))
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class).getMyStore(null))
+                        .withRel("my-store"),
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .addStore(null, null, null))
                         .withRel("add-store"),
-                linkTo(methodOn(StoreController.class).getStore(null))
+                WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                        .getStore(null))
                         .withRel("other-store")
         );
 
