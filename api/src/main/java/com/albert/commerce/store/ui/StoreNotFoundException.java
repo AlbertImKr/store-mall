@@ -1,9 +1,9 @@
 package com.albert.commerce.store.ui;
 
+import com.albert.commerce.common.exception.BusinessException;
 import com.albert.commerce.common.exception.ErrorMessage;
-import com.albert.commerce.store.StoreException;
 
-public class StoreNotFoundException extends StoreException {
+public class StoreNotFoundException extends BusinessException {
 
     private static final ErrorMessage errorMessage = ErrorMessage.STORE_NOT_FOUND_ERROR;
 
