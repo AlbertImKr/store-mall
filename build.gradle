@@ -16,12 +16,6 @@ subprojects {
     apply { pluginManager.apply "io.spring.dependency-management" }
     apply { pluginManager.apply "org.springframework.boot" }
 
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
-    }
-
     dependencies {
         // spring boot
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -34,6 +28,7 @@ subprojects {
         // lombok
         implementation 'org.projectlombok:lombok'
         testImplementation 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
         // mySql
         runtimeOnly 'com.mysql:mysql-connector-j'

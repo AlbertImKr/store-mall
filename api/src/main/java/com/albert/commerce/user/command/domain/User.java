@@ -1,23 +1,23 @@
 package com.albert.commerce.user.command.domain;
 
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import java.util.concurrent.atomic.AtomicLong;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@NoArgsConstructor
 @Entity
+@Table(name = "user")
 public class User {
 
-    private static final AtomicLong idGenerator = new AtomicLong();
-
-    @Id
-    private Long id;
+    @EmbeddedId
+    private UserId id;
     private String nickname;
     private String email;
     @Enumerated(EnumType.STRING)
@@ -25,7 +25,7 @@ public class User {
 
     @Builder
     public User(String nickname, String email, Role role) {
-        this.id = idGenerator.incrementAndGet();
+        this.id = new UserId();
         this.nickname = nickname;
         this.email = email;
         this.role = role;

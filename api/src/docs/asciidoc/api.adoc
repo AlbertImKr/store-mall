@@ -1,0 +1,220 @@
+= Spring Boot Commerce
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Store]]
+== Store
+
+[[get_my_store]]
+=== My 스토어 정보를 요청
+
+[[get_my_store_curl_request]]
+==== curl request
+
+include::{snippets}/getMyStoreSuccess/curl-request.adoc[]
+
+[[get_my_store_httpie_requset]]
+==== httpie request
+
+include::{snippets}/getMyStoreSuccess/httpie-request.adoc[]
+
+[[get_my_store_http_requset]]
+==== http request
+
+include::{snippets}/getMyStoreSuccess/http-request.adoc[]
+
+[[get_my_store_success_response]]
+==== success response
+
+include::{snippets}/getMyStoreSuccess/http-response.adoc[]
+
+[[get_my_store_response_body]]
+==== success response body
+
+include::{snippets}/getMyStoreSuccess/response-body.adoc[]
+
+[[get_my_store_response_field]]
+==== success response filed
+
+include::{snippets}/getMyStoreSuccess/response-fields.adoc[]
+
+[[get_my_store_links]]
+==== success links
+
+include::{snippets}/getMyStoreSuccess/links.adoc[]
+
+[[get_my_store_failed_response]]
+==== failed response
+
+include::{snippets}/getMyStoreFailed/http-response.adoc[]
+
+[[get_my_store_failed_response_body]]
+==== failed response body
+
+include::{snippets}/getMyStoreFailed/response-body.adoc[]
+
+[[get_my_store_failed_response_field]]
+==== failed response field
+
+include::{snippets}/getMyStoreFailed/response-fields.adoc[]
+
+[[get_my_store_failed_response_links]]
+==== failed response links
+
+include::{snippets}/getMyStoreFailed/links.adoc[]
+
+[[get_store]]
+=== Store Id로 스토어 정보를 요청
+
+[[get_store_curl_request]]
+==== curl request
+
+include::{snippets}/getStoreSuccess/curl-request.adoc[]
+
+[[get_store_httpie_requset]]
+==== httpie request
+
+include::{snippets}/getStoreSuccess/httpie-request.adoc[]
+
+[[get_store_http_requset]]
+==== http request
+
+include::{snippets}/getStoreSuccess/http-request.adoc[]
+
+[[get_store_success_response]]
+==== success response
+
+include::{snippets}/getStoreSuccess/http-response.adoc[]
+
+[[get_store_response_body]]
+==== success response body
+
+include::{snippets}/getStoreSuccess/response-body.adoc[]
+
+[[get_store_response_field]]
+==== success response filed
+
+include::{snippets}/getStoreSuccess/response-fields.adoc[]
+
+[[get_store_links]]
+==== success links
+
+include::{snippets}/getStoreSuccess/links.adoc[]
+
+[[get_store_failed_response]]
+==== failed response
+
+include::{snippets}/getMyStoreFailed/http-response.adoc[]
+
+[[get_store_failed_response_body]]
+==== failed response body
+
+include::{snippets}/getMyStoreFailed/response-body.adoc[]
+
+[[get_store_failed_response_field]]
+==== failed response field
+
+include::{snippets}/getMyStoreFailed/response-fields.adoc[]
+
+[[get_store_failed_response_links]]
+==== failed response links
+
+include::{snippets}/getMyStoreFailed/links.adoc[]
+
+[[add_my_store]]
+=== My Store를 만든다
+
+[[add_my_store_curl_request]]
+==== curl request
+
+include::{snippets}/addStoreSuccess/curl-request.adoc[]
+
+[[add_my_store_httpie_requset]]
+==== httpie request
+
+include::{snippets}/addStoreSuccess/httpie-request.adoc[]
+
+[[add_my_store_http_requset]]
+==== http request
+
+include::{snippets}/addStoreSuccess/http-request.adoc[]
+
+[[add_my_store_success_response]]
+==== success response
+
+include::{snippets}/addStoreSuccess/http-response.adoc[]
+
+[[add_my_store_response_body]]
+==== success response body
+
+include::{snippets}/addStoreSuccess/response-body.adoc[]
+
+[[add_my_store_links]]
+==== success links
+
+include::{snippets}/addStoreSuccess/links.adoc[]
+
+[[add_my_store_failed_response]]
+==== failed response
+
+include::{snippets}/addStoreFailed/http-response.adoc[]
+
+[[add_my_store_failed_response_body]]
+==== failed response body
+
+include::{snippets}/addStoreFailed/response-body.adoc[]
+
+[[add_my_store_failed_response_field]]
+==== failed response field
+
+include::{snippets}/addStoreFailed/response-fields.adoc[]
+
+[[add_my_store_failed_response_links]]
+==== failed response links
+
+include::{snippets}/addStoreFailed/links.adoc[]
+
+[[Product]]
+== Product
+
+[[add_product]]
+=== 상품을 추가한다
+
+[[add_product_curl_request]]
+==== curl request
+
+include::{snippets}/addProduct/curl-request.adoc[]
+
+[[add_product_httpie_requset]]
+==== httpie request
+
+include::{snippets}/addProduct/httpie-request.adoc[]
+
+[[add_product_http_requset]]
+==== http request
+
+include::{snippets}/addProduct/http-request.adoc[]
+
+[[add_product_success_response]]
+==== success response
+
+include::{snippets}/addProduct/http-response.adoc[]
+
+[[add_product_response_body]]
+==== success response body
+
+include::{snippets}/addProduct/response-body.adoc[]
+
+[[add_product_response_field]]
+==== success response filed
+
+include::{snippets}/addProduct/response-fields.adoc[]
+
+[[add_product_links]]
+==== success links
+
+include::{snippets}/addProduct/links.adoc[]

@@ -1,0 +1,19 @@
+package com.albert.commerce.store.command.application;
+
+import com.albert.commerce.common.exception.BusinessException;
+import com.albert.commerce.common.exception.ErrorMessage;
+
+public class StoreAlreadyExistsException extends BusinessException {
+
+    private static final ErrorMessage errorMessage = ErrorMessage.STORE_ALREADY_EXISTS_ERROR;
+
+    public StoreAlreadyExistsException() {
+        super(errorMessage.getMessage());
+    }
+
+
+    @Override
+    protected ErrorMessage getErrorMessage() {
+        return errorMessage;
+    }
+}
