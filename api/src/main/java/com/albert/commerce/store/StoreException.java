@@ -6,7 +6,7 @@ import com.albert.commerce.common.exception.ErrorMessage;
 public abstract class StoreException extends AppException {
 
 
-    public StoreException(String message) {
+    protected StoreException(String message) {
         super(message);
     }
 
