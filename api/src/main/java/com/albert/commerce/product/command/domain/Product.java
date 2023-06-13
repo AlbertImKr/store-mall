@@ -8,25 +8,22 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 @Entity
 public class Product {
 
     @EmbeddedId
     private ProductId productId;
-
     private StoreId storeId;
-
     private String productName;
     @Convert(converter = MoneyConverter.class)
     private Money price;
     private String description;
     private String brand;
     private String category;
-
-    public Product() {
-    }
 
     @Builder
     public Product(ProductId productId, StoreId storeId, String productName, Money price,
