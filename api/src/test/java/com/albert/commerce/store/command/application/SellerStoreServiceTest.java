@@ -6,6 +6,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.albert.commerce.store.application.NewStoreRequest;
+import com.albert.commerce.store.application.SellerStoreResponse;
+import com.albert.commerce.store.application.SellerStoreService;
+import com.albert.commerce.store.application.StoreAlreadyExistsException;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.query.StoreDao;
@@ -25,7 +29,7 @@ class SellerStoreServiceTest {
     void setUserService() {
         storeRepository = mock(StoreRepository.class);
         storeDao = mock(StoreDao.class);
-        sellerStoreService = new SellerStoreService(storeRepository);
+        sellerStoreService = new SellerStoreService(storeRepository, storeDao);
     }
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")

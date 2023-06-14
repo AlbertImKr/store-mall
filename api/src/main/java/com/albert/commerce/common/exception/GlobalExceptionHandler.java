@@ -1,7 +1,7 @@
 package com.albert.commerce.common.exception;
 
 import com.albert.commerce.common.BusinessLinks;
-import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
+import com.albert.commerce.store.application.StoreAlreadyExistsException;
 import com.albert.commerce.store.ui.MyStoreNotFoundException;
 import com.albert.commerce.store.ui.StoreNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

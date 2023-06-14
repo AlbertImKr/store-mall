@@ -17,15 +17,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductService;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
-import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.application.NewStoreRequest;
+import com.albert.commerce.store.application.SellerStoreResponse;
+import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.StoreDao;
+import com.albert.commerce.user.application.UserService;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,13 +66,18 @@ class ProductControllerTest {
     SellerStoreService sellerStoreService;
 
     @Autowired
-    StoreDao storeDao;
-
-    @Autowired
     ProductService productService;
 
     @Autowired
     EntityManager entityManager;
+
+    @Autowired
+    UserService userService;
+
+    @BeforeEach
+    void saveTestUser() {
+        userService.init("test@email.com");
+    }
 
     @DisplayName("My Store에서 Product를 추가한다")
     @Test
@@ -100,17 +106,13 @@ class ProductControllerTest {
                 .andExpect(jsonPath("category").value(TEST_CATEGORY))
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
                 //restDocs
                 .andDo(document(
                                 "addProduct", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("현재 product 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("my-store").description("My 스토어에 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -159,8 +161,7 @@ class ProductControllerTest {
                 .andExpect(jsonPath("productsResponse.*.category").exists())
                 .andExpect(jsonPath("productsResponse.*._links.self").exists())
                 // restDocs
-                .andDo(document(
-                                "getProducts", preprocessResponse(prettyPrint()),
+                .andDo(document("getProducts", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("요청한 링크"),

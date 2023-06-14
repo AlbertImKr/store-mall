@@ -1,19 +1,15 @@
 package com.albert.commerce.product.ui;
 
+import com.albert.commerce.common.BusinessLinks;
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;
 import com.albert.commerce.product.application.ProductService;
 import com.albert.commerce.product.application.ProductsResponse;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.command.domain.StoreUserId;
-import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.store.ui.ConsumerStoreController;
-import com.albert.commerce.store.ui.SellerStoreController;
-import com.albert.commerce.user.command.domain.UserId;
-import com.albert.commerce.user.query.UserDataDao;
-import com.albert.commerce.user.query.UserProfileResponse;
+import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.query.StoreDaoImpl;
+import com.albert.commerce.store.ui.StoreNotFoundException;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
@@ -31,47 +27,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/products", produces = MediaTypes.HAL_JSON_VALUE)
 public class ProductController {
 
+    private static final WebMvcLinkBuilder LINK_BUILDER = WebMvcLinkBuilder
+            .linkTo(ProductController.class);
     private final ProductService productService;
-    private final UserDataDao userDataDao;
-    private final StoreDao storeDao;
+    private final StoreDaoImpl storeDao;
     private final ProductDao productDao;
 
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest productRequest,
             Principal principal) {
-        String email = principal.getName();
-        UserProfileResponse user = userDataDao.findByEmail(email).orElseThrow();
-        UserId id = user.getId();
-        Store store = storeDao.findByStoreUserId(new StoreUserId(id)).orElseThrow();
+        StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName())
+                .orElseThrow(StoreNotFoundException::new);
         ProductResponse productResponse = productService
-                .addProduct(productRequest, store.getStoreId());
+                .addProduct(productRequest, storeId);
         ProductId productId = productResponse.getProductId();
-        Link selfRel = WebMvcLinkBuilder
-                .linkTo(ProductController.class).slash(productId.getId()).withSelfRel();
 
-        productResponse.add(selfRel,
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(null))
-                        .withRel("my-store"),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(SellerStoreController.class)
-                                        .createStore(null, null, null))
-                        .withRel("add-store"),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(ConsumerStoreController.class)
-                                        .getStore(null))
-                        .withRel("other-store")
-        );
+        Link selfRel = LINK_BUILDER.slash(productId.getId()).withSelfRel();
+
+        productResponse.add(selfRel, BusinessLinks.MY_STORE);
 
         return ResponseEntity.created(selfRel.toUri()).body(productResponse);
     }
 
     @GetMapping
     public ResponseEntity<ProductsResponse> findProduct(Principal principal) {
-        String email = principal.getName();
-        ProductsResponse products = productDao.findProductsByUserEmail(email);
-        Link selfRel = WebMvcLinkBuilder
-                .linkTo(ProductController.class).withSelfRel();
+        ProductsResponse products = productDao.findProductsByUserEmail(principal.getName());
+        Link selfRel = LINK_BUILDER.withSelfRel();
         products.add(selfRel);
         return ResponseEntity.ok(products);
     }

@@ -1,12 +1,11 @@
 package com.albert.commerce.store.ui;
 
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
+import com.albert.commerce.store.application.NewStoreRequest;
+import com.albert.commerce.store.application.SellerStoreResponse;
+import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
-import com.albert.commerce.store.query.StoreDaoImpl;
+import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
 import java.net.URI;
@@ -31,7 +30,7 @@ public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
     private final UserDataDao userDataDao;
-    private final StoreDaoImpl storeDao;
+    private final StoreDao storeDao;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -42,9 +41,6 @@ public class SellerStoreController {
         UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
                 .orElseThrow();
         newStoreRequest.setUserId(userProfileResponse.getId());
-        if (storeDao.existsByStoreUserId(newStoreRequest.getStoreUserId())) {
-            throw new StoreAlreadyExistsException();
-        }
         SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
 
         URI myStore = WebMvcLinkBuilder.linkTo(

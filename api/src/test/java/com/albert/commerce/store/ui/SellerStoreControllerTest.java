@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.application.NewStoreRequest;
+import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.user.application.UserService;
 import com.albert.commerce.user.query.UserProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
