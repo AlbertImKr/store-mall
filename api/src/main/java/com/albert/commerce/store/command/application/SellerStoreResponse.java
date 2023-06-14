@@ -10,29 +10,26 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
-public class StoreResponse extends RepresentationModel<StoreResponse> {
+public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse> {
 
     private StoreId storeId;
     private String storeName;
 
-    public StoreResponse() {
+    public SellerStoreResponse() {
     }
 
     @Builder
-    public StoreResponse(StoreId storeId, String storeName, Links links) {
+    public SellerStoreResponse(StoreId storeId, String storeName, Links links) {
         this.storeId = storeId;
         this.storeName = storeName;
         super.add(links);
     }
 
-    public static StoreResponse from(Store store) {
-        return StoreResponse.builder()
+    public static SellerStoreResponse from(Store store) {
+        return SellerStoreResponse.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
-                .links(Links.of(
-                        StoreLinks.MY_STORE,
-                        StoreLinks.ADD_STORE,
-                        StoreLinks.GET_STORE))
+                .links(Links.of(StoreLinks.MY_STORE))
                 .build();
     }
 

@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class StoreService {
+public class SellerStoreService {
 
     private final StoreRepository storeRepository;
     private final StoreDao storeDao;
 
-    public StoreResponse addStore(StoreRequest storeRequest) {
-        if (storeDao.existsByStoreUserId(storeRequest.getStoreUserId())) {
+    public SellerStoreResponse addStore(NewStoreRequest newStoreRequest) {
+        if (storeDao.existsByStoreUserId(newStoreRequest.getStoreUserId())) {
             throw new StoreAlreadyExistsException();
         }
-        Store store = storeRequest.toStore();
+        Store store = newStoreRequest.toStore();
         Store savedStore = storeRepository.save(store);
-        return StoreResponse.from(savedStore);
+        return SellerStoreResponse.from(savedStore);
     }
 
 }

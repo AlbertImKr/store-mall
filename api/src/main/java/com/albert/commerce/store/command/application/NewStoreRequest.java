@@ -9,16 +9,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StoreRequest {
+public class NewStoreRequest {
 
     private UserId userId;
     @NotNull
     private String storeName;
 
-    public StoreRequest() {
+    public NewStoreRequest() {
     }
 
-    public StoreRequest(String storeName) {
+    public NewStoreRequest(String storeName) {
         this.storeName = storeName;
     }
 

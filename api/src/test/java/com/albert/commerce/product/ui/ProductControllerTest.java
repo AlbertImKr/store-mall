@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.product.application.ProductRequest;
-import com.albert.commerce.store.command.application.StoreRequest;
-import com.albert.commerce.store.command.application.StoreService;
+import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
@@ -57,7 +57,7 @@ class ProductControllerTest {
     UserDataDao userDataDao;
 
     @Autowired
-    StoreService storeService;
+    SellerStoreService sellerStoreService;
 
     @Autowired
     StoreDao storeDao;
@@ -70,9 +70,9 @@ class ProductControllerTest {
         );
         UserProfileResponse userProfileResponse = userDataDao.findByEmail("test@email.com")
                 .orElseThrow();
-        StoreRequest storeRequest = new StoreRequest("store");
-        storeRequest.setUserId(userProfileResponse.getId());
-        storeService.addStore(storeRequest);
+        NewStoreRequest newStoreRequest = new NewStoreRequest("store");
+        newStoreRequest.setUserId(userProfileResponse.getId());
+        sellerStoreService.addStore(newStoreRequest);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)

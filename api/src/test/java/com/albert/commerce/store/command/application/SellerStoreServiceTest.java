@@ -15,9 +15,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
-class StoreServiceTest {
+class SellerStoreServiceTest {
 
-    private StoreService storeService;
+    private SellerStoreService sellerStoreService;
     private StoreRepository storeRepository;
     private StoreDao storeDao;
 
@@ -25,36 +25,36 @@ class StoreServiceTest {
     void setUserService() {
         storeRepository = mock(StoreRepository.class);
         storeDao = mock(StoreDao.class);
-        storeService = new StoreService(storeRepository, storeDao);
+        sellerStoreService = new SellerStoreService(storeRepository, storeDao);
     }
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")
     @Test
     void addStoreSuccess() {
         // given
-        StoreRequest storeRequest = new StoreRequest("test");
-        storeRequest.setUserId(new UserId());
-        Store store = storeRequest.toStore();
+        NewStoreRequest newStoreRequest = new NewStoreRequest("test");
+        newStoreRequest.setUserId(new UserId());
+        Store store = newStoreRequest.toStore();
         given(storeDao.existsByStoreUserId(any())).willReturn(false);
         given(storeRepository.save(any())).willReturn(store);
 
         // when
-        StoreResponse storeResponse = storeService.addStore(storeRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
 
         // then
-        assertThat(store.getStoreId()).isEqualTo(storeResponse.getStoreId());
+        assertThat(store.getStoreId()).isEqualTo(sellerStoreResponse.getStoreId());
     }
 
     @DisplayName("User는 이미 Store를 하나 만들었으면 에외를 던진다.")
     @Test
     void addStoreFailed() {
         // given
-        StoreRequest storeRequest = new StoreRequest("test");
-        storeRequest.setUserId(new UserId());
+        NewStoreRequest newStoreRequest = new NewStoreRequest("test");
+        newStoreRequest.setUserId(new UserId());
         given(storeDao.existsByStoreUserId(any())).willReturn(true);
 
         // when,then
-        assertThatThrownBy(() -> storeService.addStore(storeRequest)).isInstanceOf(
+        assertThatThrownBy(() -> sellerStoreService.addStore(newStoreRequest)).isInstanceOf(
                 StoreAlreadyExistsException.class);
     }
 }

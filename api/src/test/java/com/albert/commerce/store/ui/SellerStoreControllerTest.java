@@ -16,14 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.store.command.application.StoreRequest;
-import com.albert.commerce.store.command.application.StoreResponse;
-import com.albert.commerce.store.command.application.StoreService;
+import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.application.UserService;
 import com.albert.commerce.user.query.UserProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
-class StoreControllerTest {
+class SellerStoreControllerTest {
 
     public static final String TEST_STORE_NAME = "testStore";
     @Autowired
@@ -55,7 +53,7 @@ class StoreControllerTest {
     UserService userService;
 
     @Autowired
-    StoreService storeService;
+    SellerStoreService sellerStoreService;
 
     @Autowired
     EntityManager entityManager;
@@ -65,9 +63,9 @@ class StoreControllerTest {
         userService.init("test@email.com");
     }
 
-    @DisplayName("정상적으로 스토어를 추가한다")
+    @DisplayName("정상적으로 스토어를 생성한다")
     @Test
-    void addStoreSuccess() throws Exception {
+    void createStoreSuccess() throws Exception {
         mockMvc.perform(post("/stores")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(TEST_STORE_NAME)))
@@ -75,8 +73,6 @@ class StoreControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
                 .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
                 //restDocs
                 .andDo(document(
@@ -84,10 +80,7 @@ class StoreControllerTest {
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("지금 요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
+                                        linkWithRel("my-store").description("My 스토어에 연결한다")
                                 )
                         )
                 );
@@ -95,12 +88,12 @@ class StoreControllerTest {
 
     @DisplayName("스토어가 이미 추가 되여 있으면 에러 메시지를 응답한다")
     @Test
-    void addStoreFailed() throws Exception {
+    void createStoreFailed() throws Exception {
         // given
-        StoreRequest storeRequest = new StoreRequest(TEST_STORE_NAME);
+        NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
-        storeRequest.setUserId(userProfileResponse.getId());
-        storeService.addStore(storeRequest);
+        newStoreRequest.setUserId(userProfileResponse.getId());
+        sellerStoreService.addStore(newStoreRequest);
 
         // when
         mockMvc.perform(post("/stores")
@@ -112,18 +105,13 @@ class StoreControllerTest {
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "addStoreFailed", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
+                                        linkWithRel("my-store").description("My 스토어에 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -137,10 +125,10 @@ class StoreControllerTest {
     @Test
     void getMyStoreSuccess() throws Exception {
         // given
-        StoreRequest storeRequest = new StoreRequest(TEST_STORE_NAME);
+        NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
-        storeRequest.setUserId(userProfileResponse.getId());
-        storeService.addStore(storeRequest);
+        newStoreRequest.setUserId(userProfileResponse.getId());
+        sellerStoreService.addStore(newStoreRequest);
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -153,18 +141,13 @@ class StoreControllerTest {
                 .andExpect(jsonPath("storeName").exists())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getMyStoreSuccess", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
+                                        linkWithRel("my-store").description("My 스토어 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -186,19 +169,14 @@ class StoreControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
+                .andExpect(jsonPath("_links.create-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getMyStoreFailed", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
+                                        linkWithRel("create-store").description("My 스토어를 만든다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -208,70 +186,5 @@ class StoreControllerTest {
                 );
     }
 
-    @DisplayName("스토어 아이디로 스토어 가져온다")
-    @Test
-    void getStoreSuccess() throws Exception {
-        // given
-        StoreRequest storeRequest = new StoreRequest(TEST_STORE_NAME);
-        UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
-        storeRequest.setUserId(userProfileResponse.getId());
-        StoreResponse storeResponse = storeService.addStore(storeRequest);
-        entityManager.flush();
 
-        mockMvc.perform(get("/stores/" + storeResponse.getStoreId().getValue()))
-                .andDo(print())
-                .andExpect(jsonPath("storeId").exists())
-                .andExpect(jsonPath("storeName").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
-                //restDocs
-                .andDo(document(
-                                "getStoreSuccess", preprocessResponse(prettyPrint()),
-                                links(
-                                        halLinks(),
-                                        linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
-                                ),
-                                responseFields(
-                                        subsectionWithPath("_links").ignored(),
-                                        fieldWithPath("storeId").description("스토어 아이디"),
-                                        fieldWithPath("storeName").description("스토어 이름")
-                                )
-                        )
-                );
-    }
-
-    @DisplayName("스토어 아이디로 존재하지 않으면 에러 메시지를 응답한다")
-    @Test
-    void getStoreFailed() throws Exception {
-        UUID uuid = UUID.randomUUID();
-        mockMvc.perform(get("/stores/" + uuid))
-                .andDo(print())
-                .andExpect(jsonPath("error-message").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.get-store").exists())
-                //restDocs
-                .andDo(document(
-                                "getStoreFailed", preprocessResponse(prettyPrint()),
-                                links(
-                                        halLinks(),
-                                        linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("get-store").optional()
-                                                .description("다른 스토어를 연결한다")
-                                ),
-                                responseFields(
-                                        subsectionWithPath("_links").ignored(),
-                                        fieldWithPath("error-message").description("예외 메시지")
-                                )
-                        )
-                );
-    }
 }

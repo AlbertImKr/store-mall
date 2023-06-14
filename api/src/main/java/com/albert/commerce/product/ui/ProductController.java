@@ -7,7 +7,8 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.store.ui.StoreController;
+import com.albert.commerce.store.ui.ConsumerStoreController;
+import com.albert.commerce.store.ui.SellerStoreController;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
@@ -46,14 +47,14 @@ public class ProductController {
 
         productResponse.add(selfRel,
                 WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class).getMyStore(null))
+                                WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(null))
                         .withRel("my-store"),
                 WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .addStore(null, null, null))
+                                WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+                                        .createStore(null, null, null))
                         .withRel("add-store"),
                 WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
+                                WebMvcLinkBuilder.methodOn(ConsumerStoreController.class)
                                         .getStore(null))
                         .withRel("other-store")
         );
