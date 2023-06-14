@@ -25,7 +25,7 @@ class SellerStoreServiceTest {
     void setUserService() {
         storeRepository = mock(StoreRepository.class);
         storeDao = mock(StoreDao.class);
-        sellerStoreService = new SellerStoreService(storeRepository, storeDao);
+        sellerStoreService = new SellerStoreService(storeRepository);
     }
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")
@@ -35,7 +35,6 @@ class SellerStoreServiceTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("test");
         newStoreRequest.setUserId(new UserId());
         Store store = newStoreRequest.toStore();
-        given(storeDao.existsByStoreUserId(any())).willReturn(false);
         given(storeRepository.save(any())).willReturn(store);
 
         // when
