@@ -9,18 +9,23 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.product.application.ProductRequest;
+import com.albert.commerce.product.application.ProductService;
 import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +66,12 @@ class ProductControllerTest {
 
     @Autowired
     StoreDao storeDao;
+
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    EntityManager entityManager;
 
     @DisplayName("My Store에서 Product를 추가한다")
     @Test
@@ -109,6 +120,64 @@ class ProductControllerTest {
                                         fieldWithPath("description").description("상품 설명"),
                                         fieldWithPath("brand").description("상품 브랜드"),
                                         fieldWithPath("category").description("상품 카타고리")
+                                )
+                        )
+                );
+    }
+
+
+    @DisplayName("My Store에서 모든 Product를 가져온다")
+    @Test
+    void getProducts() throws Exception {
+        ProductRequest productRequest = new ProductRequest(
+                TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
+        );
+        UserProfileResponse userProfileResponse = userDataDao.findByEmail("test@email.com")
+                .orElseThrow();
+        NewStoreRequest newStoreRequest = new NewStoreRequest("store");
+        newStoreRequest.setUserId(userProfileResponse.getId());
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
+        StoreId storeId = sellerStoreResponse.getStoreId();
+
+        productService.addProduct(productRequest, storeId);
+        productService.addProduct(productRequest, storeId);
+        productService.addProduct(productRequest, storeId);
+        productService.addProduct(productRequest, storeId);
+        productService.addProduct(productRequest, storeId);
+
+        mockMvc.perform(get("/products")
+                        .accept(MediaTypes.HAL_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("productsResponse").isArray())
+                .andExpect(jsonPath("productsResponse.*.productId").exists())
+                .andExpect(jsonPath("productsResponse.*.productName").exists())
+                .andExpect(jsonPath("productsResponse.*.price").exists())
+                .andExpect(jsonPath("productsResponse.*.description").exists())
+                .andExpect(jsonPath("productsResponse.*.brand").exists())
+                .andExpect(jsonPath("productsResponse.*.category").exists())
+                .andExpect(jsonPath("productsResponse.*._links.self").exists())
+                // restDocs
+                .andDo(document(
+                                "getProducts", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("my-store").description("My Store 연결 링크")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("productsResponse[]._links.self.href").description(
+                                                "product 링크"),
+                                        fieldWithPath("productsResponse[].productId").description("상품 아이디"),
+                                        fieldWithPath("productsResponse[].productName").description(
+                                                "상품 네이밍"),
+                                        fieldWithPath("productsResponse[].price").description("상품 가격"),
+                                        fieldWithPath("productsResponse[].description").description(
+                                                "상품 설명"),
+                                        fieldWithPath("productsResponse[].brand").description("상품 브랜드"),
+                                        fieldWithPath("productsResponse[].category").description("상품 카타고리")
                                 )
                         )
                 );

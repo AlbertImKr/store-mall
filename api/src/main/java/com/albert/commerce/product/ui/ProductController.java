@@ -3,7 +3,9 @@ package com.albert.commerce.product.ui;
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;
 import com.albert.commerce.product.application.ProductService;
+import com.albert.commerce.product.application.ProductsResponse;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
@@ -18,6 +20,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,7 @@ public class ProductController {
     private final ProductService productService;
     private final UserDataDao userDataDao;
     private final StoreDao storeDao;
+    private final ProductDao productDao;
 
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest productRequest,
@@ -60,5 +64,15 @@ public class ProductController {
         );
 
         return ResponseEntity.created(selfRel.toUri()).body(productResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ProductsResponse> findProduct(Principal principal) {
+        String email = principal.getName();
+        ProductsResponse products = productDao.findProductsByUserEmail(email);
+        Link selfRel = WebMvcLinkBuilder
+                .linkTo(ProductController.class).withSelfRel();
+        products.add(selfRel);
+        return ResponseEntity.ok(products);
     }
 }

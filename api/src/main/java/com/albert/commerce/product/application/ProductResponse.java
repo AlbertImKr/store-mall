@@ -11,7 +11,6 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 @Setter
 public class ProductResponse extends RepresentationModel<ProductResponse> {
-
     private ProductId productId;
 
     private String productName;
