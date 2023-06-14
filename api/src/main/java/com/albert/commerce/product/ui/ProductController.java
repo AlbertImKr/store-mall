@@ -8,7 +8,7 @@ import com.albert.commerce.product.application.ProductsResponse;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.StoreDaoImpl;
+import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.store.ui.StoreNotFoundException;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ProductController {
     private static final WebMvcLinkBuilder LINK_BUILDER = WebMvcLinkBuilder
             .linkTo(ProductController.class);
     private final ProductService productService;
-    private final StoreDaoImpl storeDao;
+    private final StoreDao storeDao;
     private final ProductDao productDao;
 
     @PostMapping
@@ -38,20 +38,18 @@ public class ProductController {
             Principal principal) {
         StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName())
                 .orElseThrow(StoreNotFoundException::new);
-        ProductResponse productResponse = productService
-                .addProduct(productRequest, storeId);
+        ProductResponse productResponse = productService.addProduct(productRequest, storeId);
+
         ProductId productId = productResponse.getProductId();
-
         Link selfRel = LINK_BUILDER.slash(productId.getId()).withSelfRel();
-
         productResponse.add(selfRel, BusinessLinks.MY_STORE);
-
         return ResponseEntity.created(selfRel.toUri()).body(productResponse);
     }
 
     @GetMapping
     public ResponseEntity<ProductsResponse> findProduct(Principal principal) {
         ProductsResponse products = productDao.findProductsByUserEmail(principal.getName());
+
         Link selfRel = LINK_BUILDER.withSelfRel();
         products.add(selfRel);
         return ResponseEntity.ok(products);
