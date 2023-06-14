@@ -1,14 +1,11 @@
 package com.albert.commerce.store.ui;
 
-import com.albert.commerce.store.command.application.StoreAndProductResponse;
 import com.albert.commerce.store.command.application.StoreRequest;
 import com.albert.commerce.store.command.application.StoreResponse;
 import com.albert.commerce.store.command.application.StoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreUserId;
-import com.albert.commerce.store.query.StoreAndProduct;
-import com.albert.commerce.store.query.StoreAndProductDao;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
@@ -36,7 +33,6 @@ public class StoreController {
     private final StoreService storeService;
     private final UserDataDao userDataDao;
     private final StoreDao storeDao;
-    private final StoreAndProductDao storeAndProductDao;
 
     @PostMapping
     public ResponseEntity addStore(@RequestBody StoreRequest storeRequest, Errors errors,
@@ -90,12 +86,12 @@ public class StoreController {
 
     @GetMapping("/{storeId}")
     public ResponseEntity getStore(@PathVariable UUID storeId) {
-        Optional<StoreAndProduct> store = storeAndProductDao.findById(StoreId.from(storeId));
+        Optional<Store> store = storeDao.findById(StoreId.from(storeId));
         if (store.isEmpty()) {
             throw new StoreNotFoundException();
         }
-        StoreAndProductResponse storeAndProductResponse = StoreAndProductResponse.from(store.get());
-        storeAndProductResponse.add(
+        StoreResponse storeResponse = StoreResponse.from(store.get());
+        storeResponse.add(
                 WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(
                                 WebMvcLinkBuilder.methodOn(StoreController.class)
@@ -109,7 +105,7 @@ public class StoreController {
                                 WebMvcLinkBuilder.methodOn(StoreController.class)
                                         .getStore(null))
                         .withRel("other-store"));
-        return ResponseEntity.ok().body(storeAndProductResponse);
+        return ResponseEntity.ok().body(storeResponse);
     }
 
 }

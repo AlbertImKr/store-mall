@@ -1,6 +1,5 @@
 package com.albert.commerce.store.command.application;
 
-import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.query.StoreDao;
@@ -21,16 +20,6 @@ public class StoreService {
         Store store = storeRequest.toStore();
         Store savedStore = storeRepository.save(store);
         return StoreResponse.from(savedStore);
-    }
-
-    public void addProductId(Store store, ProductId productId) {
-        store.addProductId(productId);
-        storeRepository.save(store);
-    }
-
-    public void removeProductId(Store store, ProductId productId) {
-        store.removeProductId(productId);
-        storeRepository.save(store);
     }
 
 }

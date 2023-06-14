@@ -4,7 +4,6 @@ import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;
 import com.albert.commerce.product.application.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.store.command.application.StoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
@@ -31,7 +30,6 @@ public class ProductController {
     private final ProductService productService;
     private final UserDataDao userDataDao;
     private final StoreDao storeDao;
-    private final StoreService storeService;
 
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest productRequest,
@@ -43,7 +41,6 @@ public class ProductController {
         ProductResponse productResponse = productService
                 .addProduct(productRequest, store.getStoreId());
         ProductId productId = productResponse.getProductId();
-        storeService.addProductId(store, productId);
         Link selfRel = WebMvcLinkBuilder
                 .linkTo(ProductController.class).slash(productId.getId()).withSelfRel();
 

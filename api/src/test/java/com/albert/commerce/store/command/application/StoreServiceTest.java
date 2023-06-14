@@ -5,12 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
-import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreRepository;
-import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.domain.UserId;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,38 +56,5 @@ class StoreServiceTest {
         // when,then
         assertThatThrownBy(() -> storeService.addStore(storeRequest)).isInstanceOf(
                 StoreAlreadyExistsException.class);
-    }
-
-    @DisplayName("상품을 추가한다.")
-    @Test
-    void addProduct() {
-        // given
-        Store store = new Store("testStore", new StoreUserId(new UserId()));
-        ProductId productId = new ProductId();
-        given(storeRepository.save(any())).willReturn(store);
-
-        // when
-        storeService.addProductId(store, productId);
-
-        // then
-        assertThat(store.getProductIds().contains(productId)).isTrue();
-        verify(storeRepository).save(any());
-    }
-
-    @DisplayName("상품을 삭제한다.")
-    @Test
-    void removeProduct() {
-        // given
-        Store store = new Store("testStore", new StoreUserId(new UserId()));
-        ProductId productId = new ProductId();
-        store.addProductId(productId);
-        given(storeRepository.save(any())).willReturn(store);
-
-        // when
-        storeService.removeProductId(store, productId);
-
-        // then
-        assertThat(store.getProductIds().contains(productId)).isFalse();
-        verify(storeRepository).save(any());
     }
 }

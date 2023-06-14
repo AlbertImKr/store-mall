@@ -1,6 +1,5 @@
 package com.albert.commerce.product.ui;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
@@ -18,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.store.command.application.StoreRequest;
 import com.albert.commerce.store.command.application.StoreService;
-import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.UserDataDao;
 import com.albert.commerce.user.query.UserProfileResponse;
@@ -114,8 +112,5 @@ class ProductControllerTest {
                                 )
                         )
                 );
-
-        Store store = storeDao.findByStoreUserId(storeRequest.getStoreUserId()).orElseThrow();
-        assertThat(store.getProductIds()).isNotEmpty();
     }
 }
