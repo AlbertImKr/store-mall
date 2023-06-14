@@ -68,19 +68,9 @@ public class StoreController {
         }
         StoreResponse storeResponse = StoreResponse.from(store.get());
         storeResponse.add(
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .getMyStore(null))
-                        .withSelfRel(),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .addStore(null, null, null))
-                        .withRel("add-store"),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .getStore(null))
-                        .withRel("other-store")
-        );
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(StoreController.class)
+                                .getMyStore(null))
+                        .withSelfRel());
         return ResponseEntity.ok().body(storeResponse);
     }
 
@@ -92,19 +82,7 @@ public class StoreController {
         }
         StoreResponse storeResponse = StoreResponse.from(store.get());
         storeResponse.add(
-                WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId).withSelfRel(),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .getMyStore(null))
-                        .withRel("my-store"),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .addStore(null, null, null))
-                        .withRel("add-store"),
-                WebMvcLinkBuilder.linkTo(
-                                WebMvcLinkBuilder.methodOn(StoreController.class)
-                                        .getStore(null))
-                        .withRel("other-store"));
+                WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId).withSelfRel());
         return ResponseEntity.ok().body(storeResponse);
     }
 

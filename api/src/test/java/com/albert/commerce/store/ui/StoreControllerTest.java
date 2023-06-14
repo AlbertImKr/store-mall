@@ -74,13 +74,20 @@ class StoreControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
+                .andExpect(jsonPath("_links.add-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
                 //restDocs
                 .andDo(document(
                                 "addStoreSuccess", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
-                                        linkWithRel("self").description("소토어 추가 링크입니다.")
+                                        linkWithRel("self").description("지금 요청한 링크"),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다"),
+                                        linkWithRel("add-store").description("My 스토어를 만든다"),
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 )
                         )
                 );
@@ -103,17 +110,20 @@ class StoreControllerTest {
                 // then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("error-message").exists())
+                .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "addStoreFailed", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
                                         linkWithRel("my-store").description("My 스토어에 연결한다"),
                                         linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -142,16 +152,19 @@ class StoreControllerTest {
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())
                 .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getMyStoreSuccess", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
-                                        linkWithRel("self").description("My 스토어 연결한다"),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("my-store").description("My 스토어 연결한다"),
                                         linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -172,17 +185,20 @@ class StoreControllerTest {
                 // then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("error-message").exists())
+                .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getMyStoreFailed", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
                                         linkWithRel("my-store").description("My 스토어에 연결한다"),
                                         linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -206,19 +222,20 @@ class StoreControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getStoreSuccess", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
                                         linkWithRel("my-store").description("My 스토어에 연결한다"),
-                                        linkWithRel("self").description("현재 스토어에 연결한다"),
                                         linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -238,15 +255,17 @@ class StoreControllerTest {
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 .andExpect(jsonPath("_links.add-store").exists())
-                .andExpect(jsonPath("_links.other-store").exists())
+                .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs
                 .andDo(document(
                                 "getStoreFailed", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
                                         linkWithRel("my-store").description("My 스토어에 연결한다"),
                                         linkWithRel("add-store").description("My 스토어를 만든다"),
-                                        linkWithRel("other-store").optional().description("다른 스토어를 연결한다")
+                                        linkWithRel("get-store").optional()
+                                                .description("다른 스토어를 연결한다")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),

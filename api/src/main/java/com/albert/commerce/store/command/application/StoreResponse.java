@@ -5,6 +5,7 @@ import com.albert.commerce.store.command.domain.StoreId;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
 @Getter
@@ -18,15 +19,20 @@ public class StoreResponse extends RepresentationModel<StoreResponse> {
     }
 
     @Builder
-    public StoreResponse(StoreId storeId, String storeName) {
+    public StoreResponse(StoreId storeId, String storeName, Links links) {
         this.storeId = storeId;
         this.storeName = storeName;
+        super.add(links);
     }
 
     public static StoreResponse from(Store store) {
         return StoreResponse.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
+                .links(Links.of(
+                        StoreLinks.MY_STORE,
+                        StoreLinks.ADD_STORE,
+                        StoreLinks.GET_STORE))
                 .build();
     }
 
