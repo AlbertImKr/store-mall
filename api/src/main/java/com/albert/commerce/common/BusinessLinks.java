@@ -1,13 +1,13 @@
-package com.albert.commerce.store.command.application;
+package com.albert.commerce.common;
 
 import com.albert.commerce.store.ui.ConsumerStoreController;
 import com.albert.commerce.store.ui.SellerStoreController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-public class StoreLinks {
+public class BusinessLinks {
 
-    private StoreLinks() {
+    private BusinessLinks() {
     }
 
     public static final Link MY_STORE =

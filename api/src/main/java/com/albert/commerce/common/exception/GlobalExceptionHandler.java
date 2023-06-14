@@ -1,7 +1,7 @@
 package com.albert.commerce.common.exception;
 
+import com.albert.commerce.common.BusinessLinks;
 import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
-import com.albert.commerce.store.command.application.StoreLinks;
 import com.albert.commerce.store.ui.MyStoreNotFoundException;
 import com.albert.commerce.store.ui.StoreNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
                 storeAlreadyExistsException.getErrorMessage());
         return errorResponse.add(
                 selfRel,
-                StoreLinks.MY_STORE
+                BusinessLinks.MY_STORE
         );
     }
 
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(storeNotFoundException.getErrorMessage());
         return errorResponse.add(
                 selfRel,
-                StoreLinks.GET_STORE
+                BusinessLinks.GET_STORE
         );
     }
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(myStoreNotFoundException.getErrorMessage());
         return errorResponse.add(
                 selfRel,
-                StoreLinks.CREATE_STORE
+                BusinessLinks.CREATE_STORE
         );
     }
 }

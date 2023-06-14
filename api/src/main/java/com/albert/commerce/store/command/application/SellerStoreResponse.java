@@ -1,5 +1,6 @@
 package com.albert.commerce.store.command.application;
 
+import com.albert.commerce.common.BusinessLinks;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse
         return SellerStoreResponse.builder()
                 .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
-                .links(Links.of(StoreLinks.MY_STORE))
+                .links(Links.of(BusinessLinks.MY_STORE))
                 .build();
     }
 
