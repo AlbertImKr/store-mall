@@ -17,10 +17,10 @@ public class ProductService {
     private final SequenceGenerator sequenceGenerator;
 
     @Transactional
-    public ProductResponse addProduct(ProductRequest productRequest, StoreId storeId) {
+    public CreatedProductResponse addProduct(ProductRequest productRequest, StoreId storeId) {
         Product product = productRepository.save(
                 productRequest.toProduct(storeId, new ProductId(sequenceGenerator.generate())));
-        return ProductResponse.from(product);
+        return CreatedProductResponse.from(product);
     }
 
 }

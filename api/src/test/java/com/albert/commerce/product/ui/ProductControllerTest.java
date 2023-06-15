@@ -193,6 +193,12 @@ class ProductControllerTest {
                                         fieldWithPath(
                                                 "_embedded.productResponseList[].description").description(
                                                 "상품 설명"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].createdTime").description(
+                                                "생성 시간"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].updateTime").description(
+                                                "업데이트 시간"),
                                         fieldWithPath("page.size").description("page size"),
                                         fieldWithPath("page.totalElements").description("전체 개수"),
                                         fieldWithPath("page.totalPages").description("전체 페이지 수"),

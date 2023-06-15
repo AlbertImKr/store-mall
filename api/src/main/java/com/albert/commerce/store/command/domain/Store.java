@@ -1,5 +1,6 @@
 package com.albert.commerce.store.command.domain;
 
+import com.albert.commerce.common.model.BaseEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "store")
-public class Store {
+public class Store extends BaseEntity {
 
 
     @EmbeddedId

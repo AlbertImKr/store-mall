@@ -3,6 +3,7 @@ package com.albert.commerce.product.ui;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.albert.commerce.common.units.BusinessLinks;
+import com.albert.commerce.product.application.CreatedProductResponse;
 import com.albert.commerce.product.application.ProductAssembler;
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;
@@ -42,11 +43,12 @@ public class ProductController {
     private final ProductAssembler productAssembler;
 
     @PostMapping
-    public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest productRequest,
+    public ResponseEntity<CreatedProductResponse> addProduct(
+            @RequestBody ProductRequest productRequest,
             Principal principal) {
         StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName())
                 .orElseThrow(StoreNotFoundException::new);
-        ProductResponse productResponse = productService.addProduct(productRequest, storeId);
+        CreatedProductResponse productResponse = productService.addProduct(productRequest, storeId);
 
         ProductId productId = productResponse.getProductId();
         Link selfRel = WebMvcLinkBuilder

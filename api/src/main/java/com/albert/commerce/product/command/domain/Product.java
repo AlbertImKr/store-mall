@@ -1,6 +1,7 @@
 package com.albert.commerce.product.command.domain;
 
 import com.albert.commerce.common.jpa.MoneyConverter;
+import com.albert.commerce.common.model.BaseEntity;
 import com.albert.commerce.common.model.Money;
 import com.albert.commerce.store.command.domain.StoreId;
 import jakarta.persistence.Convert;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Product {
+public class Product extends BaseEntity {
 
     @EmbeddedId
     private ProductId productId;

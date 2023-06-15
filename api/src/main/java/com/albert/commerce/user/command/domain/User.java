@@ -1,5 +1,6 @@
 package com.albert.commerce.user.command.domain;
 
+import com.albert.commerce.common.model.BaseEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends BaseEntity {
 
     @EmbeddedId
     private UserId id;
