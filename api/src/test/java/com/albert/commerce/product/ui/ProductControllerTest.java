@@ -22,8 +22,9 @@ import com.albert.commerce.store.application.SellerStoreResponse;
 import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.UserDataDao;
-import com.albert.commerce.user.query.UserProfileResponse;
+import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.UserDao;
+import com.albert.commerce.user.query.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,12 +37,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureRestDocs
-@Sql(scripts = "classpath:db/mysql/testUser.sql")
 @WithMockUser(username = "test@email.com")
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -60,7 +59,7 @@ class ProductControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserDataDao userDataDao;
+    UserDao userDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -86,10 +85,10 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        UserProfileResponse userProfileResponse = userDataDao.findByEmail("test@email.com")
-                .orElseThrow();
+        User user = userDao.findUserProfileByEmail("test@email.com")
+                .orElseThrow(UserNotFoundException::new);
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
-        newStoreRequest.setUserId(userProfileResponse.getId());
+        newStoreRequest.setUserId(user.getId());
         sellerStoreService.createStore(newStoreRequest);
 
         mockMvc.perform(post("/products")
@@ -135,10 +134,10 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        UserProfileResponse userProfileResponse = userDataDao.findByEmail("test@email.com")
-                .orElseThrow();
+        User user = userDao.findUserProfileByEmail("test@email.com")
+                .orElseThrow(UserNotFoundException::new);
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
-        newStoreRequest.setUserId(userProfileResponse.getId());
+        newStoreRequest.setUserId(user.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         StoreId storeId = sellerStoreResponse.getStoreId();
         for (int i = 0; i < 100; i++) {

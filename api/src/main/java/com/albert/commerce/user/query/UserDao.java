@@ -1,12 +1,10 @@
 package com.albert.commerce.user.query;
 
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDataDao extends JpaRepository<UserProfileResponse, UserId> {
-
-    Optional<UserProfileResponse> findByEmail(String email);
+public interface UserDao extends JpaRepository<User, UserId>, UserDaoCustom {
 
     boolean existsByEmail(String email);
 }

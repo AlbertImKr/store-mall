@@ -38,7 +38,7 @@ class SellerStoreServiceTest {
     void addStoreSuccess() {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest("test");
-        newStoreRequest.setUserId(new UserId(sequenceGenerator.generate()));
+        newStoreRequest.setUserId(UserId.from(sequenceGenerator.generate()));
         Store store = newStoreRequest.toStore(new StoreId(sequenceGenerator.generate()));
         given(storeRepository.save(any())).willReturn(store);
 
@@ -54,7 +54,7 @@ class SellerStoreServiceTest {
     void addStoreFailed() {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest("test");
-        newStoreRequest.setUserId(new UserId(sequenceGenerator.generate()));
+        newStoreRequest.setUserId(UserId.from(sequenceGenerator.generate()));
         given(storeDao.existsByStoreUserId(any())).willReturn(true);
 
         // when,then

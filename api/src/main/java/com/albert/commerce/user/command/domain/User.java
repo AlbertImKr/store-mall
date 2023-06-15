@@ -1,11 +1,15 @@
 package com.albert.commerce.user.command.domain;
 
+import static com.albert.commerce.user.command.domain.Role.USER;
+
 import com.albert.commerce.common.model.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +28,38 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column
+    private LocalDate dateOfBirth;
+    @Column
+    private String phoneNumber;
+    @Column
+    private String address;
+    @Column
+    private boolean isActive;
+
     @Builder
-    public User(UserId id, String nickname, String email, Role role) {
+    public User(UserId id, String nickname, String email, Role role, LocalDate dateOfBirth,
+            String phoneNumber, String address, boolean isActive) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.isActive = isActive;
+    }
+
+    public static User createByEmail(String email, UserId userId) {
+        return User.builder()
+                .id(userId)
+                .email(email)
+                .nickname("user")
+                .role(USER)
+                .dateOfBirth(LocalDate.now())
+                .address("")
+                .phoneNumber("")
+                .isActive(false)
+                .build();
     }
 }

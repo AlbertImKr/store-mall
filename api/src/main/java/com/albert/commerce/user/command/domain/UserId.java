@@ -14,8 +14,12 @@ public class UserId implements Serializable {
     @Column(name = "user_id")
     private String id;
 
-    public UserId(String id) {
+    private UserId(String id) {
         this.id = id;
+    }
+
+    public static UserId from(String generate) {
+        return new UserId(generate);
     }
 
     @JsonValue

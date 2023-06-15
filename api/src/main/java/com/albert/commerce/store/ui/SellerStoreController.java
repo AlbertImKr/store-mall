@@ -6,8 +6,9 @@ import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.query.UserDataDao;
-import com.albert.commerce.user.query.UserProfileResponse;
+import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.UserDao;
+import com.albert.commerce.user.query.UserNotFoundException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Optional;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
-    private final UserDataDao userDataDao;
+    private final UserDao userDao;
     private final StoreDao storeDao;
 
     @PostMapping
@@ -37,9 +38,9 @@ public class SellerStoreController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }
-        UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
-                .orElseThrow();
-        newStoreRequest.setUserId(userProfileResponse.getId());
+        User user = userDao.findUserProfileByEmail(principal.getName())
+                .orElseThrow(UserNotFoundException::new);
+        newStoreRequest.setUserId(user.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
 
         URI myStore = WebMvcLinkBuilder.linkTo(
@@ -56,10 +57,10 @@ public class SellerStoreController {
 
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
-        UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
-                .orElseThrow();
+        User user = userDao.findUserProfileByEmail(principal.getName())
+                .orElseThrow(UserNotFoundException::new);
         Optional<Store> store = storeDao.findByStoreUserId(
-                new StoreUserId(userProfileResponse.getId()));
+                new StoreUserId(user.getId()));
         if (store.isEmpty()) {
             throw new MyStoreNotFoundException();
         }

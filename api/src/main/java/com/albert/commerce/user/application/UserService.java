@@ -1,40 +1,41 @@
 package com.albert.commerce.user.application;
 
 
-import static com.albert.commerce.user.command.domain.Role.USER;
-
 import com.albert.commerce.common.model.SequenceGenerator;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
-import com.albert.commerce.user.query.UserDataDao;
-import com.albert.commerce.user.query.UserProfileResponse;
+import com.albert.commerce.user.query.UserDao;
+import com.albert.commerce.user.query.UserInfoResponse;
+import com.albert.commerce.user.query.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserDataDao userDataDao;
+    private final UserDao userDao;
     private final SequenceGenerator sequenceGenerator;
 
     public void init(String email) {
-        if (userDataDao.existsByEmail(email)) {
+        if (userDao.existsByEmail(email)) {
             return;
         }
-        User user = User.builder()
-                .id(new UserId(sequenceGenerator.generate()))
-                .email(email)
-                .nickname("user")
-                .role(USER)
-                .build();
+        User user = User.createByEmail(email, UserId.from(sequenceGenerator.generate()));
         userRepository.save(user);
     }
 
-    public UserProfileResponse findByEmail(String email) {
-        return userDataDao.findByEmail(email)
-                .orElseThrow(() -> new EmailNotFoundException("존재하지 않은 이메일입니다."));
+    public UserInfoResponse findByEmail(String email) {
+        return UserInfoResponse.from(userDao.findUserProfileByEmail(email)
+                .orElseThrow(UserNotFoundException::new));
+    }
+
+    public UserInfoResponse updateUserInfo(String email, UserProfileRequest userProfileRequest) {
+        return UserInfoResponse.from(userDao.updateUserInfo(email, userProfileRequest)
+                .orElseThrow(UserNotFoundException::new));
     }
 }

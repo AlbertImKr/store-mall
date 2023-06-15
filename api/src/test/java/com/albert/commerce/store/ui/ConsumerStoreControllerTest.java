@@ -17,7 +17,7 @@ import com.albert.commerce.store.application.NewStoreRequest;
 import com.albert.commerce.store.application.SellerStoreResponse;
 import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.UserProfileResponse;
+import com.albert.commerce.user.query.UserInfoResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -68,8 +68,8 @@ class ConsumerStoreControllerTest {
     void getStoreSuccess() throws Exception {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
-        UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
-        newStoreRequest.setUserId(userProfileResponse.getId());
+        UserInfoResponse userInfoResponse = userService.findByEmail("test@email.com");
+        newStoreRequest.setUserId(userInfoResponse.id());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         entityManager.flush();
 
