@@ -1,12 +1,12 @@
 package com.albert.commerce.product.application;
 
 import com.albert.commerce.common.BusinessLinks;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -15,18 +15,20 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class ProductsResponse extends RepresentationModel<ProductsResponse> {
 
-    public List<ProductResponse> productsResponse;
+    public Page<ProductResponse> productsResponse;
 
     @Builder
-    private ProductsResponse(List<ProductResponse> productsResponse, Links links) {
+    private ProductsResponse(Page<ProductResponse> productsResponse, Links links) {
         this.productsResponse = productsResponse;
         super.add(links);
     }
 
-    public static ProductsResponse from(List<ProductResponse> productsResponse) {
+    public static ProductsResponse from(Page<ProductResponse> productsResponse) {
         return ProductsResponse.builder()
                 .productsResponse(productsResponse)
                 .links(Links.of(BusinessLinks.MY_STORE))
                 .build();
     }
+
+
 }

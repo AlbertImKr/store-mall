@@ -81,7 +81,8 @@ class ProductControllerTest {
 
     @DisplayName("My Store에서 Product를 추가한다")
     @Test
-    void addProduct() throws Exception {
+    void
+    addProduct() throws Exception {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
@@ -140,45 +141,62 @@ class ProductControllerTest {
         newStoreRequest.setUserId(userProfileResponse.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
         StoreId storeId = sellerStoreResponse.getStoreId();
-
-        productService.addProduct(productRequest, storeId);
-        productService.addProduct(productRequest, storeId);
-        productService.addProduct(productRequest, storeId);
-        productService.addProduct(productRequest, storeId);
-        productService.addProduct(productRequest, storeId);
+        for (int i = 0; i < 100; i++) {
+            productService.addProduct(productRequest, storeId);
+        }
 
         mockMvc.perform(get("/products")
+                        .param("size", "20")
+                        .param("page", "1")
                         .accept(MediaTypes.HAL_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("productsResponse").isArray())
-                .andExpect(jsonPath("productsResponse.*.productId").exists())
-                .andExpect(jsonPath("productsResponse.*.productName").exists())
-                .andExpect(jsonPath("productsResponse.*.price").exists())
-                .andExpect(jsonPath("productsResponse.*.description").exists())
-                .andExpect(jsonPath("productsResponse.*.brand").exists())
-                .andExpect(jsonPath("productsResponse.*.category").exists())
-                .andExpect(jsonPath("productsResponse.*._links.self").exists())
+                .andExpect(jsonPath("_embedded.productResponseList").isArray())
+                .andExpect(jsonPath("_embedded.productResponseList.*.productId").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*.productName").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*.price").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*.description").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*.brand").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*.category").exists())
+                .andExpect(jsonPath("_embedded.productResponseList.*._links.self").exists())
                 // restDocs
                 .andDo(document("getProducts", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
                                         linkWithRel("self").description("요청한 링크"),
-                                        linkWithRel("my-store").description("My Store 연결 링크")
+                                        linkWithRel("first").description("첫 페이지 링크"),
+                                        linkWithRel("prev").description("이전 페이지 링크"),
+                                        linkWithRel("next").description("다음 페이지 링크"),
+                                        linkWithRel("last").description("My Store 연결 링크")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
-                                        fieldWithPath("productsResponse[]._links.self.href").description(
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[]._links.self.href").description(
                                                 "product 링크"),
-                                        fieldWithPath("productsResponse[].productId").description("상품 아이디"),
-                                        fieldWithPath("productsResponse[].productName").description(
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].productId").description(
+                                                "상품 아이디"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].productName").description(
                                                 "상품 네이밍"),
-                                        fieldWithPath("productsResponse[].price").description("상품 가격"),
-                                        fieldWithPath("productsResponse[].description").description(
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].price").description(
+                                                "상품 가격"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].brand").description(
+                                                "상품 브랜드"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].category").description(
+                                                "상품의 카테고리"),
+                                        fieldWithPath(
+                                                "_embedded.productResponseList[].description").description(
                                                 "상품 설명"),
-                                        fieldWithPath("productsResponse[].brand").description("상품 브랜드"),
-                                        fieldWithPath("productsResponse[].category").description("상품 카타고리")
+                                        fieldWithPath("page.size").description("page size"),
+                                        fieldWithPath("page.totalElements").description("전체 개수"),
+                                        fieldWithPath("page.totalPages").description("전체 페이지 수"),
+                                        fieldWithPath("page.number").description("현재 페이지 넘버")
                                 )
                         )
                 );

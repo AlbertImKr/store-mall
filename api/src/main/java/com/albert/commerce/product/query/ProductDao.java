@@ -1,21 +1,20 @@
 package com.albert.commerce.product.query;
 
-import com.albert.commerce.product.application.ProductResponse;
-import com.albert.commerce.product.application.ProductsResponse;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.QProduct;
-import com.albert.commerce.product.ui.ProductController;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -42,21 +41,27 @@ public class ProductDao {
                 ));
     }
 
-    public ProductsResponse findProductsByUserEmail(String userEmail) {
+    public Page<Product> findProductsByUserEmail(String userEmail, Pageable pageable) {
 
         QProduct qProduct = QProduct.product;
-
-        List<Product> products = jpaQueryFactory.selectFrom(qProduct)
+        List<Product> contentProducts = jpaQueryFactory.selectFrom(qProduct)
                 .where(
                         qProduct.storeId.eq(
                                 getStoreIdByUserId(getUserIdByEmail(userEmail))
                         )
-                ).fetch();
-        return ProductsResponse.from(products.stream()
-                .map(product -> ProductResponse.from(product)
-                        .add(WebMvcLinkBuilder.linkTo(ProductController.class)
-                                .slash(product.getProductId().getId())
-                                .withSelfRel()))
-                .collect(Collectors.toList()));
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        JPAQuery<Long> productJPAQuery = jpaQueryFactory
+                .select(qProduct.count())
+                .from(qProduct)
+                .where(
+                        qProduct.storeId.eq(
+                                getStoreIdByUserId(getUserIdByEmail(userEmail))
+                        )
+                );
+        return PageableExecutionUtils.getPage(contentProducts, pageable, productJPAQuery::fetchOne
+        );
     }
 }
