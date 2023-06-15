@@ -21,8 +21,8 @@ public class Store {
 
     private StoreUserId storeUserId;
 
-    public Store(String storeName, StoreUserId storeUserId) {
-        this.storeId = new StoreId();
+    public Store(StoreId storeId, String storeName, StoreUserId storeUserId) {
+        this.storeId = storeId;
         this.storeName = storeName;
         this.storeUserId = storeUserId;
     }

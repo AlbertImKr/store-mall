@@ -1,6 +1,7 @@
 package com.albert.commerce.store.application;
 
 import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.user.command.domain.UserId;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +23,8 @@ public class NewStoreRequest {
         this.storeName = storeName;
     }
 
-    public Store toStore() {
-        return new Store(storeName, new StoreUserId(userId));
+    public Store toStore(StoreId storeId) {
+        return new Store(storeId, storeName, new StoreUserId(userId));
     }
 
     public StoreUserId getStoreUserId() {

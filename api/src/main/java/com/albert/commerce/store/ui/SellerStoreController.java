@@ -11,7 +11,6 @@ import com.albert.commerce.user.query.UserProfileResponse;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -41,12 +40,12 @@ public class SellerStoreController {
         UserProfileResponse userProfileResponse = userDataDao.findByEmail(principal.getName())
                 .orElseThrow();
         newStoreRequest.setUserId(userProfileResponse.getId());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
 
         URI myStore = WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(principal))
                 .toUri();
-        UUID storeId = sellerStoreResponse.getStoreId().getValue();
+        String storeId = sellerStoreResponse.getStoreId().getValue();
         sellerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(SellerStoreController.class)
                         .slash(storeId)

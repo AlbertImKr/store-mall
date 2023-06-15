@@ -6,11 +6,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.albert.commerce.common.SequenceGenerator;
+import com.albert.commerce.common.SequenceGeneratorImpl;
 import com.albert.commerce.store.application.NewStoreRequest;
 import com.albert.commerce.store.application.SellerStoreResponse;
 import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.application.StoreAlreadyExistsException;
 import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.domain.UserId;
@@ -24,12 +27,14 @@ class SellerStoreServiceTest {
     private SellerStoreService sellerStoreService;
     private StoreRepository storeRepository;
     private StoreDao storeDao;
+    private SequenceGenerator sequenceGenerator;
 
     @BeforeEach
     void setUserService() {
         storeRepository = mock(StoreRepository.class);
         storeDao = mock(StoreDao.class);
-        sellerStoreService = new SellerStoreService(storeRepository, storeDao);
+        sequenceGenerator = new SequenceGeneratorImpl();
+        sellerStoreService = new SellerStoreService(storeRepository, storeDao, sequenceGenerator);
     }
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")
@@ -37,12 +42,12 @@ class SellerStoreServiceTest {
     void addStoreSuccess() {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest("test");
-        newStoreRequest.setUserId(new UserId());
-        Store store = newStoreRequest.toStore();
+        newStoreRequest.setUserId(new UserId(sequenceGenerator.generate()));
+        Store store = newStoreRequest.toStore(new StoreId(sequenceGenerator.generate()));
         given(storeRepository.save(any())).willReturn(store);
 
         // when
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
 
         // then
         assertThat(store.getStoreId()).isEqualTo(sellerStoreResponse.getStoreId());
@@ -53,11 +58,11 @@ class SellerStoreServiceTest {
     void addStoreFailed() {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest("test");
-        newStoreRequest.setUserId(new UserId());
+        newStoreRequest.setUserId(new UserId(sequenceGenerator.generate()));
         given(storeDao.existsByStoreUserId(any())).willReturn(true);
 
         // when,then
-        assertThatThrownBy(() -> sellerStoreService.addStore(newStoreRequest)).isInstanceOf(
+        assertThatThrownBy(() -> sellerStoreService.createStore(newStoreRequest)).isInstanceOf(
                 StoreAlreadyExistsException.class);
     }
 }

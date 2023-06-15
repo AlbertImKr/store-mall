@@ -24,8 +24,8 @@ public class User {
     private Role role;
 
     @Builder
-    public User(String nickname, String email, Role role) {
-        this.id = new UserId();
+    public User(UserId id, String nickname, String email, Role role) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = role;

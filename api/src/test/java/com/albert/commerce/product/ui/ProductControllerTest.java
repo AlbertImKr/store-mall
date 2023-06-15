@@ -90,7 +90,7 @@ class ProductControllerTest {
                 .orElseThrow();
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
         newStoreRequest.setUserId(userProfileResponse.getId());
-        sellerStoreService.addStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +139,7 @@ class ProductControllerTest {
                 .orElseThrow();
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
         newStoreRequest.setUserId(userProfileResponse.getId());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         StoreId storeId = sellerStoreResponse.getStoreId();
         for (int i = 0; i < 100; i++) {
             productService.addProduct(productRequest, storeId);

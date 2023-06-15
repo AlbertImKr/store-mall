@@ -81,6 +81,11 @@ class SellerStoreControllerTest {
                                         halLinks(),
                                         linkWithRel("self").description("지금 요청한 링크"),
                                         linkWithRel("my-store").description("My 스토어에 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어 아이디"),
+                                        fieldWithPath("storeName").description("스토어 네이밍")
                                 )
                         )
                 );
@@ -93,7 +98,7 @@ class SellerStoreControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userProfileResponse.getId());
-        sellerStoreService.addStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest);
 
         // when
         mockMvc.perform(post("/stores")
@@ -128,7 +133,7 @@ class SellerStoreControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userProfileResponse.getId());
-        sellerStoreService.addStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest);
 
         // when
         mockMvc.perform(get("/stores/my")

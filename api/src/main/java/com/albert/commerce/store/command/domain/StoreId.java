@@ -4,28 +4,26 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class StoreId implements Serializable {
 
     @Column(name = "store_id")
-    private UUID value;
+    private String value;
 
-    public StoreId() {
-        this.value = UUID.randomUUID();
-    }
-
-    private StoreId(UUID value) {
+    public StoreId(String value) {
         this.value = value;
     }
 
-    public static StoreId from(UUID storeId) {
+    public static StoreId from(String storeId) {
         return new StoreId(storeId);
     }
 
     @JsonValue
-    public UUID getValue() {
+    public String getValue() {
         return value;
     }
 }

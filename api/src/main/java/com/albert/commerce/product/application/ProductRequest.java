@@ -12,10 +12,10 @@ public record ProductRequest(String productName,
                              String category) {
 
 
-    public Product toProduct(StoreId storeId) {
+    public Product toProduct(StoreId storeId, ProductId productId) {
         return Product.builder()
                 .storeId(storeId)
-                .productId(new ProductId())
+                .productId(productId)
                 .productName(productName)
                 .price(new Money(price))
                 .description(description)

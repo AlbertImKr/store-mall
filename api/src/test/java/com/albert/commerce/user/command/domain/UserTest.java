@@ -11,6 +11,7 @@ class UserTest {
     @Test
     void createByBuilder() {
         User user = User.builder()
+                .id(new UserId("sss"))
                 .nickname("test")
                 .email("test@email.com")
                 .role(Role.USER)

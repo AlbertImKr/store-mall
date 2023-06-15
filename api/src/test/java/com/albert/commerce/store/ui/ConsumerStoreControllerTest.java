@@ -70,7 +70,7 @@ class ConsumerStoreControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserProfileResponse userProfileResponse = userService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userProfileResponse.getId());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.addStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getValue()))
