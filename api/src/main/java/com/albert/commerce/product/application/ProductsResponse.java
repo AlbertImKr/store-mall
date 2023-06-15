@@ -1,6 +1,6 @@
 package com.albert.commerce.product.application;
 
-import com.albert.commerce.common.BusinessLinks;
+import com.albert.commerce.common.units.BusinessLinks;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

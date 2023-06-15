@@ -1,6 +1,6 @@
 package com.albert.commerce.store.application;
 
-import com.albert.commerce.common.SequenceGenerator;
+import com.albert.commerce.common.model.SequenceGenerator;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;

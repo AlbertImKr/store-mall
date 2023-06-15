@@ -3,7 +3,7 @@ package com.albert.commerce.user.application;
 
 import static com.albert.commerce.user.command.domain.Role.USER;
 
-import com.albert.commerce.common.SequenceGenerator;
+import com.albert.commerce.common.model.SequenceGenerator;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;

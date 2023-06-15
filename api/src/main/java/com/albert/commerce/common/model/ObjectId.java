@@ -1,4 +1,4 @@
-package com.albert.commerce.common;
+package com.albert.commerce.common.model;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -92,13 +92,13 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
 
     private static void isTrueArgument(String error, boolean flag) {
         if (!flag) {
-            throw new RuntimeException(error + "이 null이면 안됩니다.");
+            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
         }
     }
 
     private static Object notNull(String error, Object object) {
         if (object == null) {
-            throw new RuntimeException(error + "이 null이면 안됩니다.");
+            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
         }
         return object;
     }

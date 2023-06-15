@@ -2,7 +2,7 @@ package com.albert.commerce.product.ui;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.albert.commerce.common.BusinessLinks;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.application.ProductAssembler;
 import com.albert.commerce.product.application.ProductRequest;
 import com.albert.commerce.product.application.ProductResponse;

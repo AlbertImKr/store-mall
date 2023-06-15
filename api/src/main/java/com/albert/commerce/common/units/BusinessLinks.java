@@ -1,4 +1,4 @@
-package com.albert.commerce.common;
+package com.albert.commerce.common.units;
 
 import com.albert.commerce.store.ui.ConsumerStoreController;
 import com.albert.commerce.store.ui.SellerStoreController;

@@ -1,4 +1,4 @@
-package com.albert.commerce.store.command.application;
+package com.albert.commerce.store.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,12 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.albert.commerce.common.SequenceGenerator;
-import com.albert.commerce.common.SequenceGeneratorImpl;
-import com.albert.commerce.store.application.NewStoreRequest;
-import com.albert.commerce.store.application.SellerStoreResponse;
-import com.albert.commerce.store.application.SellerStoreService;
-import com.albert.commerce.store.application.StoreAlreadyExistsException;
+import com.albert.commerce.common.model.SequenceGenerator;
+import com.albert.commerce.common.model.SequenceGeneratorImpl;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;

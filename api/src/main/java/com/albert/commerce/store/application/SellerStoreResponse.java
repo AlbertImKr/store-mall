@@ -1,6 +1,6 @@
 package com.albert.commerce.store.application;
 
-import com.albert.commerce.common.BusinessLinks;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import lombok.AccessLevel;
