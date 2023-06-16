@@ -18,8 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.albert.commerce.store.application.NewStoreRequest;
 import com.albert.commerce.store.application.SellerStoreService;
-import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.UserInfoResponse;
+import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,8 +51,9 @@ class SellerStoreControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserService userService;
-
+    UserCommandService userCommandService;
+    @Autowired
+    UserQueryService userQueryService;
     @Autowired
     SellerStoreService sellerStoreService;
 
@@ -60,7 +62,7 @@ class SellerStoreControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userCommandService.init("test@email.com");
     }
 
     @DisplayName("정상적으로 스토어를 생성한다")
@@ -96,7 +98,7 @@ class SellerStoreControllerTest {
     void createStoreFailed() throws Exception {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
-        UserInfoResponse userInfoResponse = userService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userInfoResponse.getId());
         sellerStoreService.createStore(newStoreRequest);
 
@@ -131,7 +133,7 @@ class SellerStoreControllerTest {
     void getMyStoreSuccess() throws Exception {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
-        UserInfoResponse userInfoResponse = userService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userInfoResponse.getId());
         sellerStoreService.createStore(newStoreRequest);
 

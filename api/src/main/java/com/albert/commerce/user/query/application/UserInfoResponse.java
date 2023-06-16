@@ -1,4 +1,4 @@
-package com.albert.commerce.user.query;
+package com.albert.commerce.user.query.application;
 
 import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
@@ -24,7 +24,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
     private boolean isActive;
 
     @Builder
-    public UserInfoResponse(UserId id, String nickname, String email, Role role,
+    private UserInfoResponse(UserId id, String nickname, String email, Role role,
             LocalDate dateOfBirth, String phoneNumber, String address, boolean isActive) {
         this.id = id;
         this.nickname = nickname;

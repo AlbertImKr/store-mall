@@ -1,4 +1,4 @@
-package com.albert.commerce.user.query;
+package com.albert.commerce.user;
 
 import com.albert.commerce.common.exception.BusinessException;
 import com.albert.commerce.common.exception.ErrorMessage;
@@ -13,6 +13,6 @@ public class UserNotFoundException extends BusinessException {
 
     @Override
     protected ErrorMessage getErrorMessage() {
-        return null;
+        return errorMessage;
     }
 }

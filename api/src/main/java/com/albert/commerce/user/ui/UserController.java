@@ -4,9 +4,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.user.application.UserProfileRequest;
-import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.UserInfoResponse;
+import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserProfileRequest;
+import com.albert.commerce.user.query.application.UserQueryService;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
 
 
     @GetMapping("/")
@@ -31,7 +33,7 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userService.findByEmail(email);
+        UserInfoResponse userInfoResponse = userQueryService.findByEmail(email);
         userInfoResponse.add(
                 linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
                         .withSelfRel(),
@@ -46,7 +48,8 @@ public class UserController {
     public UserInfoResponse updateUserInfo(Principal principal,
             UserProfileRequest userProfileRequest) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userService.updateUserInfo(email, userProfileRequest);
+        UserInfoResponse userInfoResponse = userCommandService.updateUserInfo(email,
+                userProfileRequest);
         userInfoResponse.add(
                 linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
                         .withSelfRel(),

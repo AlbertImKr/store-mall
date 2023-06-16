@@ -6,9 +6,8 @@ import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.UserDao;
-import com.albert.commerce.user.query.UserNotFoundException;
+import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserQueryService;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Optional;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
-    private final UserDao userDao;
+    private final UserQueryService userQueryService;
     private final StoreDao storeDao;
 
     @PostMapping
@@ -38,8 +37,7 @@ public class SellerStoreController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }
-        User user = userDao.findUserProfileByEmail(principal.getName())
-                .orElseThrow(UserNotFoundException::new);
+        UserInfoResponse user = userQueryService.findByEmail(principal.getName());
         newStoreRequest.setUserId(user.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
 
@@ -57,8 +55,7 @@ public class SellerStoreController {
 
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
-        User user = userDao.findUserProfileByEmail(principal.getName())
-                .orElseThrow(UserNotFoundException::new);
+        UserInfoResponse user = userQueryService.findByEmail(principal.getName());
         Optional<Store> store = storeDao.findByStoreUserId(
                 new StoreUserId(user.getId()));
         if (store.isEmpty()) {

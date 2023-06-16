@@ -21,10 +21,9 @@ import com.albert.commerce.store.application.NewStoreRequest;
 import com.albert.commerce.store.application.SellerStoreResponse;
 import com.albert.commerce.store.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.UserDao;
-import com.albert.commerce.user.query.UserNotFoundException;
+import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +58,7 @@ class ProductControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserDao userDao;
+    UserQueryService userQueryService;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -71,11 +70,11 @@ class ProductControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserService userService;
+    UserCommandService userCommandService;
 
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userCommandService.init("test@email.com");
     }
 
     @DisplayName("My Store에서 Product를 추가한다")
@@ -85,8 +84,7 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        User user = userDao.findUserProfileByEmail("test@email.com")
-                .orElseThrow(UserNotFoundException::new);
+        UserInfoResponse user = userQueryService.findByEmail("test@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
         newStoreRequest.setUserId(user.getId());
         sellerStoreService.createStore(newStoreRequest);
@@ -134,8 +132,7 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        User user = userDao.findUserProfileByEmail("test@email.com")
-                .orElseThrow(UserNotFoundException::new);
+        UserInfoResponse user = userQueryService.findByEmail("test@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
         newStoreRequest.setUserId(user.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);

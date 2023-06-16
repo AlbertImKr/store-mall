@@ -16,8 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.store.application.NewStoreRequest;
 import com.albert.commerce.store.application.SellerStoreResponse;
 import com.albert.commerce.store.application.SellerStoreService;
-import com.albert.commerce.user.application.UserService;
-import com.albert.commerce.user.query.UserInfoResponse;
+import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -49,7 +50,7 @@ class ConsumerStoreControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserService userService;
+    UserCommandService userCommandService;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -57,10 +58,13 @@ class ConsumerStoreControllerTest {
     @Autowired
     EntityManager entityManager;
 
+    @Autowired
+    UserQueryService userQueryService;
+
 
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userCommandService.init("test@email.com");
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")
@@ -68,7 +72,7 @@ class ConsumerStoreControllerTest {
     void getStoreSuccess() throws Exception {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
-        UserInfoResponse userInfoResponse = userService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         newStoreRequest.setUserId(userInfoResponse.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         entityManager.flush();

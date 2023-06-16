@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.user.application.UserService;
+import com.albert.commerce.user.command.application.UserCommandService;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,14 +35,14 @@ class UserControllerTest {
 
 
     @Autowired
-    UserService userService;
+    UserCommandService userCommandService;
 
     @Autowired
     MockMvc mockMvc;
 
     @BeforeEach
     void initUser() {
-        userService.init("test@email.com");
+        userCommandService.init("test@email.com");
     }
 
     @DisplayName("User info를 가져온다")

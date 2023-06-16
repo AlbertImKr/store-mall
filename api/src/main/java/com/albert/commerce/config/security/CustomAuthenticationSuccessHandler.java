@@ -1,6 +1,6 @@
 package com.albert.commerce.config.security;
 
-import com.albert.commerce.user.application.UserService;
+import com.albert.commerce.user.command.application.UserCommandService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 public class CustomAuthenticationSuccessHandler extends
         SavedRequestAwareAuthenticationSuccessHandler {
 
-    private final UserService userService;
+    private final UserCommandService userCommandService;
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     @Override
@@ -41,7 +41,7 @@ public class CustomAuthenticationSuccessHandler extends
         }
         if (authentication.isAuthenticated()) {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            userService.init(oAuth2User.getName());
+            userCommandService.init(oAuth2User.getName());
         }
         clearAuthenticationAttributes(request);
         // Use the DefaultSavedRequest URL
