@@ -1,5 +1,9 @@
 package com.albert.commerce.user.ui;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.user.application.UserProfileRequest;
 import com.albert.commerce.user.application.UserService;
 import com.albert.commerce.user.query.UserInfoResponse;
@@ -27,14 +31,30 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        return userService.findByEmail(email);
+        UserInfoResponse userInfoResponse = userService.findByEmail(email);
+        userInfoResponse.add(
+                linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
+                        .withSelfRel(),
+                BusinessLinks.CREATE_STORE,
+                BusinessLinks.GET_STORE,
+                BusinessLinks.MY_STORE
+        );
+        return userInfoResponse;
     }
 
     @PutMapping("/users/profile")
     public UserInfoResponse updateUserInfo(Principal principal,
             UserProfileRequest userProfileRequest) {
         String email = principal.getName();
-        return userService.updateUserInfo(email, userProfileRequest);
+        UserInfoResponse userInfoResponse = userService.updateUserInfo(email, userProfileRequest);
+        userInfoResponse.add(
+                linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
+                        .withSelfRel(),
+                BusinessLinks.CREATE_STORE,
+                BusinessLinks.GET_STORE,
+                BusinessLinks.MY_STORE
+        );
+        return userInfoResponse;
     }
 
 }

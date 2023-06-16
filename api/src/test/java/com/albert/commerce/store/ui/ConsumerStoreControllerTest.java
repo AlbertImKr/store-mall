@@ -69,7 +69,7 @@ class ConsumerStoreControllerTest {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserInfoResponse userInfoResponse = userService.findByEmail("test@email.com");
-        newStoreRequest.setUserId(userInfoResponse.id());
+        newStoreRequest.setUserId(userInfoResponse.getId());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
         entityManager.flush();
 
