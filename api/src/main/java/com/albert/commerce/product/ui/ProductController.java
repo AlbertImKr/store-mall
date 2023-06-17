@@ -3,11 +3,11 @@ package com.albert.commerce.product.ui;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.product.application.CreatedProductResponse;
-import com.albert.commerce.product.application.ProductAssembler;
-import com.albert.commerce.product.application.ProductRequest;
-import com.albert.commerce.product.application.ProductResponse;
-import com.albert.commerce.product.application.ProductService;
+import com.albert.commerce.product.command.application.CreatedProductResponse;
+import com.albert.commerce.product.command.application.ProductAssembler;
+import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductResponse;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;

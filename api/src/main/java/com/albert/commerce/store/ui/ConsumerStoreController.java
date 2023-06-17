@@ -1,6 +1,6 @@
 package com.albert.commerce.store.ui;
 
-import com.albert.commerce.store.application.ConsumerStoreResponse;
+import com.albert.commerce.store.command.application.ConsumerStoreResponse;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.StoreDao;

@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.store.application.NewStoreRequest;
-import com.albert.commerce.store.application.SellerStoreResponse;
-import com.albert.commerce.store.application.SellerStoreService;
+import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.store.command.application.SellerStoreResponse;
+import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.command.application.UserCommandService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserQueryService;

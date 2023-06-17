@@ -1,4 +1,4 @@
-package com.albert.commerce.product.application;
+package com.albert.commerce.product.command.application;
 
 import com.albert.commerce.common.units.BusinessLinks;
 import lombok.AccessLevel;

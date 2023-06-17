@@ -1,4 +1,4 @@
-package com.albert.commerce.store.query;
+package com.albert.commerce.store.infra;
 
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.StoreId;

@@ -15,11 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.product.application.ProductRequest;
-import com.albert.commerce.product.application.ProductService;
-import com.albert.commerce.store.application.NewStoreRequest;
-import com.albert.commerce.store.application.SellerStoreResponse;
-import com.albert.commerce.store.application.SellerStoreService;
+import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
+import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.store.command.application.SellerStoreResponse;
+import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.application.UserCommandService;
 import com.albert.commerce.user.query.application.UserInfoResponse;

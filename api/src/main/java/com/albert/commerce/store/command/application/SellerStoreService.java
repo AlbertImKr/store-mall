@@ -1,10 +1,9 @@
-package com.albert.commerce.store.application;
+package com.albert.commerce.store.command.application;
 
 import com.albert.commerce.common.model.SequenceGenerator;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
-import com.albert.commerce.store.query.StoreDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,10 @@ import org.springframework.stereotype.Service;
 public class SellerStoreService {
 
     private final StoreRepository storeRepository;
-    private final StoreDao storeDao;
     private final SequenceGenerator sequenceGenerator;
 
     public SellerStoreResponse createStore(NewStoreRequest newStoreRequest) {
-        if (storeDao.existsByStoreUserId(newStoreRequest.getStoreUserId())) {
+        if (storeRepository.existsByStoreUserId(newStoreRequest.getStoreUserId())) {
             throw new StoreAlreadyExistsException();
         }
         Store store = newStoreRequest.toStore(new StoreId(sequenceGenerator.generate()));

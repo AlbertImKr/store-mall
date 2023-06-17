@@ -1,4 +1,4 @@
-package com.albert.commerce.product.application;
+package com.albert.commerce.product.command.application;
 
 import com.albert.commerce.common.model.SequenceGenerator;
 import com.albert.commerce.product.command.domain.Product;
