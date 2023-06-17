@@ -3,7 +3,6 @@ package com.albert.commerce.store.command.application;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreUserId;
-import com.albert.commerce.user.command.domain.UserId;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import lombok.Setter;
 @Setter
 public class NewStoreRequest {
 
-    private UserId userId;
     @NotNull
     private String storeName;
 
@@ -23,11 +21,7 @@ public class NewStoreRequest {
         this.storeName = storeName;
     }
 
-    public Store toStore(StoreId storeId) {
-        return new Store(storeId, storeName, new StoreUserId(userId));
-    }
-
-    public StoreUserId getStoreUserId() {
-        return new StoreUserId(userId);
+    public Store toStore(StoreUserId storeUserId, StoreId storeId) {
+        return new Store(storeId, storeName, storeUserId);
     }
 }

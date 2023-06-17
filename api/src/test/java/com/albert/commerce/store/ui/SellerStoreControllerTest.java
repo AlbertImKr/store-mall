@@ -43,7 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class SellerStoreControllerTest {
 
-    public static final String TEST_STORE_NAME = "testStore";
+    private static final String TEST_STORE_NAME = "testStore";
+
     @Autowired
     MockMvc mockMvc;
 
@@ -99,8 +100,7 @@ class SellerStoreControllerTest {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
-        newStoreRequest.setUserId(userInfoResponse.getId());
-        sellerStoreService.createStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
         mockMvc.perform(post("/stores")
@@ -134,8 +134,7 @@ class SellerStoreControllerTest {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
-        newStoreRequest.setUserId(userInfoResponse.getId());
-        sellerStoreService.createStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
         mockMvc.perform(get("/stores/my")

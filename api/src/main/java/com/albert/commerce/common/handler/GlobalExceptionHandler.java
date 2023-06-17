@@ -1,11 +1,14 @@
-package com.albert.commerce.common.exception;
+package com.albert.commerce.common.handler;
 
+import com.albert.commerce.common.exception.ErrorResponse;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
 import com.albert.commerce.store.ui.MyStoreNotFoundException;
+import com.albert.commerce.store.ui.SellerStoreController;
 import com.albert.commerce.store.ui.StoreNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,12 +31,22 @@ public class GlobalExceptionHandler {
         );
     }
 
+    private static String getMyStoreRequestPath() {
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+                SellerStoreController.class).getMyStore(null)).toUri().getPath();
+    }
+
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeExceptionHandler(StoreNotFoundException storeNotFoundException,
             HttpServletRequest httpServletRequest) {
         Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
         ErrorResponse errorResponse = new ErrorResponse(storeNotFoundException.getErrorMessage());
+        System.out.println("path = " + getMyStoreRequestPath());
+        System.out.println("requestURI = " + httpServletRequest.getRequestURI());
+        if (httpServletRequest.getRequestURI().equals(getMyStoreRequestPath())) {
+            return errorResponse.add(selfRel, BusinessLinks.CREATE_STORE);
+        }
         return errorResponse.add(
                 selfRel,
                 BusinessLinks.GET_STORE

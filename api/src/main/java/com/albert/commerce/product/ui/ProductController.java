@@ -13,7 +13,6 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.store.ui.StoreNotFoundException;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,8 +45,7 @@ public class ProductController {
     public ResponseEntity<CreatedProductResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
-        StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName())
-                .orElseThrow(StoreNotFoundException::new);
+        StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName());
         CreatedProductResponse productResponse = productService.addProduct(productRequest, storeId);
 
         ProductId productId = productResponse.getProductId();

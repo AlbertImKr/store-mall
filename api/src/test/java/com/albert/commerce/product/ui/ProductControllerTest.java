@@ -22,6 +22,7 @@ import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,11 +47,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class ProductControllerTest {
 
-    public static final String TEST_PRODUCT_NAME = "testProductName";
-    public static final String TEST_DESCRIPTION = "testDescription";
-    public static final String TEST_BRAND = "testBrand";
-    public static final String TEST_CATEGORY = "testCategory";
-    public static final int TEST_PRICE = 10000;
+    private static final String TEST_PRODUCT_NAME = "testProductName";
+    private static final String TEST_DESCRIPTION = "testDescription";
+    private static final String TEST_BRAND = "testBrand";
+    private static final String TEST_CATEGORY = "testCategory";
+    private static final int TEST_PRICE = 10000;
+    private static final String TEST_USER_EMAIL = "test@email.com";
     @Autowired
     MockMvc mockMvc;
 
@@ -74,7 +76,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userCommandService.init("test@email.com");
+        userCommandService.init(TEST_USER_EMAIL);
     }
 
     @DisplayName("My Store에서 Product를 추가한다")
@@ -84,10 +86,9 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        UserInfoResponse user = userQueryService.findByEmail("test@email.com");
+        UserInfoResponse user = userQueryService.findByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
-        newStoreRequest.setUserId(user.getId());
-        sellerStoreService.createStore(newStoreRequest);
+        sellerStoreService.createStore(newStoreRequest, user.getId());
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -132,10 +133,9 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        UserInfoResponse user = userQueryService.findByEmail("test@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
-        newStoreRequest.setUserId(user.getId());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
+                UserId.from("ddd"));
         StoreId storeId = sellerStoreResponse.getStoreId();
         for (int i = 0; i < 100; i++) {
             productService.addProduct(productRequest, storeId);

@@ -14,8 +14,12 @@ public class StoreUserId {
     protected StoreUserId() {
     }
 
-    public StoreUserId(UserId userId) {
+    private StoreUserId(UserId userId) {
         this.userId = userId;
+    }
+
+    public static StoreUserId from(UserId userId) {
+        return new StoreUserId(userId);
     }
 
     @JsonValue

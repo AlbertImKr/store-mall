@@ -42,7 +42,6 @@ class ConsumerStoreControllerTest {
 
     public static final String TEST_STORE_NAME = "testStore";
 
-
     @Autowired
     MockMvc mockMvc;
 
@@ -73,8 +72,8 @@ class ConsumerStoreControllerTest {
         // given
         NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
-        newStoreRequest.setUserId(userInfoResponse.getId());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
+                userInfoResponse.getId());
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getValue()))
