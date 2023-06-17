@@ -61,7 +61,6 @@ public class ProductDao {
                                 getStoreIdByUserId(getUserIdByEmail(userEmail))
                         )
                 );
-        return PageableExecutionUtils.getPage(contentProducts, pageable, productJPAQuery::fetchOne
-        );
+        return PageableExecutionUtils.getPage(contentProducts, pageable, productJPAQuery::fetchOne);
     }
 }

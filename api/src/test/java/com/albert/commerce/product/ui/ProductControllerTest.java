@@ -22,7 +22,6 @@ import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.application.UserCommandService;
-import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -135,7 +134,8 @@ class ProductControllerTest {
         );
         NewStoreRequest newStoreRequest = new NewStoreRequest("store");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                UserId.from("ddd"));
+                userQueryService.findByEmail(TEST_USER_EMAIL).getId()
+        );
         StoreId storeId = sellerStoreResponse.getStoreId();
         for (int i = 0; i < 100; i++) {
             productService.addProduct(productRequest, storeId);

@@ -37,7 +37,6 @@ public class ProductController {
     private final ProductService productService;
     private final StoreDao storeDao;
     private final ProductDao productDao;
-
     private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
     private final ProductAssembler productAssembler;
 
