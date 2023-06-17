@@ -2,6 +2,8 @@ package com.albert.commerce.common.units;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.ui.ProductController;
 import com.albert.commerce.store.ui.ConsumerStoreController;
 import com.albert.commerce.store.ui.SellerStoreController;
 import com.albert.commerce.user.ui.UserController;
@@ -29,4 +31,11 @@ public class BusinessLinks {
     public static final Link GET_USER_PROFILE =
             WebMvcLinkBuilder.linkTo(methodOn(UserController.class).updateUserInfo(null, null))
                     .withRel("get-user-profile");
+
+    public static Link getProductSelfRel(ProductId productId) {
+        return WebMvcLinkBuilder
+                .linkTo(methodOn(ProductController.class).addProduct(null, null))
+                .slash(productId.getId())
+                .withSelfRel();
+    }
 }

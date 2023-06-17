@@ -3,7 +3,6 @@ package com.albert.commerce.user.command.domain;
 import static com.albert.commerce.user.command.domain.Role.USER;
 
 import com.albert.commerce.common.model.BaseEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,13 +27,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column
     private LocalDate dateOfBirth;
-    @Column
     private String phoneNumber;
-    @Column
     private String address;
-    @Column
     private boolean isActive;
 
     @Builder
@@ -54,11 +49,7 @@ public class User extends BaseEntity {
         return User.builder()
                 .id(userId)
                 .email(email)
-                .nickname("user")
                 .role(USER)
-                .dateOfBirth(LocalDate.now())
-                .address("")
-                .phoneNumber("")
                 .isActive(false)
                 .build();
     }

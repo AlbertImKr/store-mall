@@ -1,6 +1,7 @@
 package com.albert.commerce.product.command.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.albert.commerce.product.infra.ProductJpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product, ProductId> {
+public interface ProductRepository extends ProductJpaRepository {
+
 }

@@ -1,7 +1,5 @@
 package com.albert.commerce.product.ui;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.command.application.CreatedProductResponse;
 import com.albert.commerce.product.command.application.ProductAssembler;
@@ -21,7 +19,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,13 +45,11 @@ public class ProductController {
         CreatedProductResponse productResponse = productService.addProduct(productRequest, storeId);
 
         ProductId productId = productResponse.getProductId();
-        Link selfRel = WebMvcLinkBuilder
-                .linkTo(methodOn(this.getClass()).addProduct(productRequest, principal))
-                .slash(productId.getId())
-                .withSelfRel();
+        Link selfRel = BusinessLinks.getProductSelfRel(productId);
         productResponse.add(selfRel, BusinessLinks.MY_STORE);
         return ResponseEntity.created(selfRel.toUri()).body(productResponse);
     }
+
 
     @GetMapping
     public ResponseEntity<PagedModel<ProductResponse>> findAll(Principal principal,
