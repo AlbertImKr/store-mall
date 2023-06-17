@@ -17,9 +17,7 @@ public class Store extends BaseEntity {
 
     @EmbeddedId
     private StoreId storeId;
-
     private String storeName;
-
     private StoreUserId storeUserId;
 
     public Store(StoreId storeId, String storeName, StoreUserId storeUserId) {

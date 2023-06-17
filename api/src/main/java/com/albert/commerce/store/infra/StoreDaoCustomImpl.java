@@ -9,7 +9,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class StoreDaoImpl implements StoreDaoCustom {
+public class StoreDaoCustomImpl implements StoreDaoCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
