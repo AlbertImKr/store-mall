@@ -22,6 +22,11 @@ import org.junit.jupiter.api.Test;
 
 class SellerStoreServiceTest {
 
+    private static final String TEST_STORE_NAME = "testStoreName";
+    private static final String TEST_EMAIL = "test@email.com";
+    private static final String TEST_OWNER = "testOwner";
+    private static final String TEST_PHONE_NUMBER = "01011001100";
+    private static final String TEST_ADDRESS = "testAddress";
     private SellerStoreService sellerStoreService;
     private StoreRepository storeRepository;
     private SequenceGenerator sequenceGenerator;
@@ -37,10 +42,24 @@ class SellerStoreServiceTest {
     @Test
     void addStoreSuccess() {
         // given
-        NewStoreRequest newStoreRequest = new NewStoreRequest("test");
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         UserId userId = UserId.from(sequenceGenerator.generate());
         StoreId storeId = new StoreId(sequenceGenerator.generate());
-        Store store = new Store(storeId, newStoreRequest.getStoreName(), StoreUserId.from(userId));
+        Store store = Store.builder()
+                .storeId(storeId)
+                .storeName(newStoreRequest.getStoreName())
+                .storeUserId(StoreUserId.from(userId))
+                .address(TEST_ADDRESS)
+                .email(TEST_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .build();
         given(storeRepository.save(any())).willReturn(store);
 
         // when

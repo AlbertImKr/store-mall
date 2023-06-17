@@ -65,14 +65,4 @@ public class SellerStoreController {
         return ResponseEntity.ok().body(sellerStoreResponse);
     }
 
-    @PostMapping("/my")
-    public ResponseEntity updateMyStore(Principal principal) {
-        Store store = storeDao.findStoreByUserEmail(principal.getName());
-        SellerStoreResponse sellerStoreResponse = SellerStoreResponse.from(store);
-        sellerStoreResponse.add(
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
-                                .getMyStore(null))
-                        .withSelfRel());
-        return ResponseEntity.ok().body(sellerStoreResponse);
-    }
 }

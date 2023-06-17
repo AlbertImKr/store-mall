@@ -52,6 +52,11 @@ class ProductControllerTest {
     private static final String TEST_CATEGORY = "testCategory";
     private static final int TEST_PRICE = 10000;
     private static final String TEST_USER_EMAIL = "test@email.com";
+    private static final String TEST_STORE_NAME = "testStoreName";
+    private static final String TEST_STORE_EMAIL = "test@email.com";
+    private static final String TEST_OWNER = "testOwner";
+    private static final String TEST_PHONE_NUMBER = "01011001100";
+    private static final String TEST_ADDRESS = "testAddress";
     @Autowired
     MockMvc mockMvc;
 
@@ -86,7 +91,14 @@ class ProductControllerTest {
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
         UserInfoResponse user = userQueryService.findByEmail(TEST_USER_EMAIL);
-        NewStoreRequest newStoreRequest = new NewStoreRequest("store");
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_STORE_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
+
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         mockMvc.perform(post("/products")
@@ -132,7 +144,13 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        NewStoreRequest newStoreRequest = new NewStoreRequest("store");
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_STORE_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userQueryService.findByEmail(TEST_USER_EMAIL).getId()
         );

@@ -43,8 +43,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class SellerStoreControllerTest {
 
-    private static final String TEST_STORE_NAME = "testStore";
-
+    private static final String TEST_STORE_NAME = "testStoreName";
+    private static final String TEST_EMAIL = "test@email.com";
+    private static final String TEST_OWNER = "testOwner";
+    private static final String TEST_PHONE_NUMBER = "01011001100";
+    private static final String TEST_ADDRESS = "testAddress";
     @Autowired
     MockMvc mockMvc;
 
@@ -69,9 +72,16 @@ class SellerStoreControllerTest {
     @DisplayName("정상적으로 스토어를 생성한다")
     @Test
     void createStoreSuccess() throws Exception {
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email("test@email.com")
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         mockMvc.perform(post("/stores")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(TEST_STORE_NAME)))
+                        .content(objectMapper.writeValueAsString(newStoreRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
@@ -98,14 +108,20 @@ class SellerStoreControllerTest {
     @Test
     void createStoreFailed() throws Exception {
         // given
-        NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
         mockMvc.perform(post("/stores")
                         .contentType(MediaTypes.HAL_JSON)
-                        .content(objectMapper.writeValueAsString(TEST_STORE_NAME)))
+                        .content(objectMapper.writeValueAsString(newStoreRequest)))
                 .andDo(print())
                 // then
                 .andExpect(status().isBadRequest())
@@ -132,7 +148,13 @@ class SellerStoreControllerTest {
     @Test
     void getMyStoreSuccess() throws Exception {
         // given
-        NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 

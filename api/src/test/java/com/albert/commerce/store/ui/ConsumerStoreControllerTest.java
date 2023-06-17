@@ -40,8 +40,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class ConsumerStoreControllerTest {
 
-    public static final String TEST_STORE_NAME = "testStore";
-
+    private static final String TEST_STORE_NAME = "testStoreName";
+    private static final String TEST_EMAIL_COM = "test@email.com";
+    private static final String TEST_OWNER = "testOwner";
+    private static final String TEST_HONE_NUMBER = "01011001100";
+    private static final String TEST_ADDRESS = "testAddress";
     @Autowired
     MockMvc mockMvc;
 
@@ -70,7 +73,13 @@ class ConsumerStoreControllerTest {
     @Test
     void getStoreSuccess() throws Exception {
         // given
-        NewStoreRequest newStoreRequest = new NewStoreRequest(TEST_STORE_NAME);
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_EMAIL_COM)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_HONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
         UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userInfoResponse.getId());
