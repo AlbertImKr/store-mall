@@ -2124,12 +2124,20 @@
         <ul class="sectlevel2">
           <li><a href="#get_my_store">My 스토어 정보를 요청</a></li>
           <li><a href="#get_store">Store Id로 스토어 정보를 요청</a></li>
-          <li><a href="#add_my_store">My Store를 만든다</a></li>
+          <li><a href="#create_store_success">My Store를 만든다</a></li>
+          <li><a href="#update_my_store">My Store를 update</a></li>
         </ul>
       </li>
       <li><a href="#Product">Product</a>
         <ul class="sectlevel2">
           <li><a href="#add_product">상품을 추가한다</a></li>
+          <li><a href="#get_products">상품을 가져온다</a></li>
+        </ul>
+      </li>
+      <li><a href="#User">User</a>
+        <ul class="sectlevel2">
+          <li><a href="#getUserInfo">UserInfo를 가져온다</a></li>
+          <li><a href="#update_user_info">UserInfo를 update한다</a></li>
         </ul>
       </li>
     </ul>
@@ -2137,13 +2145,12 @@
 </div>
 <div id="content">
   <div class="sect1">
-    <h2 id="Store"><a class="link" href="#Store">Store</a></h2>
+    <h2 id="Store">Store</h2>
     <div class="sectionbody">
       <div class="sect2">
-        <h3 id="get_my_store"><a class="link" href="#get_my_store">My 스토어 정보를 요청</a></h3>
+        <h3 id="get_my_store">My 스토어 정보를 요청</h3>
         <div class="sect3">
-          <h4 id="get_my_store_curl_request"><a class="link" href="#get_my_store_curl_request">curl
-            request</a></h4>
+          <h4 id="get_my_store_curl_request">curl request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/my' -i -X GET \
@@ -2153,8 +2160,7 @@
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_httpie_requset"><a class="link" href="#get_my_store_httpie_requset">httpie
-            request</a></h4>
+          <h4 id="get_my_store_httpie_requset">httpie request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/my' \
@@ -2164,8 +2170,7 @@
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_http_requset"><a class="link" href="#get_my_store_http_requset">http
-            request</a></h4>
+          <h4 id="get_my_store_http_requset">http request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/my HTTP/1.1
@@ -2176,9 +2181,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_success_response"><a class="link"
-                                                    href="#get_my_store_success_response">success
-            response</a></h4>
+          <h4 id="get_my_store_success_response">success response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2189,21 +2192,21 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 359
+Content-Length: 358
 
 {
-  "storeId" : "ba4a3e28-b814-4497-80da-630fcd3493e9",
-  "storeName" : "testStore",
+  "storeId" : "648dc48acfbb663f0bb23435",
+  "storeName" : "testStoreName",
+  "address" : "testAddress",
+  "phoneNumber" : "01011001100",
+  "email" : "test@email.com",
+  "ownerName" : "testOwner",
   "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
     "self" : {
       "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
     }
   }
 }</code></pre>
@@ -2211,23 +2214,22 @@ Content-Length: 359
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_response_body"><a class="link" href="#get_my_store_response_body">success
-            response body</a></h4>
+          <h4 id="get_my_store_response_body">success response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "ba4a3e28-b814-4497-80da-630fcd3493e9",
-  "storeName" : "testStore",
+  "storeId" : "648dc48acfbb663f0bb23435",
+  "storeName" : "testStoreName",
+  "address" : "testAddress",
+  "phoneNumber" : "01011001100",
+  "email" : "test@email.com",
+  "ownerName" : "testOwner",
   "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
     "self" : {
       "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
     }
   }
 }</code></pre>
@@ -2235,8 +2237,7 @@ Content-Length: 359
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_response_field"><a class="link" href="#get_my_store_response_field">success
-            response filed</a></h4>
+          <h4 id="get_my_store_response_field">success response filed</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2263,14 +2264,41 @@ Content-Length: 359
                 <code>storeName</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어의 이름</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 네이밍</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>address</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>phoneNumber</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 연락처</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 이메일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>ownerName</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 소유주</p></td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_links"><a class="link" href="#get_my_store_links">success links</a>
-          </h4>
+          <h4 id="get_my_store_links">success links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2286,31 +2314,22 @@ Content-Length: 359
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
               </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>my-store</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어 연결한다</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
               </td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_failed_response"><a class="link"
-                                                   href="#get_my_store_failed_response">failed
-            response</a></h4>
+          <h4 id="get_my_store_failed_response">failed response</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -2318,54 +2337,47 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 343
+Content-Length: 358
 
 {
+  "storeId" : "648dc48acfbb663f0bb23435",
+  "storeName" : "testStoreName",
+  "address" : "testAddress",
+  "phoneNumber" : "01011001100",
+  "email" : "test@email.com",
+  "ownerName" : "testOwner",
   "_links" : {
     "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
+    "self" : {
       "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
     }
-  },
-  "error-message" : "스토어가 존재 하지 않습니다"
+  }
 }</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_failed_response_body"><a class="link"
-                                                        href="#get_my_store_failed_response_body">failed
-            response body</a></h4>
+          <h4 id="get_my_store_failed_response_body">failed response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "_links" : {
-    "my-store" : {
+    "self" : {
       "href" : "http://localhost:8080/stores/my"
     },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+    "create-store" : {
+      "href" : "http://localhost/stores"
     }
   },
-  "error-message" : "스토어가 존재 하지 않습니다"
+  "error-message" : "스토어가 존재 하지 않습니다."
 }</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_failed_response_field"><a class="link"
-                                                         href="#get_my_store_failed_response_field">failed
-            response field</a></h4>
+          <h4 id="get_my_store_failed_response_field">failed response field</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2391,9 +2403,7 @@ Content-Length: 343
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_my_store_failed_response_links"><a class="link"
-                                                         href="#get_my_store_failed_response_links">failed
-            response links</a></h4>
+          <h4 id="get_my_store_failed_response_links">failed response links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2407,21 +2417,14 @@ Content-Length: 343
             </thead>
             <tbody>
             <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>my-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
-              </td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
+                <code>create-store</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
               </td>
             </tr>
             </tbody>
@@ -2429,38 +2432,34 @@ Content-Length: 343
         </div>
       </div>
       <div class="sect2">
-        <h3 id="get_store"><a class="link" href="#get_store">Store Id로 스토어 정보를 요청</a></h3>
+        <h3 id="get_store">Store Id로 스토어 정보를 요청</h3>
         <div class="sect3">
-          <h4 id="get_store_curl_request"><a class="link" href="#get_store_curl_request">curl
-            request</a></h4>
+          <h4 id="get_store_curl_request">curl request</h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8' -i -X GET</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/648dc489cfbb663f0bb23430' -i -X GET</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_httpie_requset"><a class="link" href="#get_store_httpie_requset">httpie
-            request</a></h4>
+          <h4 id="get_store_httpie_requset">httpie request</h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8'</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/648dc489cfbb663f0bb23430'</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_http_requset"><a class="link" href="#get_store_http_requset">http
-            request</a></h4>
+          <h4 id="get_store_http_requset">http request</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/ed7a011a-f237-42de-801e-f1333450f4c8 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/648dc489cfbb663f0bb23430 HTTP/1.1
 Host: localhost:8080</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_success_response"><a class="link" href="#get_store_success_response">success
-            response</a></h4>
+          <h4 id="get_store_success_response">success response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2471,24 +2470,18 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 468
+Content-Length: 293
 
 {
-  "storeId" : "ed7a011a-f237-42de-801e-f1333450f4c8",
-  "storeName" : "testStore",
+  "storeId" : "648dc489cfbb663f0bb23430",
+  "storeName" : "testStoreName",
   "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8"
-    },
-    "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
       "templated" : true
+    },
+    "self" : {
+      "href" : "http://localhost:8080/stores/648dc489cfbb663f0bb23430"
     }
   }
 }</code></pre>
@@ -2496,26 +2489,19 @@ Content-Length: 468
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_response_body"><a class="link" href="#get_store_response_body">success
-            response body</a></h4>
+          <h4 id="get_store_response_body">success response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "ed7a011a-f237-42de-801e-f1333450f4c8",
-  "storeName" : "testStore",
+  "storeId" : "648dc489cfbb663f0bb23430",
+  "storeName" : "testStoreName",
   "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/stores/ed7a011a-f237-42de-801e-f1333450f4c8"
-    },
-    "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
       "templated" : true
+    },
+    "self" : {
+      "href" : "http://localhost:8080/stores/648dc489cfbb663f0bb23430"
     }
   }
 }</code></pre>
@@ -2523,8 +2509,7 @@ Content-Length: 468
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_response_field"><a class="link" href="#get_store_response_field">success
-            response filed</a></h4>
+          <h4 id="get_store_response_field">success response filed</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2557,7 +2542,7 @@ Content-Length: 468
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_store_links"><a class="link" href="#get_store_links">success links</a></h4>
+          <h4 id="get_store_links">success links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2571,26 +2556,13 @@ Content-Length: 468
             </thead>
             <tbody>
             <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>my-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
-              </td>
-            </tr>
-            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
               </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">현재 스토어에 연결한다</p>
-              </td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
+                <code>get-store</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
               </td>
             </tr>
@@ -2598,8 +2570,7 @@ Content-Length: 468
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_store_failed_response"><a class="link" href="#get_store_failed_response">failed
-            response</a></h4>
+          <h4 id="get_store_failed_response">failed response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
@@ -2610,54 +2581,42 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 343
+Content-Length: 227
 
 {
   "_links" : {
-    "my-store" : {
+    "self" : {
       "href" : "http://localhost:8080/stores/my"
     },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+    "create-store" : {
+      "href" : "http://localhost/stores"
     }
   },
-  "error-message" : "스토어가 존재 하지 않습니다"
+  "error-message" : "스토어가 존재 하지 않습니다."
 }</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_failed_response_body"><a class="link"
-                                                     href="#get_store_failed_response_body">failed
-            response body</a></h4>
+          <h4 id="get_store_failed_response_body">failed response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "_links" : {
-    "my-store" : {
+    "self" : {
       "href" : "http://localhost:8080/stores/my"
     },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+    "create-store" : {
+      "href" : "http://localhost/stores"
     }
   },
-  "error-message" : "스토어가 존재 하지 않습니다"
+  "error-message" : "스토어가 존재 하지 않습니다."
 }</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="get_store_failed_response_field"><a class="link"
-                                                      href="#get_store_failed_response_field">failed
-            response field</a></h4>
+          <h4 id="get_store_failed_response_field">failed response field</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2683,9 +2642,7 @@ Content-Length: 343
           </table>
         </div>
         <div class="sect3">
-          <h4 id="get_store_failed_response_links"><a class="link"
-                                                      href="#get_store_failed_response_links">failed
-            response links</a></h4>
+          <h4 id="get_store_failed_response_links">failed response links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2699,21 +2656,14 @@ Content-Length: 343
             </thead>
             <tbody>
             <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>my-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
-              </td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
+                <code>create-store</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
               </td>
             </tr>
             </tbody>
@@ -2721,46 +2671,41 @@ Content-Length: 343
         </div>
       </div>
       <div class="sect2">
-        <h3 id="add_my_store"><a class="link" href="#add_my_store">My Store를 만든다</a></h3>
+        <h3 id="create_store_success">My Store를 만든다</h3>
         <div class="sect3">
-          <h4 id="add_my_store_curl_request"><a class="link" href="#add_my_store_curl_request">curl
-            request</a></h4>
+          <h4 id="create_store_success_curl_request">curl request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -d '"testStore"'</code></pre>
+    -d '{"storeName":"testStoreName","ownerName":"testOwner","address":"testAddress","phoneNumber":"01011001100","email":"test@email.com"}'</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_httpie_requset"><a class="link" href="#add_my_store_httpie_requset">httpie
-            request</a></h4>
+          <h4 id="create_store_success_httpie_requset">httpie request</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '"testStore"' | http POST 'http://localhost:8080/stores' \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{"storeName":"testStoreName","ownerName":"testOwner","address":"testAddress","phoneNumber":"01011001100","email":"test@email.com"}' | http POST 'http://localhost:8080/stores' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_http_requset"><a class="link" href="#add_my_store_http_requset">http
-            request</a></h4>
+          <h4 id="create_store_success_http_requset">http request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /stores HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 11
+Content-Length: 130
 Host: localhost:8080
 
-"testStore"</code></pre>
+{"storeName":"testStoreName","ownerName":"testOwner","address":"testAddress","phoneNumber":"01011001100","email":"test@email.com"}</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_success_response"><a class="link"
-                                                    href="#add_my_store_success_response">success
-            response</a></h4>
+          <h4 id="create_store_success_response">success response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -2772,14 +2717,21 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 209
+Content-Length: 380
 
 {
-  "storeId" : "2a9536d6-e884-4367-8199-8f191a405c06",
-  "storeName" : "testStore",
+  "storeId" : "648dc48acfbb663f0bb2343a",
+  "storeName" : "testStoreName",
+  "address" : "testAddress",
+  "phoneNumber" : "01011001100",
+  "email" : "test@email.com",
+  "ownerName" : "testOwner",
   "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
     "self" : {
-      "href" : "http://localhost:8080/stores/2a9536d6-e884-4367-8199-8f191a405c06"
+      "href" : "http://localhost:8080/stores/648dc48acfbb663f0bb2343a"
     }
   }
 }</code></pre>
@@ -2787,16 +2739,22 @@ Content-Length: 209
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_response_body"><a class="link" href="#add_my_store_response_body">success
-            response body</a></h4>
+          <h4 id="create_store_success_response_body">success response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "2a9536d6-e884-4367-8199-8f191a405c06",
-  "storeName" : "testStore",
+  "storeId" : "648dc48acfbb663f0bb2343a",
+  "storeName" : "testStoreName",
+  "address" : "testAddress",
+  "phoneNumber" : "01011001100",
+  "email" : "test@email.com",
+  "ownerName" : "testOwner",
   "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
     "self" : {
-      "href" : "http://localhost:8080/stores/2a9536d6-e884-4367-8199-8f191a405c06"
+      "href" : "http://localhost:8080/stores/648dc48acfbb663f0bb2343a"
     }
   }
 }</code></pre>
@@ -2804,8 +2762,7 @@ Content-Length: 209
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_links"><a class="link" href="#add_my_store_links">success links</a>
-          </h4>
+          <h4 id="create_store_success_links">success links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2821,16 +2778,19 @@ Content-Length: 209
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
               </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">소토어 추가 링크입니다.</p>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">지금 요청한 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>my-store</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
               </td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_failed_response"><a class="link"
-                                                   href="#add_my_store_failed_response">failed
-            response</a></h4>
+          <h4 id="create_store_failed_response">failed response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
@@ -2841,19 +2801,15 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 337
+Content-Length: 216
 
 {
   "_links" : {
-    "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
+    "self" : {
       "href" : "http://localhost:8080/stores"
     },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
     }
   },
   "error-message" : "스토어 이미 존재합니다."
@@ -2862,22 +2818,16 @@ Content-Length: 337
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_failed_response_body"><a class="link"
-                                                        href="#add_my_store_failed_response_body">failed
-            response body</a></h4>
+          <h4 id="create_store_failed_response_body">failed response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "_links" : {
-    "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
+    "self" : {
       "href" : "http://localhost:8080/stores"
     },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
     }
   },
   "error-message" : "스토어 이미 존재합니다."
@@ -2886,9 +2836,7 @@ Content-Length: 337
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_failed_response_field"><a class="link"
-                                                         href="#add_my_store_failed_response_field">failed
-            response field</a></h4>
+          <h4 id="create_store_failed_response_field">failed response field</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2914,9 +2862,7 @@ Content-Length: 337
           </table>
         </div>
         <div class="sect3">
-          <h4 id="add_my_store_failed_response_links"><a class="link"
-                                                         href="#add_my_store_failed_response_links">failed
-            response links</a></h4>
+          <h4 id="create_store_failed_response_links">failed response links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -2930,21 +2876,133 @@ Content-Length: 337
             </thead>
             <tbody>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>my-store</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
               </td>
             </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="update_my_store">My Store를 update</h3>
+        <div class="sect3">
+          <h4 id="update_my_store_curl_request">curl request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/my' -i -X PUT \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -d '{"storeName":"newStoreName","address":"newAddress","phoneNumber":"1111111111","email":"new@email.com","ownerName":"newOwnerName"}'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_my_store_httpie_requset">httpie request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{"storeName":"newStoreName","address":"newAddress","phoneNumber":"1111111111","email":"new@email.com","ownerName":"newOwnerName"}' | http PUT 'http://localhost:8080/stores/my' \
+    'Content-Type:application/json;charset=UTF-8'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_my_store_http_requset">http request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /stores/my HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 129
+Host: localhost:8080
+
+{"storeName":"newStoreName","address":"newAddress","phoneNumber":"1111111111","email":"new@email.com","ownerName":"newOwnerName"}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_my_store_success_response">success response</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 357
+
+{
+  "storeId" : "648dc48acfbb663f0bb23438",
+  "storeName" : "newStoreName",
+  "address" : "newAddress",
+  "phoneNumber" : "1111111111",
+  "email" : "new@email.com",
+  "ownerName" : "newOwnerName",
+  "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_my_store_response_body">success response body</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "storeId" : "648dc48acfbb663f0bb23438",
+  "storeName" : "newStoreName",
+  "address" : "newAddress",
+  "phoneNumber" : "1111111111",
+  "email" : "new@email.com",
+  "ownerName" : "newOwnerName",
+  "_links" : {
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_my_store_links">success links</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 50%;">
+              <col style="width: 50%;">
+            </colgroup>
+            <thead>
             <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
-              </td>
+              <th class="tableblock halign-left valign-top">Relation</th>
+              <th class="tableblock halign-left valign-top">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
+                <code>my-store</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 찾는다</p>
               </td>
             </tr>
             </tbody>
@@ -2954,13 +3012,12 @@ Content-Length: 337
     </div>
   </div>
   <div class="sect1">
-    <h2 id="Product"><a class="link" href="#Product">Product</a></h2>
+    <h2 id="Product">Product</h2>
     <div class="sectionbody">
       <div class="sect2">
-        <h3 id="add_product"><a class="link" href="#add_product">상품을 추가한다</a></h3>
+        <h3 id="add_product">상품을 추가한다</h3>
         <div class="sect3">
-          <h4 id="add_product_curl_request"><a class="link" href="#add_product_curl_request">curl
-            request</a></h4>
+          <h4 id="add_product_curl_request">curl request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/products' -i -X POST \
@@ -2971,8 +3028,7 @@ Content-Length: 337
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_product_httpie_requset"><a class="link" href="#add_product_httpie_requset">httpie
-            request</a></h4>
+          <h4 id="add_product_httpie_requset">httpie request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{"productName":"testProductName","price":10000,"description":"testDescription","brand":"testBrand","category":"testCategory"}' | http POST 'http://localhost:8080/products' \
@@ -2982,8 +3038,7 @@ Content-Length: 337
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_product_http_requset"><a class="link" href="#add_product_http_requset">http
-            request</a></h4>
+          <h4 id="add_product_http_requset">http request</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /products HTTP/1.1
@@ -2997,13 +3052,11 @@ Host: localhost:8080
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_product_success_response"><a class="link"
-                                                   href="#add_product_success_response">success
-            response</a></h4>
+          <h4 id="add_product_success_response">success response</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a
+Location: http://localhost:8080/products/648dc488cfbb663f0bb233c5
 Content-Type: application/hal+json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -3011,10 +3064,10 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 592
+Content-Length: 379
 
 {
-  "productId" : "3b9f324d-9361-4ec1-9df8-fbcc40a9c78a",
+  "productId" : "648dc488cfbb663f0bb233c5",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3022,17 +3075,10 @@ Content-Length: 592
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a"
+      "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233c5"
     },
     "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+      "href" : "http://localhost/stores/my"
     }
   }
 }</code></pre>
@@ -3040,12 +3086,11 @@ Content-Length: 592
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_product_response_body"><a class="link" href="#add_product_response_body">success
-            response body</a></h4>
+          <h4 id="add_product_response_body">success response body</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "productId" : "3b9f324d-9361-4ec1-9df8-fbcc40a9c78a",
+  "productId" : "648dc488cfbb663f0bb233c5",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3053,17 +3098,10 @@ Content-Length: 592
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/3b9f324d-9361-4ec1-9df8-fbcc40a9c78a"
+      "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233c5"
     },
     "my-store" : {
-      "href" : "http://localhost:8080/stores/my"
-    },
-    "add-store" : {
-      "href" : "http://localhost:8080/stores"
-    },
-    "other-store" : {
-      "href" : "http://localhost:8080/stores/{storeId}",
-      "templated" : true
+      "href" : "http://localhost/stores/my"
     }
   }
 }</code></pre>
@@ -3071,8 +3109,7 @@ Content-Length: 592
           </div>
         </div>
         <div class="sect3">
-          <h4 id="add_product_response_field"><a class="link" href="#add_product_response_field">success
-            response filed</a></h4>
+          <h4 id="add_product_response_field">success response filed</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -3133,8 +3170,7 @@ Content-Length: 592
           </table>
         </div>
         <div class="sect3">
-          <h4 id="add_product_links"><a class="link" href="#add_product_links">success links</a>
-          </h4>
+          <h4 id="add_product_links">success links</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 50%;">
@@ -3159,17 +3195,1211 @@ Content-Length: 592
               <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어에 연결한다</p>
               </td>
             </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="get_products">상품을 가져온다</h3>
+        <div class="sect3">
+          <h4 id="get_products_curl_request">curl request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/products?size=20&amp;page=1' -i -X GET \
+    -H 'Accept: application/hal+json'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_httpie_requset">httpie request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/products?size=20&amp;page=1' \
+    'Accept:application/hal+json'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_http_requset">http request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /products?size=20&amp;page=1 HTTP/1.1
+Accept: application/hal+json
+Host: localhost:8080</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_success_response">success response</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 9362
+
+{
+  "_embedded" : {
+    "productResponseList" : [ {
+      "productId" : "648dc488cfbb663f0bb233dc",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dc"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233dd",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dd"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233de",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233de"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233df",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233df"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e0",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e0"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e1",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e1"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e2",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e2"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e3",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e3"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e4",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e4"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e5",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e5"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e6",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e6"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e7",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e7"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e8",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e8"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e9",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e9"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ea",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ea"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233eb",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233eb"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ec",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ec"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ed",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ed"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ee",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ee"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ef",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ef"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/products?page=0&amp;size=20"
+    },
+    "prev" : {
+      "href" : "http://localhost:8080/products?page=0&amp;size=20"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/products?page=1&amp;size=20"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/products?page=2&amp;size=20"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/products?page=4&amp;size=20"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 100,
+    "totalPages" : 5,
+    "number" : 1
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_response_body">success response body</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "_embedded" : {
+    "productResponseList" : [ {
+      "productId" : "648dc488cfbb663f0bb233dc",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dc"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233dd",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dd"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233de",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233de"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233df",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233df"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e0",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e0"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e1",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e1"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e2",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e2"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e3",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e3"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e4",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e4"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e5",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e5"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e6",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e6"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e7",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e7"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e8",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e8"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233e9",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e9"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ea",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ea"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233eb",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233eb"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ec",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ec"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ed",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ed"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ee",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ee"
+        }
+      }
+    }, {
+      "productId" : "648dc488cfbb663f0bb233ef",
+      "productName" : "testProductName",
+      "price" : 10000,
+      "description" : "testDescription",
+      "brand" : "testBrand",
+      "category" : "testCategory",
+      "createdTime" : "20230617233448",
+      "updateTime" : "20230617233448",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ef"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/products?page=0&amp;size=20"
+    },
+    "prev" : {
+      "href" : "http://localhost:8080/products?page=0&amp;size=20"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/products?page=1&amp;size=20"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/products?page=2&amp;size=20"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/products?page=4&amp;size=20"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 100,
+    "totalPages" : 5,
+    "number" : 1
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_response_field">success response filed</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
             <tr>
+              <th class="tableblock halign-left valign-top">Path</th>
+              <th class="tableblock halign-left valign-top">Type</th>
+              <th class="tableblock halign-left valign-top">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[]._links.self.href</code>
+              </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>add-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">product 링크</p>
               </td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].productId</code>
+              </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>other-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">다른 스토어를 연결한다</p>
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 아이디</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].productName</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 네이밍</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].price</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 가격</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].brand</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 브랜드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].category</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품의 카테고리</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].description</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 설명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].createdTime</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">생성 시간</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>_embedded.productResponseList[].updateTime</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">업데이트 시간</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>page.size</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">page size</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page.totalElements</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">전체 개수</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page.totalPages</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">전체 페이지 수</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>page.number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 넘버</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="get_products_links">success links</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 50%;">
+              <col style="width: 50%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Relation</th>
+              <th class="tableblock halign-left valign-top">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">요청한 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>first</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">첫 페이지 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>prev</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이전 페이지 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>next</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 링크</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>last</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">My Store 연결 링크</p>
               </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sect1">
+    <h2 id="User">User</h2>
+    <div class="sectionbody">
+      <div class="sect2">
+        <h3 id="getUserInfo">UserInfo를 가져온다</h3>
+        <div class="sect3">
+          <h4 id="get_user_info_curl_request">curl request</h4>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/users/profile' -i -X GET</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_user_info_httpie_requset">httpie request</h4>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/users/profile'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_user_info_http_requset">http request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/profile HTTP/1.1
+Host: localhost:8080</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_user_info_success_response">success response</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 581
+
+{
+  "id" : "648dc48acfbb663f0bb2343c",
+  "nickname" : "updateNickname",
+  "email" : "test@email.com",
+  "role" : "USER",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구",
+  "active" : false,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/profile"
+    },
+    "create-store" : {
+      "href" : "http://localhost/stores"
+    },
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
+      "templated" : true
+    },
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_user_info_response_body">success response body</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "id" : "648dc48acfbb663f0bb2343c",
+  "nickname" : "updateNickname",
+  "email" : "test@email.com",
+  "role" : "USER",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구",
+  "active" : false,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/profile"
+    },
+    "create-store" : {
+      "href" : "http://localhost/stores"
+    },
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
+      "templated" : true
+    },
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="get_user_info_response_field">success response filed</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Path</th>
+              <th class="tableblock halign-left valign-top">Type</th>
+              <th class="tableblock halign-left valign-top">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>nickname</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>role</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>dateOfBirth</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">생년월</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>phoneNumber</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">폰넘버</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>address</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>active</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Boolean</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">활성화여부</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="update_user_info">UserInfo를 update한다</h3>
+        <div class="sect3">
+          <h4 id="update_user_info_curl_request">curl request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/users/profile' -i -X PUT \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -d '{
+  "nickname" : "updateNickname",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구"
+}'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_user_info_httpie_requset">httpie request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{
+  "nickname" : "updateNickname",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구"
+}' | http PUT 'http://localhost:8080/users/profile' \
+    'Content-Type:application/json;charset=UTF-8'</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_user_info_http_requset">http request</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /users/profile HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 136
+Host: localhost:8080
+
+{
+  "nickname" : "updateNickname",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구"
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_user_info_success_response">success response</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 581
+
+{
+  "id" : "648dc48acfbb663f0bb2343c",
+  "nickname" : "updateNickname",
+  "email" : "test@email.com",
+  "role" : "USER",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구",
+  "active" : false,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/profile"
+    },
+    "create-store" : {
+      "href" : "http://localhost/stores"
+    },
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
+      "templated" : true
+    },
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_user_info_response_body">success response body</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "id" : "648dc48acfbb663f0bb2343c",
+  "nickname" : "updateNickname",
+  "email" : "test@email.com",
+  "role" : "USER",
+  "dateOfBirth" : "2023-06-17",
+  "phoneNumber" : "01011112222",
+  "address" : "인천시남동구",
+  "active" : false,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/profile"
+    },
+    "create-store" : {
+      "href" : "http://localhost/stores"
+    },
+    "get-store" : {
+      "href" : "http://localhost/stores/{storeId}",
+      "templated" : true
+    },
+    "my-store" : {
+      "href" : "http://localhost/stores/my"
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="update_user_info_response_field">success response filed</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Path</th>
+              <th class="tableblock halign-left valign-top">Type</th>
+              <th class="tableblock halign-left valign-top">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>nickname</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>role</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>dateOfBirth</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">생년월</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>phoneNumber</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">폰넘버</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>address</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>active</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Boolean</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">활성화여부</p></td>
             </tr>
             </tbody>
           </table>
@@ -3181,7 +4411,7 @@ Content-Length: 592
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-06-10 21:36:41 +0900
+    Last updated 2023-06-17 23:34:41 +0900
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

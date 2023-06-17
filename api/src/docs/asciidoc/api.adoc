@@ -4,7 +4,6 @@
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 2
-:sectlinks:
 
 [[Store]]
 == Store
@@ -50,7 +49,7 @@ include::{snippets}/getMyStoreSuccess/links.adoc[]
 [[get_my_store_failed_response]]
 ==== failed response
 
-include::{snippets}/getMyStoreFailed/http-response.adoc[]
+include::{snippets}/getMyStoreSuccess/http-response.adoc[]
 
 [[get_my_store_failed_response_body]]
 ==== failed response body
@@ -125,58 +124,92 @@ include::{snippets}/getMyStoreFailed/response-fields.adoc[]
 
 include::{snippets}/getMyStoreFailed/links.adoc[]
 
-[[add_my_store]]
+[[create_store_success]]
 === My Store를 만든다
 
-[[add_my_store_curl_request]]
+[[create_store_success_curl_request]]
 ==== curl request
 
-include::{snippets}/addStoreSuccess/curl-request.adoc[]
+include::{snippets}/createStoreSuccess/curl-request.adoc[]
 
-[[add_my_store_httpie_requset]]
+[[create_store_success_httpie_requset]]
 ==== httpie request
 
-include::{snippets}/addStoreSuccess/httpie-request.adoc[]
+include::{snippets}/createStoreSuccess/httpie-request.adoc[]
 
-[[add_my_store_http_requset]]
+[[create_store_success_http_requset]]
 ==== http request
 
-include::{snippets}/addStoreSuccess/http-request.adoc[]
+include::{snippets}/createStoreSuccess/http-request.adoc[]
 
-[[add_my_store_success_response]]
+[[create_store_success_response]]
 ==== success response
 
-include::{snippets}/addStoreSuccess/http-response.adoc[]
+include::{snippets}/createStoreSuccess/http-response.adoc[]
 
-[[add_my_store_response_body]]
+[[create_store_success_response_body]]
 ==== success response body
 
-include::{snippets}/addStoreSuccess/response-body.adoc[]
+include::{snippets}/createStoreSuccess/response-body.adoc[]
 
-[[add_my_store_links]]
+[[create_store_success_links]]
 ==== success links
 
-include::{snippets}/addStoreSuccess/links.adoc[]
+include::{snippets}/createStoreSuccess/links.adoc[]
 
-[[add_my_store_failed_response]]
+[[create_store_failed_response]]
 ==== failed response
 
-include::{snippets}/addStoreFailed/http-response.adoc[]
+include::{snippets}/createStoreFailed/http-response.adoc[]
 
-[[add_my_store_failed_response_body]]
+[[create_store_failed_response_body]]
 ==== failed response body
 
-include::{snippets}/addStoreFailed/response-body.adoc[]
+include::{snippets}/createStoreFailed/response-body.adoc[]
 
-[[add_my_store_failed_response_field]]
+[[create_store_failed_response_field]]
 ==== failed response field
 
-include::{snippets}/addStoreFailed/response-fields.adoc[]
+include::{snippets}/createStoreFailed/response-fields.adoc[]
 
-[[add_my_store_failed_response_links]]
+[[create_store_failed_response_links]]
 ==== failed response links
 
-include::{snippets}/addStoreFailed/links.adoc[]
+include::{snippets}/createStoreFailed/links.adoc[]
+
+[[update_my_store]]
+=== My Store를 update
+
+[[update_my_store_curl_request]]
+==== curl request
+
+include::{snippets}/updateMyStore/curl-request.adoc[]
+
+[[update_my_store_httpie_requset]]
+==== httpie request
+
+include::{snippets}/updateMyStore/httpie-request.adoc[]
+
+[[update_my_store_http_requset]]
+==== http request
+
+include::{snippets}/updateMyStore/http-request.adoc[]
+
+[[update_my_store_success_response]]
+==== success response
+
+include::{snippets}/updateMyStore/http-response.adoc[]
+
+[[update_my_store_response_body]]
+==== success response body
+
+include::{snippets}/updateMyStore/response-body.adoc[]
+
+[[update_my_store_links]]
+==== success links
+
+include::{snippets}/updateMyStore/links.adoc[]
+
 
 [[Product]]
 == Product
@@ -218,3 +251,110 @@ include::{snippets}/addProduct/response-fields.adoc[]
 ==== success links
 
 include::{snippets}/addProduct/links.adoc[]
+
+[[get_products]]
+=== 상품을 가져온다
+
+[[get_products_curl_request]]
+==== curl request
+
+include::{snippets}/getProducts/curl-request.adoc[]
+
+[[get_products_httpie_requset]]
+==== httpie request
+
+include::{snippets}/getProducts/httpie-request.adoc[]
+
+[[get_products_http_requset]]
+==== http request
+
+include::{snippets}/getProducts/http-request.adoc[]
+
+[[get_products_success_response]]
+==== success response
+
+include::{snippets}/getProducts/http-response.adoc[]
+
+[[get_products_response_body]]
+==== success response body
+
+include::{snippets}/getProducts/response-body.adoc[]
+
+[[get_products_response_field]]
+==== success response filed
+
+include::{snippets}/getProducts/response-fields.adoc[]
+
+[[get_products_links]]
+==== success links
+
+include::{snippets}/getProducts/links.adoc[]
+
+[[User]]
+== User
+
+[[getUserInfo]]
+=== UserInfo를 가져온다
+
+[[get_user_info_curl_request]]
+==== curl request
+
+include::{snippets}/getUserInfo/curl-request.adoc[]
+
+[[get_user_info_httpie_requset]]
+==== httpie request
+
+include::{snippets}/getUserInfo/httpie-request.adoc[]
+
+[[get_user_info_http_requset]]
+==== http request
+
+include::{snippets}/getUserInfo/http-request.adoc[]
+
+[[get_user_info_success_response]]
+==== success response
+
+include::{snippets}/getUserInfo/http-response.adoc[]
+
+[[get_user_info_response_body]]
+==== success response body
+
+include::{snippets}/getUserInfo/response-body.adoc[]
+
+[[get_user_info_response_field]]
+==== success response filed
+
+include::{snippets}/getUserInfo/response-fields.adoc[]
+
+[[update_user_info]]
+=== UserInfo를 update한다
+
+[[update_user_info_curl_request]]
+==== curl request
+
+include::{snippets}/updateUserInfo/curl-request.adoc[]
+
+[[update_user_info_httpie_requset]]
+==== httpie request
+
+include::{snippets}/updateUserInfo/httpie-request.adoc[]
+
+[[update_user_info_http_requset]]
+==== http request
+
+include::{snippets}/updateUserInfo/http-request.adoc[]
+
+[[update_user_info_success_response]]
+==== success response
+
+include::{snippets}/updateUserInfo/http-response.adoc[]
+
+[[update_user_info_response_body]]
+==== success response body
+
+include::{snippets}/updateUserInfo/response-body.adoc[]
+
+[[update_user_info_response_field]]
+==== success response filed
+
+include::{snippets}/updateUserInfo/response-fields.adoc[]

@@ -105,8 +105,7 @@ class ProductControllerTest {
 
     @DisplayName("My Store에서 Product를 추가한다")
     @Test
-    void
-    addProduct() throws Exception {
+    void addProduct() throws Exception {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
