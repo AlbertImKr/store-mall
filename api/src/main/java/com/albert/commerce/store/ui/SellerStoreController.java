@@ -5,7 +5,6 @@ import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserQueryDao;
@@ -70,9 +69,8 @@ public class SellerStoreController {
     @PutMapping("/my")
     public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
-        User user = userQueryDao.findUserProfileByEmail(principal.getName());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
-                updateStoreRequest, StoreUserId.from(user.getId()));
+                updateStoreRequest, principal.getName());
 
         sellerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)

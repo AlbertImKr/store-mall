@@ -31,9 +31,9 @@ public class SellerStoreService {
     }
 
     public SellerStoreResponse updateMyStore(UpdateStoreRequest updateStoreRequest,
-            StoreUserId storeUserId) {
+            String email) {
         return SellerStoreResponse.from(
-                storeRepository.updateMyStore(updateStoreRequest, storeUserId)
+                storeRepository.updateMyStore(updateStoreRequest, email)
                         .orElseThrow(StoreNotFoundException::new));
     }
 }

@@ -1,8 +1,9 @@
-logging:
-  level:
-    org:
-      springframework:
-        security: trace
+# security logging
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: trace
 
 spring:
   security:
