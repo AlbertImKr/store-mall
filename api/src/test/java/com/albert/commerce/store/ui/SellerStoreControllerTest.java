@@ -11,6 +11,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -18,11 +19,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.infra.UserJpaUserRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,11 +39,9 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureRestDocs
 @WithMockUser("test@email.com")
-@Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
 class SellerStoreControllerTest {
@@ -64,10 +67,23 @@ class SellerStoreControllerTest {
     @Autowired
     EntityManager entityManager;
 
+    @Autowired
+    StoreRepository storeRepository;
+
+    @Autowired
+    UserJpaUserRepository userJpaUserRepository;
+
     @BeforeEach
     void saveTestUser() {
         userCommandService.init("test@email.com");
     }
+
+    @AfterEach
+    void clear() {
+        storeRepository.deleteAll();
+        userJpaUserRepository.deleteAll();
+    }
+
 
     @DisplayName("정상적으로 스토어를 생성한다")
     @Test
@@ -86,6 +102,10 @@ class SellerStoreControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
+                .andExpect(jsonPath("address").exists())
+                .andExpect(jsonPath("phoneNumber").exists())
+                .andExpect(jsonPath("email").exists())
+                .andExpect(jsonPath("ownerName").exists())
                 .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
                 //restDocs
                 .andDo(document(
@@ -98,7 +118,11 @@ class SellerStoreControllerTest {
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
                                         fieldWithPath("storeId").description("스토어 아이디"),
-                                        fieldWithPath("storeName").description("스토어 네이밍")
+                                        fieldWithPath("storeName").description("스토어 네이밍"),
+                                        fieldWithPath("address").description("스토어 주소"),
+                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
+                                        fieldWithPath("email").description("스토어 이메일"),
+                                        fieldWithPath("ownerName").description("스토어 소유주")
                                 )
                         )
                 );
@@ -167,6 +191,10 @@ class SellerStoreControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())
+                .andExpect(jsonPath("address").exists())
+                .andExpect(jsonPath("phoneNumber").exists())
+                .andExpect(jsonPath("email").exists())
+                .andExpect(jsonPath("ownerName").exists())
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.my-store").exists())
                 //restDocs
@@ -180,7 +208,11 @@ class SellerStoreControllerTest {
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
                                         fieldWithPath("storeId").description("스토어의 아이디"),
-                                        fieldWithPath("storeName").description("스토어의 이름")
+                                        fieldWithPath("storeName").description("스토어 네이밍"),
+                                        fieldWithPath("address").description("스토어 주소"),
+                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
+                                        fieldWithPath("email").description("스토어 이메일"),
+                                        fieldWithPath("ownerName").description("스토어 소유주")
                                 )
                         )
                 );
@@ -212,6 +244,70 @@ class SellerStoreControllerTest {
                                 )
                         )
                 );
+    }
+
+
+    @DisplayName("스토어 정보를 update 한다")
+    @Test
+    void updateMyStore() throws Exception {
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
+        UserInfoResponse user = userQueryService.findByEmail(TEST_EMAIL);
+        sellerStoreService.createStore(newStoreRequest, user.getId());
+
+        String newStoreName = "newStoreName";
+        String newEmail = "new@email.com";
+        String newOwnerName = "newOwnerName";
+        String newPhoneNumber = "1111111111";
+        String newAddress = "newAddress";
+        UpdateStoreRequest updateStoreRequest = UpdateStoreRequest.builder()
+                .storeName(newStoreName)
+                .email(newEmail)
+                .ownerName(newOwnerName)
+                .phoneNumber(newPhoneNumber)
+                .address(newAddress)
+                .build();
+        // when
+        mockMvc.perform(put("/stores/my")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(updateStoreRequest))
+                )
+                .andDo(print())
+                // then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("storeId").exists())
+                .andExpect(jsonPath("storeName").value(newStoreName))
+                .andExpect(jsonPath("address").value(newAddress))
+                .andExpect(jsonPath("phoneNumber").value(newPhoneNumber))
+                .andExpect(jsonPath("email").value(newEmail))
+                .andExpect(jsonPath("ownerName").value(newOwnerName))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
+                //restDocs
+                .andDo(document(
+                                "getMyStoreFailed", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("my-store").description("My 스토어를 찾는다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어의 아이디"),
+                                        fieldWithPath("storeName").description("스토어 네이밍"),
+                                        fieldWithPath("address").description("스토어 주소"),
+                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
+                                        fieldWithPath("email").description("스토어 이메일"),
+                                        fieldWithPath("ownerName").description("스토어 소유주")
+                                )
+                        )
+                );
+
     }
 
 

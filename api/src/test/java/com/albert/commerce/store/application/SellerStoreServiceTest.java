@@ -53,7 +53,7 @@ class SellerStoreServiceTest {
         StoreId storeId = new StoreId(sequenceGenerator.generate());
         Store store = Store.builder()
                 .storeId(storeId)
-                .storeName(newStoreRequest.getStoreName())
+                .storeName(newStoreRequest.storeName())
                 .storeUserId(StoreUserId.from(userId))
                 .address(TEST_ADDRESS)
                 .email(TEST_EMAIL)

@@ -8,4 +8,6 @@ public interface StoreDaoCustom {
     StoreId findStoreIdByUserEmail(String email);
 
     Store findStoreByUserEmail(String email);
+
+
 }

@@ -3,31 +3,15 @@ package com.albert.commerce.store.command.application;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreUserId;
-import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Setter
-public class NewStoreRequest {
+public record NewStoreRequest(String storeName, String ownerName, String address,
+                              String phoneNumber,
 
-    @NotNull
-    private String storeName;
-    @NotNull
-    private String ownerName;
-    @NotNull
-    private String address;
-    @NotNull
-    private String phoneNumber;
-    @NotNull
-    private String email;
+                              String email) {
 
     @Builder
-    private NewStoreRequest(String storeName, String ownerName, String address, String phoneNumber,
+    public NewStoreRequest(String storeName, String ownerName, String address, String phoneNumber,
             String email) {
         this.storeName = storeName;
         this.ownerName = ownerName;
@@ -37,15 +21,14 @@ public class NewStoreRequest {
     }
 
     public Store toStore(StoreUserId storeUserId, StoreId storeId) {
-        return Store
-                .builder()
+        return Store.builder()
+                .storeUserId(storeUserId)
+                .storeId(storeId)
                 .storeName(storeName)
                 .ownerName(ownerName)
                 .address(address)
-                .email(email)
                 .phoneNumber(phoneNumber)
-                .storeUserId(storeUserId)
-                .storeId(storeId)
+                .email(email)
                 .build();
     }
 }

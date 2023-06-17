@@ -16,7 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.infra.UserJpaUserRepository;
+import com.albert.commerce.user.query.application.UserProfileRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,9 +46,23 @@ class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @BeforeEach
     void initUser() {
         userCommandService.init("test@email.com");
+    }
+
+    @Autowired
+    EntityManager entityManager;
+
+    @Autowired
+    UserJpaUserRepository userJpaUserRepository;
+
+    @AfterEach
+    void clear() {
+        userJpaUserRepository.deleteAll();
     }
 
     @DisplayName("User info를 가져온다")
@@ -60,24 +80,24 @@ class UserControllerTest {
                 .andExpect(jsonPath("active").exists())
                 // restdocs
                 .andDo(document("getUserInfo", preprocessResponse(prettyPrint()),
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("요청한 링크"),
-                                linkWithRel("create-store").description("My 스토어를 만든다"),
-                                linkWithRel("get-store").description("스토어를 연결한다"),
-                                linkWithRel("my-store").description("My 스토어 연결한다")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("id").description("아이디"),
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("role").description("권한"),
-                                fieldWithPath("dateOfBirth").description("생년월"),
-                                fieldWithPath("phoneNumber").description("폰넘버"),
-                                fieldWithPath("address").description("주소"),
-                                fieldWithPath("active").description("활성화여부")
-                        )
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("create-store").description("My 스토어를 만든다"),
+                                        linkWithRel("get-store").description("스토어를 연결한다"),
+                                        linkWithRel("my-store").description("My 스토어 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("id").description("아이디"),
+                                        fieldWithPath("nickname").description("닉네임"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("role").description("권한"),
+                                        fieldWithPath("dateOfBirth").description("생년월"),
+                                        fieldWithPath("phoneNumber").description("폰넘버"),
+                                        fieldWithPath("address").description("주소"),
+                                        fieldWithPath("active").description("활성화여부")
+                                )
                         )
                 );
     }
@@ -86,14 +106,16 @@ class UserControllerTest {
     @Test
     void updateUserInfo() throws Exception {
         String updateNickname = "updateNickname";
-        String dateOfBirth = String.valueOf(LocalDate.now());
+        LocalDate now = LocalDate.now();
+        String dateOfBirth = String.valueOf(now);
         String phoneNumber = "01011112222";
         String address = "인천시남동구";
+        UserProfileRequest userProfileRequest = new UserProfileRequest(updateNickname, now,
+                phoneNumber, address);
+
         mockMvc.perform(put("/users/profile")
-                        .queryParam("nickname", updateNickname)
-                        .queryParam("dateOfBirth", dateOfBirth)
-                        .queryParam("phoneNumber", phoneNumber)
-                        .queryParam("address", address)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(userProfileRequest))
                 )
                 .andDo(print())
                 .andExpect(jsonPath("id").exists())
@@ -106,26 +128,26 @@ class UserControllerTest {
                 .andExpect(jsonPath("active").exists())
                 // restdocs
                 .andDo(document("updateUserInfo",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("요청한 링크"),
-                                linkWithRel("create-store").description("My 스토어를 만든다"),
-                                linkWithRel("get-store").description("스토어를 연결한다"),
-                                linkWithRel("my-store").description("My 스토어 연결한다")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("id").description("아이디"),
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("role").description("권한"),
-                                fieldWithPath("dateOfBirth").description("생년월"),
-                                fieldWithPath("phoneNumber").description("폰넘버"),
-                                fieldWithPath("address").description("주소"),
-                                fieldWithPath("active").description("활성화여부")
-                        )
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("create-store").description("My 스토어를 만든다"),
+                                        linkWithRel("get-store").description("스토어를 연결한다"),
+                                        linkWithRel("my-store").description("My 스토어 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("id").description("아이디"),
+                                        fieldWithPath("nickname").description("닉네임"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("role").description("권한"),
+                                        fieldWithPath("dateOfBirth").description("생년월"),
+                                        fieldWithPath("phoneNumber").description("폰넘버"),
+                                        fieldWithPath("address").description("주소"),
+                                        fieldWithPath("active").description("활성화여부")
+                                )
                         )
                 );
     }

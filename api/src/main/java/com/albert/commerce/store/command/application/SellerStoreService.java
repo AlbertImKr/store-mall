@@ -5,11 +5,14 @@ import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.command.domain.StoreUserId;
+import com.albert.commerce.store.ui.StoreNotFoundException;
 import com.albert.commerce.user.command.domain.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class SellerStoreService {
 
@@ -27,4 +30,10 @@ public class SellerStoreService {
         return SellerStoreResponse.from(savedStore);
     }
 
+    public SellerStoreResponse updateMyStore(UpdateStoreRequest updateStoreRequest,
+            StoreUserId storeUserId) {
+        return SellerStoreResponse.from(
+                storeRepository.updateMyStore(updateStoreRequest, storeUserId)
+                        .orElseThrow(StoreNotFoundException::new));
+    }
 }

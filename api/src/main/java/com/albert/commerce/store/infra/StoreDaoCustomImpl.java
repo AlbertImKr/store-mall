@@ -51,4 +51,5 @@ public class StoreDaoCustomImpl implements StoreDaoCustom {
         return storeId;
     }
 
+
 }

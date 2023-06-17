@@ -1,8 +1,8 @@
 package com.albert.commerce.store.command.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.albert.commerce.store.infra.StoreCommandDaoCustom;
+import com.albert.commerce.store.infra.StoreJpaRepository;
 
-public interface StoreRepository extends JpaRepository<Store, StoreId> {
+public interface StoreRepository extends StoreJpaRepository, StoreCommandDaoCustom {
 
-    boolean existsByStoreUserId(StoreUserId storeUserId);
 }

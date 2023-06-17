@@ -1,10 +1,8 @@
 package com.albert.commerce.store.query;
 
-import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.StoreDaoCustom;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.albert.commerce.store.infra.StoreJpaRepository;
 
-public interface StoreDao extends JpaRepository<Store, StoreId>, StoreDaoCustom {
+public interface StoreDao extends StoreJpaRepository, StoreDaoCustom {
 
 }

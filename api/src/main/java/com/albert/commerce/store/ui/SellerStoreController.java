@@ -3,7 +3,9 @@ package com.albert.commerce.store.ui;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserQueryDao;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,7 +30,6 @@ public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
     private final StoreDao storeDao;
-
     private final UserQueryDao userQueryDao;
 
     @PostMapping
@@ -57,6 +59,20 @@ public class SellerStoreController {
     public ResponseEntity getMyStore(Principal principal) {
         Store store = storeDao.findStoreByUserEmail(principal.getName());
         SellerStoreResponse sellerStoreResponse = SellerStoreResponse.from(store);
+
+        sellerStoreResponse.add(
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+                                .getMyStore(null))
+                        .withSelfRel());
+        return ResponseEntity.ok().body(sellerStoreResponse);
+    }
+
+    @PutMapping("/my")
+    public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
+            Principal principal) {
+        User user = userQueryDao.findUserProfileByEmail(principal.getName());
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
+                updateStoreRequest, StoreUserId.from(user.getId()));
 
         sellerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)

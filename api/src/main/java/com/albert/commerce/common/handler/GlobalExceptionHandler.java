@@ -42,8 +42,6 @@ public class GlobalExceptionHandler {
             HttpServletRequest httpServletRequest) {
         Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
         ErrorResponse errorResponse = new ErrorResponse(storeNotFoundException.getErrorMessage());
-        System.out.println("path = " + getMyStoreRequestPath());
-        System.out.println("requestURI = " + httpServletRequest.getRequestURI());
         if (httpServletRequest.getRequestURI().equals(getMyStoreRequestPath())) {
             return errorResponse.add(selfRel, BusinessLinks.CREATE_STORE);
         }
