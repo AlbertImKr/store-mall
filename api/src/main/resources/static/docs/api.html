@@ -2195,7 +2195,7 @@ X-Frame-Options: DENY
 Content-Length: 358
 
 {
-  "storeId" : "648dc48acfbb663f0bb23435",
+  "storeId" : "648dcfb147d916749c554d2d",
   "storeName" : "testStoreName",
   "address" : "testAddress",
   "phoneNumber" : "01011001100",
@@ -2218,7 +2218,7 @@ Content-Length: 358
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "648dc48acfbb663f0bb23435",
+  "storeId" : "648dcfb147d916749c554d2d",
   "storeName" : "testStoreName",
   "address" : "testAddress",
   "phoneNumber" : "01011001100",
@@ -2253,46 +2253,11 @@ Content-Length: 358
             </thead>
             <tbody>
             <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>storeId</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어의 아이디</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>storeName</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 네이밍</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>address</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 주소</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>phoneNumber</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 연락처</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error-message</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 이메일</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>ownerName</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">스토어 소유주</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">예외 메시지</p></td>
             </tr>
             </tbody>
           </table>
@@ -2318,8 +2283,8 @@ Content-Length: 358
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>my-store</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어 연결한다</p>
+                <code>create-store</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">My 스토어를 만든다</p>
               </td>
             </tr>
             </tbody>
@@ -2329,7 +2294,7 @@ Content-Length: 358
           <h4 id="get_my_store_failed_response">failed response</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
 Content-Type: application/hal+json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -2337,23 +2302,18 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 358
+Content-Length: 227
 
 {
-  "storeId" : "648dc48acfbb663f0bb23435",
-  "storeName" : "testStoreName",
-  "address" : "testAddress",
-  "phoneNumber" : "01011001100",
-  "email" : "test@email.com",
-  "ownerName" : "testOwner",
   "_links" : {
-    "my-store" : {
-      "href" : "http://localhost/stores/my"
-    },
     "self" : {
       "href" : "http://localhost:8080/stores/my"
+    },
+    "create-store" : {
+      "href" : "http://localhost/stores"
     }
-  }
+  },
+  "error-message" : "스토어가 존재 하지 않습니다."
 }</code></pre>
             </div>
           </div>
@@ -2437,7 +2397,7 @@ Content-Length: 358
           <h4 id="get_store_curl_request">curl request</h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/648dc489cfbb663f0bb23430' -i -X GET</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/stores/648dcfb147d916749c554d28' -i -X GET</code></pre>
             </div>
           </div>
         </div>
@@ -2445,7 +2405,7 @@ Content-Length: 358
           <h4 id="get_store_httpie_requset">httpie request</h4>
           <div class="listingblock">
             <div class="content">
-              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/648dc489cfbb663f0bb23430'</code></pre>
+              <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/stores/648dcfb147d916749c554d28'</code></pre>
             </div>
           </div>
         </div>
@@ -2453,7 +2413,7 @@ Content-Length: 358
           <h4 id="get_store_http_requset">http request</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/648dc489cfbb663f0bb23430 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stores/648dcfb147d916749c554d28 HTTP/1.1
 Host: localhost:8080</code></pre>
             </div>
           </div>
@@ -2473,7 +2433,7 @@ X-Frame-Options: DENY
 Content-Length: 293
 
 {
-  "storeId" : "648dc489cfbb663f0bb23430",
+  "storeId" : "648dcfb147d916749c554d28",
   "storeName" : "testStoreName",
   "_links" : {
     "get-store" : {
@@ -2481,7 +2441,7 @@ Content-Length: 293
       "templated" : true
     },
     "self" : {
-      "href" : "http://localhost:8080/stores/648dc489cfbb663f0bb23430"
+      "href" : "http://localhost:8080/stores/648dcfb147d916749c554d28"
     }
   }
 }</code></pre>
@@ -2493,7 +2453,7 @@ Content-Length: 293
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "648dc489cfbb663f0bb23430",
+  "storeId" : "648dcfb147d916749c554d28",
   "storeName" : "testStoreName",
   "_links" : {
     "get-store" : {
@@ -2501,7 +2461,7 @@ Content-Length: 293
       "templated" : true
     },
     "self" : {
-      "href" : "http://localhost:8080/stores/648dc489cfbb663f0bb23430"
+      "href" : "http://localhost:8080/stores/648dcfb147d916749c554d28"
     }
   }
 }</code></pre>
@@ -2720,7 +2680,7 @@ X-Frame-Options: DENY
 Content-Length: 380
 
 {
-  "storeId" : "648dc48acfbb663f0bb2343a",
+  "storeId" : "648dcfb247d916749c554d32",
   "storeName" : "testStoreName",
   "address" : "testAddress",
   "phoneNumber" : "01011001100",
@@ -2731,7 +2691,7 @@ Content-Length: 380
       "href" : "http://localhost/stores/my"
     },
     "self" : {
-      "href" : "http://localhost:8080/stores/648dc48acfbb663f0bb2343a"
+      "href" : "http://localhost:8080/stores/648dcfb247d916749c554d32"
     }
   }
 }</code></pre>
@@ -2743,7 +2703,7 @@ Content-Length: 380
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "648dc48acfbb663f0bb2343a",
+  "storeId" : "648dcfb247d916749c554d32",
   "storeName" : "testStoreName",
   "address" : "testAddress",
   "phoneNumber" : "01011001100",
@@ -2754,7 +2714,7 @@ Content-Length: 380
       "href" : "http://localhost/stores/my"
     },
     "self" : {
-      "href" : "http://localhost:8080/stores/648dc48acfbb663f0bb2343a"
+      "href" : "http://localhost:8080/stores/648dcfb247d916749c554d32"
     }
   }
 }</code></pre>
@@ -2939,7 +2899,7 @@ X-Frame-Options: DENY
 Content-Length: 357
 
 {
-  "storeId" : "648dc48acfbb663f0bb23438",
+  "storeId" : "648dcfb147d916749c554d30",
   "storeName" : "newStoreName",
   "address" : "newAddress",
   "phoneNumber" : "1111111111",
@@ -2962,7 +2922,7 @@ Content-Length: 357
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "storeId" : "648dc48acfbb663f0bb23438",
+  "storeId" : "648dcfb147d916749c554d30",
   "storeName" : "newStoreName",
   "address" : "newAddress",
   "phoneNumber" : "1111111111",
@@ -3056,7 +3016,7 @@ Host: localhost:8080
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: http://localhost:8080/products/648dc488cfbb663f0bb233c5
+Location: http://localhost:8080/products/648dcfb047d916749c554cbd
 Content-Type: application/hal+json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -3067,7 +3027,7 @@ X-Frame-Options: DENY
 Content-Length: 379
 
 {
-  "productId" : "648dc488cfbb663f0bb233c5",
+  "productId" : "648dcfb047d916749c554cbd",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3075,7 +3035,7 @@ Content-Length: 379
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233c5"
+      "href" : "http://localhost:8080/products/648dcfb047d916749c554cbd"
     },
     "my-store" : {
       "href" : "http://localhost/stores/my"
@@ -3090,7 +3050,7 @@ Content-Length: 379
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "productId" : "648dc488cfbb663f0bb233c5",
+  "productId" : "648dcfb047d916749c554cbd",
   "productName" : "testProductName",
   "price" : 10000,
   "description" : "testDescription",
@@ -3098,7 +3058,7 @@ Content-Length: 379
   "category" : "testCategory",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233c5"
+      "href" : "http://localhost:8080/products/648dcfb047d916749c554cbd"
     },
     "my-store" : {
       "href" : "http://localhost/stores/my"
@@ -3246,283 +3206,283 @@ Content-Length: 9362
 {
   "_embedded" : {
     "productResponseList" : [ {
-      "productId" : "648dc488cfbb663f0bb233dc",
+      "productId" : "648dcfb047d916749c554cd4",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dc"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd4"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233dd",
+      "productId" : "648dcfb047d916749c554cd5",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dd"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd5"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233de",
+      "productId" : "648dcfb047d916749c554cd6",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233de"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd6"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233df",
+      "productId" : "648dcfb047d916749c554cd7",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233df"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd7"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e0",
+      "productId" : "648dcfb047d916749c554cd8",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e0"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd8"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e1",
+      "productId" : "648dcfb047d916749c554cd9",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e1"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd9"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e2",
+      "productId" : "648dcfb047d916749c554cda",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e2"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cda"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e3",
+      "productId" : "648dcfb047d916749c554cdb",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e3"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdb"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e4",
+      "productId" : "648dcfb047d916749c554cdc",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e4"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdc"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e5",
+      "productId" : "648dcfb047d916749c554cdd",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e5"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdd"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e6",
+      "productId" : "648dcfb047d916749c554cde",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e6"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cde"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e7",
+      "productId" : "648dcfb047d916749c554cdf",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e7"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdf"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e8",
+      "productId" : "648dcfb047d916749c554ce0",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e8"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce0"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e9",
+      "productId" : "648dcfb047d916749c554ce1",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e9"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce1"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ea",
+      "productId" : "648dcfb047d916749c554ce2",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ea"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce2"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233eb",
+      "productId" : "648dcfb047d916749c554ce3",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233eb"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce3"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ec",
+      "productId" : "648dcfb047d916749c554ce4",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ec"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce4"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ed",
+      "productId" : "648dcfb047d916749c554ce5",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ed"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce5"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ee",
+      "productId" : "648dcfb047d916749c554ce6",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ee"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce6"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ef",
+      "productId" : "648dcfb047d916749c554ce7",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ef"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce7"
         }
       }
     } ]
@@ -3561,283 +3521,283 @@ Content-Length: 9362
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "_embedded" : {
     "productResponseList" : [ {
-      "productId" : "648dc488cfbb663f0bb233dc",
+      "productId" : "648dcfb047d916749c554cd4",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dc"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd4"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233dd",
+      "productId" : "648dcfb047d916749c554cd5",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233dd"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd5"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233de",
+      "productId" : "648dcfb047d916749c554cd6",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233de"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd6"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233df",
+      "productId" : "648dcfb047d916749c554cd7",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233df"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd7"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e0",
+      "productId" : "648dcfb047d916749c554cd8",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e0"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd8"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e1",
+      "productId" : "648dcfb047d916749c554cd9",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e1"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cd9"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e2",
+      "productId" : "648dcfb047d916749c554cda",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e2"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cda"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e3",
+      "productId" : "648dcfb047d916749c554cdb",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e3"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdb"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e4",
+      "productId" : "648dcfb047d916749c554cdc",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e4"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdc"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e5",
+      "productId" : "648dcfb047d916749c554cdd",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e5"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdd"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e6",
+      "productId" : "648dcfb047d916749c554cde",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e6"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cde"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e7",
+      "productId" : "648dcfb047d916749c554cdf",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e7"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554cdf"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e8",
+      "productId" : "648dcfb047d916749c554ce0",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e8"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce0"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233e9",
+      "productId" : "648dcfb047d916749c554ce1",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233e9"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce1"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ea",
+      "productId" : "648dcfb047d916749c554ce2",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ea"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce2"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233eb",
+      "productId" : "648dcfb047d916749c554ce3",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233eb"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce3"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ec",
+      "productId" : "648dcfb047d916749c554ce4",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ec"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce4"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ed",
+      "productId" : "648dcfb047d916749c554ce5",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ed"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce5"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ee",
+      "productId" : "648dcfb047d916749c554ce6",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ee"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce6"
         }
       }
     }, {
-      "productId" : "648dc488cfbb663f0bb233ef",
+      "productId" : "648dcfb047d916749c554ce7",
       "productName" : "testProductName",
       "price" : 10000,
       "description" : "testDescription",
       "brand" : "testBrand",
       "category" : "testCategory",
-      "createdTime" : "20230617233448",
-      "updateTime" : "20230617233448",
+      "createdTime" : "20230618002224",
+      "updateTime" : "20230618002224",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/products/648dc488cfbb663f0bb233ef"
+          "href" : "http://localhost:8080/products/648dcfb047d916749c554ce7"
         }
       }
     } ]
@@ -4071,11 +4031,11 @@ X-Frame-Options: DENY
 Content-Length: 581
 
 {
-  "id" : "648dc48acfbb663f0bb2343c",
+  "id" : "648dcfb247d916749c554d34",
   "nickname" : "updateNickname",
   "email" : "test@email.com",
   "role" : "USER",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구",
   "active" : false,
@@ -4103,11 +4063,11 @@ Content-Length: 581
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "id" : "648dc48acfbb663f0bb2343c",
+  "id" : "648dcfb247d916749c554d34",
   "nickname" : "updateNickname",
   "email" : "test@email.com",
   "role" : "USER",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구",
   "active" : false,
@@ -4216,7 +4176,7 @@ Content-Length: 581
     -H 'Content-Type: application/json;charset=UTF-8' \
     -d '{
   "nickname" : "updateNickname",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구"
 }'</code></pre>
@@ -4229,7 +4189,7 @@ Content-Length: 581
             <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{
   "nickname" : "updateNickname",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구"
 }' | http PUT 'http://localhost:8080/users/profile' \
@@ -4248,7 +4208,7 @@ Host: localhost:8080
 
 {
   "nickname" : "updateNickname",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구"
 }</code></pre>
@@ -4270,11 +4230,11 @@ X-Frame-Options: DENY
 Content-Length: 581
 
 {
-  "id" : "648dc48acfbb663f0bb2343c",
+  "id" : "648dcfb247d916749c554d34",
   "nickname" : "updateNickname",
   "email" : "test@email.com",
   "role" : "USER",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구",
   "active" : false,
@@ -4302,11 +4262,11 @@ Content-Length: 581
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "id" : "648dc48acfbb663f0bb2343c",
+  "id" : "648dcfb247d916749c554d34",
   "nickname" : "updateNickname",
   "email" : "test@email.com",
   "role" : "USER",
-  "dateOfBirth" : "2023-06-17",
+  "dateOfBirth" : "2023-06-18",
   "phoneNumber" : "01011112222",
   "address" : "인천시남동구",
   "active" : false,
@@ -4411,7 +4371,7 @@ Content-Length: 581
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-06-17 23:34:41 +0900
+    Last updated 2023-06-18 00:22:17 +0900
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

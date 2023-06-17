@@ -12,6 +12,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.subsecti
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -115,6 +116,7 @@ class ConsumerStoreControllerTest {
         UUID uuid = UUID.randomUUID();
         mockMvc.perform(get("/stores/" + uuid))
                 .andDo(print())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("error-message").exists())
                 .andExpect(jsonPath("_links.get-store").exists())
                 //restDocs

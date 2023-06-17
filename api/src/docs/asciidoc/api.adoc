@@ -39,17 +39,17 @@ include::{snippets}/getMyStoreSuccess/response-body.adoc[]
 [[get_my_store_response_field]]
 ==== success response filed
 
-include::{snippets}/getMyStoreSuccess/response-fields.adoc[]
+include::{snippets}/getMyStoreFailed/response-fields.adoc[]
 
 [[get_my_store_links]]
 ==== success links
 
-include::{snippets}/getMyStoreSuccess/links.adoc[]
+include::{snippets}/getMyStoreFailed/links.adoc[]
 
 [[get_my_store_failed_response]]
 ==== failed response
 
-include::{snippets}/getMyStoreSuccess/http-response.adoc[]
+include::{snippets}/getMyStoreFailed/http-response.adoc[]
 
 [[get_my_store_failed_response_body]]
 ==== failed response body
