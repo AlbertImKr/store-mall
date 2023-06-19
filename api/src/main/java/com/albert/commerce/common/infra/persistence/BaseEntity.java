@@ -1,4 +1,4 @@
-package com.albert.commerce.common.model;
+package com.albert.commerce.common.infra.persistence;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

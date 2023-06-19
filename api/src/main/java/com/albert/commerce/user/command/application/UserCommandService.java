@@ -1,7 +1,7 @@
 package com.albert.commerce.user.command.application;
 
 
-import com.albert.commerce.common.model.SequenceGenerator;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserCommandDAO;

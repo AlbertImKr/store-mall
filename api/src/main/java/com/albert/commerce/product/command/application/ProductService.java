@@ -1,6 +1,6 @@
 package com.albert.commerce.product.command.application;
 
-import com.albert.commerce.common.model.SequenceGenerator;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;

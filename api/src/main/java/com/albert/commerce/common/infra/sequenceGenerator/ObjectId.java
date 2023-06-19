@@ -1,4 +1,4 @@
-package com.albert.commerce.common.model;
+package com.albert.commerce.common.infra.sequenceGenerator;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -2,7 +2,7 @@ package com.albert.commerce.user.command.domain;
 
 import static com.albert.commerce.user.command.domain.Role.USER;
 
-import com.albert.commerce.common.model.BaseEntity;
+import com.albert.commerce.common.infra.persistence.BaseEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

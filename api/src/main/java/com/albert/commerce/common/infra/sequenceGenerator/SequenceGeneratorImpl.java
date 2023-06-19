@@ -1,5 +1,6 @@
-package com.albert.commerce.common.model;
+package com.albert.commerce.common.infra.sequenceGenerator;
 
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import org.springframework.stereotype.Component;
 
 @Component

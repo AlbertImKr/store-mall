@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.albert.commerce.common.model.SequenceGenerator;
-import com.albert.commerce.common.model.SequenceGeneratorImpl;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
+import com.albert.commerce.common.infra.sequenceGenerator.SequenceGeneratorImpl;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;

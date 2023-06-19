@@ -1,6 +1,6 @@
 package com.albert.commerce.store.command.domain;
 
-import com.albert.commerce.common.model.BaseEntity;
+import com.albert.commerce.common.infra.persistence.BaseEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

@@ -1,4 +1,4 @@
-package com.albert.commerce.common.model;
+package com.albert.commerce.common.infra.persistence;
 
 public interface SequenceGenerator {
 

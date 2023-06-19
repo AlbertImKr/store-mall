@@ -1,6 +1,6 @@
 package com.albert.commerce.product.command.application;
 
-import com.albert.commerce.common.model.Money;
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.fasterxml.jackson.annotation.JsonFormat;
