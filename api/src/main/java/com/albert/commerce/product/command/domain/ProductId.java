@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Access(AccessType.FIELD)
 public class ProductId implements Serializable {
 
-    @Column(name = "product_id")
+    @Column(name = "product_id", nullable = false)
     private String id;
 
     public ProductId(String id) {

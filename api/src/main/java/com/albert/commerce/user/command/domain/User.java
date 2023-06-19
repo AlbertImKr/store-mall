@@ -3,6 +3,7 @@ package com.albert.commerce.user.command.domain;
 import static com.albert.commerce.user.command.domain.Role.USER;
 
 import com.albert.commerce.common.infra.persistence.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,14 +23,20 @@ public class User extends BaseEntity {
 
     @EmbeddedId
     private UserId id;
+    @Column(nullable = true)
     private String nickname;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    @Column(nullable = true)
     private LocalDate dateOfBirth;
+    @Column(nullable = true)
     private String phoneNumber;
+    @Column(nullable = true)
     private String address;
+    @Column(nullable = false)
     private boolean isActive;
 
     @Builder

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class UserId implements Serializable {
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String id;
 
     private UserId(String id) {
