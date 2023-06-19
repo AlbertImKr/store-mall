@@ -1,4 +1,4 @@
-package com.albert.commerce.store.infra;
+package com.albert.commerce.store.infra.presentation.imports;
 
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;

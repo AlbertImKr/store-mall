@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
-import com.albert.commerce.store.command.domain.StoreRepository;
+import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
@@ -69,7 +69,7 @@ class SellerStoreControllerTest {
     UserQueryDao userQueryDao;
 
     @Autowired
-    StoreRepository storeRepository;
+    StoreJpaRepository storeJpaRepository;
 
     @Autowired
     UserJpaRepository userJpaRepository;
@@ -81,7 +81,7 @@ class SellerStoreControllerTest {
 
     @AfterEach
     void clear() {
-        storeRepository.deleteAll();
+        storeJpaRepository.deleteAll();
         userJpaRepository.deleteAll();
     }
 

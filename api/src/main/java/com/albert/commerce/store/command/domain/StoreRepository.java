@@ -1,8 +1,13 @@
 package com.albert.commerce.store.command.domain;
 
-import com.albert.commerce.store.infra.StoreCommandDaoCustom;
-import com.albert.commerce.store.infra.StoreJpaRepository;
+import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import java.util.Optional;
 
-public interface StoreRepository extends StoreJpaRepository, StoreCommandDaoCustom {
+public interface StoreRepository {
 
+    boolean existsByStoreUserId(StoreUserId from);
+
+    Store save(Store store);
+
+    Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, String email);
 }

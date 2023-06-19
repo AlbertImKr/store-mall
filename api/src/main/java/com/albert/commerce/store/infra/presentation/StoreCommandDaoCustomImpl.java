@@ -1,8 +1,11 @@
-package com.albert.commerce.store.infra;
+package com.albert.commerce.store.infra.presentation;
 
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.domain.StoreRepository;
+import com.albert.commerce.store.command.domain.StoreUserId;
+import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
 import com.querydsl.jpa.JPAExpressions;
@@ -10,11 +13,14 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
-public class StoreCommandDaoCustomImpl implements StoreCommandDaoCustom {
+@Repository
+public class StoreCommandDaoCustomImpl implements StoreRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final StoreJpaRepository storeJpaRepository;
 
     private static JPQLQuery<UserId> getUserIdJPQLQuery(String email) {
         QUser qUser = QUser.user;
@@ -44,5 +50,15 @@ public class StoreCommandDaoCustomImpl implements StoreCommandDaoCustom {
                 .selectFrom(store)
                 .where(store.storeUserId.userId.eq(getUserIdJPQLQuery(email)))
                 .fetchFirst());
+    }
+
+    @Override
+    public boolean existsByStoreUserId(StoreUserId from) {
+        return storeJpaRepository.existsByStoreUserId(from);
+    }
+
+    @Override
+    public Store save(Store store) {
+        return storeJpaRepository.save(store);
     }
 }
