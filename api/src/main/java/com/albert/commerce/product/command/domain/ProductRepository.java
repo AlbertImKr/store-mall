@@ -1,7 +1,8 @@
 package com.albert.commerce.product.command.domain;
 
-import com.albert.commerce.product.infra.ProductJpaRepository;
+public interface ProductRepository {
 
-public interface ProductRepository extends ProductJpaRepository {
+    Product save(Product product);
 
+    ProductId nextId();
 }
