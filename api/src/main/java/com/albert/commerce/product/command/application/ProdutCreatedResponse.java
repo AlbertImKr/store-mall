@@ -14,7 +14,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreatedProductResponse extends RepresentationModel<CreatedProductResponse> {
+public class ProdutCreatedResponse extends RepresentationModel<ProdutCreatedResponse> {
 
     private ProductId productId;
     private String productName;
@@ -24,7 +24,7 @@ public class CreatedProductResponse extends RepresentationModel<CreatedProductRe
     private String category;
 
     @Builder
-    private CreatedProductResponse(ProductId productId, String productName, Money price,
+    private ProdutCreatedResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category) {
         this.productId = productId;
@@ -35,8 +35,8 @@ public class CreatedProductResponse extends RepresentationModel<CreatedProductRe
         this.category = category;
     }
 
-    public static CreatedProductResponse from(Product product) {
-        return CreatedProductResponse.builder()
+    public static ProdutCreatedResponse from(Product product) {
+        return ProdutCreatedResponse.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .brand(product.getBrand())

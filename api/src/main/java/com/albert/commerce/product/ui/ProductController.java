@@ -1,11 +1,11 @@
 package com.albert.commerce.product.ui;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.product.command.application.CreatedProductResponse;
 import com.albert.commerce.product.command.application.ProductAssembler;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.product.command.application.ProductService;
+import com.albert.commerce.product.command.application.ProdutCreatedResponse;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
@@ -38,11 +38,11 @@ public class ProductController {
     private final ProductAssembler productAssembler;
 
     @PostMapping
-    public ResponseEntity<CreatedProductResponse> addProduct(
+    public ResponseEntity<ProdutCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName());
-        CreatedProductResponse productResponse = productService.addProduct(productRequest, storeId);
+        ProdutCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
 
         ProductId productId = productResponse.getProductId();
         Link selfRel = BusinessLinks.getProductSelfRel(productId);
