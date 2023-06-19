@@ -10,9 +10,10 @@ import com.albert.commerce.user.ui.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-public class BusinessLinks {
+public final class BusinessLinks {
 
     private BusinessLinks() {
+        throw new AssertionError("인스턴스화가 필요하지 않는 클래스입니다.");
     }
 
     public static final Link MY_STORE =
