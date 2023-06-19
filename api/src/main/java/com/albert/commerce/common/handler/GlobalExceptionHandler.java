@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(StoreAlreadyExistsException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeAlreadyExistsExceptionHandler(
             StoreAlreadyExistsException storeAlreadyExistsException,
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
                 SellerStoreController.class).getMyStore(null)).toUri().getPath();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(StoreNotFoundException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeExceptionHandler(StoreNotFoundException storeNotFoundException,
             HttpServletRequest httpServletRequest) {
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler
+    @ExceptionHandler(MyStoreNotFoundException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeExceptionHandler(MyStoreNotFoundException myStoreNotFoundException,
             HttpServletRequest httpServletRequest) {
