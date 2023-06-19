@@ -1,9 +1,10 @@
-package com.albert.commerce.product.infra;
+package com.albert.commerce.product.infra.persistence;
 
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
+import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

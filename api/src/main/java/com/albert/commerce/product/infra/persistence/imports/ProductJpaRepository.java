@@ -1,4 +1,4 @@
-package com.albert.commerce.product.infra;
+package com.albert.commerce.product.infra.persistence.imports;
 
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
