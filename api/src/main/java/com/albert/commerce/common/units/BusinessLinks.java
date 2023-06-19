@@ -1,5 +1,6 @@
 package com.albert.commerce.common.units;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.albert.commerce.product.command.domain.ProductId;
@@ -8,6 +9,7 @@ import com.albert.commerce.store.ui.ConsumerStoreController;
 import com.albert.commerce.store.ui.SellerStoreController;
 import com.albert.commerce.user.ui.UserController;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 public final class BusinessLinks {
@@ -39,4 +41,11 @@ public final class BusinessLinks {
                 .slash(productId.getId())
                 .withSelfRel();
     }
+
+    public static final Links USER_INFO_RESPONSE_LINKS = Links.of(
+            linkTo(methodOn(UserController.class).updateUserInfo(null, null))
+                    .withSelfRel(),
+            BusinessLinks.CREATE_STORE,
+            BusinessLinks.GET_STORE,
+            BusinessLinks.MY_STORE);
 }

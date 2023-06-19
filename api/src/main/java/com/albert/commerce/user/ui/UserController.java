@@ -1,9 +1,7 @@
 package com.albert.commerce.user.ui;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_LINKS;
 
-import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.user.command.application.UserCommandService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserProfileRequest;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
+
     private final UserQueryService userQueryService;
     private final UserCommandService userCommandService;
 
@@ -35,13 +34,7 @@ public class UserController {
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
         UserInfoResponse userInfoResponse = userQueryService.findByEmail(email);
-        userInfoResponse.add(
-                linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
-                        .withSelfRel(),
-                BusinessLinks.CREATE_STORE,
-                BusinessLinks.GET_STORE,
-                BusinessLinks.MY_STORE
-        );
+        userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return userInfoResponse;
     }
 
@@ -51,14 +44,9 @@ public class UserController {
         String email = principal.getName();
         UserInfoResponse userInfoResponse = userCommandService.updateUserInfo(email,
                 userProfileRequest);
-        userInfoResponse.add(
-                linkTo(methodOn(UserController.class).updateUserInfo(principal, null))
-                        .withSelfRel(),
-                BusinessLinks.CREATE_STORE,
-                BusinessLinks.GET_STORE,
-                BusinessLinks.MY_STORE
-        );
+        userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return userInfoResponse;
     }
-
 }
+
+
