@@ -52,7 +52,7 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<PagedModel<ProductResponse>> findAll(Principal principal,
+    public ResponseEntity<PagedModel<ProductResponse>> getAllProducts(Principal principal,
             Pageable pageable) {
         Page<Product> products =
                 productDao.findProductsByUserEmail(principal.getName(), pageable);

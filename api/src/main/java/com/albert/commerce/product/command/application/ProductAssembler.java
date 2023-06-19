@@ -17,7 +17,8 @@ public class ProductAssembler extends
 
     private static Link getProductSelfRefLink(ProductResponse productResponse) {
         return WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder.methodOn(ProductController.class).findAll(null, null))
+                .linkTo(WebMvcLinkBuilder.methodOn(ProductController.class)
+                        .getAllProducts(null, null))
                 .slash(productResponse.getProductId().getId()).withSelfRel();
     }
 
