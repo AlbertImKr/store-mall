@@ -44,10 +44,11 @@ public class ProductDao {
     public Page<Product> findProductsByUserEmail(String userEmail, Pageable pageable) {
 
         QProduct qProduct = QProduct.product;
+        JPQLQuery<StoreId> storeIdQuery = getStoreIdByUserId(getUserIdByEmail(userEmail));
         List<Product> contentProducts = jpaQueryFactory.selectFrom(qProduct)
                 .where(
                         qProduct.storeId.eq(
-                                getStoreIdByUserId(getUserIdByEmail(userEmail))
+                                storeIdQuery
                         )
                 )
                 .offset(pageable.getOffset())
@@ -58,7 +59,7 @@ public class ProductDao {
                 .from(qProduct)
                 .where(
                         qProduct.storeId.eq(
-                                getStoreIdByUserId(getUserIdByEmail(userEmail))
+                                storeIdQuery
                         )
                 );
         return PageableExecutionUtils.getPage(contentProducts, pageable, productJPAQuery::fetchOne);
