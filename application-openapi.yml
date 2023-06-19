@@ -2,6 +2,8 @@ openapi: 3.0.0
 servers:
   - description: authorizationServer
     url: http://localhost:9000
+  - description: api
+    url: http://localhost:8080
 
 info:
   description: This is Albert's commerce-project API
@@ -23,7 +25,7 @@ paths:
       tags:
         - authorizationServer
       summary: 유저를 추가한다
-      description: 유저를 추가한다
+      operationId: addUser
       requestBody:
         content:
           application/json:
@@ -40,6 +42,7 @@ paths:
     get:
       tags:
         - authorizationServer
+      operationId: authorize
       summary: authorize 토큰 요청 페이지
       description: 로그인 후 요청 해야 합니다. 브라우저에서 요청을 해야한다 http://localhost:9000/oauth2/authorize?response_type=code&client_id=oidc-client&scope=openid profile&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client
       parameters:
@@ -79,7 +82,7 @@ paths:
       tags:
         - authorizationServer
       summary: Token를 요청한다
-      description: AccessToken,RefreshToken,IdToken을 요청한다
+      operationId: getToken
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -97,7 +100,7 @@ paths:
       tags:
         - authorizationServer
       summary: UserInfo 요청한다
-      description: Token이 필요한다 UserInfo를 요청한다
+      operationId: getUserInfo
       responses:
         '200':
           description: 요청 성공
@@ -108,13 +111,92 @@ paths:
       tags:
         - authorizationServer
       summary: issuer를 요청한다
-      description: 서버의 허용하는 리스트
+      operationId: getConfiguration
       responses:
         '200':
           description: 요청 성공
+  /users/profile:
+    get:
+      tags:
+        - ApiApplication
+      summary: UserInfo를 가져온다
+      operationId: getUserProfileApi
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: UserInfo가져오기 성공
+    put:
+      tags:
+        - ApiApplication
+      summary: userInfo를 update한다
+      operationId: updateUserInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JoinRequest"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: 유저 업로드 성공
 
 components:
   schemas:
+    UserInfoRequest:
+      type: object
+      properties:
+        nickname:
+          type: string
+          example: "jack"
+        dateOfBirth:
+          type: string
+          example: "2000-06-18"
+        phoneNumber:
+          type: string
+          example: "01011112222"
+        address:
+          type: string
+          example: "서울시강동구"
+    ErrorMessage:
+      type: object
+      properties:
+        error-message:
+          type: string
+          example:
+            "스토어가 존재 하지 않습니다."
+    User:
+      type: object
+      properties:
+        storeId:
+          type: string
+          example:
+            "648dcaabc07dce0417febb2e"
+        storeName:
+          type: string
+          example:
+            "testStoreName"
+        phoneNumber:
+          type: string
+          example:
+            "01011001100"
+        address:
+          type: string
+          example:
+            "estAddress"
+        email:
+          type: string
+          example:
+            "test@email.com"
+        ownerName:
+          type: string
+          example:
+            "testOwner"
     JoinRequest:
       type: object
       required:

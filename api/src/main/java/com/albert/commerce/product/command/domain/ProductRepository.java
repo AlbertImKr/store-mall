@@ -1,6 +1,8 @@
 package com.albert.commerce.product.command.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+public interface ProductRepository {
 
-public interface ProductRepository extends JpaRepository<Product, ProductId> {
+    Product save(Product product);
+
+    ProductId nextId();
 }

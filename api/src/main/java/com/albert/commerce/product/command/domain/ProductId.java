@@ -7,21 +7,23 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 @Access(AccessType.FIELD)
 public class ProductId implements Serializable {
 
-    @Column(name = "product_id")
-    private UUID id;
+    @Column(name = "product_id", nullable = false)
+    private String id;
 
-    public ProductId() {
-        this.id = UUID.randomUUID();
+    public ProductId(String id) {
+        this.id = id;
     }
 
     @JsonValue
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

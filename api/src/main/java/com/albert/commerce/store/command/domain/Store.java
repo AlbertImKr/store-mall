@@ -1,50 +1,47 @@
 package com.albert.commerce.store.command.domain;
 
-import com.albert.commerce.product.command.domain.ProductId;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
+import com.albert.commerce.common.infra.persistence.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "store")
-public class Store {
+public class Store extends BaseEntity {
 
 
     @EmbeddedId
     private StoreId storeId;
-
+    @Column(nullable = false)
     private String storeName;
-
+    @Column(nullable = false)
     private StoreUserId storeUserId;
+    @Column(nullable = false)
+    private String ownerName;
+    @Column(nullable = false)
+    private String address;
+    @Column(nullable = false)
+    private String phoneNumber;
+    @Column(nullable = false)
+    private String email;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "product",
-            joinColumns = @JoinColumn(name = "store_id")
-    )
-    private Set<ProductId> productIds = new HashSet<>();
-
-    public Store(String storeName, StoreUserId storeUserId) {
-        this.storeId = new StoreId();
+    @Builder
+    private Store(StoreId storeId, String storeName, StoreUserId storeUserId, String ownerName,
+            String address, String phoneNumber, String email) {
+        this.storeId = storeId;
         this.storeName = storeName;
         this.storeUserId = storeUserId;
-    }
-
-    public void addProductId(ProductId productId) {
-        productIds.add(productId);
-    }
-
-    public void removeProductId(ProductId productId) {
-        productIds.remove(productId);
+        this.ownerName = ownerName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 }

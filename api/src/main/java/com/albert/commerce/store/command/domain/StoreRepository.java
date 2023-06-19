@@ -1,8 +1,13 @@
 package com.albert.commerce.store.command.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import java.util.Optional;
 
-public interface StoreRepository extends JpaRepository<Store, StoreId> {
+public interface StoreRepository {
 
+    boolean existsByStoreUserId(StoreUserId from);
 
+    Store save(Store store);
+
+    Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, String email);
 }

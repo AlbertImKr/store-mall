@@ -1,6 +1,6 @@
 package com.albert.commerce.config.security;
 
-import com.albert.commerce.user.application.UserService;
+import com.albert.commerce.user.command.application.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -11,9 +11,8 @@ public class StoreAlreadyExistsException extends BusinessException {
         super(errorMessage.getMessage());
     }
 
-
     @Override
-    protected ErrorMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         return errorMessage;
     }
 }
