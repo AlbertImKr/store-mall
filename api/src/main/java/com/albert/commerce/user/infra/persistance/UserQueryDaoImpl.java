@@ -1,8 +1,9 @@
-package com.albert.commerce.user.infra;
+package com.albert.commerce.user.infra.persistance;
 
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserQueryDao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class UserQueryDaoImpl implements UserQueryDao {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public User findUserProfileByEmail(String email) {
+    public UserInfoResponse findUserProfileByEmail(String email) {
         QUser user = QUser.user;
         User targetUser = jpaQueryFactory.selectFrom(user)
                 .where(user.email.eq(email))
@@ -23,7 +24,7 @@ public class UserQueryDaoImpl implements UserQueryDao {
         if (targetUser == null) {
             throw new UserNotFoundException();
         }
-        return targetUser;
+        return UserInfoResponse.from(targetUser);
     }
 
 

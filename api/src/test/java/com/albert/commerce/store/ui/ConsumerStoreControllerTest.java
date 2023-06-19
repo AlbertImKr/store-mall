@@ -17,9 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserQueryService;
+import com.albert.commerce.user.query.domain.UserQueryDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -53,7 +53,7 @@ class ConsumerStoreControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserCommandService userCommandService;
+    UserService userService;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -62,12 +62,12 @@ class ConsumerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserQueryService userQueryService;
+    UserQueryDao userQueryDao;
 
 
     @BeforeEach
     void saveTestUser() {
-        userCommandService.init("test@email.com");
+        userService.init("test@email.com");
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")
@@ -81,7 +81,7 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userInfoResponse.getId());
         entityManager.flush();

@@ -1,10 +1,14 @@
 package com.albert.commerce.config;
 
-import com.albert.commerce.user.infra.UserQueryDaoImpl;
+import com.albert.commerce.user.command.domain.UserRepository;
+import com.albert.commerce.user.infra.persistance.UserQueryDaoImpl;
+import com.albert.commerce.user.infra.persistance.UserRepositoryImpl;
+import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.domain.UserQueryDao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -14,6 +18,9 @@ public class TestConfig {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private UserJpaRepository userJpaRepository;
+
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(entityManager);
@@ -22,6 +29,12 @@ public class TestConfig {
     @Bean
     public UserQueryDao userQueryDao() {
         return new UserQueryDaoImpl(jpaQueryFactory());
+    }
+
+
+    @Bean
+    public UserRepository userRepository() {
+        return new UserRepositoryImpl(jpaQueryFactory(), userJpaRepository);
     }
 
 }

@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.user.command.application.UserCommandService;
-import com.albert.commerce.user.infra.UserJpaUserRepository;
-import com.albert.commerce.user.query.application.UserProfileRequest;
+import com.albert.commerce.user.command.application.UserProfileRequest;
+import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -42,28 +42,27 @@ class UserControllerTest {
 
 
     @Autowired
-    UserCommandService userCommandService;
+    UserService userService;
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @BeforeEach
-    void initUser() {
-        userCommandService.init("test@email.com");
-    }
+    @Autowired
+    UserJpaRepository userJpaRepository;
 
     @Autowired
     EntityManager entityManager;
 
-    @Autowired
-    UserJpaUserRepository userJpaUserRepository;
+    @BeforeEach
+    void initUser() {
+        userService.init("test@email.com");
+    }
 
     @AfterEach
     void clear() {
-        userJpaUserRepository.deleteAll();
+        userJpaRepository.deleteAll();
     }
 
 

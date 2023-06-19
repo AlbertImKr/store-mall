@@ -5,8 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.albert.commerce.config.TestConfig;
 import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.command.domain.UserCommandDAO;
 import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.user.command.domain.UserRepository;
+import com.albert.commerce.user.query.application.UserInfoResponse;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ class UserQueryDaoTest {
     UserQueryDao userQueryDao;
 
     @Autowired
-    UserCommandDAO userCommandDAO;
+    UserRepository userRepository;
 
     @Test
     void findUserProfileByEmail() {
@@ -46,10 +47,11 @@ class UserQueryDaoTest {
                 .address(testAddress)
                 .isActive(testIsActive)
                 .build();
-        User savedUser = userCommandDAO.save(user);
+        User savedUser = userRepository.save(user);
 
-        User findeduser = userQueryDao.findUserProfileByEmail(testEmail);
+        UserInfoResponse findeduser = userQueryDao.findUserProfileByEmail(testEmail);
 
-        assertThat(findeduser).usingRecursiveComparison().isEqualTo(savedUser);
+        assertThat(findeduser).usingRecursiveComparison()
+                .isEqualTo(UserInfoResponse.from(savedUser));
     }
 }

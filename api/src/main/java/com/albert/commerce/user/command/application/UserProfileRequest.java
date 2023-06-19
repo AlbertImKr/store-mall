@@ -1,4 +1,4 @@
-package com.albert.commerce.user.query.application;
+package com.albert.commerce.user.command.application;
 
 import java.time.LocalDate;
 

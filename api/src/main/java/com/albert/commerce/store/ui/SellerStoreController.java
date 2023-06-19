@@ -6,7 +6,7 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserQueryDao;
 import java.net.URI;
 import java.security.Principal;
@@ -38,9 +38,9 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        User user = userQueryDao.findUserProfileByEmail(userEmail);
+        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(userEmail);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                user.getId());
+                userInfoResponse.getId());
 
         URI myStore = WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(principal))

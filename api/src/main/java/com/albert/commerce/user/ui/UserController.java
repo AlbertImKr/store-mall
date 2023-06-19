@@ -2,10 +2,10 @@ package com.albert.commerce.user.ui;
 
 import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_LINKS;
 
-import com.albert.commerce.user.command.application.UserCommandService;
+import com.albert.commerce.user.command.application.UserProfileRequest;
+import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserProfileRequest;
-import com.albert.commerce.user.query.application.UserQueryService;
+import com.albert.commerce.user.query.domain.UserQueryDao;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 
-    private final UserQueryService userQueryService;
-    private final UserCommandService userCommandService;
+    private final UserQueryDao userQueryDao;
+    private final UserService userService;
 
 
     @GetMapping("/")
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userQueryService.findByEmail(email);
+        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(email);
         userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return userInfoResponse;
     }
@@ -42,7 +42,7 @@ public class UserController {
     public UserInfoResponse updateUserInfo(Principal principal,
             @RequestBody UserProfileRequest userProfileRequest) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userCommandService.updateUserInfo(email,
+        UserInfoResponse userInfoResponse = userService.updateUserInfo(email,
                 userProfileRequest);
         userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return userInfoResponse;

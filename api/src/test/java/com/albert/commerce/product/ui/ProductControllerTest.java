@@ -23,10 +23,10 @@ import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.StoreJpaRepository;
-import com.albert.commerce.user.command.application.UserCommandService;
-import com.albert.commerce.user.infra.UserJpaUserRepository;
+import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserQueryService;
+import com.albert.commerce.user.query.domain.UserQueryDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -68,7 +68,7 @@ class ProductControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserQueryService userQueryService;
+    UserQueryDao userQueryDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -80,26 +80,26 @@ class ProductControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserCommandService userCommandService;
+    UserService userService;
 
     @Autowired
     StoreJpaRepository storeJpaRepository;
 
     @Autowired
-    UserJpaUserRepository userJpaUserRepository;
+    UserJpaRepository userJpaRepository;
 
     @Autowired
     ProductJpaRepository productJpaRepository;
 
     @BeforeEach
     void saveTestUser() {
-        userCommandService.init(TEST_USER_EMAIL);
+        userService.init(TEST_USER_EMAIL);
     }
 
     @AfterEach
     void clear() {
         storeJpaRepository.deleteAll();
-        userJpaUserRepository.deleteAll();
+        userJpaRepository.deleteAll();
         productJpaRepository.deleteAll();
     }
 
@@ -109,7 +109,7 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
         );
-        UserInfoResponse user = userQueryService.findByEmail(TEST_USER_EMAIL);
+        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -175,7 +175,7 @@ class ProductControllerTest {
                     .build();
             SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
                     newStoreRequest,
-                    userQueryService.findByEmail(TEST_USER_EMAIL).getId()
+                    userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL).getId()
             );
             StoreId storeId = sellerStoreResponse.getStoreId();
             for (int i = 0; i < 100; i++) {

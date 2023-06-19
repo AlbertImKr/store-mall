@@ -21,10 +21,10 @@ import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.StoreRepository;
-import com.albert.commerce.user.command.application.UserCommandService;
-import com.albert.commerce.user.infra.UserJpaUserRepository;
+import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserQueryService;
+import com.albert.commerce.user.query.domain.UserQueryDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -58,9 +58,7 @@ class SellerStoreControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserCommandService userCommandService;
-    @Autowired
-    UserQueryService userQueryService;
+    UserService userService;
     @Autowired
     SellerStoreService sellerStoreService;
 
@@ -68,20 +66,23 @@ class SellerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
+    UserQueryDao userQueryDao;
+
+    @Autowired
     StoreRepository storeRepository;
 
     @Autowired
-    UserJpaUserRepository userJpaUserRepository;
+    UserJpaRepository userJpaRepository;
 
     @BeforeEach
     void saveTestUser() {
-        userCommandService.init("test@email.com");
+        userService.init("test@email.com");
     }
 
     @AfterEach
     void clear() {
         storeRepository.deleteAll();
-        userJpaUserRepository.deleteAll();
+        userJpaRepository.deleteAll();
     }
 
 
@@ -109,17 +110,17 @@ class SellerStoreControllerTest {
                 .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
                 //restDocs
                 .andDo(document(
-                        "createStoreSuccess", preprocessResponse(prettyPrint()),
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("지금 요청한 링크"),
-                                linkWithRel("my-store").description("My 스토어에 연결한다")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("storeId").description("스토어 아이디"),
-                                fieldWithPath("storeName").description("스토어 네이밍"),
-                                fieldWithPath("address").description("스토어 주소"),
+                                "createStoreSuccess", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("지금 요청한 링크"),
+                                        linkWithRel("my-store").description("My 스토어에 연결한다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어 아이디"),
+                                        fieldWithPath("storeName").description("스토어 네이밍"),
+                                        fieldWithPath("address").description("스토어 주소"),
                                         fieldWithPath("phoneNumber").description("스토어 연락처"),
                                         fieldWithPath("email").description("스토어 이메일"),
                                         fieldWithPath("ownerName").description("스토어 소유주")
@@ -139,7 +140,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
@@ -179,7 +180,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryService.findByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
@@ -257,7 +258,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse user = userQueryService.findByEmail(TEST_EMAIL);
+        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_EMAIL);
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         String newStoreName = "newStoreName";
@@ -290,17 +291,17 @@ class SellerStoreControllerTest {
                 .andExpect(jsonPath("_links.my-store").exists())
                 //restDocs
                 .andDo(document(
-                        "updateMyStore", preprocessResponse(prettyPrint()),
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("요청한 링크"),
-                                linkWithRel("my-store").description("My 스토어를 찾는다")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("storeId").description("스토어의 아이디"),
-                                fieldWithPath("storeName").description("스토어 네이밍"),
-                                fieldWithPath("address").description("스토어 주소"),
+                                "updateMyStore", preprocessResponse(prettyPrint()),
+                                links(
+                                        halLinks(),
+                                        linkWithRel("self").description("요청한 링크"),
+                                        linkWithRel("my-store").description("My 스토어를 찾는다")
+                                ),
+                                responseFields(
+                                        subsectionWithPath("_links").ignored(),
+                                        fieldWithPath("storeId").description("스토어의 아이디"),
+                                        fieldWithPath("storeName").description("스토어 네이밍"),
+                                        fieldWithPath("address").description("스토어 주소"),
                                         fieldWithPath("phoneNumber").description("스토어 연락처"),
                                         fieldWithPath("email").description("스토어 이메일"),
                                         fieldWithPath("ownerName").description("스토어 소유주")
