@@ -21,7 +21,9 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +63,17 @@ public class ProductController {
                 .toModel(products, productAssembler);
 
         return ResponseEntity.ok(productResponses);
+    }
+
+    @PutMapping(value = "/{productId}")
+    public ResponseEntity<ProductResponse> updateProduct(Principal principal,
+            @PathVariable ProductId productId, @RequestBody ProductRequest productRequest) {
+        Product product = productDao.findByUserEmailAndProductId(principal.getName(), productId);
+
+        ProductResponse productResponse = productService.update(product, productRequest);
+
+        Link selfRel = BusinessLinks.getProductSelfRel(productId);
+        productResponse.add(selfRel, BusinessLinks.MY_STORE);
+        return ResponseEntity.ok(productResponse);
     }
 }

@@ -4,6 +4,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.ha
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -11,12 +12,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
+import com.albert.commerce.product.command.application.ProdutCreatedResponse;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -26,7 +30,7 @@ import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -61,6 +65,11 @@ class ProductControllerTest {
     private static final String TEST_OWNER = "testOwner";
     private static final String TEST_PHONE_NUMBER = "01011001100";
     private static final String TEST_ADDRESS = "testAddress";
+    public static final int CHANGED_PRICE = 300;
+    public static final String CHANGED_PRODUCT_NAME = "changedProductName";
+    public static final String CHANGED_DESCRIPTION = "changedDescription";
+    public static final String CHANGED_CATEGORY = "changedCategory";
+    public static final String CHANGED_BRAND = "changedBrand";
     @Autowired
     MockMvc mockMvc;
 
@@ -68,7 +77,7 @@ class ProductControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserQueryDao userQueryDao;
+    UserDao userDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -107,9 +116,10 @@ class ProductControllerTest {
     @Test
     void addProduct() throws Exception {
         ProductRequest productRequest = new ProductRequest(
-                TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
+                TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
+                TEST_CATEGORY
         );
-        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -156,6 +166,74 @@ class ProductControllerTest {
                 );
     }
 
+    @DisplayName("Product를 update한다")
+    @Test
+    void updateProduct() throws Exception {
+        // given
+        ProductRequest productRequest = new ProductRequest(
+                TEST_PRODUCT_NAME,
+                new Money(TEST_PRICE),
+                TEST_DESCRIPTION,
+                TEST_BRAND,
+                TEST_CATEGORY
+        );
+        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_STORE_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
+
+        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest, user.getId());
+
+        ProdutCreatedResponse produtCreatedResponse = productService.addProduct(productRequest,
+                store.getStoreId());
+        productRequest = new ProductRequest(
+                CHANGED_PRODUCT_NAME,
+                new Money(CHANGED_PRICE),
+                CHANGED_DESCRIPTION,
+                CHANGED_BRAND,
+                CHANGED_CATEGORY
+        );
+
+        // when,then
+        mockMvc.perform(put("/products/" + produtCreatedResponse.getProductId().getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("productId").exists())
+                .andExpect(jsonPath("productName").value(CHANGED_PRODUCT_NAME))
+                .andExpect(jsonPath("price").value(CHANGED_PRICE))
+                .andExpect(jsonPath("description").value(CHANGED_DESCRIPTION))
+                .andExpect(jsonPath("brand").value(CHANGED_BRAND))
+                .andExpect(jsonPath("category").value(CHANGED_CATEGORY))
+                // restdocs
+                .andDo(document("updateProduct",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        links(
+                                halLinks(),
+                                linkWithRel("self").description("현재 연결한 link"),
+                                linkWithRel("my-store").description("my-store link")
+                        ),
+                        responseFields(
+                                subsectionWithPath("_links").ignored(),
+                                fieldWithPath("productId").description("상품 아이디"),
+                                fieldWithPath("price").description("상품 가격"),
+                                fieldWithPath("productName").description("상품명"),
+                                fieldWithPath("description").description("상품 상세"),
+                                fieldWithPath("brand").description("상품 브랜드"),
+                                fieldWithPath("createdTime").description("생성시간"),
+                                fieldWithPath("category").description("카테코리"),
+                                fieldWithPath("updateTime").description("업데이트시간")
+                        )
+                ))
+        ;
+    }
+
     @DisplayName("데이터 추가")
     @Nested
     class Products {
@@ -164,7 +242,8 @@ class ProductControllerTest {
         @BeforeEach
         void setData() {
             ProductRequest productRequest = new ProductRequest(
-                    TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
+                    TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
+                    TEST_CATEGORY
             );
             NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                     .storeName(TEST_STORE_NAME)
@@ -175,7 +254,7 @@ class ProductControllerTest {
                     .build();
             SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
                     newStoreRequest,
-                    userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL).getId()
+                    userDao.findUserProfileByEmail(TEST_USER_EMAIL).getId()
             );
             StoreId storeId = sellerStoreResponse.getStoreId();
             for (int i = 0; i < 100; i++) {
@@ -242,14 +321,14 @@ class ProductControllerTest {
                                                     "_embedded.productResponseList[].updateTime").description(
                                                     "업데이트 시간"),
                                             fieldWithPath("page.size").description("page size"),
-                                            fieldWithPath("page.totalElements").description("전체 개수"),
-                                            fieldWithPath("page.totalPages").description("전체 페이지 수"),
+                                            fieldWithPath("page.totalElements").description(
+                                                    "전체 개수"),
+                                            fieldWithPath("page.totalPages").description(
+                                                    "전체 페이지 수"),
                                             fieldWithPath("page.number").description("현재 페이지 넘버")
                                     )
                             )
                     );
         }
     }
-
-
 }

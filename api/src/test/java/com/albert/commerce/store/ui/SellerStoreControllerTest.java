@@ -24,7 +24,7 @@ import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -66,7 +66,7 @@ class SellerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserQueryDao userQueryDao;
+    UserDao userDao;
 
     @Autowired
     StoreJpaRepository storeJpaRepository;
@@ -140,7 +140,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
@@ -180,7 +180,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
 
         // when
@@ -258,7 +258,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_EMAIL);
+        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_EMAIL);
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         String newStoreName = "newStoreName";

@@ -6,7 +6,7 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 
 public record ProductRequest(String productName,
-                             long price,
+                             Money price,
                              String description,
                              String brand,
                              String category) {
@@ -17,7 +17,7 @@ public record ProductRequest(String productName,
                 .storeId(storeId)
                 .productId(productId)
                 .productName(productName)
-                .price(new Money(price))
+                .price(price)
                 .description(description)
                 .brand(brand)
                 .category(category)

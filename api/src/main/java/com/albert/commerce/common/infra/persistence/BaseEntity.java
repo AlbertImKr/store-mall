@@ -7,12 +7,10 @@ import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
-@Setter
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
@@ -20,7 +18,8 @@ public abstract class BaseEntity implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     @CreationTimestamp
     private LocalDateTime createdTime;
-
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     @UpdateTimestamp
     private LocalDateTime updateTime;
 

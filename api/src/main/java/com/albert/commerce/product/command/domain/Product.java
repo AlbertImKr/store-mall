@@ -45,4 +45,14 @@ public class Product extends BaseEntity {
         this.brand = brand;
         this.category = category;
     }
+
+    public Product update(String productName, Money price, String brand, String category,
+            String description) {
+        this.productName = productName;
+        this.price = price;
+        this.brand = brand;
+        this.category = category;
+        this.description = description;
+        return this;
+    }
 }

@@ -7,7 +7,9 @@ import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
+import com.albert.commerce.user.infra.persistance.UserDaoImpl;
 import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,15 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+
 @DataJpaTest
 @Import(TestConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class UserQueryDaoTest {
+class UserDaoTest {
+
 
     @Autowired
-    UserQueryDao userQueryDao;
+    JPAQueryFactory jpaQueryFactory;
 
     @Autowired
     UserRepository userRepository;
@@ -49,7 +53,8 @@ class UserQueryDaoTest {
                 .build();
         User savedUser = userRepository.save(user);
 
-        UserInfoResponse findeduser = userQueryDao.findUserProfileByEmail(testEmail);
+        UserDaoImpl userDao = new UserDaoImpl(jpaQueryFactory);
+        UserInfoResponse findeduser = userDao.findUserProfileByEmail(testEmail);
 
         assertThat(findeduser).usingRecursiveComparison()
                 .isEqualTo(UserInfoResponse.from(savedUser));

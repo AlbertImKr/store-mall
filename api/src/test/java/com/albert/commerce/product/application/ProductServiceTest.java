@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.domain.Product;
@@ -33,7 +34,7 @@ class ProductServiceTest {
         StoreId storeId = mock(StoreId.class);
         ProductId productId = mock(ProductId.class);
         ProductRequest productRequest = new ProductRequest("testProductName",
-                1000, "test", "testBrand", "test");
+                new Money(1000), "test", "testBrand", "test");
         Product product = productRequest.toProduct(storeId, productId);
         given(productRepository.save(any(Product.class))).willReturn(product);
 

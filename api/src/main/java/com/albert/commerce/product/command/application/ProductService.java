@@ -20,4 +20,15 @@ public class ProductService {
         return ProdutCreatedResponse.from(product);
     }
 
+    @Transactional
+    public ProductResponse update(Product product, ProductRequest productRequest) {
+        Product changedProduct = product.update(
+                productRequest.productName(),
+                productRequest.price(),
+                productRequest.brand(),
+                productRequest.category(),
+                productRequest.description());
+        Product savedProduct = productRepository.save(changedProduct);
+        return ProductResponse.from(savedProduct);
+    }
 }

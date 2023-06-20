@@ -5,7 +5,7 @@ import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_
 import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 
-    private final UserQueryDao userQueryDao;
+    private final UserDao userDao;
     private final UserService userService;
 
 
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(email);
+        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail(email);
         userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return userInfoResponse;
     }

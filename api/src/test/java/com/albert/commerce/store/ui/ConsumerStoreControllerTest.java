@@ -19,7 +19,7 @@ import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -62,7 +62,7 @@ class ConsumerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserQueryDao userQueryDao;
+    UserDao userDao;
 
 
     @BeforeEach
@@ -81,7 +81,7 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
+        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userInfoResponse.getId());
         entityManager.flush();

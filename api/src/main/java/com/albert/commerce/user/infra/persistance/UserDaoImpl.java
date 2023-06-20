@@ -4,14 +4,14 @@ import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class UserQueryDaoImpl implements UserQueryDao {
+public class UserDaoImpl implements UserDao {
 
     private final JPAQueryFactory jpaQueryFactory;
 

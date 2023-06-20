@@ -7,7 +7,7 @@ import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.domain.UserDao;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
     private final StoreDao storeDao;
-    private final UserQueryDao userQueryDao;
+    private final UserDao userDao;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -38,7 +38,7 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(userEmail);
+        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail(userEmail);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userInfoResponse.getId());
 

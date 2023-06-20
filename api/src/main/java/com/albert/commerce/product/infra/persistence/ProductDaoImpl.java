@@ -1,6 +1,8 @@
 package com.albert.commerce.product.infra.persistence;
 
+import com.albert.commerce.product.UnauthorizedModificationException;
 import com.albert.commerce.product.command.domain.Product;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.QProduct;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.QStore;
@@ -66,4 +68,20 @@ public class ProductDaoImpl implements ProductDao {
                 );
         return PageableExecutionUtils.getPage(contentProducts, pageable, productJPAQuery::fetchOne);
     }
+
+    @Override
+    public Product findByUserEmailAndProductId(String userEmail, ProductId productId) {
+        QProduct qProduct = QProduct.product;
+        Product product = jpaQueryFactory.select(qProduct)
+                .from(qProduct)
+                .where(qProduct.productId.eq(productId).and(qProduct.storeId.eq(
+                        getStoreIdByUserId(getUserIdByEmail(userEmail))
+                )))
+                .fetchFirst();
+        if (product == null) {
+            throw new UnauthorizedModificationException();
+        }
+        return product;
+    }
+
 }
