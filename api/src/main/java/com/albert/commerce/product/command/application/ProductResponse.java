@@ -1,6 +1,7 @@
 package com.albert.commerce.product.command.application;
 
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
 
@@ -36,7 +38,8 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     @Builder
     private ProductResponse(ProductId productId, String productName, Money price,
             String description,
-            String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime) {
+            String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime,
+            Links links) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -45,6 +48,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
         this.category = category;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
+        add(links);
     }
 
     public static ProductResponse from(Product product) {
@@ -56,6 +60,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
                 .brand(product.getBrand())
                 .description(product.getDescription())
                 .category(product.getCategory())
+                .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
                 .price(product.getPrice())
                 .build();
     }

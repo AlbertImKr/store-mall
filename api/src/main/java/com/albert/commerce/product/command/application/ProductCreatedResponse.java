@@ -1,6 +1,7 @@
 package com.albert.commerce.product.command.application;
 
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProdutcCreatedResponse extends RepresentationModel<ProdutcCreatedResponse> {
+public class ProductCreatedResponse extends RepresentationModel<ProductCreatedResponse> {
 
     private ProductId productId;
     private String productName;
@@ -24,7 +25,7 @@ public class ProdutcCreatedResponse extends RepresentationModel<ProdutcCreatedRe
     private String category;
 
     @Builder
-    private ProdutcCreatedResponse(ProductId productId, String productName, Money price,
+    private ProductCreatedResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category) {
         this.productId = productId;
@@ -35,14 +36,15 @@ public class ProdutcCreatedResponse extends RepresentationModel<ProdutcCreatedRe
         this.category = category;
     }
 
-    public static ProdutcCreatedResponse from(Product product) {
-        return ProdutcCreatedResponse.builder()
+    public static ProductCreatedResponse from(Product product) {
+        return ProductCreatedResponse.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .brand(product.getBrand())
                 .description(product.getDescription())
                 .category(product.getCategory())
                 .price(product.getPrice())
-                .build();
+                .build()
+                .add(BusinessLinks.getProductSelfRel(product.getProductId()));
     }
 }

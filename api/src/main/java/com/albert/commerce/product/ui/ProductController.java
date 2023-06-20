@@ -1,11 +1,11 @@
 package com.albert.commerce.product.ui;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.product.command.application.ProductAssembler;
+import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.ProdutcCreatedResponse;
+import com.albert.commerce.product.command.application.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
@@ -37,21 +36,17 @@ public class ProductController {
     private final StoreDao storeDao;
     private final ProductDao productDao;
     private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
-    private final ProductAssembler productAssembler;
+    private final ProductsAssembler productsAssembler;
 
     @PostMapping
-    public ResponseEntity<ProdutcCreatedResponse> addProduct(
+    public ResponseEntity<ProductCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName());
-        ProdutcCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
-
-        ProductId productId = productResponse.getProductId();
-        Link selfRel = BusinessLinks.getProductSelfRel(productId);
-        productResponse.add(selfRel, BusinessLinks.MY_STORE);
-        return ResponseEntity.created(selfRel.toUri()).body(productResponse);
+        ProductCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
+        return ResponseEntity.created(BusinessLinks.MY_STORE.toUri())
+                .body(productResponse);
     }
-
 
     @GetMapping
     public ResponseEntity<PagedModel<ProductResponse>> getAllProducts(Principal principal,
@@ -60,7 +55,7 @@ public class ProductController {
                 productDao.findProductsByUserEmail(principal.getName(), pageable);
 
         PagedModel<ProductResponse> productResponses = pagedResourcesAssembler
-                .toModel(products, productAssembler);
+                .toModel(products, productsAssembler);
 
         return ResponseEntity.ok(productResponses);
     }
@@ -72,8 +67,14 @@ public class ProductController {
 
         ProductResponse productResponse = productService.update(product, productRequest);
 
-        Link selfRel = BusinessLinks.getProductSelfRel(productId);
-        productResponse.add(selfRel, BusinessLinks.MY_STORE);
+        productResponse.add(BusinessLinks.MY_STORE);
+        return ResponseEntity.ok(productResponse);
+    }
+
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable ProductId productId) {
+        ProductResponse productResponse = productDao.findById(productId);
         return ResponseEntity.ok(productResponse);
     }
 }

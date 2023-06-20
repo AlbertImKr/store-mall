@@ -1,6 +1,7 @@
 package com.albert.commerce.product.infra.persistence;
 
 import com.albert.commerce.product.UnauthorizedModificationException;
+import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.QProduct;
@@ -84,4 +85,15 @@ public class ProductDaoImpl implements ProductDao {
         return product;
     }
 
+    @Override
+    public ProductResponse findById(ProductId productId) {
+        QProduct qProduct = QProduct.product;
+        Product product = jpaQueryFactory.selectFrom(qProduct)
+                .where(qProduct.productId.eq(productId))
+                .fetchFirst();
+        if (product == null) {
+            throw new ProductNotFoundException();
+        }
+        return ProductResponse.from(product);
+    }
 }

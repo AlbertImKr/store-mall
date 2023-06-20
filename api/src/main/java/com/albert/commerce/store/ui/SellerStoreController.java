@@ -1,5 +1,6 @@
 package com.albert.commerce.store.ui;
 
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
@@ -42,9 +43,7 @@ public class SellerStoreController {
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 userInfoResponse.getId());
 
-        URI myStore = WebMvcLinkBuilder.linkTo(
-                        WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(principal))
-                .toUri();
+        URI myStore = BusinessLinks.MY_STORE.toUri();
         String storeId = sellerStoreResponse.getStoreId().getValue();
         sellerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(SellerStoreController.class)

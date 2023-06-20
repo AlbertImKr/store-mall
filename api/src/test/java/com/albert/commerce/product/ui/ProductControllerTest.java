@@ -18,9 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.ProdutcCreatedResponse;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -145,14 +145,12 @@ class ProductControllerTest {
                 .andExpect(jsonPath("brand").value(TEST_BRAND))
                 .andExpect(jsonPath("category").value(TEST_CATEGORY))
                 .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
                 //restDocs
                 .andDo(document(
                                 "addProduct", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
-                                        linkWithRel("self").description("현재 product 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다")
+                                        linkWithRel("self").description("현재 product 링크")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -189,7 +187,7 @@ class ProductControllerTest {
 
         SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest, user.getId());
 
-        ProdutcCreatedResponse produtcCreatedResponse = productService.addProduct(productRequest,
+        ProductCreatedResponse productCreatedResponse = productService.addProduct(productRequest,
                 store.getStoreId());
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
@@ -200,7 +198,7 @@ class ProductControllerTest {
         );
 
         // when,then
-        mockMvc.perform(put("/products/" + produtcCreatedResponse.getProductId().getId())
+        mockMvc.perform(put("/products/" + productCreatedResponse.getProductId().getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
                 .andExpect(status().isOk())
