@@ -32,7 +32,8 @@ public final class BusinessLinks {
                     .withRel("get-store");
 
     public static final Link GET_USER_PROFILE =
-            WebMvcLinkBuilder.linkTo(methodOn(UserController.class).updateUserInfo(null, null))
+            WebMvcLinkBuilder.linkTo(
+                            methodOn(UserController.class).updateUserInfo(null, null, null))
                     .withRel("get-user-profile");
 
     public static Link getProductSelfRel(ProductId productId) {
@@ -43,7 +44,7 @@ public final class BusinessLinks {
     }
 
     public static final Links USER_INFO_RESPONSE_LINKS = Links.of(
-            linkTo(methodOn(UserController.class).updateUserInfo(null, null))
+            linkTo(methodOn(UserController.class).updateUserInfo(null, null, null))
                     .withSelfRel(),
             BusinessLinks.CREATE_STORE,
             BusinessLinks.GET_STORE,

@@ -66,6 +66,41 @@ class UserControllerTest {
     }
 
 
+    @DisplayName("User info update 실패")
+    @Test
+    void updateUserInfoFailed() throws Exception {
+        String updateNickname = "n";
+        LocalDate now = LocalDate.now();
+        String phoneNumber = "0101111222";
+        String address = "인천";
+        UserProfileRequest userProfileRequest = new UserProfileRequest(updateNickname, now,
+                phoneNumber, address);
+
+        mockMvc.perform(put("/users/profile")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(userProfileRequest))
+                )
+                .andDo(print())
+                .andExpect(jsonPath("$.field").exists())
+                .andExpect(jsonPath("$.objectName").exists())
+                .andExpect(jsonPath("$.defaultMessage").exists())
+                .andExpect(jsonPath("$.code").exists())
+                .andExpect(jsonPath("$.rejectedValue").exists())
+                // restdocs
+                .andDo(document("updateUserInfoFailed",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                responseFields(
+                                        fieldWithPath("field").description("error field"),
+                                        fieldWithPath("objectName").description("error objectName"),
+                                        fieldWithPath("defaultMessage").description("error defaultMessage"),
+                                        fieldWithPath("code").description("error code"),
+                                        fieldWithPath("rejectedValue").description("error rejectedValue")
+                                )
+                        )
+                );
+    }
+
     @Nested
     class UserInfoTest {
 
@@ -74,11 +109,12 @@ class UserControllerTest {
         @Test
         void updateUserInfo() throws Exception {
             String updateNickname = "updateNickname";
-            LocalDate now = LocalDate.now();
-            String dateOfBirth = String.valueOf(now);
+            LocalDate yesterday = LocalDate.now().minusDays(1);
+            String dateOfBirth = String.valueOf(yesterday);
             String phoneNumber = "01011112222";
             String address = "인천시남동구";
-            UserProfileRequest userProfileRequest = new UserProfileRequest(updateNickname, now,
+            UserProfileRequest userProfileRequest = new UserProfileRequest(updateNickname,
+                    yesterday,
                     phoneNumber, address);
 
             mockMvc.perform(put("/users/profile")
@@ -119,6 +155,7 @@ class UserControllerTest {
                             )
                     );
         }
+
 
         @DisplayName("User info를 가져온다")
         @Test

@@ -14,10 +14,10 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProdutCreatedResponse addProduct(ProductRequest productRequest, StoreId storeId) {
+    public ProdutcCreatedResponse addProduct(ProductRequest productRequest, StoreId storeId) {
         Product product = productRepository.save(
                 productRequest.toProduct(storeId, productRepository.nextId()));
-        return ProdutCreatedResponse.from(product);
+        return ProdutcCreatedResponse.from(product);
     }
 
     @Transactional

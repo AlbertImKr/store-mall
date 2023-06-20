@@ -2,6 +2,7 @@ package com.albert.commerce.common.handler;
 
 import com.albert.commerce.common.exception.ErrorResponse;
 import com.albert.commerce.common.units.BusinessLinks;
+import com.albert.commerce.product.UnauthorizedModificationException;
 import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
 import com.albert.commerce.store.ui.MyStoreNotFoundException;
 import com.albert.commerce.store.ui.SellerStoreController;
@@ -60,6 +61,21 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(myStoreNotFoundException.getErrorMessage());
         return errorResponse.add(
                 selfRel,
+                BusinessLinks.CREATE_STORE
+        );
+    }
+
+    @ExceptionHandler(UnauthorizedModificationException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ErrorResponse unauthorizedModificationExceptionHandler(
+            UnauthorizedModificationException unauthorizedModificationException,
+            HttpServletRequest httpServletRequest) {
+        Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
+        ErrorResponse errorResponse = new ErrorResponse(
+                unauthorizedModificationException.getErrorMessage());
+        return errorResponse.add(
+                selfRel,
+                BusinessLinks.MY_STORE,
                 BusinessLinks.CREATE_STORE
         );
     }

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.ProdutCreatedResponse;
+import com.albert.commerce.product.command.application.ProdutcCreatedResponse;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -65,11 +65,12 @@ class ProductControllerTest {
     private static final String TEST_OWNER = "testOwner";
     private static final String TEST_PHONE_NUMBER = "01011001100";
     private static final String TEST_ADDRESS = "testAddress";
-    public static final int CHANGED_PRICE = 300;
-    public static final String CHANGED_PRODUCT_NAME = "changedProductName";
-    public static final String CHANGED_DESCRIPTION = "changedDescription";
-    public static final String CHANGED_CATEGORY = "changedCategory";
-    public static final String CHANGED_BRAND = "changedBrand";
+    private static final int CHANGED_PRICE = 300;
+    private static final String CHANGED_PRODUCT_NAME = "changedProductName";
+    private static final String CHANGED_DESCRIPTION = "changedDescription";
+    private static final String CHANGED_CATEGORY = "changedCategory";
+    private static final String CHANGED_BRAND = "changedBrand";
+    private static final String NO_MATCH_ID = "noMatchId";
     @Autowired
     MockMvc mockMvc;
 
@@ -168,7 +169,7 @@ class ProductControllerTest {
 
     @DisplayName("Product를 update한다")
     @Test
-    void updateProduct() throws Exception {
+    void updateProductSuccess() throws Exception {
         // given
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME,
@@ -188,7 +189,7 @@ class ProductControllerTest {
 
         SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest, user.getId());
 
-        ProdutCreatedResponse produtCreatedResponse = productService.addProduct(productRequest,
+        ProdutcCreatedResponse produtcCreatedResponse = productService.addProduct(productRequest,
                 store.getStoreId());
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
@@ -199,7 +200,7 @@ class ProductControllerTest {
         );
 
         // when,then
-        mockMvc.perform(put("/products/" + produtCreatedResponse.getProductId().getId())
+        mockMvc.perform(put("/products/" + produtcCreatedResponse.getProductId().getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
                 .andExpect(status().isOk())
@@ -210,8 +211,10 @@ class ProductControllerTest {
                 .andExpect(jsonPath("description").value(CHANGED_DESCRIPTION))
                 .andExpect(jsonPath("brand").value(CHANGED_BRAND))
                 .andExpect(jsonPath("category").value(CHANGED_CATEGORY))
-                // restdocs
-                .andDo(document("updateProduct",
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
+                // restdocs¬
+                .andDo(document("updateProductSuccess",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         links(
@@ -229,6 +232,44 @@ class ProductControllerTest {
                                 fieldWithPath("createdTime").description("생성시간"),
                                 fieldWithPath("category").description("카테코리"),
                                 fieldWithPath("updateTime").description("업데이트시간")
+                        )
+                ))
+        ;
+    }
+
+
+    @DisplayName("Product를 update 실패한다")
+    @Test
+    void updateProductFailed() throws Exception {
+        ProductRequest productRequest = new ProductRequest(
+                CHANGED_PRODUCT_NAME,
+                new Money(CHANGED_PRICE),
+                CHANGED_DESCRIPTION,
+                CHANGED_BRAND,
+                CHANGED_CATEGORY
+        );
+        mockMvc.perform(put("/products/" + NO_MATCH_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andExpect(jsonPath("error-message").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
+                .andExpect(jsonPath("_links.create-store").exists())
+                // restdocs
+                .andDo(document("updateProductFailed",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        links(
+                                halLinks(),
+                                linkWithRel("self").description("현재 연결한 link"),
+                                linkWithRel("my-store").description("my-store link"),
+                                linkWithRel("create-store").description("store 생성하는 link")
+                        ),
+                        responseFields(
+                                subsectionWithPath("_links").ignored(),
+                                fieldWithPath("error-message").description("에러 메시지")
                         )
                 ))
         ;
@@ -280,7 +321,11 @@ class ProductControllerTest {
                     .andExpect(jsonPath("_embedded.productResponseList.*.description").exists())
                     .andExpect(jsonPath("_embedded.productResponseList.*.brand").exists())
                     .andExpect(jsonPath("_embedded.productResponseList.*.category").exists())
-                    .andExpect(jsonPath("_embedded.productResponseList.*._links.self").exists())
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.first").exists())
+                    .andExpect(jsonPath("_links.prev").exists())
+                    .andExpect(jsonPath("_links.next").exists())
+                    .andExpect(jsonPath("_links.last").exists())
                     // restDocs
                     .andDo(document("getProducts", preprocessResponse(prettyPrint()),
                                     links(

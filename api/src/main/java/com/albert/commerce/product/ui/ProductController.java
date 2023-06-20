@@ -5,7 +5,7 @@ import com.albert.commerce.product.command.application.ProductAssembler;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.ProdutCreatedResponse;
+import com.albert.commerce.product.command.application.ProdutcCreatedResponse;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
@@ -40,11 +40,11 @@ public class ProductController {
     private final ProductAssembler productAssembler;
 
     @PostMapping
-    public ResponseEntity<ProdutCreatedResponse> addProduct(
+    public ResponseEntity<ProdutcCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName());
-        ProdutCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
+        ProdutcCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
 
         ProductId productId = productResponse.getProductId();
         Link selfRel = BusinessLinks.getProductSelfRel(productId);

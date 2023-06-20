@@ -6,10 +6,13 @@ import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserDao;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,13 +42,16 @@ public class UserController {
     }
 
     @PutMapping("/users/profile")
-    public UserInfoResponse updateUserInfo(Principal principal,
-            @RequestBody UserProfileRequest userProfileRequest) {
+    public ResponseEntity updateUserInfo(Principal principal,
+            @Valid @RequestBody UserProfileRequest userProfileRequest, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors);
+        }
         String email = principal.getName();
         UserInfoResponse userInfoResponse = userService.updateUserInfo(email,
                 userProfileRequest);
         userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
-        return userInfoResponse;
+        return ResponseEntity.ok().body(userInfoResponse);
     }
 }
 
