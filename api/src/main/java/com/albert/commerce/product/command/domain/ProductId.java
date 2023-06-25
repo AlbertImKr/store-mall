@@ -18,8 +18,13 @@ public class ProductId implements Serializable {
     @Column(name = "product_id", nullable = false)
     private String id;
 
-    public ProductId(String id) {
+
+    private ProductId(String id) {
         this.id = id;
+    }
+
+    public static ProductId from(String productId) {
+        return new ProductId(productId);
     }
 
     @JsonValue

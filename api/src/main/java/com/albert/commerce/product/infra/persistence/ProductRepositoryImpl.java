@@ -22,6 +22,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public ProductId nextId() {
-        return new ProductId(sequenceGenerator.generate());
+        return ProductId.from(sequenceGenerator.generate());
     }
 }

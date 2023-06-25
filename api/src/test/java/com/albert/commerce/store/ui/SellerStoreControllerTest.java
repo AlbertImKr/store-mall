@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
@@ -35,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,7 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureRestDocs
 @WithMockUser("test@email.com")
 @AutoConfigureMockMvc
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SellerStoreControllerTest {
 
     private static final String TEST_STORE_NAME = "testStoreName";
@@ -107,7 +109,7 @@ class SellerStoreControllerTest {
                 .andExpect(jsonPath("phoneNumber").exists())
                 .andExpect(jsonPath("email").exists())
                 .andExpect(jsonPath("ownerName").exists())
-                .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
+                .andExpect(redirectedUrl(BusinessLinks.MY_STORE.toUri().toString()))
                 //restDocs
                 .andDo(document(
                                 "createStoreSuccess", preprocessResponse(prettyPrint()),

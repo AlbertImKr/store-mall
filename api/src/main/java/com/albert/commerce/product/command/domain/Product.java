@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class Product extends BaseEntity {
 
     @EmbeddedId
+    @Column(name = "product_id")
     private ProductId productId;
     @Column(nullable = false)
     private StoreId storeId;
