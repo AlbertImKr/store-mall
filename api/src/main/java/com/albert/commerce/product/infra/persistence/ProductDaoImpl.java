@@ -15,6 +15,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -95,5 +96,19 @@ public class ProductDaoImpl implements ProductDao {
             throw new ProductNotFoundException();
         }
         return ProductResponse.from(product);
+    }
+
+    @Override
+    public List<Product> findProductsByProductsId(List<ProductId> productsId, StoreId storeId) {
+        QProduct qProduct = QProduct.product;
+        return productsId.stream()
+                .map(productId ->
+                        jpaQueryFactory.select(qProduct)
+                                .from(qProduct)
+                                .where(qProduct.productId.eq(productId)
+                                        .and(qProduct.storeId.eq(storeId)))
+                                .fetchFirst()
+                )
+                .collect(Collectors.toList());
     }
 }

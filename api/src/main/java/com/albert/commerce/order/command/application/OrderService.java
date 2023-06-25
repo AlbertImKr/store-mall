@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -25,15 +27,17 @@ public class OrderService {
         return OrderResponse.from(order.orElseThrow(OrderNotFoundException::new));
     }
 
-    public Order save(StoreId storeId, UserId userId, int amount,
-            List<Product> products) {
+    public Order createOrder(UserId userId, long amount, List<Product> products, StoreId storeId) {
         Order order = Order.builder()
                 .orderId(orderRepository.nextId())
                 .userId(userId)
-                .products(products)
                 .storeId(storeId)
+                .products(products)
                 .amount(amount)
                 .build();
+
         return orderRepository.save(order);
     }
+
+
 }

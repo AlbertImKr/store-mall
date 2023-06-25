@@ -1,5 +1,6 @@
 package com.albert.commerce.order.command.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
@@ -15,17 +16,18 @@ import lombok.NoArgsConstructor;
 public class OrderId implements Serializable {
 
     @Column(name = "order_id", nullable = false)
-    private String id;
+    private String value;
 
     private OrderId(String orderId) {
-        this.id = orderId;
+        this.value = orderId;
     }
 
     public static OrderId from(String orderId) {
         return new OrderId(orderId);
     }
 
-    public String getId() {
-        return id;
+    @JsonValue
+    public String getValue() {
+        return value;
     }
 }

@@ -223,6 +223,7 @@ class ProductControllerTest {
                         responseFields(
                                 subsectionWithPath("_links").ignored(),
                                 fieldWithPath("productId").description("상품 아이디"),
+                                fieldWithPath("storeId").description("스토어 아이"),
                                 fieldWithPath("price").description("상품 가격"),
                                 fieldWithPath("productName").description("상품명"),
                                 fieldWithPath("description").description("상품 상세"),
@@ -351,6 +352,9 @@ class ProductControllerTest {
                                             fieldWithPath(
                                                     "_embedded.productResponseList[].brand").description(
                                                     "상품 브랜드"),
+                                            fieldWithPath(
+                                                    "_embedded.productResponseList[].storeId").description(
+                                                    "상품 아이디"),
                                             fieldWithPath(
                                                     "_embedded.productResponseList[].category").description(
                                                     "상품의 카테고리"),

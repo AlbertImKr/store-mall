@@ -23,20 +23,20 @@ public class Order extends BaseEntity {
     @EmbeddedId
     private OrderId orderId;
     private UserId userId;
+    private StoreId storeId;
     @OneToMany
     private List<Product> products;
     private DeliveryStatus deliveryStatus;
-    private StoreId storeId;
     private long amount;
 
     @Builder
-    protected Order(OrderId orderId, UserId userId, List<Product> products,
-            StoreId storeId, long amount) {
+    protected Order(OrderId orderId, UserId userId, List<Product> products, StoreId storeId,
+            long amount) {
         this.orderId = orderId;
         this.userId = userId;
         this.products = products;
         this.deliveryStatus = DeliveryStatus.PENDING;
-        this.storeId = storeId;
         this.amount = amount;
+        this.storeId = storeId;
     }
 }

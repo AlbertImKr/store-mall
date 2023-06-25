@@ -14,21 +14,12 @@ public record OrderResponse(OrderId orderId,
                             UserId userId,
                             List<Product> products,
                             DeliveryStatus deliveryStatus,
-                            StoreId storeId,
                             long amount,
-                            LocalDateTime createdTime) {
+                            LocalDateTime createdTime,
+                            StoreId storeId) {
 
     @Builder
-    public OrderResponse(OrderId orderId, UserId userId, List<Product> products,
-            DeliveryStatus deliveryStatus, StoreId storeId, long amount,
-            LocalDateTime createdTime) {
-        this.orderId = orderId;
-        this.userId = userId;
-        this.products = products;
-        this.deliveryStatus = deliveryStatus;
-        this.storeId = storeId;
-        this.amount = amount;
-        this.createdTime = createdTime;
+    public OrderResponse {
     }
 
     public static OrderResponse from(Order order) {
@@ -36,10 +27,11 @@ public record OrderResponse(OrderId orderId,
                 .orderId(order.getOrderId())
                 .userId(order.getUserId())
                 .products(order.getProducts())
-                .deliveryStatus(order.getDeliveryStatus())
                 .storeId(order.getStoreId())
+                .deliveryStatus(order.getDeliveryStatus())
                 .amount(order.getAmount())
                 .createdTime(order.getCreatedTime())
                 .build();
     }
+
 }

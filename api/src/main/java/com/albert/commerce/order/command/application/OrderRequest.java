@@ -6,8 +6,7 @@ import java.util.List;
 
 public record OrderRequest(
         List<ProductId> productsId,
-        StoreId storeId,
-        long amount
+        StoreId storeId
 ) {
 
 }

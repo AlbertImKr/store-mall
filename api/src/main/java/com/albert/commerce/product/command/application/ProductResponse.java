@@ -4,30 +4,30 @@ import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
 
 @Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductResponse extends RepresentationModel<ProductResponse> {
 
-    private ProductId productId;
-    private String productName;
-    private Money price;
-    private String description;
-    private String brand;
-    private String category;
+    private final ProductId productId;
+    private final String productName;
+    private final Money price;
+    private final String description;
+    private final String brand;
+    private final String category;
+    private final StoreId storeId;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private LocalDateTime createdTime;
@@ -39,7 +39,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     private ProductResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime,
-            Links links) {
+            Links links, StoreId storeId) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -48,6 +48,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
         this.category = category;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
+        this.storeId = storeId;
         add(links);
     }
 
@@ -58,10 +59,17 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .brand(product.getBrand())
+                .storeId(product.getStoreId())
                 .description(product.getDescription())
                 .category(product.getCategory())
                 .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
                 .price(product.getPrice())
                 .build();
+    }
+
+    public static List<ProductResponse> changeToProductsResponse(List<Product> products) {
+        return products.stream()
+                .map(ProductResponse::from)
+                .collect(Collectors.toList());
     }
 }

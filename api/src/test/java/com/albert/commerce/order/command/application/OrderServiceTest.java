@@ -78,12 +78,10 @@ class OrderServiceTest {
             }
 
             // when
-            order = orderService.save(
-                    store.getStoreId(),
-                    user.getId(), 20000, productList);
+            order = orderService.createOrder(
+                    user.getId(), 20000, productList, store.getStoreId());
 
             // then
-            assertThat(order.getStoreId()).isEqualTo(store.getStoreId());
             assertThat(order.getAmount()).isEqualTo(20000);
             assertThat(order.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
             assertThat(order.getProducts()).isEqualTo(order.getProducts());

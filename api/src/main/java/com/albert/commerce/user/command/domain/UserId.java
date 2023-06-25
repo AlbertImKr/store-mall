@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class UserId implements Serializable {
 
     @Column(name = "user_id", nullable = false)
-    private String id;
+    private String value;
 
-    private UserId(String id) {
-        this.id = id;
+    private UserId(String value) {
+        this.value = value;
     }
 
     public static UserId from(String generate) {
@@ -23,7 +23,7 @@ public class UserId implements Serializable {
     }
 
     @JsonValue
-    public String getId() {
-        return id;
+    public String getValue() {
+        return value;
     }
 }

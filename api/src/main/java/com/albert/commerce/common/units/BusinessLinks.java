@@ -3,6 +3,8 @@ package com.albert.commerce.common.units;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.albert.commerce.order.command.domain.OrderId;
+import com.albert.commerce.order.ui.OrderController;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.ui.ProductController;
 import com.albert.commerce.store.ui.ConsumerStoreController;
@@ -49,4 +51,17 @@ public final class BusinessLinks {
             BusinessLinks.CREATE_STORE,
             BusinessLinks.GET_STORE,
             BusinessLinks.MY_STORE);
+
+    public static Link getOrder(OrderId orderId) {
+        return WebMvcLinkBuilder.linkTo(OrderController.class)
+                .slash(orderId.getValue())
+                .withRel("order");
+    }
+
+    public static final Link CREATE_ORDER_LINK = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(OrderController.class)
+                            .createOrder(null, null))
+            .withSelfRel();
+
+
 }

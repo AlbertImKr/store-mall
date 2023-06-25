@@ -75,9 +75,8 @@ class OrderDetailServiceTest {
             productList.add(productJpaRepository.findById(productCreatedResponse.getProductId())
                     .orElseThrow());
         }
-        order = orderService.save(
-                store.getStoreId(),
-                user.getId(), 20000, productList);
+        order = orderService.createOrder(
+                user.getId(), 20000, productList, store.getStoreId());
     }
 
     @DisplayName("주문 번호로 order 조회한다")

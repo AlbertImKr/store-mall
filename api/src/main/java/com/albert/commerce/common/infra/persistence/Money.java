@@ -10,4 +10,8 @@ public record Money(long value) {
         return value;
     }
 
+
+    public static Money from(long value) {
+        return new Money(value);
+    }
 }
