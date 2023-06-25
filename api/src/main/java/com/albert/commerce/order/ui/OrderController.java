@@ -5,11 +5,12 @@ import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.order.command.application.OrderAssembler;
 import com.albert.commerce.order.command.application.OrderCreateResponse;
 import com.albert.commerce.order.command.application.OrderRequest;
-import com.albert.commerce.order.command.application.OrderResponse;
 import com.albert.commerce.order.command.application.OrderResponseEntity;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
+import com.albert.commerce.order.query.application.OrderDetail;
+import com.albert.commerce.order.query.application.OrderDetailService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.user.query.application.UserInfoResponse;
@@ -36,6 +37,7 @@ public class OrderController {
     private final ProductDao productDao;
     private final UserDao userDao;
 
+    private final OrderDetailService orderDetailService;
     private final OrderAssembler orderAssembler;
 
     private static long getAmount(List<Product> products) {
@@ -48,7 +50,7 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseEntity> getOrder(Principal principal,
             @PathVariable OrderId orderId) {
-        OrderResponse order = orderService.findById(orderId, principal.getName());
+        OrderDetail order = orderDetailService.findById(orderId, principal.getName());
 
         OrderResponseEntity orderResponse = orderAssembler.toModel(order);
 

@@ -2,6 +2,7 @@ package com.albert.commerce.order.command.application;
 
 import com.albert.commerce.order.command.domain.DeliveryStatus;
 import com.albert.commerce.order.command.domain.OrderId;
+import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.ui.OrderController;
 import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.store.command.domain.StoreId;
@@ -39,7 +40,7 @@ public class OrderResponseEntity extends RepresentationModel<ProductResponse> {
         this.add(links);
     }
 
-    public static OrderResponseEntity from(OrderResponse order) {
+    public static OrderResponseEntity from(OrderDetail order) {
         return OrderResponseEntity.builder()
                 .orderId(order.orderId())
                 .userId(order.userId())
