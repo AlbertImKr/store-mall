@@ -30,4 +30,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     public OrderId nextId() {
         return OrderId.from(sequenceGenerator.generate());
     }
+
+    @Override
+    public void delete(Order order) {
+        orderJpaResponsibility.delete(order);
+    }
 }

@@ -27,8 +27,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer.successHandler(
-                        customAuthenticationSuccessHandler));
+                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer
+                        .successHandler(
+                                customAuthenticationSuccessHandler));
         return httpSecurity.build();
     }
 

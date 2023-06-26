@@ -1,5 +1,6 @@
 package com.albert.commerce.order.ui;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -9,6 +10,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,9 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
+import com.albert.commerce.order.query.domain.OrderDao;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
@@ -71,6 +75,8 @@ class OrderControllerTest {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    OrderDao orderDao;
     @Autowired
     ProductService productService;
 
@@ -213,7 +219,23 @@ class OrderControllerTest {
             ;
         }
 
+        @DisplayName("주문을 삭제한다")
+        @Test
+        void deleteOrder() throws Exception {
+            // given
+            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest(order.getOrderId(),
+                    "wrong order");
 
+            // when
+            mockMvc.perform(delete("/orders")
+                            .content(objectMapper.writeValueAsString(deleteOrderRequest))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaTypes.HAL_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk());
+
+            assertThat(orderDao.findById(order.getOrderId(), consumer.getEmail())).isNull();
+        }
     }
 
 

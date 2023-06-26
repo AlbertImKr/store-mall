@@ -30,4 +30,7 @@ public class OrderService {
     }
 
 
+    public void deleteOrder(Order order) {
+        orderRepository.delete(order);
+    }
 }

@@ -2,6 +2,7 @@ package com.albert.commerce.order.ui;
 
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
+import com.albert.commerce.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.order.command.application.OrderAssembler;
 import com.albert.commerce.order.command.application.OrderCreateResponse;
 import com.albert.commerce.order.command.application.OrderRequest;
@@ -11,6 +12,7 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.query.application.OrderDetailService;
+import com.albert.commerce.order.query.domain.OrderDao;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.user.query.application.UserInfoResponse;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +41,7 @@ public class OrderController {
     private final UserDao userDao;
 
     private final OrderDetailService orderDetailService;
+    private final OrderDao orderDao;
     private final OrderAssembler orderAssembler;
 
     private static long getAmount(List<Product> products) {
@@ -72,5 +76,14 @@ public class OrderController {
         OrderCreateResponse orderCreateResponse = OrderCreateResponse.from(order.getOrderId());
 
         return ResponseEntity.created(orderLink.toUri()).body(orderCreateResponse);
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity deleteOrder(Principal principal,
+            @RequestBody DeleteOrderRequest deleteOrderRequest) {
+        orderService.deleteOrder(
+                orderDao.findById(deleteOrderRequest.orderId(), principal.getName()));
+        return ResponseEntity.ok().build();
     }
 }

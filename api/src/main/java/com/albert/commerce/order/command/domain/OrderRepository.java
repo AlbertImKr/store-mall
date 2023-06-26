@@ -9,4 +9,6 @@ public interface OrderRepository {
     Order save(Order order);
 
     OrderId nextId();
+
+    void delete(Order order);
 }
