@@ -6,7 +6,7 @@ import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ public class Order extends BaseEntity {
     private OrderId orderId;
     private UserId userId;
     private StoreId storeId;
-    @OneToMany
+    @ManyToMany
     private List<Product> products;
     private DeliveryStatus deliveryStatus;
     private long amount;

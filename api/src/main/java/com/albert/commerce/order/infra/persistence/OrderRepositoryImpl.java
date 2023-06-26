@@ -28,7 +28,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public OrderId nextId() {
-        return OrderId.from(sequenceGenerator.generate());
+        String generate = sequenceGenerator.generate();
+        return OrderId.from(generate);
     }
 
     @Override

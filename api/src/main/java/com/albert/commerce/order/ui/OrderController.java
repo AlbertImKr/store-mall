@@ -20,8 +20,12 @@ import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +47,8 @@ public class OrderController {
     private final OrderDetailService orderDetailService;
     private final OrderDao orderDao;
     private final OrderAssembler orderAssembler;
+
+    private final PagedResourcesAssembler<OrderDetail> pagedResourcesAssembler;
 
     private static long getAmount(List<Product> products) {
         return products.stream()
@@ -84,6 +90,17 @@ public class OrderController {
             @RequestBody DeleteOrderRequest deleteOrderRequest) {
         orderService.deleteOrder(
                 orderDao.findById(deleteOrderRequest.orderId(), principal.getName()));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
+            Pageable pageable) {
+        UserInfoResponse user = userDao.findUserProfileByEmail(principal.getName());
+        Page<OrderDetail> orders = orderDetailService.findAllByUserId(user.getId(), pageable);
+
+        PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,
+                orderAssembler);
+        return ResponseEntity.ok(entityModels);
     }
 }
