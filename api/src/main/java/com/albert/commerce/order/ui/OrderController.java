@@ -62,6 +62,7 @@ public class OrderController {
             @PathVariable OrderId orderId) {
         OrderDetail order = orderDetailService.findById(orderId, principal.getName());
 
+        // HATEOAS
         OrderResponseEntity orderResponse = orderAssembler.toModel(order);
 
         return ResponseEntity.ok(orderResponse);
@@ -99,6 +100,7 @@ public class OrderController {
         UserInfoResponse user = userDao.findUserProfileByEmail(principal.getName());
         Page<OrderDetail> orders = orderDetailService.findAllByUserId(user.getId(), pageable);
 
+        // HATEOAS
         PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,
                 orderAssembler);
         return ResponseEntity.ok(entityModels);
