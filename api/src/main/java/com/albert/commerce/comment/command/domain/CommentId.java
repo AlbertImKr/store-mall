@@ -21,7 +21,7 @@ public class CommentId implements Serializable {
         this.value = value;
     }
 
-    private static CommentId from(String value) {
+    public static CommentId from(String value) {
         return new CommentId(value);
     }
 

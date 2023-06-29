@@ -54,10 +54,12 @@ public class User extends BaseEntity {
 
     public static User createByEmail(String email, UserId userId) {
         return User.builder()
+                .nickname("user")
                 .id(userId)
                 .email(email)
                 .role(USER)
                 .isActive(false)
                 .build();
     }
+
 }

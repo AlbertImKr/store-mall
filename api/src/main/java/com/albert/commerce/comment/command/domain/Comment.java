@@ -7,11 +7,13 @@ import com.albert.commerce.user.command.domain.UserId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Comment extends BaseEntity {
@@ -24,12 +26,20 @@ public class Comment extends BaseEntity {
     private StoreId storeId;
     @Column(nullable = false)
     private UserId userId;
+    @OneToOne
+    private Comment parentComment;
+
+    @OneToOne
+    private Comment chlidComment;
 
     @Builder
-    private Comment(CommentId commentId, ProductId productId, StoreId storeId, UserId userId) {
+    public Comment(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
+            Comment parentComment, Comment chlidComment) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
         this.userId = userId;
+        this.parentComment = parentComment;
+        this.chlidComment = chlidComment;
     }
 }
