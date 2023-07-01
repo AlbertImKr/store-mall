@@ -28,8 +28,8 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -120,7 +120,7 @@ class ProductControllerTest {
                 TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
                 TEST_CATEGORY
         );
-        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        User user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -176,7 +176,7 @@ class ProductControllerTest {
                 TEST_BRAND,
                 TEST_CATEGORY
         );
-        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        User user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)

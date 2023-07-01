@@ -33,7 +33,7 @@ import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -92,7 +92,7 @@ class OrderControllerTest {
     @Autowired
     EntityManager entityManager;
 
-    UserInfoResponse seller;
+    User seller;
     SellerStoreResponse store;
     List<ProductId> productsId;
 
@@ -156,7 +156,7 @@ class OrderControllerTest {
     class NeedOrderTest {
 
         Order order;
-        UserInfoResponse consumer;
+        User consumer;
 
         @BeforeEach
         void settingOrder() {
@@ -246,7 +246,7 @@ class OrderControllerTest {
     @Nested
     class EnoughOrders {
 
-        UserInfoResponse consumer;
+        User consumer;
 
         @BeforeEach
         void setOrders() {

@@ -1,6 +1,6 @@
 package com.albert.commerce.user.command.application;
 
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +18,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail(email);
-        if (userInfoResponse == null) {
+        User user = userDao.findUserProfileByEmail(email);
+        if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new CustomUserDetails(userInfoResponse);
+        return new CustomUserDetails(user);
     }
 }

@@ -23,8 +23,8 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -142,8 +142,8 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
+        User user = userDao.findUserProfileByEmail("test@email.com");
+        sellerStoreService.createStore(newStoreRequest, user.getId());
 
         // when
         mockMvc.perform(post("/stores")
@@ -182,8 +182,8 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
+        User user = userDao.findUserProfileByEmail("test@email.com");
+        sellerStoreService.createStore(newStoreRequest, user.getId());
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -260,7 +260,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse user = userDao.findUserProfileByEmail(TEST_EMAIL);
+        User user = userDao.findUserProfileByEmail(TEST_EMAIL);
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         String newStoreName = "newStoreName";

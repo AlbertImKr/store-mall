@@ -10,7 +10,7 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.net.URI;
 import java.security.Principal;
@@ -42,9 +42,9 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail(userEmail);
+        User user = userDao.findUserProfileByEmail(userEmail);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                userInfoResponse.getId());
+                user.getId());
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
         String storeId = sellerStoreResponse.getStoreId().getValue();

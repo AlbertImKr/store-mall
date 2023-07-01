@@ -1,11 +1,9 @@
 package com.albert.commerce.user.query.domain;
 
-import com.albert.commerce.user.command.domain.UserId;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 
 public interface UserDao {
 
-    UserInfoResponse findUserProfileByEmail(String email);
+    User findUserProfileByEmail(String email);
 
-    UserId findUserIdByEmail(String email);
 }

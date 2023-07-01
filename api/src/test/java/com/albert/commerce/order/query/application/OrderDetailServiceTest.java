@@ -14,7 +14,7 @@ import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ class OrderDetailServiceTest {
     void setOrder() {
         // User 저장
         userService.init(userEmail);
-        UserInfoResponse user = userDao.findUserProfileByEmail(userEmail);
+        User user = userDao.findUserProfileByEmail(userEmail);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",

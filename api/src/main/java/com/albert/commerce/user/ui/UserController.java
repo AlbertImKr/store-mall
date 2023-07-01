@@ -4,6 +4,7 @@ import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_
 
 import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.application.UserInfoResponse;
 import com.albert.commerce.user.query.domain.UserDao;
 import jakarta.validation.Valid;
@@ -36,9 +37,8 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail(email);
-        userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
-        return userInfoResponse;
+        User user = userDao.findUserProfileByEmail(email);
+        return UserInfoResponse.from(user).add(USER_INFO_RESPONSE_LINKS);
     }
 
     @PutMapping("/users/profile")

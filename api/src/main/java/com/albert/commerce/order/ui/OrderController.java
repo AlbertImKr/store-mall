@@ -15,7 +15,7 @@ import com.albert.commerce.order.query.application.OrderDetailService;
 import com.albert.commerce.order.query.domain.OrderDao;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
 import java.util.List;
@@ -71,7 +71,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderCreateResponse> createOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
-        UserInfoResponse user = userDao.findUserProfileByEmail(principal.getName());
+        User user = userDao.findUserProfileByEmail(principal.getName());
         List<Product> products = productDao.findProductsByProductsId(orderRequest.productsId(),
                 orderRequest.storeId());
         long amount = getAmount(products);
@@ -97,7 +97,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
             Pageable pageable) {
-        UserInfoResponse user = userDao.findUserProfileByEmail(principal.getName());
+        User user = userDao.findUserProfileByEmail(principal.getName());
         Page<OrderDetail> orders = orderDetailService.findAllByUserId(user.getId(), pageable);
 
         // HATEOAS
