@@ -1,6 +1,5 @@
 package com.albert.commerce.product.query;
 
-import com.albert.commerce.product.command.application.ProductResponse;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
@@ -14,7 +13,7 @@ public interface ProductDao {
 
     Product findByUserEmailAndProductId(String name, ProductId productId);
 
-    ProductResponse findById(ProductId productId);
+    Product findById(ProductId productId);
 
     List<Product> findProductsByProductsId(List<ProductId> productsId, StoreId storeId);
 }

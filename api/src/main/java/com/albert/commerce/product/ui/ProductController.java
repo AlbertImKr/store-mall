@@ -74,7 +74,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable ProductId productId) {
-        ProductResponse productResponse = productDao.findById(productId);
-        return ResponseEntity.ok(productResponse);
+        Product product = productDao.findById(productId);
+        return ResponseEntity.ok(ProductResponse.from(product));
     }
 }
