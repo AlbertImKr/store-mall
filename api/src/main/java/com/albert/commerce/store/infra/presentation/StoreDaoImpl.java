@@ -9,7 +9,6 @@ import com.albert.commerce.store.ui.StoreNotFoundException;
 import com.albert.commerce.user.command.domain.QUser;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +59,7 @@ public class StoreDaoImpl implements StoreDao {
     }
 
     @Override
-    public Optional<Store> findById(StoreId storeId) {
-        return storeJpaRepository.findById(storeId);
+    public Store findById(StoreId storeId) {
+        return storeJpaRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
 }
