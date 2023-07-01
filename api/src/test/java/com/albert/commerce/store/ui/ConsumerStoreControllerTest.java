@@ -18,7 +18,7 @@ import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.application.UserInfoResponse;
+import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -81,9 +81,9 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userDao.findUserProfileByEmail("test@email.com");
+        User user = userDao.findUserProfileByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                userInfoResponse.getId());
+                user.getId());
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getValue()))

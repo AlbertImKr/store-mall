@@ -13,7 +13,6 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
-import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.user.command.domain.UserId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +53,7 @@ class SellerStoreServiceTest {
         Store store = Store.builder()
                 .storeId(storeId)
                 .storeName(newStoreRequest.storeName())
-                .storeUserId(StoreUserId.from(userId))
+                .userId(userId)
                 .address(TEST_ADDRESS)
                 .email(TEST_EMAIL)
                 .ownerName(TEST_OWNER)

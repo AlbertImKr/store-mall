@@ -4,7 +4,6 @@ import com.albert.commerce.store.command.application.ConsumerStoreResponse;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.StoreDao;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -23,11 +22,8 @@ public class ConsumerStoreController {
 
     @GetMapping("/{storeId}")
     public ResponseEntity getStore(@PathVariable String storeId) {
-        Optional<Store> store = storeDao.findById(StoreId.from(storeId));
-        if (store.isEmpty()) {
-            throw new StoreNotFoundException();
-        }
-        ConsumerStoreResponse consumerStoreResponse = ConsumerStoreResponse.from(store.get());
+        Store store = storeDao.findById(StoreId.from(storeId));
+        ConsumerStoreResponse consumerStoreResponse = ConsumerStoreResponse.from(store);
         consumerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(SellerStoreController.class).slash(storeId).withSelfRel());
         return ResponseEntity.ok().body(consumerStoreResponse);

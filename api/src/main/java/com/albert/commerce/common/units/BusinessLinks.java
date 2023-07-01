@@ -24,6 +24,15 @@ public final class BusinessLinks {
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
                             .getMyStore(null))
                     .withRel("my-store");
+
+    public static Link GET_STORE_BY_STORE_ID(String storeId) {
+        return WebMvcLinkBuilder.linkTo(SellerStoreController.class)
+                .slash(storeId)
+                .withSelfRel();
+    }    public static final Link GET_MY_STORE_WITH_SELF = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+                            .getMyStore(null))
+            .withSelfRel();
     public static final Link CREATE_STORE =
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
                             .createStore(null, null, null))
@@ -62,6 +71,8 @@ public final class BusinessLinks {
                     WebMvcLinkBuilder.methodOn(OrderController.class)
                             .createOrder(null, null))
             .withSelfRel();
+
+
 
 
 }

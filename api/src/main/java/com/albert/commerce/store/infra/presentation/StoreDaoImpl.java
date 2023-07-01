@@ -26,7 +26,7 @@ public class StoreDaoImpl implements StoreDao {
         Store targetStore = jpaQueryFactory
                 .select(store)
                 .from(store)
-                .where(store.storeUserId.userId.eq(
+                .where(store.userId.eq(
                         JPAExpressions
                                 .select(user.id)
                                 .from(user)
@@ -45,7 +45,7 @@ public class StoreDaoImpl implements StoreDao {
         StoreId storeId = jpaQueryFactory
                 .select(store.storeId)
                 .from(store)
-                .where(store.storeUserId.userId.eq(
+                .where(store.userId.eq(
                         JPAExpressions
                                 .select(user.id)
                                 .from(user)

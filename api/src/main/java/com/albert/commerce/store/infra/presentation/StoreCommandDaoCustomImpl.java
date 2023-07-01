@@ -4,7 +4,6 @@ import com.albert.commerce.store.command.application.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreRepository;
-import com.albert.commerce.store.command.domain.StoreUserId;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
@@ -41,20 +40,20 @@ public class StoreCommandDaoCustomImpl implements StoreRepository {
                 .set(store.email, updateStoreRequest.email())
                 .set(store.ownerName, updateStoreRequest.ownerName())
                 .set(store.phoneNumber, updateStoreRequest.phoneNumber())
-                .where(store.storeUserId.userId.eq(
+                .where(store.userId.eq(
                         getUserIdJPQLQuery(email)
                 ))
                 .execute();
 
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(store)
-                .where(store.storeUserId.userId.eq(getUserIdJPQLQuery(email)))
+                .where(store.userId.eq(getUserIdJPQLQuery(email)))
                 .fetchFirst());
     }
 
     @Override
-    public boolean existsByStoreUserId(StoreUserId from) {
-        return storeJpaRepository.existsByStoreUserId(from);
+    public boolean existsByUserId(UserId userId) {
+        return storeJpaRepository.existsByUserId(userId);
     }
 
     @Override

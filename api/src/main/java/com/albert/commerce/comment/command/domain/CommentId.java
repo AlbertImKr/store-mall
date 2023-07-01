@@ -7,14 +7,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 @Access(AccessType.FIELD)
+@EqualsAndHashCode(of = "value")
 public class CommentId implements Serializable {
 
-    @Column(name = "comment_id", nullable = false)
+    @Column(name = "comment_id")
     private String value;
 
     public CommentId(String value) {

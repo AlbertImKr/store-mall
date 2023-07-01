@@ -1,6 +1,7 @@
 package com.albert.commerce.store.command.domain;
 
 import com.albert.commerce.common.infra.persistence.BaseEntity;
+import com.albert.commerce.user.command.domain.UserId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private String storeName;
     @Column(nullable = false)
-    private StoreUserId storeUserId;
+    private UserId userId;
     @Column(nullable = false)
     private String ownerName;
     @Column(nullable = false)
@@ -34,11 +35,11 @@ public class Store extends BaseEntity {
     private String email;
 
     @Builder
-    private Store(StoreId storeId, String storeName, StoreUserId storeUserId, String ownerName,
+    private Store(StoreId storeId, String storeName, UserId userId, String ownerName,
             String address, String phoneNumber, String email) {
         this.storeId = storeId;
         this.storeName = storeName;
-        this.storeUserId = storeUserId;
+        this.userId = userId;
         this.ownerName = ownerName;
         this.address = address;
         this.phoneNumber = phoneNumber;

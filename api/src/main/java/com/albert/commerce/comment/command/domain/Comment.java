@@ -7,6 +7,7 @@ import com.albert.commerce.user.command.domain.UserId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,26 +21,37 @@ public class Comment extends BaseEntity {
 
     @EmbeddedId
     private CommentId commentId;
-    @Column(nullable = false)
+    @Column(name = "product_id")
     private ProductId productId;
-    @Column(nullable = false)
+    @Column(name = "store_id")
     private StoreId storeId;
-    @Column(nullable = false)
+    private String nickName;
+    @Column(name = "user_id")
     private UserId userId;
+
+    @OneToOne(mappedBy = "parentComment")
+    @JoinColumn(name = "child_comment_id")
+    private Comment childComment;
     @OneToOne
+    @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
-    @OneToOne
-    private Comment chlidComment;
+    private String detail;
 
     @Builder
-    public Comment(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
-            Comment parentComment, Comment chlidComment) {
+    private Comment(CommentId commentId, ProductId productId, StoreId storeId, String nickName,
+            UserId userId, Comment childComment, Comment parentComment, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
+        this.nickName = nickName;
         this.userId = userId;
+        this.childComment = childComment;
         this.parentComment = parentComment;
-        this.chlidComment = chlidComment;
+        this.detail = detail;
+    }
+
+    public void addChildComment(Comment comment) {
+        this.childComment = comment;
     }
 }

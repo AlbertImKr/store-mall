@@ -40,7 +40,7 @@ public class ProductDaoImpl implements ProductDao {
         return JPAExpressions
                 .select(qStore.storeId)
                 .from(qStore)
-                .where(qStore.storeUserId.userId.eq(
+                .where(qStore.userId.eq(
                         userIdByEmail
                 ));
     }
