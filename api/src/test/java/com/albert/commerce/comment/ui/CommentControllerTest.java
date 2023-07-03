@@ -44,8 +44,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureRestDocs
 @WithMockUser("consumer@email.com")
 @AutoConfigureMockMvc
@@ -127,7 +130,7 @@ class CommentControllerTest {
                 .andExpect(jsonPath("commentId").exists())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("productId").exists())
-                .andExpect(jsonPath("userName").exists())
+                .andExpect(jsonPath("nickname").exists())
                 .andExpect(jsonPath("detail").exists())
                 // restDocs
                 .andDo(document("saveComment",
@@ -135,9 +138,15 @@ class CommentControllerTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("commentId").description("댓글 아이디"),
+                                fieldWithPath("createdTime").description("댓글 생성시간"),
+                                fieldWithPath("updateTime").description("댓글 업데이트시간"),
+                                fieldWithPath("nickname").description("댓글 작성"),
+                                fieldWithPath("childCommentId").description("하위 comment 아이디"),
+                                fieldWithPath("parentCommentId").description("상의 comment 아이디"),
+                                fieldWithPath("userId").description("작성자 아이디"),
                                 fieldWithPath("storeId").description("스토어 아이디"),
                                 fieldWithPath("productId").description("상품 아이디"),
-                                fieldWithPath("userName").description("유저 네이밍"),
+                                fieldWithPath("nickname").description("유저 네이밍"),
                                 fieldWithPath("detail").description("댓글 내용")
                         )
 
@@ -152,45 +161,52 @@ class CommentControllerTest {
         ProductId productId = product.getProductId();
         UserId userId = consumer.getId();
         StoreId storeId = store.getStoreId();
-        CommentResponse commentResponse1 = commentService.save(userId,
+        CommentResponse commentResponse1 = commentService.save(userId, consumer.getNickname(),
                 productId, storeId, "test1");
 
-        CommentResponse commentResponse2 = commentService.save(userId,
+        CommentResponse commentResponse2 = commentService.save(userId, consumer.getNickname(),
                 productId, storeId, "test2", commentResponse1.getCommentId());
-        commentService.save(userId,
+        commentService.save(userId, consumer.getNickname(),
                 productId, storeId, "test3", commentResponse2.getCommentId());
 
         mockMvc.perform(get("/comments")
                         .param("productId", productId.getId()))
                 .andDo(print())
-                .andExpect(jsonPath("_embedded.commentList[*].createdTime").isArray())
-                .andExpect(jsonPath("_embedded.commentList[*].updateTime").exists())
-                .andExpect(jsonPath("_embedded.commentList[*].commentId").exists())
-                .andExpect(jsonPath("_embedded.commentList[*].productId").exists())
-                .andExpect(jsonPath("_embedded.commentList[*].storeId").exists())
-                .andExpect(jsonPath("_embedded.commentList[*].userId").exists())
-                .andExpect(jsonPath("_embedded.commentList[*].parentComment").exists())
+                .andExpect(jsonPath("_embedded.comments[*].commentId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].storeId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].productId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].createdTime").exists())
+                .andExpect(jsonPath("_embedded.comments[*].updateTime").exists())
+                .andExpect(jsonPath("_embedded.comments[*].nickname").exists())
+                .andExpect(jsonPath("_embedded.comments[*].detail").exists())
+                .andExpect(jsonPath("_embedded.comments[*].userId").exists())
                 // restDocs
                 .andDo(document("findCommentsByProductId",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 responseFields(
-                                        fieldWithPath("_embedded.commentList[].createdTime")
-                                                .description("comment createTime"),
-                                        fieldWithPath("_embedded.commentList[].updateTime")
-                                                .description("comment updateTime"),
-                                        fieldWithPath("_embedded.commentList[].commentId")
+                                        fieldWithPath("_embedded.comments[].commentId")
                                                 .description("comment commentId"),
-                                        fieldWithPath("_embedded.commentList[].productId")
-                                                .description("comment productId"),
-                                        fieldWithPath("_embedded.commentList[].storeId")
-                                                .description("comment storeId"),
-                                        fieldWithPath("_embedded.commentList[].userId")
+                                        fieldWithPath("_embedded.comments[].userId")
                                                 .description("comment userId"),
-                                        fieldWithPath("_embedded.commentList[].detail")
+                                        fieldWithPath("_embedded.comments[].nickname")
+                                                .description("comment 작성자 nickname"),
+                                        fieldWithPath("_embedded.comments[].storeId")
+                                                .description("comment storeId"),
+                                        fieldWithPath("_embedded.comments[].productId")
+                                                .description("comment productId"),
+                                        fieldWithPath("_embedded.comments[].createdTime")
+                                                .description("comment createTime"),
+                                        fieldWithPath("_embedded.comments[].updateTime")
+                                                .description("comment updateTime"),
+                                        fieldWithPath("_embedded.comments[].childCommentId")
+                                                .description("comment childCommentId"),
+                                        fieldWithPath("_embedded.comments[].parentCommentId")
+                                                .description("comment parentCommentId"),
+                                        fieldWithPath("_embedded.comments[].detail")
                                                 .description("comment detail"),
-                                        subsectionWithPath("_embedded.commentList[].parentComment")
-                                                .description("parent Comment").optional()
+                                        subsectionWithPath("_embedded.comments[].childComment")
+                                                .description("child Comment").optional()
                                 )
                         )
                 )

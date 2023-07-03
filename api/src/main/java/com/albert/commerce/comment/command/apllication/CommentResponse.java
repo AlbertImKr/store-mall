@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
+
 @Getter
 @Setter
 public class CommentResponse {
@@ -21,18 +21,41 @@ public class CommentResponse {
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
     private String nickname;
-    private CommentResponse childComment;
+    private String childCommentId;
+    private String parentCommentId;
     private String detail;
     private UserId userId;
 
-    public static CommentResponse from(Comment comment) {
+    public CommentResponse() {
+    }
+
+    @Builder
+    private CommentResponse(CommentId commentId, StoreId storeId, ProductId productId,
+            LocalDateTime createdTime, LocalDateTime updateTime, String nickname,
+            String childCommentId,
+            String parentCommentId, String detail, UserId userId) {
+        this.commentId = commentId;
+        this.storeId = storeId;
+        this.productId = productId;
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
+        this.nickname = nickname;
+        this.childCommentId = childCommentId;
+        this.parentCommentId = parentCommentId;
+        this.detail = detail;
+        this.userId = userId;
+    }
+
+    public static CommentResponse of(Comment comment, String nickname) {
         return CommentResponse.builder()
                 .commentId(comment.getCommentId())
+                .nickname(nickname)
                 .storeId(comment.getStoreId())
                 .productId(comment.getProductId())
-                .nickname(comment.getNickName())
                 .createdTime(comment.getCreatedTime())
                 .updateTime(comment.getUpdateTime())
+                .childCommentId(comment.getChildCommentId())
+                .parentCommentId(comment.getParentCommentId())
                 .detail(comment.getDetail())
                 .build();
     }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -18,8 +19,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentDao commentDao;
 
-    @Transactional
-    public CommentResponse save(UserId userId, ProductId productId, StoreId storeId, String detail,
+
+    public CommentResponse save(UserId userId, String nickname, ProductId productId,
+            StoreId storeId, String detail,
             CommentId parentCommentId) {
         Comment parentComment = commentDao.findById(parentCommentId);
         Comment comment = Comment.builder()
@@ -28,23 +30,26 @@ public class CommentService {
                 .storeId(storeId)
                 .userId(userId)
                 .detail(detail)
-                .parentComment(parentComment)
+                .nickname(nickname)
+                .parentCommentId(parentComment.getCommentId().getValue())
                 .build();
         Comment savedComment = commentRepository.save(comment);
-        return CommentResponse.from(savedComment);
-
+        parentComment.updateChildCommentId(comment.getCommentId());
+        return CommentResponse.of(savedComment, nickname);
     }
 
-    public CommentResponse save(UserId userId, ProductId productId, StoreId storeId,
+    public CommentResponse save(UserId userId, String nickname, ProductId productId,
+            StoreId storeId,
             String detail) {
         Comment comment = Comment.builder()
                 .commentId(commentRepository.nextId())
                 .productId(productId)
                 .storeId(storeId)
+                .nickname(nickname)
                 .userId(userId)
                 .detail(detail)
                 .build();
         Comment savedComment = commentRepository.save(comment);
-        return CommentResponse.from(savedComment);
+        return CommentResponse.of(savedComment, nickname);
     }
 }

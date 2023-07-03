@@ -8,8 +8,8 @@ import com.albert.commerce.comment.command.apllication.CommentRequest;
 import com.albert.commerce.comment.command.apllication.CommentResponse;
 import com.albert.commerce.comment.command.apllication.CommentService;
 import com.albert.commerce.comment.command.domain.CommentId;
-import com.albert.commerce.comment.infra.presentation.CommentDTO;
-import com.albert.commerce.comment.query.CommentDao;
+import com.albert.commerce.comment.query.CommentDTO;
+import com.albert.commerce.comment.query.CommentDaoService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
@@ -18,8 +18,8 @@ import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
-import java.util.Collection;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentDao commentDao;
+    private final CommentDaoService commentDaoService;
     private final UserDao userDao;
     private final ProductDao productDao;
     private final StoreDao storeDao;
@@ -49,16 +49,18 @@ public class CommentController {
         CommentId parentCommentId = commentRequest.parentCommentId();
         if (parentCommentId == null) {
             return EntityModel.of(
-                    commentService.save(user.getId(), product.getProductId(), store.getStoreId(),
+                    commentService.save(user.getId(), user.getNickname(), product.getProductId(),
+                            store.getStoreId(),
                             commentRequest.detail()));
         }
         return EntityModel.of(
-                commentService.save(user.getId(), product.getProductId(), store.getStoreId(),
+                commentService.save(user.getId(), user.getNickname(), product.getProductId(),
+                        store.getStoreId(),
                         commentRequest.detail(), parentCommentId));
     }
 
     @GetMapping(params = "productId")
-    public Collection<CommentDTO> findCommentsByProductId(ProductId productId) {
-        return commentDao.findByProductId(productId);
+    public CollectionModel<CommentDTO> findCommentsByProductId(ProductId productId) {
+        return CollectionModel.of(commentDaoService.findCommentResponseByProductId(productId));
     }
 }
