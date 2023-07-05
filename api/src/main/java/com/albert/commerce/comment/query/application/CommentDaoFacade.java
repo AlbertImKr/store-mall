@@ -15,9 +15,9 @@ public class CommentDaoFacade {
 
     private final CommentDao commentDao;
 
-    public List<CommentNode> findCommentsResponseByProductId(ProductId productId) {
+    public List<CommentNode> findCommentsResponseByProductId(String productId) {
         List<CommentResponse> commentResponses =
-                commentDao.findCommentResponseByProductId(productId);
+                commentDao.findCommentResponseByProductId(ProductId.from(productId));
         return CommentNode.from(commentResponses);
     }
 

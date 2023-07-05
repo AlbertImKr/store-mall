@@ -118,7 +118,8 @@ class CommentControllerTest {
     @Test
     void saveComment() throws Exception {
         ProductId testProductId = product.getProductId();
-        CommentRequest commentRequest = new CommentRequest(testProductId, store.getStoreId(), null,
+        CommentRequest commentRequest = new CommentRequest(testProductId.getId(),
+                store.getStoreId().getId(), null,
                 "test");
 
         mockMvc.perform(post("/comments")
@@ -159,17 +160,26 @@ class CommentControllerTest {
         String userEmail = "consumer@email.com";
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        CommentRequest commentRequest = new CommentRequest(productId, storeId, null, "test");
+        String productIdValue = productId.getId();
+        String storeIdValue = storeId.getId();
+        CommentRequest commentRequest =
+                new CommentRequest(productIdValue, storeIdValue, null, "test");
         CommentResponse commentResponse1 = commentService.save(commentRequest, userEmail);
-        commentRequest = new CommentRequest(productId, storeId, commentResponse1.getCommentId(),
+        commentRequest = new CommentRequest(
+                productIdValue,
+                storeIdValue,
+                commentResponse1.getCommentId().getId(),
                 "test1");
         CommentResponse commentResponse2 = commentService.save(commentRequest, userEmail);
-        commentRequest = new CommentRequest(productId, storeId, commentResponse2.getCommentId(),
+        commentRequest = new CommentRequest(
+                productIdValue,
+                storeIdValue,
+                commentResponse2.getCommentId().getId(),
                 "test1");
         commentService.save(commentRequest, userEmail);
 
         mockMvc.perform(get("/comments")
-                        .param("productId", productId.getId()))
+                        .param("productId", productIdValue))
                 .andDo(print())
                 .andExpect(jsonPath("_embedded.comments[*].commentId").exists())
                 .andExpect(jsonPath("_embedded.comments[*].storeId").exists())

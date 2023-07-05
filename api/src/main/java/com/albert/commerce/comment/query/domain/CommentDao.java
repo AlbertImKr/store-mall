@@ -5,10 +5,11 @@ import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.product.command.domain.ProductId;
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentDao {
 
-    Comment findById(CommentId commentId);
+    Optional<Comment> findById(CommentId commentId);
 
     List<CommentResponse> findCommentResponseByProductId(ProductId productId);
 

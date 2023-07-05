@@ -13,6 +13,7 @@ import com.albert.commerce.user.command.domain.QUser;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -35,8 +36,8 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     }
 
     @Override
-    public Comment findById(CommentId commentId) {
-        return commentJpaRepository.findById(commentId).orElseThrow();
+    public Optional<Comment> findById(CommentId commentId) {
+        return commentJpaRepository.findById(commentId);
     }
 
     @Override

@@ -25,14 +25,15 @@ public class CommentService {
     private final ProductDao productDao;
     private final StoreDao storeDao;
 
-    public CommentResponse save(CommentRequest commentRequest,
-            String email) {
+    public CommentResponse save(CommentRequest commentRequest, String email) {
         User user = userDao.findUserProfileByEmail(email);
-        ProductId productId = commentRequest.productId();
+        ProductId productId = ProductId.from(commentRequest.productId());
         checkProductId(productId);
-        StoreId storeId = commentRequest.storeId();
+        StoreId storeId = StoreId.from(commentRequest.storeId());
         checkStoreId(storeId);
-        CommentId parentCommentId = commentRequest.parentCommentId();
+        CommentId parentCommentId = commentRequest.parentCommentId() == null ?
+                null : CommentId.from(
+                commentRequest.parentCommentId());
         checkParentCommentId(parentCommentId);
         Comment comment = Comment.builder()
                 .commentId(commentRepository.nextId())
