@@ -1,4 +1,4 @@
-package com.albert.commerce.comment.command.apllication;
+package com.albert.commerce.comment.command.application;
 
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.product.command.domain.ProductId;

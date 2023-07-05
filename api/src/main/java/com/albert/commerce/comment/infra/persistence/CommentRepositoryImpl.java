@@ -1,11 +1,11 @@
-package com.albert.commerce.comment.infra.presentation;
+package com.albert.commerce.comment.infra.persistence;
 
-import com.albert.commerce.comment.command.apllication.CommentResponse;
+import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.command.domain.CommentRepository;
 import com.albert.commerce.comment.command.domain.QComment;
-import com.albert.commerce.comment.infra.presentation.imports.CommentJpaRepository;
+import com.albert.commerce.comment.infra.persistence.imports.CommentJpaRepository;
 import com.albert.commerce.comment.query.CommentDao;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.ProductId;

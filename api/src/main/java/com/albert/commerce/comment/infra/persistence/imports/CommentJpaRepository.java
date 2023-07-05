@@ -1,4 +1,4 @@
-package com.albert.commerce.comment.infra.presentation.imports;
+package com.albert.commerce.comment.infra.persistence.imports;
 
 import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;

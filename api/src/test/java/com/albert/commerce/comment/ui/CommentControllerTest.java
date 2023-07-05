@@ -12,9 +12,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.comment.command.apllication.CommentRequest;
-import com.albert.commerce.comment.command.apllication.CommentResponse;
-import com.albert.commerce.comment.command.apllication.CommentService;
+import com.albert.commerce.comment.command.application.CommentRequest;
+import com.albert.commerce.comment.command.application.CommentResponse;
+import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.query.CommentDao;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;

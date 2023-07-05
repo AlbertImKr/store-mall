@@ -1,6 +1,6 @@
 package com.albert.commerce.comment.query;
 
-import com.albert.commerce.comment.command.apllication.CommentResponse;
+import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;

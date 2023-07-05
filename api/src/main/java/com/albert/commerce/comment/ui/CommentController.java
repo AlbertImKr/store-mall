@@ -1,8 +1,8 @@
 package com.albert.commerce.comment.ui;
 
-import com.albert.commerce.comment.command.apllication.CommentRequest;
-import com.albert.commerce.comment.command.apllication.CommentResponse;
-import com.albert.commerce.comment.command.apllication.CommentService;
+import com.albert.commerce.comment.command.application.CommentRequest;
+import com.albert.commerce.comment.command.application.CommentResponse;
+import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.query.CommentDTO;
 import com.albert.commerce.comment.query.CommentDaoService;
