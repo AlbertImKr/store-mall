@@ -30,8 +30,6 @@ public class CommentService {
                 .storeId(storeId)
                 .userId(userId)
                 .detail(detail)
-                .nickname(nickname)
-                .parentCommentId(parentComment.getCommentId().getValue())
                 .build();
         Comment savedComment = commentRepository.save(comment);
         parentComment.updateChildCommentId(comment.getCommentId());
@@ -45,7 +43,6 @@ public class CommentService {
                 .commentId(commentRepository.nextId())
                 .productId(productId)
                 .storeId(storeId)
-                .nickname(nickname)
                 .userId(userId)
                 .detail(detail)
                 .build();

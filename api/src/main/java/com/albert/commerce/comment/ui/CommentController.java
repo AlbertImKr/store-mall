@@ -1,9 +1,5 @@
 package com.albert.commerce.comment.ui;
 
-//import com.albert.commerce.comment.command.apllication.CommentRequest;
-//import com.albert.commerce.comment.command.apllication.CommentResponse;
-//import com.albert.commerce.comment.command.apllication.CommentService;
-
 import com.albert.commerce.comment.command.apllication.CommentRequest;
 import com.albert.commerce.comment.command.apllication.CommentResponse;
 import com.albert.commerce.comment.command.apllication.CommentService;

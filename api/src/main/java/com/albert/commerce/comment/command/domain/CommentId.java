@@ -3,7 +3,6 @@ package com.albert.commerce.comment.command.domain;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import lombok.AccessLevel;
@@ -13,14 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 @Access(AccessType.FIELD)
-@EqualsAndHashCode(of = "value")
+@EqualsAndHashCode(of = "id")
 public class CommentId implements Serializable {
 
-    @Column(name = "comment_id")
-    private String value;
+    private String id;
 
-    public CommentId(String value) {
-        this.value = value;
+    public CommentId(String id) {
+        this.id = id;
     }
 
     public static CommentId from(String value) {
@@ -28,7 +26,7 @@ public class CommentId implements Serializable {
     }
 
     @JsonValue
-    public String getValue() {
-        return value;
+    public String getId() {
+        return id;
     }
 }

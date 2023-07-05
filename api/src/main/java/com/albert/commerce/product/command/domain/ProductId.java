@@ -3,7 +3,6 @@ package com.albert.commerce.product.command.domain;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Access(AccessType.FIELD)
 public class ProductId implements Serializable {
 
-    @Column(name = "product_id", nullable = false)
     private String id;
 
 

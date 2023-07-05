@@ -175,7 +175,7 @@ class OrderControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("orderId").exists())
                     .andExpect(jsonPath("userId").value(consumer.getId().getValue()))
-                    .andExpect(jsonPath("storeId").value(store.getStoreId().getValue()))
+                    .andExpect(jsonPath("storeId").value(store.getStoreId().getId()))
                     .andExpect(jsonPath("products").isArray())
                     .andExpect(jsonPath("products.*.createdTime").exists())
                     .andExpect(jsonPath("products.*.updateTime").exists())

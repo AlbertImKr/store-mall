@@ -4,7 +4,9 @@ import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
@@ -18,34 +20,35 @@ import lombok.NoArgsConstructor;
 public class Comment extends BaseEntity {
 
     @EmbeddedId
-    @Column(table = "comment", name = "comment_id")
+    @AttributeOverride(name = "id", column = @Column(name = "comment_id", nullable = false))
     private CommentId commentId;
-    @Column(name = "product_id")
+    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
+    @Embedded
     private ProductId productId;
-    @Column(name = "store_id")
+    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    @Embedded
     private StoreId storeId;
-    @Column(name = "user_id")
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @Embedded
     private UserId userId;
-    @Column(name = "child_comment_id")
-    private String childCommentId;
-    @Column(name = "parent_comment_id")
-    private String parentCommentId;
+    @AttributeOverride(name = "id", column = @Column(name = "child_comment_id", nullable = false))
+    @Embedded
+    private CommentId childCommentId;
 
     private String detail;
 
     @Builder
-    public Comment(CommentId commentId, ProductId productId, StoreId storeId, String nickname,
-            UserId userId, String childCommentId, String parentCommentId, String detail) {
+    private Comment(CommentId commentId, ProductId productId, StoreId storeId,
+            UserId userId, CommentId childCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
         this.userId = userId;
         this.childCommentId = childCommentId;
-        this.parentCommentId = parentCommentId;
         this.detail = detail;
     }
 
     public void updateChildCommentId(CommentId commentId) {
-        this.childCommentId = commentId.getValue();
+        this.childCommentId = commentId;
     }
 }

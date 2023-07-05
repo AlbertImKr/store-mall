@@ -47,7 +47,7 @@ public class SellerStoreController {
                 user.getId());
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
-        String storeId = sellerStoreResponse.getStoreId().getValue();
+        String storeId = sellerStoreResponse.getStoreId().getId();
         sellerStoreResponse.add(GET_STORE_BY_STORE_ID(storeId));
         return ResponseEntity.created(myStore).body(sellerStoreResponse);
     }

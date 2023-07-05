@@ -86,7 +86,7 @@ class ConsumerStoreControllerTest {
                 user.getId());
         entityManager.flush();
 
-        mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getValue()))
+        mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getId()))
                 .andDo(print())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())

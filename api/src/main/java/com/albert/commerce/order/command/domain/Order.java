@@ -4,6 +4,9 @@ import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -21,8 +24,13 @@ import lombok.NoArgsConstructor;
 public class Order extends BaseEntity {
 
     @EmbeddedId
+    @AttributeOverride(name = "id", column = @Column(name = "order_id", nullable = false))
     private OrderId orderId;
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @Embedded
     private UserId userId;
+    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    @Embedded
     private StoreId storeId;
     @ManyToMany
     private List<Product> products;

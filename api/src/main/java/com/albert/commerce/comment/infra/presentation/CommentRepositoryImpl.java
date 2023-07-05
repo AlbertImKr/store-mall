@@ -51,7 +51,6 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
                         comment.productId,
                         comment.detail,
                         comment.childCommentId,
-                        comment.parentCommentId,
                         comment.createdTime,
                         comment.updateTime,
                         user.nickname

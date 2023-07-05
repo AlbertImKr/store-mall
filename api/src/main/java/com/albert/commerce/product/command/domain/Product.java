@@ -4,8 +4,10 @@ import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.store.command.domain.StoreId;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
@@ -19,9 +21,10 @@ import lombok.NoArgsConstructor;
 public class Product extends BaseEntity {
 
     @EmbeddedId
-    @Column(name = "product_id")
+    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
     private ProductId productId;
-    @Column(nullable = false)
+    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    @Embedded
     private StoreId storeId;
     @Column(nullable = false)
     private String productName;

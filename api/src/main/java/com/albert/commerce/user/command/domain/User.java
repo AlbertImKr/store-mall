@@ -23,7 +23,7 @@ public class User extends BaseEntity {
 
     @EmbeddedId
     private UserId id;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
     private String email;

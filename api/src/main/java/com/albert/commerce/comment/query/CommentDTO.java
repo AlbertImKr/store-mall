@@ -24,8 +24,7 @@ public class CommentDTO {
     private ProductId productId;
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
-    private String childCommentId;
-    private String parentCommentId;
+    private CommentId childCommentId;
     private String detail;
     private CommentDTO childComment;
 
@@ -38,7 +37,6 @@ public class CommentDTO {
                 .updateTime(commentResponse.getUpdateTime())
                 .nickname(commentResponse.getNickname())
                 .childCommentId(commentResponse.getChildCommentId())
-                .parentCommentId(commentResponse.getParentCommentId())
                 .detail(commentResponse.getDetail())
                 .userId(commentResponse.getUserId())
                 .build();

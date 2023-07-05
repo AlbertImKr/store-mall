@@ -21,8 +21,7 @@ public class CommentResponse {
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
     private String nickname;
-    private String childCommentId;
-    private String parentCommentId;
+    private CommentId childCommentId;
     private String detail;
     private UserId userId;
 
@@ -32,8 +31,8 @@ public class CommentResponse {
     @Builder
     private CommentResponse(CommentId commentId, StoreId storeId, ProductId productId,
             LocalDateTime createdTime, LocalDateTime updateTime, String nickname,
-            String childCommentId,
-            String parentCommentId, String detail, UserId userId) {
+            CommentId childCommentId,
+            String detail, UserId userId) {
         this.commentId = commentId;
         this.storeId = storeId;
         this.productId = productId;
@@ -41,7 +40,6 @@ public class CommentResponse {
         this.updateTime = updateTime;
         this.nickname = nickname;
         this.childCommentId = childCommentId;
-        this.parentCommentId = parentCommentId;
         this.detail = detail;
         this.userId = userId;
     }
@@ -55,7 +53,6 @@ public class CommentResponse {
                 .createdTime(comment.getCreatedTime())
                 .updateTime(comment.getUpdateTime())
                 .childCommentId(comment.getChildCommentId())
-                .parentCommentId(comment.getParentCommentId())
                 .detail(comment.getDetail())
                 .build();
     }
