@@ -44,7 +44,7 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 
-        return jpaQueryFactory.select(Projections.bean(CommentResponse.class,
+        return jpaQueryFactory.select(Projections.fields(CommentResponse.class,
                         comment.commentId,
                         comment.userId,
                         comment.storeId,

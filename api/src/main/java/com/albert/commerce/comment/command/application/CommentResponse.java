@@ -6,13 +6,14 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-@Setter
 public class CommentResponse {
 
     private CommentId commentId;
@@ -24,9 +25,6 @@ public class CommentResponse {
     private CommentId parentCommentId;
     private String detail;
     private UserId userId;
-
-    public CommentResponse() {
-    }
 
     @Builder
     private CommentResponse(CommentId commentId, StoreId storeId, ProductId productId,
