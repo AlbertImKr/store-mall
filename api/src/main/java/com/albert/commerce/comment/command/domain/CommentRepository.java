@@ -5,4 +5,6 @@ public interface CommentRepository {
     Comment save(Comment comment);
 
     CommentId nextId();
+
+    boolean exists(CommentId parentCommentId);
 }

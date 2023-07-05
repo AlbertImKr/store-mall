@@ -4,6 +4,7 @@ import com.albert.commerce.product.UnauthorizedModificationException;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.QProduct;
+import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.StoreId;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Repository;
 public class ProductDaoImpl implements ProductDao {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final ProductJpaRepository productJpaRepository;
 
     private static JPQLQuery<UserId> getUserIdByEmail(String userEmail) {
         QUser qUser = QUser.user;
@@ -109,5 +111,10 @@ public class ProductDaoImpl implements ProductDao {
                                 .fetchFirst()
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean exists(ProductId productId) {
+        return productJpaRepository.existsById(productId);
     }
 }

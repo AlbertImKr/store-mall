@@ -10,4 +10,6 @@ public interface StoreDao {
     Store findStoreByUserEmail(String email);
 
     StoreId findStoreIdByUserEmail(String email);
+
+    boolean exists(StoreId storeId);
 }

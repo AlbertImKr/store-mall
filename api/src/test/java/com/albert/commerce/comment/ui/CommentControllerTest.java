@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
-import com.albert.commerce.comment.query.CommentDao;
+import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -31,7 +31,6 @@ import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.StoreDao;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -141,8 +140,7 @@ class CommentControllerTest {
                                 fieldWithPath("createdTime").description("댓글 생성시간"),
                                 fieldWithPath("updateTime").description("댓글 업데이트시간"),
                                 fieldWithPath("nickname").description("댓글 작성"),
-                                fieldWithPath("childCommentId").description("하위 comment 아이디"),
-                                fieldWithPath("parentCommentId").description("상의 comment 아이디"),
+                                fieldWithPath("parentCommentId").description("상위 comment 아이디"),
                                 fieldWithPath("userId").description("작성자 아이디"),
                                 fieldWithPath("storeId").description("스토어 아이디"),
                                 fieldWithPath("productId").description("상품 아이디"),
@@ -158,16 +156,17 @@ class CommentControllerTest {
     @Test
     void findCommentsByProductId() throws Exception {
         // given
+        String userEmail = "consumer@email.com";
         ProductId productId = product.getProductId();
-        UserId userId = consumer.getId();
         StoreId storeId = store.getStoreId();
-        CommentResponse commentResponse1 = commentService.save(userId, consumer.getNickname(),
-                productId, storeId, "test1");
-
-        CommentResponse commentResponse2 = commentService.save(userId, consumer.getNickname(),
-                productId, storeId, "test2", commentResponse1.getCommentId());
-        commentService.save(userId, consumer.getNickname(),
-                productId, storeId, "test3", commentResponse2.getCommentId());
+        CommentRequest commentRequest = new CommentRequest(productId, storeId, null, "test");
+        CommentResponse commentResponse1 = commentService.save(commentRequest, userEmail);
+        commentRequest = new CommentRequest(productId, storeId, commentResponse1.getCommentId(),
+                "test1");
+        CommentResponse commentResponse2 = commentService.save(commentRequest, userEmail);
+        commentRequest = new CommentRequest(productId, storeId, commentResponse2.getCommentId(),
+                "test1");
+        commentService.save(commentRequest, userEmail);
 
         mockMvc.perform(get("/comments")
                         .param("productId", productId.getId()))
@@ -199,8 +198,6 @@ class CommentControllerTest {
                                                 .description("comment createTime"),
                                         fieldWithPath("_embedded.comments[].updateTime")
                                                 .description("comment updateTime"),
-                                        fieldWithPath("_embedded.comments[].childCommentId")
-                                                .description("comment childCommentId"),
                                         fieldWithPath("_embedded.comments[].parentCommentId")
                                                 .description("comment parentCommentId"),
                                         fieldWithPath("_embedded.comments[].detail")

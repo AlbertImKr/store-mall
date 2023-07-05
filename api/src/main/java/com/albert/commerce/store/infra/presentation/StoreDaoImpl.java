@@ -62,4 +62,9 @@ public class StoreDaoImpl implements StoreDao {
     public Store findById(StoreId storeId) {
         return storeJpaRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
+
+    @Override
+    public boolean exists(StoreId storeId) {
+        return storeJpaRepository.existsById(storeId);
+    }
 }

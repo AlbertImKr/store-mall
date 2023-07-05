@@ -1,4 +1,4 @@
-package com.albert.commerce.comment.query;
+package com.albert.commerce.comment.query.domain;
 
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.domain.Comment;
@@ -12,4 +12,5 @@ public interface CommentDao {
 
     List<CommentResponse> findCommentResponseByProductId(ProductId productId);
 
+    boolean exists(CommentId commentId);
 }

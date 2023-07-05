@@ -3,10 +3,14 @@ package com.albert.commerce.comment.command.application;
 import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.command.domain.CommentRepository;
-import com.albert.commerce.comment.query.CommentDao;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
+import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.store.query.StoreDao;
+import com.albert.commerce.store.ui.StoreNotFoundException;
+import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,36 +21,46 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final CommentDao commentDao;
+    private final UserDao userDao;
+    private final ProductDao productDao;
+    private final StoreDao storeDao;
 
-
-    public CommentResponse save(UserId userId, String nickname, ProductId productId,
-            StoreId storeId, String detail,
-            CommentId parentCommentId) {
-        Comment parentComment = commentDao.findById(parentCommentId);
+    public CommentResponse save(CommentRequest commentRequest,
+            String email) {
+        User user = userDao.findUserProfileByEmail(email);
+        ProductId productId = commentRequest.productId();
+        checkProductId(productId);
+        StoreId storeId = commentRequest.storeId();
+        checkStoreId(storeId);
+        CommentId parentCommentId = commentRequest.parentCommentId();
+        checkParentCommentId(parentCommentId);
         Comment comment = Comment.builder()
                 .commentId(commentRepository.nextId())
                 .productId(productId)
                 .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
+                .userId(user.getId())
+                .detail(commentRequest.detail())
+                .parentCommentId(parentCommentId)
                 .build();
         Comment savedComment = commentRepository.save(comment);
-        parentComment.updateChildCommentId(comment.getCommentId());
-        return CommentResponse.of(savedComment, nickname);
+        return CommentResponse.of(savedComment, user.getNickname());
     }
 
-    public CommentResponse save(UserId userId, String nickname, ProductId productId,
-            StoreId storeId,
-            String detail) {
-        Comment comment = Comment.builder()
-                .commentId(commentRepository.nextId())
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
-                .build();
-        Comment savedComment = commentRepository.save(comment);
-        return CommentResponse.of(savedComment, nickname);
+    private void checkParentCommentId(CommentId parentCommentId) {
+        if (parentCommentId != null && !commentRepository.exists(parentCommentId)) {
+            throw new CommentNotFoundException();
+        }
+    }
+
+    private void checkStoreId(StoreId storeId) {
+        if (!storeDao.exists(storeId)) {
+            throw new StoreNotFoundException();
+        }
+    }
+
+    private void checkProductId(ProductId productId) {
+        if (!productDao.exists(productId)) {
+            throw new ProductNotFoundException();
+        }
     }
 }

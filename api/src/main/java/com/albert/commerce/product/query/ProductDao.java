@@ -16,4 +16,6 @@ public interface ProductDao {
     Product findById(ProductId productId);
 
     List<Product> findProductsByProductsId(List<ProductId> productsId, StoreId storeId);
+
+    boolean exists(ProductId productId);
 }

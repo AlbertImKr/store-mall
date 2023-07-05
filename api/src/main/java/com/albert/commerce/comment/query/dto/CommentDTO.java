@@ -1,4 +1,4 @@
-package com.albert.commerce.comment.query;
+package com.albert.commerce.comment.query.dto;
 
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.domain.CommentId;
@@ -24,7 +24,7 @@ public class CommentDTO {
     private ProductId productId;
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
-    private CommentId childCommentId;
+    private CommentId parentCommentId;
     private String detail;
     private CommentDTO childComment;
 
@@ -36,7 +36,7 @@ public class CommentDTO {
                 .createdTime(commentResponse.getCreatedTime())
                 .updateTime(commentResponse.getUpdateTime())
                 .nickname(commentResponse.getNickname())
-                .childCommentId(commentResponse.getChildCommentId())
+                .parentCommentId(commentResponse.getParentCommentId())
                 .detail(commentResponse.getDetail())
                 .userId(commentResponse.getUserId())
                 .build();

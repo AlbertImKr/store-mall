@@ -6,7 +6,7 @@ import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.command.domain.CommentRepository;
 import com.albert.commerce.comment.command.domain.QComment;
 import com.albert.commerce.comment.infra.persistence.imports.CommentJpaRepository;
-import com.albert.commerce.comment.query.CommentDao;
+import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.user.command.domain.QUser;
@@ -50,7 +50,7 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
                         comment.storeId,
                         comment.productId,
                         comment.detail,
-                        comment.childCommentId,
+                        comment.parentCommentId,
                         comment.createdTime,
                         comment.updateTime,
                         user.nickname
@@ -61,4 +61,8 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
                 .fetch();
     }
 
+    @Override
+    public boolean exists(CommentId commentId) {
+        return commentJpaRepository.existsById(commentId);
+    }
 }

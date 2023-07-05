@@ -31,24 +31,20 @@ public class Comment extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
     @Embedded
     private UserId userId;
-    @AttributeOverride(name = "id", column = @Column(name = "child_comment_id", nullable = false))
+    @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id", nullable = true))
     @Embedded
-    private CommentId childCommentId;
+    private CommentId parentCommentId;
 
     private String detail;
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
-            UserId userId, CommentId childCommentId, String detail) {
+            UserId userId, CommentId parentCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
         this.userId = userId;
-        this.childCommentId = childCommentId;
+        this.parentCommentId = parentCommentId;
         this.detail = detail;
-    }
-
-    public void updateChildCommentId(CommentId commentId) {
-        this.childCommentId = commentId;
     }
 }

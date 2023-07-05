@@ -3,16 +3,9 @@ package com.albert.commerce.comment.ui;
 import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
-import com.albert.commerce.comment.command.domain.CommentId;
-import com.albert.commerce.comment.query.CommentDTO;
-import com.albert.commerce.comment.query.CommentDaoService;
-import com.albert.commerce.product.command.domain.Product;
+import com.albert.commerce.comment.query.application.CommentDaoService;
+import com.albert.commerce.comment.query.dto.CommentDTO;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -31,28 +24,13 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CommentDaoService commentDaoService;
-    private final UserDao userDao;
-    private final ProductDao productDao;
-    private final StoreDao storeDao;
 
 
     @PostMapping
     public EntityModel<CommentResponse> saveComment(@RequestBody CommentRequest commentRequest,
             Principal principal) {
-        User user = userDao.findUserProfileByEmail(principal.getName());
-        Product product = productDao.findById(commentRequest.productId());
-        Store store = storeDao.findById(commentRequest.storeId());
-        CommentId parentCommentId = commentRequest.parentCommentId();
-        if (parentCommentId == null) {
-            return EntityModel.of(
-                    commentService.save(user.getId(), user.getNickname(), product.getProductId(),
-                            store.getStoreId(),
-                            commentRequest.detail()));
-        }
-        return EntityModel.of(
-                commentService.save(user.getId(), user.getNickname(), product.getProductId(),
-                        store.getStoreId(),
-                        commentRequest.detail(), parentCommentId));
+        String email = principal.getName();
+        return EntityModel.of(commentService.save(commentRequest, email));
     }
 
     @GetMapping(params = "productId")
