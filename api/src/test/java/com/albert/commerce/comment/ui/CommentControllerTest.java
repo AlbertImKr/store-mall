@@ -202,7 +202,7 @@ class CommentControllerTest {
                                                 .description("comment parentCommentId"),
                                         fieldWithPath("_embedded.comments[].detail")
                                                 .description("comment detail"),
-                                        subsectionWithPath("_embedded.comments[].childComment")
+                                        subsectionWithPath("_embedded.comments[].comment")
                                                 .description("child Comment").optional()
                                 )
                         )
