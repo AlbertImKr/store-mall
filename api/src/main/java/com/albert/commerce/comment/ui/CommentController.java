@@ -26,7 +26,8 @@ public class CommentController {
 
 
     @PostMapping
-    public EntityModel<CommentResponse> saveComment(@RequestBody CommentRequest commentRequest,
+    public EntityModel<CommentResponse> saveComment(
+            @RequestBody CommentRequest commentRequest,
             Principal principal) {
         String email = principal.getName();
         return EntityModel.of(commentService.save(commentRequest, email));

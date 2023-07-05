@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -25,6 +25,7 @@ public class CommentService {
     private final ProductDao productDao;
     private final StoreDao storeDao;
 
+    @Transactional
     public CommentResponse save(CommentRequest commentRequest, String email) {
         User user = userDao.findUserProfileByEmail(email);
         ProductId productId = ProductId.from(commentRequest.productId());
