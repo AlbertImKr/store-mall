@@ -1,6 +1,5 @@
 package com.albert.commerce.order.ui;
 
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.order.command.application.OrderAssembler;
@@ -11,14 +10,8 @@ import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.application.OrderDetail;
-import com.albert.commerce.order.query.application.OrderDetailService;
-import com.albert.commerce.order.query.domain.OrderDao;
-import com.albert.commerce.product.command.domain.Product;
-import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.order.query.application.OrderFacade;
 import java.security.Principal;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,26 +34,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
-    private final ProductDao productDao;
-    private final UserDao userDao;
-
-    private final OrderDetailService orderDetailService;
-    private final OrderDao orderDao;
+    private final OrderFacade orderFacade;
     private final OrderAssembler orderAssembler;
-
     private final PagedResourcesAssembler<OrderDetail> pagedResourcesAssembler;
-
-    private static long getAmount(List<Product> products) {
-        return products.stream()
-                .map(Product::getPrice)
-                .mapToLong(Money::value)
-                .sum();
-    }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseEntity> getOrder(Principal principal,
             @PathVariable OrderId orderId) {
-        OrderDetail order = orderDetailService.findById(orderId, principal.getName());
+        OrderDetail order = orderFacade.findById(orderId, principal.getName());
 
         // HATEOAS
         OrderResponseEntity orderResponse = orderAssembler.toModel(order);
@@ -71,12 +52,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderCreateResponse> createOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
-        User user = userDao.findUserProfileByEmail(principal.getName());
-        List<Product> products = productDao.findProductsByProductsId(orderRequest.productsId(),
-                orderRequest.storeId());
-        long amount = getAmount(products);
-        Order order = orderService.createOrder(user.getId(), amount, products,
-                orderRequest.storeId());
+        String email = principal.getName();
+        Order order = orderService.createOrder(email, orderRequest);
 
         // HATEOAS
         Link orderLink = BusinessLinks.getOrder(order.getOrderId());
@@ -87,18 +64,17 @@ public class OrderController {
 
 
     @DeleteMapping
-    public ResponseEntity deleteOrder(Principal principal,
+    public ResponseEntity<Void> deleteOrder(Principal principal,
             @RequestBody DeleteOrderRequest deleteOrderRequest) {
-        orderService.deleteOrder(
-                orderDao.findById(deleteOrderRequest.orderId(), principal.getName()));
+        orderService.deleteOrder(deleteOrderRequest, principal.getName());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
             Pageable pageable) {
-        User user = userDao.findUserProfileByEmail(principal.getName());
-        Page<OrderDetail> orders = orderDetailService.findAllByUserId(user.getId(), pageable);
+        Page<OrderDetail> orders = orderFacade.findAllByUserId(principal.getName(),
+                pageable);
 
         // HATEOAS
         PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,

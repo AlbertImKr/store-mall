@@ -96,8 +96,8 @@ class CommentControllerTest {
     void setting() {
         userService.init("seller@email.com");
         userService.init("consumer@email.com");
-        seller = userDao.findUserProfileByEmail("seller@email.com");
-        consumer = userDao.findUserProfileByEmail("consumer@email.com");
+        seller = userDao.findUserByEmail("seller@email.com");
+        consumer = userDao.findUserByEmail("consumer@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");

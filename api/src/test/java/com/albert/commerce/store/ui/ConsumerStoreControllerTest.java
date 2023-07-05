@@ -81,7 +81,7 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserProfileByEmail("test@email.com");
+        User user = userDao.findUserByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 user.getId());
         entityManager.flush();

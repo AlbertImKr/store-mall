@@ -3,12 +3,12 @@ package com.albert.commerce.order.query.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class OrderDetailServiceTest {
+class OrderFacadeTest {
 
 
     @Autowired
@@ -47,7 +47,7 @@ class OrderDetailServiceTest {
     UserService userService;
 
     @Autowired
-    OrderDetailService orderDetailService;
+    OrderFacade orderFacade;
 
 
     Order order;
@@ -58,7 +58,7 @@ class OrderDetailServiceTest {
     void setOrder() {
         // User 저장
         userService.init(userEmail);
-        User user = userDao.findUserProfileByEmail(userEmail);
+        User user = userDao.findUserByEmail(userEmail);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",
@@ -67,22 +67,28 @@ class OrderDetailServiceTest {
                         "11111111111",
                         "testStore@email.com"),
                 user.getId());
-        List<Product> productList = new ArrayList<>();
+        List<String> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
                     new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
                             "testCategory"), store.getStoreId());
-            productList.add(productJpaRepository.findById(productCreatedResponse.getProductId())
-                    .orElseThrow());
+            productList.add(productCreatedResponse.getProductId().getId());
         }
-        order = orderService.createOrder(
-                user.getId(), 20000, productList, store.getStoreId());
+        OrderRequest orderRequest = new OrderRequest(productList, store.getStoreId().getId());
+        order = orderService.createOrder(userEmail, orderRequest);
     }
 
     @DisplayName("주문 번호로 order 조회한다")
     @Test
     void findById() {
-        OrderDetail orderDetail = orderDetailService.findById(order.getOrderId(), userEmail);
-        assertThat(orderDetail).usingRecursiveComparison().isEqualTo(order);
+        OrderDetail orderDetail = orderFacade.findById(order.getOrderId(), userEmail);
+        assertThat(orderDetail.getOrderId()).isEqualTo(order.getOrderId());
+        assertThat(orderDetail.getUserId()).isEqualTo(order.getUserId());
+        assertThat(orderDetail.getDeliveryStatus()).isEqualTo(order.getDeliveryStatus());
+        assertThat(orderDetail.getAmount()).isEqualTo(order.getAmount());
+        assertThat(orderDetail.getStoreId()).isEqualTo(order.getStoreId());
+//        assertThat(orderDetail.getProducts().stream()
+//                .map(Product::getProductId)
+//                .toList()).containsAll(order.getProductsId());
     }
 }

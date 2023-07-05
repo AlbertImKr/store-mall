@@ -15,7 +15,7 @@ public class UserDaoImpl implements UserDao {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public User findUserProfileByEmail(String email) {
+    public User findUserByEmail(String email) {
         QUser qUser = QUser.user;
         User user = jpaQueryFactory.selectFrom(qUser)
                 .where(qUser.email.eq(email))

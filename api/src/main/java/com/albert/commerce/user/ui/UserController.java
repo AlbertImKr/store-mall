@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
         String email = principal.getName();
-        User user = userDao.findUserProfileByEmail(email);
+        User user = userDao.findUserByEmail(email);
         return UserInfoResponse.from(user).add(USER_INFO_RESPONSE_LINKS);
     }
 

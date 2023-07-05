@@ -63,7 +63,7 @@ public final class BusinessLinks {
 
     public static Link getOrder(OrderId orderId) {
         return WebMvcLinkBuilder.linkTo(OrderController.class)
-                .slash(orderId.getValue())
+                .slash(orderId.getId())
                 .withRel("order");
     }
 

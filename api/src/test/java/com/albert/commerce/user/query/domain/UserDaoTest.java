@@ -53,7 +53,7 @@ class UserDaoTest {
         User savedUser = userRepository.save(user);
 
         UserDaoImpl userDao = new UserDaoImpl(jpaQueryFactory);
-        User findeduser = userDao.findUserProfileByEmail(testEmail);
+        User findeduser = userDao.findUserByEmail(testEmail);
 
         assertThat(findeduser).usingRecursiveComparison()
                 .isEqualTo(savedUser);

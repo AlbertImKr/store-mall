@@ -142,7 +142,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserProfileByEmail("test@email.com");
+        User user = userDao.findUserByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         // when
@@ -182,7 +182,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserProfileByEmail("test@email.com");
+        User user = userDao.findUserByEmail("test@email.com");
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         // when
@@ -260,7 +260,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserProfileByEmail(TEST_EMAIL);
+        User user = userDao.findUserByEmail(TEST_EMAIL);
         sellerStoreService.createStore(newStoreRequest, user.getId());
 
         String newStoreName = "newStoreName";

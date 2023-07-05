@@ -42,7 +42,7 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        User user = userDao.findUserProfileByEmail(userEmail);
+        User user = userDao.findUserByEmail(userEmail);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
                 user.getId());
 

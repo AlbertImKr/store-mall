@@ -26,8 +26,6 @@ import com.albert.commerce.order.query.domain.OrderDao;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.domain.Product;
-import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -94,13 +92,13 @@ class OrderControllerTest {
 
     User seller;
     SellerStoreResponse store;
-    List<ProductId> productsId;
+    List<String> productsId;
 
     @BeforeEach
     void setting() {
         userService.init("seller@email.com");
         userService.init("consumer@email.com");
-        seller = userDao.findUserProfileByEmail("seller@email.com");
+        seller = userDao.findUserByEmail("seller@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
@@ -112,7 +110,7 @@ class OrderControllerTest {
                     "test", "test");
             ProductCreatedResponse product = productService.addProduct(
                     productRequest, store.getStoreId());
-            productsId.add(product.getProductId());
+            productsId.add(product.getProductId().getId());
         }
     }
 
@@ -121,7 +119,7 @@ class OrderControllerTest {
     @Test
     void createOrder() throws Exception {
         // given
-        OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId());
+        OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
         // when
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -160,21 +158,20 @@ class OrderControllerTest {
 
         @BeforeEach
         void settingOrder() {
-            consumer = userDao.findUserProfileByEmail("consumer@email.com");
-            List<Product> products = productDao.findProductsByProductsId(productsId,
-                    store.getStoreId());
-            order = orderService.createOrder(consumer.getId(), 1000, products, store.getStoreId());
+            consumer = userDao.findUserByEmail("consumer@email.com");
+            OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
+            order = orderService.createOrder("consumer@email.com", orderRequest);
         }
 
 
         @DisplayName("주문을 id로 조회한다")
         @Test
         void getOrder() throws Exception {
-            mockMvc.perform(get("/orders/" + order.getOrderId().getValue()))
+            mockMvc.perform(get("/orders/" + order.getOrderId().getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("orderId").exists())
-                    .andExpect(jsonPath("userId").value(consumer.getId().getValue()))
+                    .andExpect(jsonPath("userId").value(consumer.getId().getId()))
                     .andExpect(jsonPath("storeId").value(store.getStoreId().getId()))
                     .andExpect(jsonPath("products").isArray())
                     .andExpect(jsonPath("products.*.createdTime").exists())
@@ -227,7 +224,8 @@ class OrderControllerTest {
         @Test
         void deleteOrder() throws Exception {
             // given
-            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest(order.getOrderId(),
+            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest(
+                    order.getOrderId().getId(),
                     "wrong order");
 
             // when
@@ -250,11 +248,9 @@ class OrderControllerTest {
 
         @BeforeEach
         void setOrders() {
-            consumer = userDao.findUserProfileByEmail("consumer@email.com");
-            List<Product> products = productDao.findProductsByProductsId(productsId,
-                    store.getStoreId());
+            OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
             for (int i = 0; i < 100; i++) {
-                orderService.createOrder(consumer.getId(), 10000, products, store.getStoreId());
+                orderService.createOrder("consumer@email.com", orderRequest);
             }
         }
 

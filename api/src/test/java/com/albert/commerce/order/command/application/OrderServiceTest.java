@@ -8,7 +8,6 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreResponse;
@@ -58,7 +57,7 @@ class OrderServiceTest {
 
             // User 저장
             userService.init(userEmail);
-            User user = userDao.findUserProfileByEmail(userEmail);
+            User user = userDao.findUserByEmail(userEmail);
             // store 생성
             SellerStoreResponse store = sellerStoreService.createStore(
                     new NewStoreRequest("testStoreName",
@@ -68,23 +67,23 @@ class OrderServiceTest {
                             "testStore@email.com"),
                     user.getId());
             // product 생성
-            List<Product> productList = new ArrayList<>();
+            List<String> productList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
                         new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
                                 "testCategory"), store.getStoreId());
-                productList.add(productJpaRepository.findById(productCreatedResponse.getProductId())
-                        .orElseThrow());
+                productList.add(productCreatedResponse.getProductId().getId());
             }
 
             // when
+            OrderRequest orderRequest = new OrderRequest(productList, store.getStoreId().getId());
             order = orderService.createOrder(
-                    user.getId(), 20000, productList, store.getStoreId());
+                    userEmail, orderRequest);
 
             // then
             assertThat(order.getAmount()).isEqualTo(20000);
             assertThat(order.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
-            assertThat(order.getProducts()).isEqualTo(order.getProducts());
+            assertThat(order.getProductsId()).isEqualTo(order.getProductsId());
             assertThat(order.getCreatedTime()).isNotNull();
             assertThat(order.getOrderId()).isNotNull();
             assertThat(order.getUpdateTime()).isNotNull();

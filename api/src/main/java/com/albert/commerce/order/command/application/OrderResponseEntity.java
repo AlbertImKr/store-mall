@@ -9,6 +9,7 @@ import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
@@ -42,16 +43,18 @@ public class OrderResponseEntity extends RepresentationModel<ProductResponse> {
 
     public static OrderResponseEntity from(OrderDetail order) {
         return OrderResponseEntity.builder()
-                .orderId(order.orderId())
-                .userId(order.userId())
-                .storeId(order.storeId())
-                .products(ProductResponse.changeToProductsResponse(order.products()))
-                .deliveryStatus(order.deliveryStatus())
-                .amount(order.amount())
+                .orderId(order.getOrderId())
+                .userId(order.getUserId())
+                .storeId(order.getStoreId())
+                .products(order.getProducts().stream()
+                        .map(ProductResponse::from)
+                        .collect(Collectors.toList()))
+                .deliveryStatus(order.getDeliveryStatus())
+                .amount(order.getAmount())
                 .links(Links.of(WebMvcLinkBuilder.linkTo(OrderController.class)
-                        .slash(order.orderId().getValue())
+                        .slash(order.getOrderId().getId())
                         .withSelfRel()))
-                .createdTime(order.createdTime())
+                .createdTime(order.getCreatedTime())
                 .build();
     }
 }

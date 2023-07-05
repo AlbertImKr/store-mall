@@ -9,8 +9,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
@@ -65,11 +63,5 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
                 .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
                 .price(product.getPrice())
                 .build();
-    }
-
-    public static List<ProductResponse> changeToProductsResponse(List<Product> products) {
-        return products.stream()
-                .map(ProductResponse::from)
-                .collect(Collectors.toList());
     }
 }

@@ -120,7 +120,7 @@ class ProductControllerTest {
                 TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
                 TEST_CATEGORY
         );
-        User user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        User user = userDao.findUserByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -176,7 +176,7 @@ class ProductControllerTest {
                 TEST_BRAND,
                 TEST_CATEGORY
         );
-        User user = userDao.findUserProfileByEmail(TEST_USER_EMAIL);
+        User user = userDao.findUserByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -294,7 +294,7 @@ class ProductControllerTest {
                     .build();
             SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
                     newStoreRequest,
-                    userDao.findUserProfileByEmail(TEST_USER_EMAIL).getId()
+                    userDao.findUserByEmail(TEST_USER_EMAIL).getId()
             );
             StoreId storeId = sellerStoreResponse.getStoreId();
             for (int i = 0; i < 100; i++) {

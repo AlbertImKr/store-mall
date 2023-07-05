@@ -5,6 +5,7 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.command.domain.OrderRepository;
 import com.albert.commerce.order.infra.persistence.imports.OrderJpaResponsibility;
+import com.albert.commerce.user.command.domain.UserId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -35,5 +36,15 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public void delete(Order order) {
         orderJpaResponsibility.delete(order);
+    }
+
+    @Override
+    public boolean exist(OrderId orderId, UserId userId) {
+        return orderJpaResponsibility.existsByOrderIdAndUserId(orderId, userId);
+    }
+
+    @Override
+    public void deleteById(OrderId orderId) {
+        orderJpaResponsibility.deleteById(orderId);
     }
 }

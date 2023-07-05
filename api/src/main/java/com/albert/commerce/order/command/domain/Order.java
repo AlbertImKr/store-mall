@@ -1,15 +1,16 @@
 package com.albert.commerce.order.command.domain;
 
 import com.albert.commerce.common.infra.persistence.BaseEntity;
-import com.albert.commerce.product.command.domain.Product;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
@@ -32,17 +33,20 @@ public class Order extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
     private StoreId storeId;
-    @ManyToMany
-    private List<Product> products;
+    @ElementCollection
+    @AttributeOverrides(
+            @AttributeOverride(name = "id", column = @Column(name = "product_id"))
+    )
+    private List<ProductId> productsId;
     private DeliveryStatus deliveryStatus;
     private long amount;
 
     @Builder
-    protected Order(OrderId orderId, UserId userId, List<Product> products, StoreId storeId,
+    protected Order(OrderId orderId, UserId userId, List<ProductId> productsId, StoreId storeId,
             long amount) {
         this.orderId = orderId;
         this.userId = userId;
-        this.products = products;
+        this.productsId = productsId;
         this.deliveryStatus = DeliveryStatus.PENDING;
         this.amount = amount;
         this.storeId = storeId;
