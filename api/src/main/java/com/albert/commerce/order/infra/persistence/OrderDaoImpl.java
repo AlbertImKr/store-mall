@@ -82,8 +82,8 @@ public class OrderDaoImpl implements OrderDao {
 
         Map<OrderId, OrderDetail> orderDetailMap = jpaQueryFactory
                 .from(qOrder)
-                .leftJoin(qProduct).on(qOrder.productsId.contains(qProduct.productId))
-                .where(limitOrders.contains(qOrder))
+                .leftJoin(qProduct).on(qProduct.productId.in(qOrder.productsId))
+                .where(qOrder.in(limitOrders))
                 .transform(groupBy(qOrder.orderId).as(
                                 new QOrderDetail(
                                         qOrder.orderId,
@@ -97,24 +97,6 @@ public class OrderDaoImpl implements OrderDao {
                         )
                 );
 
-//        Map<OrderId, OrderDetail> orders = jpaQueryFactory
-//                .from(qOrder)
-//                .leftJoin(qProduct).on(qOrder.productsId.contains(qProduct.productId))
-//                .where(qOrder.userId.eq(userId))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .transform(groupBy(qOrder.orderId).as(
-//                                new QOrderDetail(
-//                                        qOrder.orderId,
-//                                        qOrder.userId,
-//                                        list(qProduct),
-//                                        qOrder.deliveryStatus,
-//                                        qOrder.amount,
-//                                        qOrder.createdTime,
-//                                        qOrder.storeId
-//                                )
-//                        )
-//                );
 
         JPAQuery<Long> productJPAQuery = jpaQueryFactory
                 .select(qOrder.count())
