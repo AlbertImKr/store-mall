@@ -24,8 +24,6 @@ import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
-import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
@@ -182,11 +180,10 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,
-                "seller@email.com");
+        sellerStoreService.createStore(newStoreRequest, TEST_USER_EMAIL);
 
-        ProductCreatedResponse productCreatedResponse = productService.addProduct(productRequest,
-                store.getStoreId());
+        ProductCreatedResponse productCreatedResponse =
+                productService.addProduct(productRequest, TEST_USER_EMAIL);
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
                 new Money(CHANGED_PRICE),
@@ -248,24 +245,14 @@ class ProductControllerTest {
         mockMvc.perform(put("/products/" + NO_MATCH_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isNotFound())
                 .andDo(print())
                 .andExpect(jsonPath("error-message").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("_links.create-store").exists())
                 // restdocs
                 .andDo(document("updateProductFailed",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        links(
-                                halLinks(),
-                                linkWithRel("self").description("현재 연결한 link"),
-                                linkWithRel("my-store").description("my-store link"),
-                                linkWithRel("create-store").description("store 생성하는 link")
-                        ),
                         responseFields(
-                                subsectionWithPath("_links").ignored(),
                                 fieldWithPath("error-message").description("에러 메시지")
                         )
                 ))
@@ -290,13 +277,11 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                    newStoreRequest,
-                    "seller@email.com"
+            sellerStoreService.createStore(
+                    newStoreRequest, TEST_USER_EMAIL
             );
-            StoreId storeId = sellerStoreResponse.getStoreId();
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest, storeId);
+                productService.addProduct(productRequest, TEST_USER_EMAIL);
             }
         }
 

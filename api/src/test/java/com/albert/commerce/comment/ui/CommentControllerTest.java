@@ -22,6 +22,7 @@ import com.albert.commerce.product.command.application.dto.ProductCreatedRespons
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.SellerStoreService;
@@ -29,6 +30,7 @@ import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.domain.StoreDao;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -98,8 +100,9 @@ class CommentControllerTest {
     void setting() {
         userService.createByEmail(SELLER_EMAIL);
         userService.createByEmail(CONSUMER_EMAIL);
-        seller = userDao.findByEmail(SELLER_EMAIL);
-        consumer = userDao.findByEmail("consumer@email.com");
+        seller = userDao.findByEmail(SELLER_EMAIL).orElseThrow(UserNotFoundException::new);
+        consumer = userDao.findByEmail("consumer@email.com")
+                .orElseThrow(UserNotFoundException::new);
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 SELLER_EMAIL);
@@ -110,8 +113,9 @@ class CommentControllerTest {
                 "testProduct",
                 "test", "test");
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest, store.getStoreId());
-        product = productDao.findById(productCreatedResponse.getProductId());
+                productRequest, SELLER_EMAIL);
+        product = productDao.findById(productCreatedResponse.getProductId()).orElseThrow(
+                ProductNotFoundException::new);
     }
 
 

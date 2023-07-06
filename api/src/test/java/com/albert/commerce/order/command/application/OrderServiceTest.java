@@ -65,7 +65,7 @@ class OrderServiceTest {
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
                         new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
-                                "testCategory"), store.getStoreId());
+                                "testCategory"), "testStore@email.com");
                 productList.add(productCreatedResponse.getProductId().getId());
             }
 

@@ -70,7 +70,7 @@ class OrderFacadeTest {
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
                     new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
-                            "testCategory"), store.getStoreId());
+                            "testCategory"), userEmail);
             productList.add(productCreatedResponse.getProductId().getId());
         }
         OrderRequest orderRequest = new OrderRequest(productList, store.getStoreId().getId());

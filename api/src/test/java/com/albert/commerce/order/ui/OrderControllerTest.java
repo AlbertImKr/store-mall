@@ -30,6 +30,7 @@ import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -59,6 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class OrderControllerTest {
 
+    public static final String SELLER_EMAIL = "seller@email.com";
     @Autowired
     OrderController orderController;
 
@@ -96,20 +98,20 @@ class OrderControllerTest {
 
     @BeforeEach
     void setting() {
-        userService.createByEmail("seller@email.com");
+        userService.createByEmail(SELLER_EMAIL);
         userService.createByEmail("consumer@email.com");
-        seller = userDao.findByEmail("seller@email.com");
+        seller = userDao.findByEmail(SELLER_EMAIL).orElseThrow(UserNotFoundException::new);
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        store = sellerStoreService.createStore(newStoreRequest, "seller@email.com");
+        store = sellerStoreService.createStore(newStoreRequest, SELLER_EMAIL);
         productsId = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductRequest productRequest = new ProductRequest("product" + i, Money.from(10000L),
                     "testProduct",
                     "test", "test");
             ProductCreatedResponse product = productService.addProduct(
-                    productRequest, store.getStoreId());
+                    productRequest, SELLER_EMAIL);
             productsId.add(product.getProductId().getId());
         }
     }
@@ -158,7 +160,8 @@ class OrderControllerTest {
 
         @BeforeEach
         void settingOrder() {
-            consumer = userDao.findByEmail("consumer@email.com");
+            consumer = userDao.findByEmail("consumer@email.com")
+                    .orElseThrow(UserNotFoundException::new);
             OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
             order = orderService.createOrder("consumer@email.com", orderRequest);
         }

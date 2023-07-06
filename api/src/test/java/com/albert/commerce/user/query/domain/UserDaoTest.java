@@ -3,6 +3,7 @@ package com.albert.commerce.user.query.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.config.TestConfig;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
@@ -54,7 +55,7 @@ class UserDaoTest {
                 .build();
         User savedUser = userRepository.save(user);
 
-        User findeduser = userDao.findByEmail(testEmail);
+        User findeduser = userDao.findByEmail(testEmail).orElseThrow(UserNotFoundException::new);
 
         assertThat(findeduser).usingRecursiveComparison()
                 .isEqualTo(savedUser);
