@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
@@ -16,11 +17,11 @@ public abstract class BaseEntity implements Serializable {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    @CreationTimestamp
-    private LocalDateTime createdTime;
+    @CreationTimestamp(source = SourceType.DB)
+    protected LocalDateTime createdTime;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
+    @UpdateTimestamp(source = SourceType.DB)
+    protected LocalDateTime updateTime;
 
 }
