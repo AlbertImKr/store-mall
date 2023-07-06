@@ -1,4 +1,4 @@
-package com.albert.commerce.product.command.application;
+package com.albert.commerce.product.command.application.dto;
 
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.ui.ProductController;

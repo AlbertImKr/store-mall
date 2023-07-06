@@ -4,7 +4,7 @@ import com.albert.commerce.order.command.domain.DeliveryStatus;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.ui.OrderController;
-import com.albert.commerce.product.command.application.ProductResponse;
+import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import java.time.LocalDateTime;

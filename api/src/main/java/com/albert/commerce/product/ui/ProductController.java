@@ -1,11 +1,11 @@
 package com.albert.commerce.product.ui;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.product.command.application.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.ProductRequest;
-import com.albert.commerce.product.command.application.ProductResponse;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.ProductsAssembler;
+import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
+import com.albert.commerce.product.command.application.dto.ProductResponse;
+import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;

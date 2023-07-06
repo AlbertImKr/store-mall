@@ -1,4 +1,4 @@
-package com.albert.commerce.product.command.application;
+package com.albert.commerce.product.command.application.dto;
 
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;

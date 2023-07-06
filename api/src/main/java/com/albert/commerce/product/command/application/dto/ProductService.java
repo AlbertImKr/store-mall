@@ -1,5 +1,6 @@
-package com.albert.commerce.product.command.application;
+package com.albert.commerce.product.command.application.dto;
 
+import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductRepository;
 import com.albert.commerce.store.command.domain.StoreId;

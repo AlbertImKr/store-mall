@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
-import com.albert.commerce.product.command.application.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
