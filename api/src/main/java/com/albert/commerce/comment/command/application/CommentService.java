@@ -9,6 +9,7 @@ import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.domain.StoreDao;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse save(CommentRequest commentRequest, String email) {
-        User user = userDao.findByEmail(email);
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
         ProductId productId = ProductId.from(commentRequest.productId());
         checkProductId(productId);
         StoreId storeId = StoreId.from(commentRequest.storeId());

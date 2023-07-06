@@ -1,7 +1,6 @@
 package com.albert.commerce.product.infra.persistence;
 
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
-import com.albert.commerce.product.UnauthorizedModificationException;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
@@ -16,6 +15,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -93,7 +93,7 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
 
 
     @Override
-    public Product findByUserEmailAndProductId(String userEmail, ProductId productId) {
+    public Optional<Product> findByUserEmailAndProductId(String userEmail, ProductId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.select(qProduct)
                 .from(qProduct)
@@ -101,22 +101,16 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
                         getStoreIdByUserId(getUserIdByEmail(userEmail))
                 )))
                 .fetchFirst();
-        if (product == null) {
-            throw new UnauthorizedModificationException();
-        }
-        return product;
+        return Optional.ofNullable(product);
     }
 
     @Override
-    public Product findById(ProductId productId) {
+    public Optional<Product> findById(ProductId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.selectFrom(qProduct)
                 .where(qProduct.productId.eq(productId))
                 .fetchFirst();
-        if (product == null) {
-            throw new ProductNotFoundException();
-        }
-        return product;
+        return Optional.ofNullable(product);
     }
 
     @Override

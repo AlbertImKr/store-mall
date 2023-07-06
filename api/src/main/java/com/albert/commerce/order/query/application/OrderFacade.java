@@ -2,6 +2,7 @@ package com.albert.commerce.order.query.application;
 
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.domain.OrderDao;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class OrderFacade {
 
     @Transactional(readOnly = true)
     public Page<OrderDetail> findAllByUserId(String userEmail, Pageable pageable) {
-        User user = userDao.findByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         return orderDao.findByUserId(user.getId(), pageable);
     }
 }

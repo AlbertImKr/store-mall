@@ -1,9 +1,11 @@
 package com.albert.commerce.user.query.domain;
 
 import com.albert.commerce.user.command.domain.User;
+import java.util.Optional;
 
 public interface UserDao {
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
+    boolean existsByEmail(String email);
 }

@@ -3,6 +3,7 @@ package com.albert.commerce.common.handler;
 import com.albert.commerce.common.exception.ErrorResponse;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.UnauthorizedModificationException;
+import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
 import com.albert.commerce.store.MyStoreNotFoundException;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
@@ -50,6 +51,12 @@ public class GlobalExceptionHandler {
                 selfRel,
                 BusinessLinks.GET_STORE
         );
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ErrorResponse storeExceptionHandler(ProductNotFoundException productNotFoundException) {
+        return new ErrorResponse(productNotFoundException.getErrorMessage());
     }
 
 

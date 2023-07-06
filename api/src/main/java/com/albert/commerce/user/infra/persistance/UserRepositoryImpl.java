@@ -1,6 +1,5 @@
 package com.albert.commerce.user.infra.persistance;
 
-import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.User;
@@ -45,14 +44,7 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
-        QUser qUser = QUser.user;
-        User user = jpaQueryFactory.selectFrom(qUser)
-                .where(qUser.email.eq(email))
-                .fetchOne();
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
-        return user;
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepository.findByEmail(email);
     }
 }

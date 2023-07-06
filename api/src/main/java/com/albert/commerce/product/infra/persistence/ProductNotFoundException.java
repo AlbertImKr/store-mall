@@ -12,7 +12,7 @@ public class ProductNotFoundException extends BusinessException {
     }
 
     @Override
-    protected ErrorMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         return errorMessage;
     }
 }

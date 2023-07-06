@@ -3,6 +3,7 @@ package com.albert.commerce.user.command.application;
 import com.albert.commerce.user.command.application.dto.CustomUserDetails;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,10 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDao.findByEmail(email);
-        if (user == null) {
+        Optional<User> user = userDao.findByEmail(email);
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException(email);
         }
-        return new CustomUserDetails(user);
+        return new CustomUserDetails(user.get());
     }
 }

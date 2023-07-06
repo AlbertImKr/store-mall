@@ -8,6 +8,7 @@ import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class SellerStoreService {
     private final SequenceGenerator sequenceGenerator;
 
     public SellerStoreResponse createStore(NewStoreRequest newStoreRequest, String userEmail) {
-        User user = userDao.findByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         if (storeRepository.existsByUserId(user.getId())) {
             throw new StoreAlreadyExistsException();
         }

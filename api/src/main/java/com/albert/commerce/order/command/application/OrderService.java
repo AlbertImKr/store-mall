@@ -8,6 +8,7 @@ import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.util.List;
@@ -34,7 +35,7 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(DeleteOrderRequest deleteOrderRequest, String email) {
-        User user = userDao.findByEmail(email);
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
         OrderId orderId = OrderId.from(deleteOrderRequest.orderId());
         checkOrder(orderId, user);
         orderRepository.deleteById(orderId);
@@ -48,7 +49,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(String email, OrderRequest orderRequest) {
-        User user = userDao.findByEmail(email);
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
         StoreId storeId = StoreId.from(orderRequest.storeId());
         List<ProductId> productsId = orderRequest.productsId().stream()
                 .map(ProductId::from)

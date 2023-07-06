@@ -6,6 +6,7 @@ import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.domain.StoreDao;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class StoreFacade {
 
     @Transactional(readOnly = true)
     public SellerStoreResponse findStoreByUserEmail(String userEmail) {
-        User user = userDao.findByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         Store store = storeDao.findStoreByUserId(user.getId())
                 .orElseThrow(StoreNotFoundException::new);
         return SellerStoreResponse.from(store);
