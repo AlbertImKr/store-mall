@@ -1,4 +1,4 @@
-package com.albert.commerce.user.command.application;
+package com.albert.commerce.user.command.application.dto;
 
 import java.util.List;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.albert.commerce.user.command.application;
+package com.albert.commerce.user.command.application.dto;
 
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;

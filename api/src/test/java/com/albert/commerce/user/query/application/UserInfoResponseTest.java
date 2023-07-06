@@ -2,6 +2,7 @@ package com.albert.commerce.user.query.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;

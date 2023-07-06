@@ -37,7 +37,7 @@ class SellerStoreServiceTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        userService.init("seller@email.com");
+        userService.createByEmail("seller@email.com");
 
         // when
         SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,

@@ -24,7 +24,7 @@ public class SellerStoreService {
     private final SequenceGenerator sequenceGenerator;
 
     public SellerStoreResponse createStore(NewStoreRequest newStoreRequest, String userEmail) {
-        User user = userDao.findUserByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail);
         if (storeRepository.existsByUserId(user.getId())) {
             throw new StoreAlreadyExistsException();
         }

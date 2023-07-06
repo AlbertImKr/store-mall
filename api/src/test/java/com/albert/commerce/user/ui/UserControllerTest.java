@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -57,7 +57,7 @@ class UserControllerTest {
 
     @BeforeEach
     void initUser() {
-        userService.init("test@email.com");
+        userService.createByEmail("test@email.com");
     }
 
     @AfterEach

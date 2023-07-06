@@ -1,4 +1,4 @@
-package com.albert.commerce.user.query.application;
+package com.albert.commerce.user.command.application.dto;
 
 import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;

@@ -102,7 +102,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userService.init(TEST_USER_EMAIL);
+        userService.createByEmail(TEST_USER_EMAIL);
     }
 
     @AfterEach

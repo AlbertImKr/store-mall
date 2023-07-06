@@ -54,6 +54,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 class CommentControllerTest {
 
+    public static final String SELLER_EMAIL = "seller@email.com";
+    public static final String CONSUMER_EMAIL = "consumer@email.com";
     @Autowired
     MockMvc mockMvc;
 
@@ -94,13 +96,14 @@ class CommentControllerTest {
 
     @BeforeEach
     void setting() {
-        userService.init("seller@email.com");
-        userService.init("consumer@email.com");
-        seller = userDao.findUserByEmail("seller@email.com");
-        consumer = userDao.findUserByEmail("consumer@email.com");
+        userService.createByEmail(SELLER_EMAIL);
+        userService.createByEmail(CONSUMER_EMAIL);
+        seller = userDao.findByEmail(SELLER_EMAIL);
+        consumer = userDao.findByEmail("consumer@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
-                "test@email.com");
+                SELLER_EMAIL);
+        sellerStoreService.createStore(newStoreRequest, SELLER_EMAIL);
         store = storeDao.findStoreByUserId(seller.getId()).orElseThrow(StoreNotFoundException::new);
 
         ProductRequest productRequest = new ProductRequest("product", Money.from(10000L),

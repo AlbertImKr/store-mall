@@ -41,7 +41,7 @@ public class CustomAuthenticationSuccessHandler extends
         }
         if (authentication.isAuthenticated()) {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            userService.init(oAuth2User.getName());
+            userService.createByEmail(oAuth2User.getName());
         }
         clearAuthenticationAttributes(request);
         // Use the DefaultSavedRequest URL

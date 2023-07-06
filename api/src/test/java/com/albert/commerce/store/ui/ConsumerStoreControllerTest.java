@@ -66,7 +66,7 @@ class ConsumerStoreControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userService.createByEmail("test@email.com");
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")

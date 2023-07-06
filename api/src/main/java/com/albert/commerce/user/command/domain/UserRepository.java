@@ -1,6 +1,6 @@
 package com.albert.commerce.user.command.domain;
 
-import com.albert.commerce.user.command.application.UserProfileRequest;
+import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import java.util.Optional;
 
 public interface UserRepository {

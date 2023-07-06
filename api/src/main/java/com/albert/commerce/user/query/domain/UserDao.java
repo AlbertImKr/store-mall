@@ -4,6 +4,6 @@ import com.albert.commerce.user.command.domain.User;
 
 public interface UserDao {
 
-    User findUserByEmail(String email);
+    User findByEmail(String email);
 
 }

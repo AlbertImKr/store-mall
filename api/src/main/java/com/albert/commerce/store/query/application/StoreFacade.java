@@ -21,7 +21,7 @@ public class StoreFacade {
 
     @Transactional(readOnly = true)
     public SellerStoreResponse findStoreByUserEmail(String userEmail) {
-        User user = userDao.findUserByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail);
         Store store = storeDao.findStoreByUserId(user.getId())
                 .orElseThrow(StoreNotFoundException::new);
         return SellerStoreResponse.from(store);

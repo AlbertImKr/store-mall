@@ -53,7 +53,7 @@ class OrderServiceTest {
         @BeforeEach
         void save() {
             // given
-            userService.init(userEmail);
+            userService.createByEmail(userEmail);
             SellerStoreResponse store = sellerStoreService.createStore(
                     new NewStoreRequest("testStoreName",
                             "testOwnerName",

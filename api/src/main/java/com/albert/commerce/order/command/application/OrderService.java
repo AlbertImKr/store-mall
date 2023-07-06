@@ -34,7 +34,7 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(DeleteOrderRequest deleteOrderRequest, String email) {
-        User user = userDao.findUserByEmail(email);
+        User user = userDao.findByEmail(email);
         OrderId orderId = OrderId.from(deleteOrderRequest.orderId());
         checkOrder(orderId, user);
         orderRepository.deleteById(orderId);
@@ -48,7 +48,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(String email, OrderRequest orderRequest) {
-        User user = userDao.findUserByEmail(email);
+        User user = userDao.findByEmail(email);
         StoreId storeId = StoreId.from(orderRequest.storeId());
         List<ProductId> productsId = orderRequest.productsId().stream()
                 .map(ProductId::from)

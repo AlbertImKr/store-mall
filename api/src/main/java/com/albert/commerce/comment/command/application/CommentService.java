@@ -27,7 +27,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse save(CommentRequest commentRequest, String email) {
-        User user = userDao.findUserByEmail(email);
+        User user = userDao.findByEmail(email);
         ProductId productId = ProductId.from(commentRequest.productId());
         checkProductId(productId);
         StoreId storeId = StoreId.from(commentRequest.storeId());

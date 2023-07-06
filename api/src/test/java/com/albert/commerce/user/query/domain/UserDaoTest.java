@@ -7,7 +7,6 @@ import com.albert.commerce.user.command.domain.Role;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
-import com.albert.commerce.user.infra.persistance.UserDaoImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,9 @@ class UserDaoTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserDao userDao;
 
     @Test
     void findUserProfileByEmail() {
@@ -52,8 +54,7 @@ class UserDaoTest {
                 .build();
         User savedUser = userRepository.save(user);
 
-        UserDaoImpl userDao = new UserDaoImpl(jpaQueryFactory);
-        User findeduser = userDao.findUserByEmail(testEmail);
+        User findeduser = userDao.findByEmail(testEmail);
 
         assertThat(findeduser).usingRecursiveComparison()
                 .isEqualTo(savedUser);

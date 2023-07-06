@@ -57,7 +57,7 @@ class OrderFacadeTest {
     @BeforeEach
     void setOrder() {
         // User 저장
-        userService.init(userEmail);
+        userService.createByEmail(userEmail);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",

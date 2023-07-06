@@ -96,9 +96,9 @@ class OrderControllerTest {
 
     @BeforeEach
     void setting() {
-        userService.init("seller@email.com");
-        userService.init("consumer@email.com");
-        seller = userDao.findUserByEmail("seller@email.com");
+        userService.createByEmail("seller@email.com");
+        userService.createByEmail("consumer@email.com");
+        seller = userDao.findByEmail("seller@email.com");
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
@@ -158,7 +158,7 @@ class OrderControllerTest {
 
         @BeforeEach
         void settingOrder() {
-            consumer = userDao.findUserByEmail("consumer@email.com");
+            consumer = userDao.findByEmail("consumer@email.com");
             OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
             order = orderService.createOrder("consumer@email.com", orderRequest);
         }
@@ -243,7 +243,7 @@ class OrderControllerTest {
     @DisplayName("유저가 많은 orders를 하였다")
     @Nested
     class EnoughOrders {
-        
+
         @BeforeEach
         void setOrders() {
             OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());

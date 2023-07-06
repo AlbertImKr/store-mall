@@ -45,7 +45,7 @@ public class ProductController {
     public ResponseEntity<ProductCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
-        User user = userDao.findUserByEmail(principal.getName());
+        User user = userDao.findByEmail(principal.getName());
         SellerStoreResponse store = storeFacade.findStoreByUserEmail(user.getEmail());
         ProductCreatedResponse productResponse = productService.addProduct(productRequest,
                 store.getStoreId());

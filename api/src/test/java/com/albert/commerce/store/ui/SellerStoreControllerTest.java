@@ -77,7 +77,7 @@ class SellerStoreControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userService.init(TEST_EMAIL);
+        userService.createByEmail(TEST_EMAIL);
     }
 
     @AfterEach

@@ -2,11 +2,10 @@ package com.albert.commerce.user.ui;
 
 import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_LINKS;
 
-import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.command.application.dto.UserProfileRequest;
+import com.albert.commerce.user.query.application.UserFacade;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-
-    private final UserDao userDao;
     private final UserService userService;
+    private final UserFacade userFacade;
 
 
     @GetMapping("/")
@@ -36,9 +34,7 @@ public class UserController {
 
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
-        String email = principal.getName();
-        User user = userDao.findUserByEmail(email);
-        return UserInfoResponse.from(user).add(USER_INFO_RESPONSE_LINKS);
+        return userFacade.findByEmail(principal.getName());
     }
 
     @PutMapping("/users/profile")

@@ -1,10 +1,12 @@
 package com.albert.commerce.user.infra.persistance;
 
-import com.albert.commerce.user.command.application.UserProfileRequest;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserRepository;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl implements UserRepository, UserDao {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final UserJpaRepository userJpaRepository;
@@ -40,5 +42,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         return userJpaRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        QUser qUser = QUser.user;
+        User user = jpaQueryFactory.selectFrom(qUser)
+                .where(qUser.email.eq(email))
+                .fetchOne();
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
     }
 }

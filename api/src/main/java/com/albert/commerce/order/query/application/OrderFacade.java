@@ -25,7 +25,7 @@ public class OrderFacade {
 
     @Transactional(readOnly = true)
     public Page<OrderDetail> findAllByUserId(String userEmail, Pageable pageable) {
-        User user = userDao.findUserByEmail(userEmail);
+        User user = userDao.findByEmail(userEmail);
         return orderDao.findByUserId(user.getId(), pageable);
     }
 }
