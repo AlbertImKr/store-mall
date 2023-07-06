@@ -79,6 +79,7 @@ public class OrderController {
         // HATEOAS
         PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,
                 orderAssembler);
+
         return ResponseEntity.ok(entityModels);
     }
 }

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -32,7 +32,7 @@ public class OrderService {
                 .sum();
     }
 
-
+    @Transactional
     public void deleteOrder(DeleteOrderRequest deleteOrderRequest, String email) {
         User user = userDao.findUserByEmail(email);
         OrderId orderId = OrderId.from(deleteOrderRequest.orderId());
@@ -46,6 +46,7 @@ public class OrderService {
         }
     }
 
+    @Transactional
     public Order createOrder(String email, OrderRequest orderRequest) {
         User user = userDao.findUserByEmail(email);
         StoreId storeId = StoreId.from(orderRequest.storeId());

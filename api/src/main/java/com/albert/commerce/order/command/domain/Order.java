@@ -11,6 +11,8 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
@@ -38,11 +40,12 @@ public class Order extends BaseEntity {
             @AttributeOverride(name = "id", column = @Column(name = "product_id"))
     )
     private List<ProductId> productsId;
+    @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
     private long amount;
 
     @Builder
-    protected Order(OrderId orderId, UserId userId, List<ProductId> productsId, StoreId storeId,
+    private Order(OrderId orderId, UserId userId, List<ProductId> productsId, StoreId storeId,
             long amount) {
         this.orderId = orderId;
         this.userId = userId;
