@@ -23,12 +23,12 @@ import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
+import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.StoreDao;
+import com.albert.commerce.store.query.domain.StoreDao;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -101,9 +101,7 @@ class CommentControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        SellerStoreResponse createdStore = sellerStoreService.createStore(newStoreRequest,
-                seller.getId());
-        store = storeDao.findById(createdStore.getStoreId());
+        store = storeDao.findStoreByUserId(seller.getId()).orElseThrow(StoreNotFoundException::new);
 
         ProductRequest productRequest = new ProductRequest("product", Money.from(10000L),
                 "testProduct",

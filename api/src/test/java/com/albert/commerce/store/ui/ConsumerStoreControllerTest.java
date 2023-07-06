@@ -14,11 +14,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -81,9 +80,8 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserByEmail("test@email.com");
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                user.getId());
+                TEST_EMAIL_COM);
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getId()))

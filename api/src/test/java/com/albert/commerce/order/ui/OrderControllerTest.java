@@ -27,9 +27,9 @@ import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -102,7 +102,7 @@ class OrderControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        store = sellerStoreService.createStore(newStoreRequest, seller.getId());
+        store = sellerStoreService.createStore(newStoreRequest, "seller@email.com");
         productsId = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductRequest productRequest = new ProductRequest("product" + i, Money.from(10000L),
@@ -243,9 +243,7 @@ class OrderControllerTest {
     @DisplayName("유저가 많은 orders를 하였다")
     @Nested
     class EnoughOrders {
-
-        User consumer;
-
+        
         @BeforeEach
         void setOrders() {
             OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());

@@ -18,12 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.store.command.application.NewStoreRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +77,7 @@ class SellerStoreControllerTest {
 
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userService.init(TEST_EMAIL);
     }
 
     @AfterEach
@@ -93,7 +92,7 @@ class SellerStoreControllerTest {
     void createStoreSuccess() throws Exception {
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
-                .email("test@email.com")
+                .email(TEST_EMAIL)
                 .ownerName(TEST_OWNER)
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
@@ -142,8 +141,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest, TEST_EMAIL);
 
         // when
         mockMvc.perform(post("/stores")
@@ -182,8 +180,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest, TEST_EMAIL);
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -260,8 +257,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        User user = userDao.findUserByEmail(TEST_EMAIL);
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest, TEST_EMAIL);
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";

@@ -9,12 +9,12 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,6 @@ class OrderFacadeTest {
     void setOrder() {
         // User 저장
         userService.init(userEmail);
-        User user = userDao.findUserByEmail(userEmail);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",
@@ -66,7 +65,7 @@ class OrderFacadeTest {
                         "testAddress",
                         "11111111111",
                         "testStore@email.com"),
-                user.getId());
+                userEmail);
         List<String> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
@@ -87,8 +86,8 @@ class OrderFacadeTest {
         assertThat(orderDetail.getDeliveryStatus()).isEqualTo(order.getDeliveryStatus());
         assertThat(orderDetail.getAmount()).isEqualTo(order.getAmount());
         assertThat(orderDetail.getStoreId()).isEqualTo(order.getStoreId());
-//        assertThat(orderDetail.getProducts().stream()
-//                .map(Product::getProductId)
-//                .toList()).containsAll(order.getProductsId());
+        assertThat(orderDetail.getProducts().stream()
+                .map(Product::getProductId)
+                .toList()).containsAll(order.getProductsId());
     }
 }

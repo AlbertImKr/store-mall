@@ -1,4 +1,4 @@
-package com.albert.commerce.store.ui;
+package com.albert.commerce.store;
 
 import com.albert.commerce.common.exception.BusinessException;
 import com.albert.commerce.common.exception.ErrorMessage;

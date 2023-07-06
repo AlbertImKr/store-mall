@@ -1,4 +1,4 @@
-package com.albert.commerce.store.command.application;
+package com.albert.commerce.store.command.application.dto;
 
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;

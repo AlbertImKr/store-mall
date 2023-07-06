@@ -1,10 +1,12 @@
 package com.albert.commerce.store.infra.presentation;
 
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
+import com.albert.commerce.store.query.domain.StoreDao;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
 import com.querydsl.jpa.JPAExpressions;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class StoreCommandDaoCustomImpl implements StoreRepository {
+public class StoreCommandDaoCustomImpl implements StoreRepository, StoreDao {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final StoreJpaRepository storeJpaRepository;
@@ -59,5 +61,20 @@ public class StoreCommandDaoCustomImpl implements StoreRepository {
     @Override
     public Store save(Store store) {
         return storeJpaRepository.save(store);
+    }
+
+    @Override
+    public Optional<Store> findById(StoreId storeId) {
+        return storeJpaRepository.findById(storeId);
+    }
+
+    @Override
+    public boolean exists(StoreId storeId) {
+        return storeJpaRepository.existsById(storeId);
+    }
+
+    @Override
+    public Optional<Store> findStoreByUserId(UserId userId) {
+        return storeJpaRepository.findByUserId(userId);
     }
 }

@@ -1,6 +1,6 @@
 package com.albert.commerce.store.command.domain;
 
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.Optional;
 

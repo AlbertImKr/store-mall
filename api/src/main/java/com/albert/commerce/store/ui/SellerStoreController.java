@@ -4,14 +4,11 @@ import static com.albert.commerce.common.units.BusinessLinks.GET_MY_STORE_WITH_S
 import static com.albert.commerce.common.units.BusinessLinks.GET_STORE_BY_STORE_ID;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
-import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
+import com.albert.commerce.store.query.application.StoreFacade;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/stores", produces = MediaTypes.HAL_JSON_VALUE)
 public class SellerStoreController {
 
-
     private final SellerStoreService sellerStoreService;
-    private final StoreDao storeDao;
-    private final UserDao userDao;
+    private final StoreFacade storeFacade;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -42,9 +37,8 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        User user = userDao.findUserByEmail(userEmail);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                user.getId());
+                userEmail);
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
         String storeId = sellerStoreResponse.getStoreId().getId();
@@ -54,8 +48,8 @@ public class SellerStoreController {
 
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
-        Store store = storeDao.findStoreByUserEmail(principal.getName());
-        SellerStoreResponse sellerStoreResponse = SellerStoreResponse.from(store);
+        String userEmail = principal.getName();
+        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserEmail(userEmail);
 
         sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);

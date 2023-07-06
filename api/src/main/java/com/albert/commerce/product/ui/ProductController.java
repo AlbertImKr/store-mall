@@ -9,8 +9,10 @@ import com.albert.commerce.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
-import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.StoreDao;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.domain.UserDao;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
-    private final StoreDao storeDao;
+    private final StoreFacade storeFacade;
+    private final UserDao userDao;
     private final ProductDao productDao;
     private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
     private final ProductsAssembler productsAssembler;
@@ -42,8 +45,10 @@ public class ProductController {
     public ResponseEntity<ProductCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
-        StoreId storeId = storeDao.findStoreIdByUserEmail(principal.getName());
-        ProductCreatedResponse productResponse = productService.addProduct(productRequest, storeId);
+        User user = userDao.findUserByEmail(principal.getName());
+        SellerStoreResponse store = storeFacade.findStoreByUserEmail(user.getEmail());
+        ProductCreatedResponse productResponse = productService.addProduct(productRequest,
+                store.getStoreId());
         return ResponseEntity.created(BusinessLinks.MY_STORE.toUri())
                 .body(productResponse);
     }

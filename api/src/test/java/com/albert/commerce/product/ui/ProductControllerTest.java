@@ -22,13 +22,12 @@ import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +48,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureRestDocs
-@WithMockUser(username = "test@email.com")
+@WithMockUser(username = "seller@email.com")
 @AutoConfigureMockMvc
 @SpringBootTest
 class ProductControllerTest {
@@ -59,7 +58,7 @@ class ProductControllerTest {
     private static final String TEST_BRAND = "testBrand";
     private static final String TEST_CATEGORY = "testCategory";
     private static final int TEST_PRICE = 10000;
-    private static final String TEST_USER_EMAIL = "test@email.com";
+    private static final String TEST_USER_EMAIL = "seller@email.com";
     private static final String TEST_STORE_NAME = "testStoreName";
     private static final String TEST_STORE_EMAIL = "test@email.com";
     private static final String TEST_OWNER = "testOwner";
@@ -120,7 +119,6 @@ class ProductControllerTest {
                 TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
                 TEST_CATEGORY
         );
-        User user = userDao.findUserByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -129,7 +127,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest, "seller@email.com");
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -176,7 +174,6 @@ class ProductControllerTest {
                 TEST_BRAND,
                 TEST_CATEGORY
         );
-        User user = userDao.findUserByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -185,7 +182,8 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest, user.getId());
+        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,
+                "seller@email.com");
 
         ProductCreatedResponse productCreatedResponse = productService.addProduct(productRequest,
                 store.getStoreId());
@@ -294,7 +292,7 @@ class ProductControllerTest {
                     .build();
             SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
                     newStoreRequest,
-                    userDao.findUserByEmail(TEST_USER_EMAIL).getId()
+                    "seller@email.com"
             );
             StoreId storeId = sellerStoreResponse.getStoreId();
             for (int i = 0; i < 100; i++) {

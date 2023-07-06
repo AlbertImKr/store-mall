@@ -1,9 +1,8 @@
 package com.albert.commerce.store.ui;
 
-import com.albert.commerce.store.command.application.ConsumerStoreResponse;
-import com.albert.commerce.store.command.domain.Store;
+import com.albert.commerce.store.command.application.dto.ConsumerStoreResponse;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.StoreDao;
+import com.albert.commerce.store.query.application.StoreFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/stores", produces = MediaTypes.HAL_JSON_VALUE)
 public class ConsumerStoreController {
 
-    private final StoreDao storeDao;
+    private final StoreFacade storeFacade;
 
     @GetMapping("/{storeId}")
-    public ResponseEntity getStore(@PathVariable String storeId) {
-        Store store = storeDao.findById(StoreId.from(storeId));
-        ConsumerStoreResponse consumerStoreResponse = ConsumerStoreResponse.from(store);
+    public ResponseEntity<ConsumerStoreResponse> getStore(@PathVariable String storeId) {
+        ConsumerStoreResponse consumerStoreResponse = storeFacade.findById(StoreId.from(storeId));
         consumerStoreResponse.add(
                 WebMvcLinkBuilder.linkTo(SellerStoreController.class).slash(storeId).withSelfRel());
         return ResponseEntity.ok().body(consumerStoreResponse);
