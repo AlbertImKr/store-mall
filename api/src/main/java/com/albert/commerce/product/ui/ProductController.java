@@ -58,10 +58,11 @@ public class ProductController {
 
     @PutMapping(value = "/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(Principal principal,
-            @PathVariable ProductId productId, @RequestBody ProductRequest productRequest) {
+            @PathVariable String productId, @RequestBody ProductRequest productRequest) {
         String userEmail = principal.getName();
         UserInfoResponse user = userFacade.findByEmail(userEmail);
-        return ResponseEntity.ok(productService.update(user.getId(), productId, productRequest));
+        return ResponseEntity.ok(
+                productService.update(user.getId(), ProductId.from(productId), productRequest));
     }
 
 

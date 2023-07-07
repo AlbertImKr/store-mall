@@ -50,8 +50,8 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseEntity> getOrder(Principal principal,
-            @PathVariable OrderId orderId) {
-        OrderDetail order = orderFacade.findById(orderId, principal.getName());
+            @PathVariable String orderId) {
+        OrderDetail order = orderFacade.findById(OrderId.from(orderId), principal.getName());
 
         // HATEOAS
         OrderResponseEntity orderResponse = orderAssembler.toModel(order);

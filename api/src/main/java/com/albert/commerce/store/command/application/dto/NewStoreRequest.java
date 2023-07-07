@@ -5,9 +5,10 @@ import com.albert.commerce.user.command.domain.UserId;
 import lombok.Builder;
 
 @Builder
-public record NewStoreRequest(String storeName, String ownerName, String address,
+public record NewStoreRequest(String storeName,
+                              String ownerName,
+                              String address,
                               String phoneNumber,
-
                               String email) {
 
     public Store toStore(UserId userId) {
