@@ -1,5 +1,6 @@
 package com.albert.commerce.product.infra.persistence;
 
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
@@ -15,8 +16,8 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -114,21 +115,29 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
     }
 
     @Override
-    public List<Product> findProductsByProductsId(List<ProductId> productsId, StoreId storeId) {
-        QProduct qProduct = QProduct.product;
-        return productsId.stream()
-                .map(productId ->
-                        jpaQueryFactory.select(qProduct)
-                                .from(qProduct)
-                                .where(qProduct.productId.eq(productId)
-                                        .and(qProduct.storeId.eq(storeId)))
-                                .fetchFirst()
-                )
-                .collect(Collectors.toList());
+    public boolean exists(ProductId productId) {
+        return productJpaRepository.existsById(productId);
     }
 
     @Override
-    public boolean exists(ProductId productId) {
-        return productJpaRepository.existsById(productId);
+    public long getAmount(List<ProductId> productsId) {
+        QProduct qProduct = QProduct.product;
+        return jpaQueryFactory.select(qProduct.price)
+                .from(qProduct)
+                .where(qProduct.productId.in(productsId))
+                .fetch()
+                .stream()
+                .map(Money::value)
+                .reduce(Long::sum).orElse(0L);
+    }
+
+    @Override
+    public boolean isValidProductsId(List<ProductId> productsId) {
+        QProduct qProduct = QProduct.product;
+        return Objects.equals((long) productsId.size(),
+                jpaQueryFactory.select(qProduct.productId.count())
+                        .from(qProduct)
+                        .where(qProduct.productId.in(productsId))
+                        .fetchFirst());
     }
 }

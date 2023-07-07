@@ -3,18 +3,21 @@ package com.albert.commerce.order.query.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.common.infra.persistence.Money;
-import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.Product;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
+import com.albert.commerce.product.query.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,11 @@ class OrderFacadeTest {
 
     @Autowired
     OrderFacade orderFacade;
+    @Autowired
+    ProductFacade productFacade;
+
+    @Autowired
+    UserFacade userFacade;
 
 
     Order order;
@@ -58,6 +66,7 @@ class OrderFacadeTest {
     void setOrder() {
         // User 저장
         userService.createByEmail(userEmail);
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",
@@ -66,15 +75,15 @@ class OrderFacadeTest {
                         "11111111111",
                         "testStore@email.com"),
                 userEmail);
-        List<String> productList = new ArrayList<>();
+        List<ProductId> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
                     new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
                             "testCategory"), userEmail);
-            productList.add(productCreatedResponse.getProductId().getId());
+            productList.add(productCreatedResponse.getProductId());
         }
-        OrderRequest orderRequest = new OrderRequest(productList, store.getStoreId().getId());
-        order = orderService.createOrder(userEmail, orderRequest);
+        order = orderService.createOrder(user.getId(), store.getStoreId(), productList,
+                productFacade.getAmount(productList));
     }
 
     @DisplayName("주문 번호로 order 조회한다")

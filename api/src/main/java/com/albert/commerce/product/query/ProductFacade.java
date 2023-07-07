@@ -5,6 +5,7 @@ import com.albert.commerce.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +35,18 @@ public class ProductFacade {
         return ProductResponse.from(product);
     }
 
+    @Transactional(readOnly = true)
     public void checkId(ProductId productId) {
         if (!productDao.exists(productId)) {
             throw new ProductNotFoundException();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public long getAmount(List<ProductId> productsId) {
+        if (!productDao.isValidProductsId(productsId)) {
+            throw new ProductNotFoundException();
+        }
+        return productDao.getAmount(productsId);
     }
 }

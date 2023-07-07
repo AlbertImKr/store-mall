@@ -8,11 +8,15 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
+import com.albert.commerce.product.query.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +42,14 @@ class OrderServiceTest {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserFacade userFacade;
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProductFacade productFacade;
 
 
     @Nested
@@ -47,6 +57,7 @@ class OrderServiceTest {
     class needSavedOrderTest {
 
         Order order;
+        UserInfoResponse consumer;
         String userEmail = "test@email.com";
 
         @DisplayName("Order를 저장한다")
@@ -54,6 +65,7 @@ class OrderServiceTest {
         void save() {
             // given
             userService.createByEmail(userEmail);
+            consumer = userFacade.findByEmail(userEmail);
             SellerStoreResponse store = sellerStoreService.createStore(
                     new NewStoreRequest("testStoreName",
                             "testOwnerName",
@@ -61,18 +73,17 @@ class OrderServiceTest {
                             "11111111111",
                             "testStore@email.com"),
                     userEmail);
-            List<String> productList = new ArrayList<>();
+            List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
                         new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
                                 "testCategory"), "testStore@email.com");
-                productList.add(productCreatedResponse.getProductId().getId());
+                productsId.add(productCreatedResponse.getProductId());
             }
 
             // when
-            OrderRequest orderRequest = new OrderRequest(productList, store.getStoreId().getId());
-            order = orderService.createOrder(
-                    userEmail, orderRequest);
+            order = orderService.createOrder(consumer.getId(), store.getStoreId(), productsId,
+                    productFacade.getAmount(productsId));
 
             // then
             assertThat(order.getAmount()).isEqualTo(20000);

@@ -11,7 +11,14 @@ import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.query.application.OrderFacade;
+import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +43,9 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderFacade orderFacade;
     private final OrderAssembler orderAssembler;
+    private final UserFacade userFacade;
+    private final ProductFacade productFacade;
+    private final StoreFacade storeFacade;
     private final PagedResourcesAssembler<OrderDetail> pagedResourcesAssembler;
 
     @GetMapping("/{orderId}")
@@ -53,7 +63,14 @@ public class OrderController {
     public ResponseEntity<OrderCreateResponse> createOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
         String email = principal.getName();
-        Order order = orderService.createOrder(email, orderRequest);
+        UserInfoResponse user = userFacade.findByEmail(email);
+        List<ProductId> productsId = orderRequest.productsId().stream()
+                .map(ProductId::from)
+                .toList();
+        long amount = productFacade.getAmount(productsId);
+        StoreId storeId = StoreId.from(orderRequest.storeId());
+        storeFacade.checkId(storeId);
+        Order order = orderService.createOrder(user.getId(), storeId, productsId, amount);
 
         // HATEOAS
         Link orderLink = BusinessLinks.getOrder(order.getOrderId());
@@ -66,7 +83,9 @@ public class OrderController {
     @DeleteMapping
     public ResponseEntity<Void> deleteOrder(Principal principal,
             @RequestBody DeleteOrderRequest deleteOrderRequest) {
-        orderService.deleteOrder(deleteOrderRequest, principal.getName());
+        String email = principal.getName();
+        UserInfoResponse user = userFacade.findByEmail(email);
+        orderService.deleteOrder(deleteOrderRequest, user.getId());
         return ResponseEntity.noContent().build();
     }
 

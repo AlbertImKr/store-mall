@@ -40,15 +40,19 @@ public class CommentController {
             Principal principal) {
         String email = principal.getName();
         UserInfoResponse user = userFacade.findByEmail(email);
+
         ProductId productId = ProductId.from(commentRequest.productId());
         productFacade.checkId(productId);
+
         StoreId storeId = StoreId.from(commentRequest.storeId());
         storeFacade.checkId(storeId);
+
         CommentId parentCommentId =
                 commentRequest.parentCommentId() == null ?
                         null :
                         CommentId.from(commentRequest.parentCommentId());
         commentDaoFacade.checkId(parentCommentId);
+
         return EntityModel.of(
                 commentService.create(productId, storeId, parentCommentId, user.getId(),
                         commentRequest.detail(), user.getNickname()));

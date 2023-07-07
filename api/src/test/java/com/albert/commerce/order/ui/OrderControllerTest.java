@@ -26,7 +26,9 @@ import com.albert.commerce.order.query.domain.OrderDao;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductDao;
+import com.albert.commerce.product.query.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
@@ -61,6 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 class OrderControllerTest {
 
     public static final String SELLER_EMAIL = "seller@email.com";
+    public static final String CONSUMER_EMAIL = "consumer@email.com";
     @Autowired
     OrderController orderController;
 
@@ -90,29 +93,37 @@ class OrderControllerTest {
     ProductDao productDao;
 
     @Autowired
+    ProductFacade productFacade;
+
+    @Autowired
     EntityManager entityManager;
 
     User seller;
+    User consumer;
     SellerStoreResponse store;
-    List<String> productsId;
+    List<String> requestProductsId;
+    List<ProductId> productIds;
 
     @BeforeEach
     void setting() {
         userService.createByEmail(SELLER_EMAIL);
-        userService.createByEmail("consumer@email.com");
+        userService.createByEmail(CONSUMER_EMAIL);
         seller = userDao.findByEmail(SELLER_EMAIL).orElseThrow(UserNotFoundException::new);
+        consumer = userDao.findByEmail(CONSUMER_EMAIL).orElseThrow(UserNotFoundException::new);
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
         store = sellerStoreService.createStore(newStoreRequest, SELLER_EMAIL);
-        productsId = new ArrayList<>();
+        requestProductsId = new ArrayList<>();
+        productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductRequest productRequest = new ProductRequest("product" + i, Money.from(10000L),
                     "testProduct",
                     "test", "test");
             ProductCreatedResponse product = productService.addProduct(
                     productRequest, SELLER_EMAIL);
-            productsId.add(product.getProductId().getId());
+            productIds.add(product.getProductId());
+            requestProductsId.add(product.getProductId().getId());
         }
     }
 
@@ -121,7 +132,7 @@ class OrderControllerTest {
     @Test
     void createOrder() throws Exception {
         // given
-        OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
+        OrderRequest orderRequest = new OrderRequest(requestProductsId, store.getStoreId().getId());
         // when
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -162,8 +173,8 @@ class OrderControllerTest {
         void settingOrder() {
             consumer = userDao.findByEmail("consumer@email.com")
                     .orElseThrow(UserNotFoundException::new);
-            OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
-            order = orderService.createOrder("consumer@email.com", orderRequest);
+            order = orderService.createOrder(consumer.getId(), store.getStoreId(), productIds,
+                    productFacade.getAmount(productIds));
         }
 
 
@@ -249,9 +260,9 @@ class OrderControllerTest {
 
         @BeforeEach
         void setOrders() {
-            OrderRequest orderRequest = new OrderRequest(productsId, store.getStoreId().getId());
             for (int i = 0; i < 100; i++) {
-                orderService.createOrder("consumer@email.com", orderRequest);
+                orderService.createOrder(consumer.getId(), store.getStoreId(), productIds,
+                        productFacade.getAmount(productIds));
             }
         }
 
