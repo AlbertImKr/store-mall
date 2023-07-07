@@ -59,4 +59,8 @@ public class Product extends BaseEntity {
         this.description = description;
         return this;
     }
+
+    public void updateId(ProductId productId) {
+        this.productId = productId;
+    }
 }

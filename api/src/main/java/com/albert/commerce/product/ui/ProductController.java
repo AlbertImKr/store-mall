@@ -7,6 +7,10 @@ import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,14 +32,18 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductFacade productFacade;
+    private final UserFacade userFacade;
+    private final StoreFacade storeFacade;
 
     @PostMapping
     public ResponseEntity<ProductCreatedResponse> addProduct(
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        ProductCreatedResponse productResponse = productService.addProduct(productRequest,
-                userEmail);
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        SellerStoreResponse store = storeFacade.findStoreByUserId(user.getId());
+        ProductCreatedResponse productResponse = productService.addProduct(
+                productRequest.toProduct(store.getStoreId()));
         return ResponseEntity.created(BusinessLinks.MY_STORE.toUri())
                 .body(productResponse);
     }
@@ -43,15 +51,17 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PagedModel<ProductResponse>> getAllProducts(Principal principal,
             Pageable pageable) {
+        UserInfoResponse user = userFacade.findByEmail(principal.getName());
         return ResponseEntity.ok(
-                productFacade.findProductsByUserEmail(principal.getName(), pageable));
+                productFacade.findProductsByUserId(user.getId(), pageable));
     }
 
     @PutMapping(value = "/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(Principal principal,
             @PathVariable ProductId productId, @RequestBody ProductRequest productRequest) {
-        return ResponseEntity.ok(productService.update(principal.getName(), productId,
-                productRequest));
+        String userEmail = principal.getName();
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        return ResponseEntity.ok(productService.update(user.getId(), productId, productRequest));
     }
 
 

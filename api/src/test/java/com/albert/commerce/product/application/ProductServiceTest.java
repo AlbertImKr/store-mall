@@ -8,6 +8,7 @@ import com.albert.commerce.product.command.application.dto.ProductCreatedRespons
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -33,15 +34,15 @@ class ProductServiceTest {
     void addProduct() {
         // given
         userService.createByEmail(TEST_EMAIL);
-        sellerStoreService.createStore(
+        SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
                         "seller@email.com"), TEST_EMAIL);
         ProductRequest productRequest = new ProductRequest("testProductName",
                 new Money(1000), "test", "testBrand", "test");
 
         // when
-        ProductCreatedResponse productCreatedResponse = productService.addProduct(productRequest,
-                TEST_EMAIL);
+        ProductCreatedResponse productCreatedResponse = productService.addProduct(
+                productRequest.toProduct(store.getStoreId()));
 
         // then
         Assertions.assertAll(

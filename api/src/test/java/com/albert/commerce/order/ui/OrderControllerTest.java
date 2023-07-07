@@ -121,7 +121,7 @@ class OrderControllerTest {
                     "testProduct",
                     "test", "test");
             ProductCreatedResponse product = productService.addProduct(
-                    productRequest, SELLER_EMAIL);
+                    productRequest.toProduct(store.getStoreId()));
             productIds.add(product.getProductId());
             requestProductsId.add(product.getProductId().getId());
         }

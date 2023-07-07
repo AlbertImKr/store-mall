@@ -5,6 +5,7 @@ import com.albert.commerce.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
+import com.albert.commerce.user.command.domain.UserId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,9 @@ public class ProductFacade {
     private final ProductDao productDao;
 
     @Transactional(readOnly = true)
-    public PagedModel<ProductResponse> findProductsByUserEmail(String userEmail,
+    public PagedModel<ProductResponse> findProductsByUserId(UserId userId,
             Pageable pageable) {
-        Page<Product> products = productDao.findProductsByUserEmail(userEmail, pageable);
+        Page<Product> products = productDao.findProductsByUserId(userId, pageable);
         return pagedResourcesAssembler.toModel(products, productsAssembler);
     }
 

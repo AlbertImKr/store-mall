@@ -10,7 +10,6 @@ import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepositor
 import com.albert.commerce.product.query.ProductDao;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -31,21 +30,13 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    private static JPQLQuery<UserId> getUserIdByEmail(String userEmail) {
-        QUser qUser = QUser.user;
-        return JPAExpressions
-                .select(qUser.id)
-                .from(qUser)
-                .where(qUser.email.eq(userEmail));
-    }
-
-    private static JPQLQuery<StoreId> getStoreIdByUserId(JPQLQuery<UserId> userIdByEmail) {
+    private static JPQLQuery<StoreId> getStoreIdByUserId(UserId userId) {
         QStore qStore = QStore.store;
         return JPAExpressions
                 .select(qStore.storeId)
                 .from(qStore)
                 .where(qStore.userId.eq(
-                        userIdByEmail
+                        userId
                 ));
     }
 
@@ -66,6 +57,7 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
 
     @Override
     public Product save(Product product) {
+        product.updateId(nextId());
         return productJpaRepository.save(product);
     }
 
@@ -75,10 +67,10 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
     }
 
     @Override
-    public Page<Product> findProductsByUserEmail(String userEmail, Pageable pageable) {
+    public Page<Product> findProductsByUserId(UserId userId, Pageable pageable) {
 
         QProduct qProduct = QProduct.product;
-        JPQLQuery<StoreId> storeIdQuery = getStoreIdByUserId(getUserIdByEmail(userEmail));
+        JPQLQuery<StoreId> storeIdQuery = getStoreIdByUserId(userId);
         List<Product> contentProducts = jpaQueryFactory.selectFrom(qProduct)
                 .where(
                         qProduct.storeId.eq(
@@ -94,12 +86,12 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
 
 
     @Override
-    public Optional<Product> findByUserEmailAndProductId(String userEmail, ProductId productId) {
+    public Optional<Product> findByUserIdAndProductId(UserId userId, ProductId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.select(qProduct)
                 .from(qProduct)
                 .where(qProduct.productId.eq(productId).and(qProduct.storeId.eq(
-                        getStoreIdByUserId(getUserIdByEmail(userEmail))
+                        getStoreIdByUserId(userId)
                 )))
                 .fetchFirst();
         return Optional.ofNullable(product);

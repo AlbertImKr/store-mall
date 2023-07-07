@@ -24,6 +24,7 @@ import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
@@ -180,10 +181,11 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest, TEST_USER_EMAIL);
+        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,
+                TEST_USER_EMAIL);
 
         ProductCreatedResponse productCreatedResponse =
-                productService.addProduct(productRequest, TEST_USER_EMAIL);
+                productService.addProduct(productRequest.toProduct(store.getStoreId()));
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
                 new Money(CHANGED_PRICE),
@@ -277,11 +279,11 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            sellerStoreService.createStore(
+            SellerStoreResponse store = sellerStoreService.createStore(
                     newStoreRequest, TEST_USER_EMAIL
             );
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest, TEST_USER_EMAIL);
+                productService.addProduct(productRequest.toProduct(store.getStoreId()));
             }
         }
 

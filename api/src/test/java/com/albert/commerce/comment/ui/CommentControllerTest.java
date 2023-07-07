@@ -118,7 +118,7 @@ class CommentControllerTest {
                 "testProduct",
                 "test", "test");
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest, SELLER_EMAIL);
+                productRequest.toProduct(store.getStoreId()));
         product = productDao.findById(productCreatedResponse.getProductId()).orElseThrow(
                 ProductNotFoundException::new);
     }
