@@ -2,7 +2,6 @@ package com.albert.commerce.order.query.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -30,7 +29,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.transaction.annotation.Transactional;
 
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @SpringBootTest
 @Transactional
 class OrderFacadeTest {
@@ -80,7 +79,7 @@ class OrderFacadeTest {
         List<ProductId> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                    new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
+                    new ProductRequest("testProductName", 10000, "test", "testBrand",
                             "testCategory").toProduct(store.getStoreId()));
             productList.add(productCreatedResponse.getProductId());
         }

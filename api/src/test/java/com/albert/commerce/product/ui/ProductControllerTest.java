@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
@@ -123,7 +122,7 @@ class ProductControllerTest {
     @Test
     void addProduct() throws Exception {
         ProductRequest productRequest = new ProductRequest(
-                TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
+                TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND,
                 TEST_CATEGORY
         );
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
@@ -176,7 +175,7 @@ class ProductControllerTest {
         // given
         ProductRequest productRequest = new ProductRequest(
                 TEST_PRODUCT_NAME,
-                new Money(TEST_PRICE),
+                TEST_PRICE,
                 TEST_DESCRIPTION,
                 TEST_BRAND,
                 TEST_CATEGORY
@@ -196,7 +195,7 @@ class ProductControllerTest {
                 productService.addProduct(productRequest.toProduct(store.getStoreId()));
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
-                new Money(CHANGED_PRICE),
+                CHANGED_PRICE,
                 CHANGED_DESCRIPTION,
                 CHANGED_BRAND,
                 CHANGED_CATEGORY
@@ -247,7 +246,7 @@ class ProductControllerTest {
     void updateProductFailed() throws Exception {
         ProductRequest productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
-                new Money(CHANGED_PRICE),
+                CHANGED_PRICE,
                 CHANGED_DESCRIPTION,
                 CHANGED_BRAND,
                 CHANGED_CATEGORY
@@ -277,7 +276,7 @@ class ProductControllerTest {
         @BeforeEach
         void setData() {
             ProductRequest productRequest = new ProductRequest(
-                    TEST_PRODUCT_NAME, new Money(TEST_PRICE), TEST_DESCRIPTION, TEST_BRAND,
+                    TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND,
                     TEST_CATEGORY
             );
             NewStoreRequest newStoreRequest = NewStoreRequest.builder()

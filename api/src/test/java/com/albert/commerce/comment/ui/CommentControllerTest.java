@@ -16,7 +16,6 @@ import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.query.domain.CommentDao;
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
@@ -115,7 +114,7 @@ class CommentControllerTest {
         store = storeDao.findStoreByUserId(seller.getUserId())
                 .orElseThrow(StoreNotFoundException::new);
 
-        ProductRequest productRequest = new ProductRequest("product", Money.from(10000L),
+        ProductRequest productRequest = new ProductRequest("product", 10000,
                 "testProduct",
                 "test", "test");
         ProductCreatedResponse productCreatedResponse = productService.addProduct(

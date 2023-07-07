@@ -43,7 +43,7 @@ class ProductServiceTest {
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
                         "seller@email.com").toStore(user.getId()));
         ProductRequest productRequest = new ProductRequest("testProductName",
-                new Money(1000), "test", "testBrand", "test");
+                1000, "test", "testBrand", "test");
 
         // when
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
@@ -60,7 +60,7 @@ class ProductServiceTest {
                 () -> assertThat(productCreatedResponse.getCategory()).isEqualTo(
                         productRequest.category()),
                 () -> assertThat(productCreatedResponse.getPrice()).isEqualTo(
-                        productRequest.price())
+                        new Money(productRequest.price()))
         );
     }
 }

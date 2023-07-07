@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderService;
@@ -117,7 +116,7 @@ class OrderControllerTest {
         requestProductsId = new ArrayList<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            ProductRequest productRequest = new ProductRequest("product" + i, Money.from(10000L),
+            ProductRequest productRequest = new ProductRequest("product" + i, 10000,
                     "testProduct",
                     "test", "test");
             ProductCreatedResponse product = productService.addProduct(

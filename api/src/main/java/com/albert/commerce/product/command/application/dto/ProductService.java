@@ -1,5 +1,6 @@
 package com.albert.commerce.product.command.application.dto;
 
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -30,7 +31,7 @@ public class ProductService {
 
         Product changedProduct = product.update(
                 productRequest.productName(),
-                productRequest.price(),
+                new Money(productRequest.price()),
                 productRequest.brand(),
                 productRequest.category(),
                 productRequest.description());

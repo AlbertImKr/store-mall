@@ -13,6 +13,7 @@ import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.query.application.UserFacade;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -50,8 +52,14 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PagedModel<ProductResponse>> getAllProducts(Principal principal,
-            Pageable pageable) {
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Integer page
+    ) {
         UserInfoResponse user = userFacade.findByEmail(principal.getName());
+        Pageable pageable = PageRequest.of(
+                page == null ? 0 : page,
+                size == null ? 0 : size
+        );
         return ResponseEntity.ok(
                 productFacade.findProductsByUserId(user.getId(), pageable));
     }

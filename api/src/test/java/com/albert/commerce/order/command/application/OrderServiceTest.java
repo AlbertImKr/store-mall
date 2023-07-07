@@ -2,7 +2,6 @@ package com.albert.commerce.order.command.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.order.command.domain.DeliveryStatus;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -75,7 +74,7 @@ class OrderServiceTest {
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                        new ProductRequest("testProductName", new Money(10000), "test", "testBrand",
+                        new ProductRequest("testProductName", 10000, "test", "testBrand",
                                 "testCategory").toProduct(store.getStoreId()));
                 productsId.add(productCreatedResponse.getProductId());
             }
