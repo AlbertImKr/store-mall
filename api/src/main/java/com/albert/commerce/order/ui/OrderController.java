@@ -12,7 +12,7 @@ import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.query.application.OrderFacade;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.application.StoreFacade;
 import com.albert.commerce.user.command.application.dto.UserInfoResponse;
@@ -92,7 +92,8 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
             Pageable pageable) {
-        Page<OrderDetail> orders = orderFacade.findAllByUserId(principal.getName(),
+        UserInfoResponse user = userFacade.findByEmail(principal.getName());
+        Page<OrderDetail> orders = orderFacade.findAllByUserId(user.getId(),
                 pageable);
 
         // HATEOAS

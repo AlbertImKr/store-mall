@@ -19,9 +19,7 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final UserJpaRepository userJpaRepository;
-
     private final SequenceGenerator sequenceGenerator;
-
     @Override
     public Optional<User> updateUserInfo(String email, UserProfileRequest userProfileRequest) {
         QUser user = QUser.user;
@@ -44,8 +42,12 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
 
     @Override
     public User save(User user) {
-        user.updateId(UserId.from(sequenceGenerator.generate()));
+        user.updateId(nextId());
         return userJpaRepository.save(user);
+    }
+
+    private UserId nextId() {
+        return UserId.from(sequenceGenerator.generate());
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.albert.commerce.product.command.application.dto;
 
 import com.albert.commerce.common.units.BusinessLinks;
+import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
-import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
 import com.albert.commerce.user.command.domain.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

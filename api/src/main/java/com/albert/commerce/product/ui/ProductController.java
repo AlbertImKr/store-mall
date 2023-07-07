@@ -6,7 +6,7 @@ import com.albert.commerce.product.command.application.dto.ProductCreatedRespons
 import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.query.application.StoreFacade;
 import com.albert.commerce.user.command.application.dto.UserInfoResponse;

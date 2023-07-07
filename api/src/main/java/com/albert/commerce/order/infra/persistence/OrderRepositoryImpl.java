@@ -32,7 +32,6 @@ public class OrderRepositoryImpl implements OrderRepository, OrderDao {
 
     private final OrderJpaResponsibility orderJpaResponsibility;
     private final SequenceGenerator sequenceGenerator;
-
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override

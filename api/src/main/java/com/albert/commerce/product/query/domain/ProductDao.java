@@ -1,4 +1,4 @@
-package com.albert.commerce.product.query;
+package com.albert.commerce.product.query.domain;
 
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;

@@ -2,9 +2,7 @@ package com.albert.commerce.order.query.application;
 
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.query.domain.OrderDao;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.command.domain.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFacade {
 
     private final OrderDao orderDao;
-    private final UserDao userDao;
 
     @Transactional(readOnly = true)
     public OrderDetail findById(OrderId orderId, String userEmail) {
@@ -25,8 +22,7 @@ public class OrderFacade {
     }
 
     @Transactional(readOnly = true)
-    public Page<OrderDetail> findAllByUserId(String userEmail, Pageable pageable) {
-        User user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        return orderDao.findByUserId(user.getUserId(), pageable);
+    public Page<OrderDetail> findAllByUserId(UserId userId, Pageable pageable) {
+        return orderDao.findByUserId(userId, pageable);
     }
 }

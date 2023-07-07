@@ -1,4 +1,4 @@
-package com.albert.commerce.product.infra.persistence;
+package com.albert.commerce.product;
 
 import com.albert.commerce.common.exception.BusinessException;
 import com.albert.commerce.common.exception.ErrorMessage;

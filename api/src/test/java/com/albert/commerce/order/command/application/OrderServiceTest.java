@@ -10,7 +10,7 @@ import com.albert.commerce.product.command.application.dto.ProductCreatedRespons
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;

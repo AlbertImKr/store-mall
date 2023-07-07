@@ -1,10 +1,11 @@
-package com.albert.commerce.product.query;
+package com.albert.commerce.product.query.application;
 
+import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.infra.persistence.ProductNotFoundException;
+import com.albert.commerce.product.query.domain.ProductDao;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

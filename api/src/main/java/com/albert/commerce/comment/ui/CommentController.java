@@ -7,7 +7,7 @@ import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.query.application.CommentDaoFacade;
 import com.albert.commerce.comment.query.dto.CommentNode;
 import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.ProductFacade;
+import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.application.StoreFacade;
 import com.albert.commerce.user.command.application.dto.UserInfoResponse;

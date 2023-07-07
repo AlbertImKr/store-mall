@@ -7,7 +7,7 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
 import com.albert.commerce.product.command.domain.QProduct;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.product.query.ProductDao;
+import com.albert.commerce.product.query.domain.ProductDao;
 import com.albert.commerce.store.command.domain.QStore;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
