@@ -32,7 +32,9 @@ import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.domain.StoreDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +71,9 @@ class CommentControllerTest {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserFacade userFacade;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -162,26 +167,16 @@ class CommentControllerTest {
     @Test
     void findCommentsByProductId() throws Exception {
         // given
-        String userEmail = "consumer@email.com";
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
         String productIdValue = productId.getId();
-        String storeIdValue = storeId.getId();
-        CommentRequest commentRequest =
-                new CommentRequest(productIdValue, storeIdValue, null, "test");
-        CommentResponse commentResponse1 = commentService.save(commentRequest, userEmail);
-        commentRequest = new CommentRequest(
-                productIdValue,
-                storeIdValue,
-                commentResponse1.getCommentId().getId(),
-                "test1");
-        CommentResponse commentResponse2 = commentService.save(commentRequest, userEmail);
-        commentRequest = new CommentRequest(
-                productIdValue,
-                storeIdValue,
-                commentResponse2.getCommentId().getId(),
-                "test1");
-        commentService.save(commentRequest, userEmail);
+        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        CommentResponse commentResponse1 = commentService.create(
+                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+        CommentResponse commentResponse2 = commentService.create(productId, storeId,
+                commentResponse1.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+        commentService.create(productId, storeId,
+                commentResponse2.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
 
         mockMvc.perform(get("/comments")
                         .param("productId", productIdValue))

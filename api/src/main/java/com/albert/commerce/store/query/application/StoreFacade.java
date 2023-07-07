@@ -32,4 +32,10 @@ public class StoreFacade {
         Store store = storeDao.findById(storeId).orElseThrow(StoreNotFoundException::new);
         return ConsumerStoreResponse.from(store);
     }
+
+    public void checkId(StoreId storeId) {
+        if (!storeDao.exists(storeId)) {
+            throw new StoreNotFoundException();
+        }
+    }
 }

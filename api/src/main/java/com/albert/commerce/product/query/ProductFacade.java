@@ -33,4 +33,10 @@ public class ProductFacade {
         Product product = productDao.findById(productId).orElseThrow(ProductNotFoundException::new);
         return ProductResponse.from(product);
     }
+
+    public void checkId(ProductId productId) {
+        if (!productDao.exists(productId)) {
+            throw new ProductNotFoundException();
+        }
+    }
 }
