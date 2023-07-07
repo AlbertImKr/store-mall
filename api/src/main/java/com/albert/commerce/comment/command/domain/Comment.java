@@ -47,4 +47,8 @@ public class Comment extends BaseEntity {
         this.parentCommentId = parentCommentId;
         this.detail = detail;
     }
+
+    public void updateId(CommentId commentId) {
+        this.commentId = commentId;
+    }
 }

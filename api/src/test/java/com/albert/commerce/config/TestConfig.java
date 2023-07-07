@@ -1,5 +1,6 @@
 package com.albert.commerce.config;
 
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.user.command.domain.UserRepository;
 import com.albert.commerce.user.infra.persistance.UserRepositoryImpl;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
@@ -20,6 +21,9 @@ public class TestConfig {
     @Autowired
     private UserJpaRepository userJpaRepository;
 
+    @Autowired
+    private SequenceGenerator sequenceGenerator;
+
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(entityManager);
@@ -27,7 +31,7 @@ public class TestConfig {
 
     @Bean
     public UserRepository userRepository() {
-        return new UserRepositoryImpl(jpaQueryFactory(), userJpaRepository);
+        return new UserRepositoryImpl(jpaQueryFactory(), userJpaRepository, sequenceGenerator);
     }
 
 }

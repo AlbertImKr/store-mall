@@ -21,7 +21,6 @@ public class CommentService {
     public CommentResponse create(ProductId productId, StoreId storeId, CommentId parentCommentId,
             UserId userId, String detail, String userNickname) {
         Comment comment = Comment.builder()
-                .commentId(commentRepository.nextId())
                 .productId(productId)
                 .storeId(storeId)
                 .userId(userId)

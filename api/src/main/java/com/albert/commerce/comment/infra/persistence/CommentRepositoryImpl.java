@@ -25,13 +25,13 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     private final SequenceGenerator sequenceGenerator;
     private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public CommentId nextId() {
+    private CommentId nextId() {
         return CommentId.from(sequenceGenerator.generate());
     }
 
     @Override
     public Comment save(Comment comment) {
+        comment.updateId(nextId());
         return commentJpaRepository.save(comment);
     }
 
@@ -57,7 +57,7 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
                         user.nickname
                 ))
                 .from(comment)
-                .join(user).on(comment.userId.eq(user.id))
+                .join(user).on(comment.userId.eq(user.userId))
                 .where(comment.productId.eq(productId))
                 .fetch();
     }

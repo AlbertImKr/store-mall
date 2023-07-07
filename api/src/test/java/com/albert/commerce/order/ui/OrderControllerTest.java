@@ -113,7 +113,7 @@ class OrderControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        store = sellerStoreService.createStore(newStoreRequest.toStore(consumer.getId()));
+        store = sellerStoreService.createStore(newStoreRequest.toStore(consumer.getUserId()));
         requestProductsId = new ArrayList<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -173,7 +173,7 @@ class OrderControllerTest {
         void settingOrder() {
             consumer = userDao.findByEmail("consumer@email.com")
                     .orElseThrow(UserNotFoundException::new);
-            order = orderService.createOrder(consumer.getId(), store.getStoreId(), productIds,
+            order = orderService.createOrder(consumer.getUserId(), store.getStoreId(), productIds,
                     productFacade.getAmount(productIds));
         }
 
@@ -185,7 +185,7 @@ class OrderControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("orderId").exists())
-                    .andExpect(jsonPath("userId").value(consumer.getId().getId()))
+                    .andExpect(jsonPath("userId").value(consumer.getUserId().getId()))
                     .andExpect(jsonPath("storeId").value(store.getStoreId().getId()))
                     .andExpect(jsonPath("products").isArray())
                     .andExpect(jsonPath("products.*.createdTime").exists())
@@ -261,7 +261,7 @@ class OrderControllerTest {
         @BeforeEach
         void setOrders() {
             for (int i = 0; i < 100; i++) {
-                orderService.createOrder(consumer.getId(), store.getStoreId(), productIds,
+                orderService.createOrder(consumer.getUserId(), store.getStoreId(), productIds,
                         productFacade.getAmount(productIds));
             }
         }

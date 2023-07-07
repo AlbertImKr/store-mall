@@ -54,4 +54,8 @@ public class Order extends BaseEntity {
         this.amount = amount;
         this.storeId = storeId;
     }
+
+    public void updateId(OrderId orderId) {
+        this.orderId = orderId;
+    }
 }

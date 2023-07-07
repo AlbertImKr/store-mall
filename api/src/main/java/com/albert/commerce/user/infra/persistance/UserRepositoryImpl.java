@@ -1,8 +1,10 @@
 package com.albert.commerce.user.infra.persistance;
 
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -17,6 +19,8 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final UserJpaRepository userJpaRepository;
+
+    private final SequenceGenerator sequenceGenerator;
 
     @Override
     public Optional<User> updateUserInfo(String email, UserProfileRequest userProfileRequest) {
@@ -40,6 +44,7 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
 
     @Override
     public User save(User user) {
+        user.updateId(UserId.from(sequenceGenerator.generate()));
         return userJpaRepository.save(user);
     }
 

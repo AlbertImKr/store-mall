@@ -27,6 +27,6 @@ public class OrderFacade {
     @Transactional(readOnly = true)
     public Page<OrderDetail> findAllByUserId(String userEmail, Pageable pageable) {
         User user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        return orderDao.findByUserId(user.getId(), pageable);
+        return orderDao.findByUserId(user.getUserId(), pageable);
     }
 }

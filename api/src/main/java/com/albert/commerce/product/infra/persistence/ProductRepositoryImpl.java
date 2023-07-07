@@ -27,7 +27,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository, ProductDao {
 
-
     private final JPAQueryFactory jpaQueryFactory;
 
     private static JPQLQuery<StoreId> getStoreIdByUserId(UserId userId) {
@@ -61,8 +60,7 @@ public class ProductRepositoryImpl implements ProductRepository, ProductDao {
         return productJpaRepository.save(product);
     }
 
-    @Override
-    public ProductId nextId() {
+    private ProductId nextId() {
         return ProductId.from(sequenceGenerator.generate());
     }
 

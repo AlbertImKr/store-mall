@@ -23,7 +23,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
     public static UserInfoResponse from(User user) {
         return UserInfoResponse.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .role(user.getRole())

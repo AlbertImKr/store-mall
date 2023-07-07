@@ -37,11 +37,11 @@ public class OrderRepositoryImpl implements OrderRepository, OrderDao {
 
     @Override
     public Order save(Order order) {
+        order.updateId(nextId());
         return orderJpaResponsibility.save(order);
     }
 
-    @Override
-    public OrderId nextId() {
+    private OrderId nextId() {
         String generate = sequenceGenerator.generate();
         return OrderId.from(generate);
     }
@@ -74,7 +74,7 @@ public class OrderRepositoryImpl implements OrderRepository, OrderDao {
                 .where(qOrder.orderId.eq(orderId)
                         .and(qOrder.userId.eq(
                                 JPAExpressions
-                                        .select(qUser.id)
+                                        .select(qUser.userId)
                                         .from(qUser)
                                         .where(qUser.email.eq(userEmail))
                         )))

@@ -35,7 +35,6 @@ public class OrderService {
     public Order createOrder(UserId userId, StoreId storeId, List<ProductId> productsId,
             long amount) {
         Order order = Order.builder()
-                .orderId(orderRepository.nextId())
                 .userId(userId)
                 .storeId(storeId)
                 .productsId(productsId)

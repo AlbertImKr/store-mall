@@ -12,6 +12,4 @@ public interface StoreRepository {
 
     Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, UserId userId);
 
-
-    StoreId nextId();
 }

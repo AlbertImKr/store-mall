@@ -6,8 +6,6 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    OrderId nextId();
-
     boolean exist(OrderId orderId, UserId id);
 
     void deleteById(OrderId orderId);

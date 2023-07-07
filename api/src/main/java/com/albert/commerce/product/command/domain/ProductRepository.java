@@ -7,7 +7,5 @@ public interface ProductRepository {
 
     Product save(Product product);
 
-    ProductId nextId();
-
     Optional<Product> findByUserIdAndProductId(UserId userId, ProductId productId);
 }

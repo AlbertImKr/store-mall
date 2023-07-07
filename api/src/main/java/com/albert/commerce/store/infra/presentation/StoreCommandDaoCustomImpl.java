@@ -20,11 +20,9 @@ public class StoreCommandDaoCustomImpl implements StoreRepository, StoreDao {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final StoreJpaRepository storeJpaRepository;
-
     private final SequenceGenerator sequenceGenerator;
 
-    @Override
-    public StoreId nextId() {
+    private StoreId nextId() {
         return StoreId.from(sequenceGenerator.generate());
     }
 

@@ -24,7 +24,7 @@ class UserInfoResponseTest {
         boolean testIsActive = false;
         UserId testId = UserId.from("testId");
         User user = User.builder()
-                .id(testId)
+                .userId(testId)
                 .nickname(testNickName)
                 .email(testEmail)
                 .role(testRole)
