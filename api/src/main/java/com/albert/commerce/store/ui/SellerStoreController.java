@@ -9,6 +9,8 @@ import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
     private final StoreFacade storeFacade;
+    private final UserFacade userFacade;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -37,8 +40,9 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                userEmail);
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
         String storeId = sellerStoreResponse.getStoreId().getId();
@@ -49,7 +53,8 @@ public class SellerStoreController {
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
         String userEmail = principal.getName();
-        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserEmail(userEmail);
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getId());
 
         sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);
@@ -58,8 +63,9 @@ public class SellerStoreController {
     @PutMapping("/my")
     public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
+        UserInfoResponse user = userFacade.findByEmail(principal.getName());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
-                updateStoreRequest, principal.getName());
+                updateStoreRequest, user.getId());
 
         sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);

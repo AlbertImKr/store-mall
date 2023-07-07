@@ -113,7 +113,7 @@ class OrderControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        store = sellerStoreService.createStore(newStoreRequest, SELLER_EMAIL);
+        store = sellerStoreService.createStore(newStoreRequest.toStore(consumer.getId()));
         requestProductsId = new ArrayList<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {

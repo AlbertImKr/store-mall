@@ -10,6 +10,8 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,8 @@ class ProductServiceTest {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserFacade userFacade;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -34,9 +38,10 @@ class ProductServiceTest {
     void addProduct() {
         // given
         userService.createByEmail(TEST_EMAIL);
+        UserInfoResponse user = userFacade.findByEmail(TEST_EMAIL);
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
-                        "seller@email.com"), TEST_EMAIL);
+                        "seller@email.com").toStore(user.getId()));
         ProductRequest productRequest = new ProductRequest("testProductName",
                 new Money(1000), "test", "testBrand", "test");
 

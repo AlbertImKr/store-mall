@@ -73,8 +73,7 @@ class OrderFacadeTest {
                         "testOwnerName",
                         "testAddress",
                         "11111111111",
-                        "testStore@email.com"),
-                userEmail);
+                        "testStore@email.com").toStore(user.getId()));
         List<ProductId> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(

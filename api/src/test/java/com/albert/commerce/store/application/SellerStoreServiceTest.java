@@ -6,6 +6,8 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ class SellerStoreServiceTest {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserFacade userFacade;
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")
     @Test
@@ -37,11 +41,13 @@ class SellerStoreServiceTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        userService.createByEmail("seller@email.com");
+        String email = "seller@email.com";
+        userService.createByEmail(email);
+        UserInfoResponse user = userFacade.findByEmail(email);
 
         // when
-        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,
-                "seller@email.com");
+        SellerStoreResponse store = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
 
         // then
         assertThat(store.getStoreName()).isEqualTo(TEST_STORE_NAME);

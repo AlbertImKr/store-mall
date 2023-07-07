@@ -27,7 +27,9 @@ import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -99,9 +101,15 @@ class ProductControllerTest {
     @Autowired
     ProductJpaRepository productJpaRepository;
 
+    @Autowired
+    UserFacade userFacade;
+
+    UserInfoResponse user;
+
     @BeforeEach
     void saveTestUser() {
         userService.createByEmail(TEST_USER_EMAIL);
+        user = userFacade.findByEmail(TEST_USER_EMAIL);
     }
 
     @AfterEach
@@ -126,7 +134,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest, "seller@email.com");
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -181,8 +189,8 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        SellerStoreResponse store = sellerStoreService.createStore(newStoreRequest,
-                TEST_USER_EMAIL);
+        SellerStoreResponse store = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
 
         ProductCreatedResponse productCreatedResponse =
                 productService.addProduct(productRequest.toProduct(store.getStoreId()));
@@ -280,8 +288,7 @@ class ProductControllerTest {
                     .address(TEST_ADDRESS)
                     .build();
             SellerStoreResponse store = sellerStoreService.createStore(
-                    newStoreRequest, TEST_USER_EMAIL
-            );
+                    newStoreRequest.toStore(user.getId()));
             for (int i = 0; i < 100; i++) {
                 productService.addProduct(productRequest.toProduct(store.getStoreId()));
             }

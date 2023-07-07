@@ -10,5 +10,8 @@ public interface StoreRepository {
 
     Store save(Store store);
 
-    Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, String email);
+    Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, UserId userId);
+
+
+    StoreId nextId();
 }

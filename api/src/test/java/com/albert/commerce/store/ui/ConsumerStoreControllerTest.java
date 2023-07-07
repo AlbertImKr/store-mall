@@ -18,7 +18,8 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -41,10 +42,10 @@ import org.springframework.transaction.annotation.Transactional;
 class ConsumerStoreControllerTest {
 
     private static final String TEST_STORE_NAME = "testStoreName";
-    private static final String TEST_EMAIL_COM = "test@email.com";
     private static final String TEST_OWNER = "testOwner";
     private static final String TEST_HONE_NUMBER = "01011001100";
     private static final String TEST_ADDRESS = "testAddress";
+    public static final String TEST_EMAIL = "test@email.com";
     @Autowired
     MockMvc mockMvc;
 
@@ -61,12 +62,14 @@ class ConsumerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserDao userDao;
+    UserFacade userFacade;
 
+    UserInfoResponse user;
 
     @BeforeEach
     void saveTestUser() {
-        userService.createByEmail("test@email.com");
+        userService.createByEmail(TEST_EMAIL);
+        user = userFacade.findByEmail(TEST_EMAIL);
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")
@@ -75,13 +78,13 @@ class ConsumerStoreControllerTest {
         // given
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
-                .email(TEST_EMAIL_COM)
+                .email(TEST_EMAIL)
                 .ownerName(TEST_OWNER)
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                TEST_EMAIL_COM);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getId()))

@@ -45,4 +45,8 @@ public class Store extends BaseEntity {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
+
+    public void updateId(StoreId storeId) {
+        this.storeId = storeId;
+    }
 }
