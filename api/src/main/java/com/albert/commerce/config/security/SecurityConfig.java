@@ -1,5 +1,6 @@
 package com.albert.commerce.config.security;
 
+import com.albert.commerce.user.command.application.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,17 +20,21 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
-                        .requestMatchers("/index").permitAll()
-                        .anyRequest().authenticated()
+        return httpSecurity
+                .authorizeHttpRequests(
+                        requestMatcherRegistry -> requestMatcherRegistry
+                                .requestMatchers("/index").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer.successHandler(
-                        customAuthenticationSuccessHandler));
-        return httpSecurity.build();
+                .userDetailsService(customUserDetailsService)
+                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer
+                        .successHandler(customAuthenticationSuccessHandler))
+                .build();
     }
 
     @Bean

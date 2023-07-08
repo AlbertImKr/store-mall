@@ -3,6 +3,8 @@ package com.albert.commerce.common.units;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.albert.commerce.order.command.domain.OrderId;
+import com.albert.commerce.order.ui.OrderController;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.ui.ProductController;
 import com.albert.commerce.store.ui.ConsumerStoreController;
@@ -22,6 +24,15 @@ public final class BusinessLinks {
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
                             .getMyStore(null))
                     .withRel("my-store");
+
+    public static Link GET_STORE_BY_STORE_ID(String storeId) {
+        return WebMvcLinkBuilder.linkTo(SellerStoreController.class)
+                .slash(storeId)
+                .withSelfRel();
+    }    public static final Link GET_MY_STORE_WITH_SELF = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+                            .getMyStore(null))
+            .withSelfRel();
     public static final Link CREATE_STORE =
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
                             .createStore(null, null, null))
@@ -32,7 +43,8 @@ public final class BusinessLinks {
                     .withRel("get-store");
 
     public static final Link GET_USER_PROFILE =
-            WebMvcLinkBuilder.linkTo(methodOn(UserController.class).updateUserInfo(null, null))
+            WebMvcLinkBuilder.linkTo(
+                            methodOn(UserController.class).updateUserInfo(null, null, null))
                     .withRel("get-user-profile");
 
     public static Link getProductSelfRel(ProductId productId) {
@@ -43,9 +55,24 @@ public final class BusinessLinks {
     }
 
     public static final Links USER_INFO_RESPONSE_LINKS = Links.of(
-            linkTo(methodOn(UserController.class).updateUserInfo(null, null))
+            linkTo(methodOn(UserController.class).updateUserInfo(null, null, null))
                     .withSelfRel(),
             BusinessLinks.CREATE_STORE,
             BusinessLinks.GET_STORE,
             BusinessLinks.MY_STORE);
+
+    public static Link getOrder(OrderId orderId) {
+        return WebMvcLinkBuilder.linkTo(OrderController.class)
+                .slash(orderId.getId())
+                .withRel("order");
+    }
+
+    public static final Link CREATE_ORDER_LINK = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(OrderController.class)
+                            .placeOrder(null, null))
+            .withSelfRel();
+
+
+
+
 }

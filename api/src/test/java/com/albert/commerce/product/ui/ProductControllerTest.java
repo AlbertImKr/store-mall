@@ -4,6 +4,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.ha
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -11,22 +12,24 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.product.command.application.ProductRequest;
-import com.albert.commerce.product.command.application.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
+import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +48,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureRestDocs
-@WithMockUser(username = "test@email.com")
+@WithMockUser(username = "seller@email.com")
 @AutoConfigureMockMvc
 @SpringBootTest
 class ProductControllerTest {
@@ -55,12 +58,18 @@ class ProductControllerTest {
     private static final String TEST_BRAND = "testBrand";
     private static final String TEST_CATEGORY = "testCategory";
     private static final int TEST_PRICE = 10000;
-    private static final String TEST_USER_EMAIL = "test@email.com";
+    private static final String TEST_USER_EMAIL = "seller@email.com";
     private static final String TEST_STORE_NAME = "testStoreName";
     private static final String TEST_STORE_EMAIL = "test@email.com";
     private static final String TEST_OWNER = "testOwner";
     private static final String TEST_PHONE_NUMBER = "01011001100";
     private static final String TEST_ADDRESS = "testAddress";
+    private static final int CHANGED_PRICE = 300;
+    private static final String CHANGED_PRODUCT_NAME = "changedProductName";
+    private static final String CHANGED_DESCRIPTION = "changedDescription";
+    private static final String CHANGED_CATEGORY = "changedCategory";
+    private static final String CHANGED_BRAND = "changedBrand";
+    private static final String NO_MATCH_ID = "noMatchId";
     @Autowired
     MockMvc mockMvc;
 
@@ -68,7 +77,7 @@ class ProductControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserQueryDao userQueryDao;
+    UserDao userDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -91,9 +100,15 @@ class ProductControllerTest {
     @Autowired
     ProductJpaRepository productJpaRepository;
 
+    @Autowired
+    UserFacade userFacade;
+
+    UserInfoResponse user;
+
     @BeforeEach
     void saveTestUser() {
-        userService.init(TEST_USER_EMAIL);
+        userService.createByEmail(TEST_USER_EMAIL);
+        user = userFacade.findByEmail(TEST_USER_EMAIL);
     }
 
     @AfterEach
@@ -107,9 +122,9 @@ class ProductControllerTest {
     @Test
     void addProduct() throws Exception {
         ProductRequest productRequest = new ProductRequest(
-                TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
+                TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND,
+                TEST_CATEGORY
         );
-        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL);
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
                 .email(TEST_STORE_EMAIL)
@@ -118,7 +133,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -134,14 +149,12 @@ class ProductControllerTest {
                 .andExpect(jsonPath("brand").value(TEST_BRAND))
                 .andExpect(jsonPath("category").value(TEST_CATEGORY))
                 .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
                 //restDocs
                 .andDo(document(
                                 "addProduct", preprocessResponse(prettyPrint()),
                                 links(
                                         halLinks(),
-                                        linkWithRel("self").description("현재 product 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다")
+                                        linkWithRel("self").description("현재 product 링크")
                                 ),
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
@@ -156,6 +169,105 @@ class ProductControllerTest {
                 );
     }
 
+    @DisplayName("Product를 update한다")
+    @Test
+    void updateProductSuccess() throws Exception {
+        // given
+        ProductRequest productRequest = new ProductRequest(
+                TEST_PRODUCT_NAME,
+                TEST_PRICE,
+                TEST_DESCRIPTION,
+                TEST_BRAND,
+                TEST_CATEGORY
+        );
+        NewStoreRequest newStoreRequest = NewStoreRequest.builder()
+                .storeName(TEST_STORE_NAME)
+                .email(TEST_STORE_EMAIL)
+                .ownerName(TEST_OWNER)
+                .phoneNumber(TEST_PHONE_NUMBER)
+                .address(TEST_ADDRESS)
+                .build();
+
+        SellerStoreResponse store = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
+
+        ProductCreatedResponse productCreatedResponse =
+                productService.addProduct(productRequest.toProduct(store.getStoreId()));
+        productRequest = new ProductRequest(
+                CHANGED_PRODUCT_NAME,
+                CHANGED_PRICE,
+                CHANGED_DESCRIPTION,
+                CHANGED_BRAND,
+                CHANGED_CATEGORY
+        );
+
+        // when,then
+        mockMvc.perform(put("/products/" + productCreatedResponse.getProductId().getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("productId").exists())
+                .andExpect(jsonPath("productName").value(CHANGED_PRODUCT_NAME))
+                .andExpect(jsonPath("price").value(CHANGED_PRICE))
+                .andExpect(jsonPath("description").value(CHANGED_DESCRIPTION))
+                .andExpect(jsonPath("brand").value(CHANGED_BRAND))
+                .andExpect(jsonPath("category").value(CHANGED_CATEGORY))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.my-store").exists())
+                // restdocs¬
+                .andDo(document("updateProductSuccess",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        links(
+                                halLinks(),
+                                linkWithRel("self").description("현재 연결한 link"),
+                                linkWithRel("my-store").description("my-store link")
+                        ),
+                        responseFields(
+                                subsectionWithPath("_links").ignored(),
+                                fieldWithPath("productId").description("상품 아이디"),
+                                fieldWithPath("storeId").description("스토어 아이"),
+                                fieldWithPath("price").description("상품 가격"),
+                                fieldWithPath("productName").description("상품명"),
+                                fieldWithPath("description").description("상품 상세"),
+                                fieldWithPath("brand").description("상품 브랜드"),
+                                fieldWithPath("createdTime").description("생성시간"),
+                                fieldWithPath("category").description("카테코리"),
+                                fieldWithPath("updateTime").description("업데이트시간")
+                        )
+                ))
+        ;
+    }
+
+
+    @DisplayName("Product를 update 실패한다")
+    @Test
+    void updateProductFailed() throws Exception {
+        ProductRequest productRequest = new ProductRequest(
+                CHANGED_PRODUCT_NAME,
+                CHANGED_PRICE,
+                CHANGED_DESCRIPTION,
+                CHANGED_BRAND,
+                CHANGED_CATEGORY
+        );
+        mockMvc.perform(put("/products/" + NO_MATCH_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andExpect(jsonPath("error-message").exists())
+                // restdocs
+                .andDo(document("updateProductFailed",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("error-message").description("에러 메시지")
+                        )
+                ))
+        ;
+    }
+
     @DisplayName("데이터 추가")
     @Nested
     class Products {
@@ -164,7 +276,8 @@ class ProductControllerTest {
         @BeforeEach
         void setData() {
             ProductRequest productRequest = new ProductRequest(
-                    TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND, TEST_CATEGORY
+                    TEST_PRODUCT_NAME, TEST_PRICE, TEST_DESCRIPTION, TEST_BRAND,
+                    TEST_CATEGORY
             );
             NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                     .storeName(TEST_STORE_NAME)
@@ -173,13 +286,10 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                    newStoreRequest,
-                    userQueryDao.findUserProfileByEmail(TEST_USER_EMAIL).getId()
-            );
-            StoreId storeId = sellerStoreResponse.getStoreId();
+            SellerStoreResponse store = sellerStoreService.createStore(
+                    newStoreRequest.toStore(user.getId()));
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest, storeId);
+                productService.addProduct(productRequest.toProduct(store.getStoreId()));
             }
         }
 
@@ -201,7 +311,11 @@ class ProductControllerTest {
                     .andExpect(jsonPath("_embedded.productResponseList.*.description").exists())
                     .andExpect(jsonPath("_embedded.productResponseList.*.brand").exists())
                     .andExpect(jsonPath("_embedded.productResponseList.*.category").exists())
-                    .andExpect(jsonPath("_embedded.productResponseList.*._links.self").exists())
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.first").exists())
+                    .andExpect(jsonPath("_links.prev").exists())
+                    .andExpect(jsonPath("_links.next").exists())
+                    .andExpect(jsonPath("_links.last").exists())
                     // restDocs
                     .andDo(document("getProducts", preprocessResponse(prettyPrint()),
                                     links(
@@ -230,6 +344,9 @@ class ProductControllerTest {
                                                     "_embedded.productResponseList[].brand").description(
                                                     "상품 브랜드"),
                                             fieldWithPath(
+                                                    "_embedded.productResponseList[].storeId").description(
+                                                    "상품 아이디"),
+                                            fieldWithPath(
                                                     "_embedded.productResponseList[].category").description(
                                                     "상품의 카테고리"),
                                             fieldWithPath(
@@ -242,14 +359,14 @@ class ProductControllerTest {
                                                     "_embedded.productResponseList[].updateTime").description(
                                                     "업데이트 시간"),
                                             fieldWithPath("page.size").description("page size"),
-                                            fieldWithPath("page.totalElements").description("전체 개수"),
-                                            fieldWithPath("page.totalPages").description("전체 페이지 수"),
+                                            fieldWithPath("page.totalElements").description(
+                                                    "전체 개수"),
+                                            fieldWithPath("page.totalPages").description(
+                                                    "전체 페이지 수"),
                                             fieldWithPath("page.number").description("현재 페이지 넘버")
                                     )
                             )
                     );
         }
     }
-
-
 }

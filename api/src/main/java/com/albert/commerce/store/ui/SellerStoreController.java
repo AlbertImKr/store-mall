@@ -1,18 +1,20 @@
 package com.albert.commerce.store.ui;
 
-import com.albert.commerce.store.command.application.NewStoreRequest;
-import com.albert.commerce.store.command.application.SellerStoreResponse;
+import static com.albert.commerce.common.units.BusinessLinks.GET_MY_STORE_WITH_SELF;
+import static com.albert.commerce.common.units.BusinessLinks.GET_STORE_BY_STORE_ID;
+
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
-import com.albert.commerce.store.command.domain.Store;
-import com.albert.commerce.store.query.StoreDao;
-import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -28,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
-    private final StoreDao storeDao;
-    private final UserQueryDao userQueryDao;
+    private final StoreFacade storeFacade;
+    private final UserFacade userFacade;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -38,44 +40,34 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(userEmail);
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(newStoreRequest,
-                userInfoResponse.getId());
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
+                newStoreRequest.toStore(user.getId()));
 
-        URI myStore = WebMvcLinkBuilder.linkTo(
-                        WebMvcLinkBuilder.methodOn(SellerStoreController.class).getMyStore(principal))
-                .toUri();
-        String storeId = sellerStoreResponse.getStoreId().getValue();
-        sellerStoreResponse.add(
-                WebMvcLinkBuilder.linkTo(SellerStoreController.class)
-                        .slash(storeId)
-                        .withSelfRel()
-        );
+        URI myStore = BusinessLinks.MY_STORE.toUri();
+        String storeId = sellerStoreResponse.getStoreId().getId();
+        sellerStoreResponse.add(GET_STORE_BY_STORE_ID(storeId));
         return ResponseEntity.created(myStore).body(sellerStoreResponse);
     }
 
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
-        Store store = storeDao.findStoreByUserEmail(principal.getName());
-        SellerStoreResponse sellerStoreResponse = SellerStoreResponse.from(store);
+        String userEmail = principal.getName();
+        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getId());
 
-        sellerStoreResponse.add(
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
-                                .getMyStore(null))
-                        .withSelfRel());
+        sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);
     }
 
     @PutMapping("/my")
     public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
+        UserInfoResponse user = userFacade.findByEmail(principal.getName());
         SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
-                updateStoreRequest, principal.getName());
+                updateStoreRequest, user.getId());
 
-        sellerStoreResponse.add(
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
-                                .getMyStore(null))
-                        .withSelfRel());
+        sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);
     }
 

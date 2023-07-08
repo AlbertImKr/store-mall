@@ -5,10 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@EqualsAndHashCode(of = "id")
 public class UserId implements Serializable {
 
     @Column(name = "user_id", nullable = false)

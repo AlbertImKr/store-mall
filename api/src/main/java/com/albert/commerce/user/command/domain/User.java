@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 public class User extends BaseEntity {
 
     @EmbeddedId
-    private UserId id;
-    @Column(nullable = true)
+    private UserId userId;
+    @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
     private String email;
@@ -40,9 +40,9 @@ public class User extends BaseEntity {
     private boolean isActive;
 
     @Builder
-    public User(UserId id, String nickname, String email, Role role, LocalDate dateOfBirth,
+    public User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber, String address, boolean isActive) {
-        this.id = id;
+        this.userId = userId;
         this.nickname = nickname;
         this.email = email;
         this.role = role;
@@ -52,12 +52,16 @@ public class User extends BaseEntity {
         this.isActive = isActive;
     }
 
-    public static User createByEmail(String email, UserId userId) {
+    public static User createByEmail(String email) {
         return User.builder()
-                .id(userId)
+                .nickname("user")
                 .email(email)
                 .role(USER)
                 .isActive(false)
                 .build();
+    }
+
+    public void updateId(UserId userId) {
+        this.userId = userId;
     }
 }

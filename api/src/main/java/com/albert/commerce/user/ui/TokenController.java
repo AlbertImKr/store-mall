@@ -24,13 +24,13 @@ public class TokenController {
 
     @GetMapping("/token")
     public OAuth2AccessToken getToken(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient authorizedClient
-                = authorizedClientService.loadAuthorizedClient(
-                authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+                authentication.getAuthorizedClientRegistrationId(),
+                authentication.getName());
         return authorizedClient.getAccessToken();
     }
 
-    @GetMapping("/newAccessToken")
+    @GetMapping(path = "/newAccessToken", params = "")
     public OAuth2AccessToken newAccessToken(OAuth2AuthenticationToken authentication,
             HttpServletRequest request, HttpServletResponse response) {
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(

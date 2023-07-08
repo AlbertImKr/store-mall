@@ -1,46 +1,66 @@
 package com.albert.commerce.product.application;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.product.command.application.ProductRequest;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.domain.Product;
-import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.command.domain.ProductRepository;
-import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
+import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.store.command.application.SellerStoreService;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.query.application.UserFacade;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class ProductServiceTest {
 
-    @InjectMocks
+    public static final String TEST_EMAIL = "test@email.com";
+    @Autowired
     ProductService productService;
-    @Mock
-    ProductRepository productRepository;
+
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserFacade userFacade;
+
+    @Autowired
+    SellerStoreService sellerStoreService;
 
     @DisplayName("새로온 product를 추가한다")
     @Test
     void addProduct() {
         // given
-        StoreId storeId = mock(StoreId.class);
-        ProductId productId = mock(ProductId.class);
+        userService.createByEmail(TEST_EMAIL);
+        UserInfoResponse user = userFacade.findByEmail(TEST_EMAIL);
+        SellerStoreResponse store = sellerStoreService.createStore(
+                new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
+                        "seller@email.com").toStore(user.getId()));
         ProductRequest productRequest = new ProductRequest("testProductName",
                 1000, "test", "testBrand", "test");
-        Product product = productRequest.toProduct(storeId, productId);
-        given(productRepository.save(any(Product.class))).willReturn(product);
 
         // when
-        productService.addProduct(productRequest, storeId);
+        ProductCreatedResponse productCreatedResponse = productService.addProduct(
+                productRequest.toProduct(store.getStoreId()));
 
         // then
-        verify(productRepository).save(any(Product.class));
+        Assertions.assertAll(
+                () -> assertThat(productCreatedResponse.getProductName()).isEqualTo(
+                        productRequest.productName()),
+                () -> assertThat(productCreatedResponse.getDescription()).isEqualTo(
+                        productRequest.description()),
+                () -> assertThat(productCreatedResponse.getBrand()).isEqualTo(
+                        productRequest.brand()),
+                () -> assertThat(productCreatedResponse.getCategory()).isEqualTo(
+                        productRequest.category()),
+                () -> assertThat(productCreatedResponse.getPrice()).isEqualTo(
+                        new Money(productRequest.price()))
+        );
     }
 }

@@ -5,17 +5,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 @Embeddable
 public class StoreId implements Serializable {
 
     @Column(name = "store_id", nullable = false)
-    private String value;
+    private String id;
 
-    public StoreId(String value) {
-        this.value = value;
+    public StoreId(String id) {
+        this.id = id;
     }
 
     public static StoreId from(String storeId) {
@@ -23,7 +25,7 @@ public class StoreId implements Serializable {
     }
 
     @JsonValue
-    public String getValue() {
-        return value;
+    public String getId() {
+        return id;
     }
 }

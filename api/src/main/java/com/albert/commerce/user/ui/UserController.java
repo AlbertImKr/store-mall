@@ -2,14 +2,17 @@ package com.albert.commerce.user.ui;
 
 import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_LINKS;
 
-import com.albert.commerce.user.command.application.UserProfileRequest;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.command.application.dto.UserProfileRequest;
+import com.albert.commerce.user.query.application.UserFacade;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-
-    private final UserQueryDao userQueryDao;
     private final UserService userService;
+    private final UserFacade userFacade;
 
 
     @GetMapping("/")
@@ -32,20 +34,20 @@ public class UserController {
 
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
-        String email = principal.getName();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail(email);
-        userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
-        return userInfoResponse;
+        return userFacade.findByEmail(principal.getName());
     }
 
     @PutMapping("/users/profile")
-    public UserInfoResponse updateUserInfo(Principal principal,
-            @RequestBody UserProfileRequest userProfileRequest) {
+    public ResponseEntity updateUserInfo(Principal principal,
+            @Valid @RequestBody UserProfileRequest userProfileRequest, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors);
+        }
         String email = principal.getName();
         UserInfoResponse userInfoResponse = userService.updateUserInfo(email,
                 userProfileRequest);
         userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
-        return userInfoResponse;
+        return ResponseEntity.ok().body(userInfoResponse);
     }
 }
 

@@ -17,14 +17,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.store.command.application.NewStoreRequest;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.UpdateStoreRequest;
+import com.albert.commerce.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.command.application.UserService;
+import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserInfoResponse;
-import com.albert.commerce.user.query.domain.UserQueryDao;
+import com.albert.commerce.user.query.application.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,7 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureRestDocs
 @WithMockUser("test@email.com")
 @AutoConfigureMockMvc
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SellerStoreControllerTest {
 
     private static final String TEST_STORE_NAME = "testStoreName";
@@ -66,7 +68,7 @@ class SellerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserQueryDao userQueryDao;
+    UserFacade userFacade;
 
     @Autowired
     StoreJpaRepository storeJpaRepository;
@@ -74,9 +76,12 @@ class SellerStoreControllerTest {
     @Autowired
     UserJpaRepository userJpaRepository;
 
+    UserInfoResponse user;
+
     @BeforeEach
     void saveTestUser() {
-        userService.init("test@email.com");
+        userService.createByEmail(TEST_EMAIL);
+        user = userFacade.findByEmail(TEST_EMAIL);
     }
 
     @AfterEach
@@ -91,7 +96,7 @@ class SellerStoreControllerTest {
     void createStoreSuccess() throws Exception {
         NewStoreRequest newStoreRequest = NewStoreRequest.builder()
                 .storeName(TEST_STORE_NAME)
-                .email("test@email.com")
+                .email(TEST_EMAIL)
                 .ownerName(TEST_OWNER)
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
@@ -107,7 +112,7 @@ class SellerStoreControllerTest {
                 .andExpect(jsonPath("phoneNumber").exists())
                 .andExpect(jsonPath("email").exists())
                 .andExpect(jsonPath("ownerName").exists())
-                .andExpect(redirectedUrl("http://localhost:8080/stores/my"))
+                .andExpect(redirectedUrl(BusinessLinks.MY_STORE.toUri().toString()))
                 //restDocs
                 .andDo(document(
                                 "createStoreSuccess", preprocessResponse(prettyPrint()),
@@ -140,8 +145,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
 
         // when
         mockMvc.perform(post("/stores")
@@ -180,8 +184,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse userInfoResponse = userQueryDao.findUserProfileByEmail("test@email.com");
-        sellerStoreService.createStore(newStoreRequest, userInfoResponse.getId());
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -258,8 +261,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        UserInfoResponse user = userQueryDao.findUserProfileByEmail(TEST_EMAIL);
-        sellerStoreService.createStore(newStoreRequest, user.getId());
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";
