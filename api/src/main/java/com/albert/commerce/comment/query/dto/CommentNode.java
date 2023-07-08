@@ -21,6 +21,16 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(value = "comment", itemRelation = "comment", collectionRelation = "comments")
 public class CommentNode {
 
+    private CommentId commentId;
+    private UserId userId;
+    private String nickname;
+    private StoreId storeId;
+    private ProductId productId;
+    private LocalDateTime createdTime;
+    private LocalDateTime updateTime;
+    private CommentId parentCommentId;
+    private String detail;
+
     @JsonProperty(value = "comment")
     private CommentNode childCommentNode;
 
@@ -43,23 +53,13 @@ public class CommentNode {
     }
 
     private static Map<CommentId, CommentNode> getChildCommentNodesEntry(
-            List<CommentResponse> commentResponseByProductId) {
-        return commentResponseByProductId.stream()
+            List<CommentResponse> commentResponses) {
+        return commentResponses.stream()
                 .filter(commentResponse -> commentResponse.getParentCommentId() != null)
                 .collect(Collectors.toMap(
                         CommentResponse::getParentCommentId,
                         CommentNode::from));
     }
-
-    private CommentId commentId;
-    private UserId userId;
-    private String nickname;
-    private StoreId storeId;
-    private ProductId productId;
-    private LocalDateTime createdTime;
-    private LocalDateTime updateTime;
-    private CommentId parentCommentId;
-    private String detail;
 
     private static List<CommentNode> getSeedCommentNodes(
             List<CommentResponse> commentResponseByProductId) {

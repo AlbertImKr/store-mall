@@ -8,18 +8,18 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
 @Getter
-public class OrderCreateResponse extends RepresentationModel<OrderCreateResponse> {
+public class OrderCreatedResponse extends RepresentationModel<OrderCreatedResponse> {
 
     private final OrderId orderId;
 
     @Builder
-    protected OrderCreateResponse(OrderId orderId, Links links) {
+    protected OrderCreatedResponse(OrderId orderId, Links links) {
         this.add(links);
         this.orderId = orderId;
     }
 
-    public static OrderCreateResponse from(OrderId orderId) {
-        return OrderCreateResponse.builder()
+    public static OrderCreatedResponse from(OrderId orderId) {
+        return OrderCreatedResponse.builder()
                 .orderId(orderId)
                 .links(Links.of(BusinessLinks.CREATE_ORDER_LINK, BusinessLinks.getOrder(orderId)))
                 .build();

@@ -3,7 +3,7 @@ package com.albert.commerce.order.ui;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.order.command.application.OrderAssembler;
-import com.albert.commerce.order.command.application.OrderCreateResponse;
+import com.albert.commerce.order.command.application.OrderCreatedResponse;
 import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderResponseEntity;
 import com.albert.commerce.order.command.application.OrderService;
@@ -60,7 +60,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderCreateResponse> createOrder(Principal principal,
+    public ResponseEntity<OrderCreatedResponse> placeOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
         String email = principal.getName();
         UserInfoResponse user = userFacade.findByEmail(email);
@@ -70,22 +70,22 @@ public class OrderController {
         long amount = productFacade.getAmount(productsId);
         StoreId storeId = StoreId.from(orderRequest.storeId());
         storeFacade.checkId(storeId);
-        Order order = orderService.createOrder(user.getId(), storeId, productsId, amount);
+        Order order = orderService.placeOrder(user.getId(), storeId, productsId, amount);
 
         // HATEOAS
         Link orderLink = BusinessLinks.getOrder(order.getOrderId());
-        OrderCreateResponse orderCreateResponse = OrderCreateResponse.from(order.getOrderId());
+        OrderCreatedResponse orderCreatedResponse = OrderCreatedResponse.from(order.getOrderId());
 
-        return ResponseEntity.created(orderLink.toUri()).body(orderCreateResponse);
+        return ResponseEntity.created(orderLink.toUri()).body(orderCreatedResponse);
     }
 
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteOrder(Principal principal,
+    public ResponseEntity<Void> cancelOrder(Principal principal,
             @RequestBody DeleteOrderRequest deleteOrderRequest) {
         String email = principal.getName();
         UserInfoResponse user = userFacade.findByEmail(email);
-        orderService.deleteOrder(deleteOrderRequest, user.getId());
+        orderService.cancelOrder(deleteOrderRequest, user.getId());
         return ResponseEntity.noContent().build();
     }
 
@@ -93,8 +93,7 @@ public class OrderController {
     public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
             Pageable pageable) {
         UserInfoResponse user = userFacade.findByEmail(principal.getName());
-        Page<OrderDetail> orders = orderFacade.findAllByUserId(user.getId(),
-                pageable);
+        Page<OrderDetail> orders = orderFacade.findAllByUserId(user.getId(), pageable);
 
         // HATEOAS
         PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,

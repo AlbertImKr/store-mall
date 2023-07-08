@@ -83,7 +83,7 @@ class OrderFacadeTest {
                             "testCategory").toProduct(store.getStoreId()));
             productList.add(productCreatedResponse.getProductId());
         }
-        order = orderService.createOrder(user.getId(), store.getStoreId(), productList,
+        order = orderService.placeOrder(user.getId(), store.getStoreId(), productList,
                 productFacade.getAmount(productList));
     }
 

@@ -80,7 +80,7 @@ class OrderServiceTest {
             }
 
             // when
-            order = orderService.createOrder(consumer.getId(), store.getStoreId(), productsId,
+            order = orderService.placeOrder(consumer.getId(), store.getStoreId(), productsId,
                     productFacade.getAmount(productsId));
 
             // then

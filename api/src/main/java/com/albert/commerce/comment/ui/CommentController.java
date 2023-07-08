@@ -4,7 +4,7 @@ import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.command.domain.CommentId;
-import com.albert.commerce.comment.query.application.CommentDaoFacade;
+import com.albert.commerce.comment.query.application.CommentFacade;
 import com.albert.commerce.comment.query.dto.CommentNode;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentDaoFacade commentDaoFacade;
+    private final CommentFacade commentFacade;
     private final UserFacade userFacade;
     private final ProductFacade productFacade;
     private final StoreFacade storeFacade;
@@ -51,7 +51,7 @@ public class CommentController {
                 commentRequest.parentCommentId() == null ?
                         null :
                         CommentId.from(commentRequest.parentCommentId());
-        commentDaoFacade.checkId(parentCommentId);
+        commentFacade.checkId(parentCommentId);
 
         return EntityModel.of(
                 commentService.create(productId, storeId, parentCommentId, user.getId(),
@@ -61,6 +61,6 @@ public class CommentController {
     @GetMapping(params = "productId")
     public CollectionModel<CommentNode> findCommentsByProductId(String productId) {
         return CollectionModel.of(
-                commentDaoFacade.findCommentsResponseByProductId(ProductId.from(productId)));
+                commentFacade.findCommentsResponseByProductId(ProductId.from(productId)));
     }
 }

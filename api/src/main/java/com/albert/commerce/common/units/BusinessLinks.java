@@ -69,7 +69,7 @@ public final class BusinessLinks {
 
     public static final Link CREATE_ORDER_LINK = WebMvcLinkBuilder.linkTo(
                     WebMvcLinkBuilder.methodOn(OrderController.class)
-                            .createOrder(null, null))
+                            .placeOrder(null, null))
             .withSelfRel();
 
 

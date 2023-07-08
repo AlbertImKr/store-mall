@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CommentDaoFacade {
+public class CommentFacade {
 
 
     private final CommentDao commentDao;

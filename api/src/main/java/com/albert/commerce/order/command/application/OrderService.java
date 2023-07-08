@@ -19,7 +19,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public void deleteOrder(DeleteOrderRequest deleteOrderRequest, UserId userId) {
+    public void cancelOrder(DeleteOrderRequest deleteOrderRequest, UserId userId) {
         OrderId orderId = OrderId.from(deleteOrderRequest.orderId());
         checkOrder(orderId, userId);
         orderRepository.deleteById(orderId);
@@ -32,7 +32,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(UserId userId, StoreId storeId, List<ProductId> productsId,
+    public Order placeOrder(UserId userId, StoreId storeId, List<ProductId> productsId,
             long amount) {
         Order order = Order.builder()
                 .userId(userId)

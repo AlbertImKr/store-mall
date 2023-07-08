@@ -172,7 +172,7 @@ class OrderControllerTest {
         void settingOrder() {
             consumer = userDao.findByEmail("consumer@email.com")
                     .orElseThrow(UserNotFoundException::new);
-            order = orderService.createOrder(consumer.getUserId(), store.getStoreId(), productIds,
+            order = orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productIds,
                     productFacade.getAmount(productIds));
         }
 
@@ -260,7 +260,7 @@ class OrderControllerTest {
         @BeforeEach
         void setOrders() {
             for (int i = 0; i < 100; i++) {
-                orderService.createOrder(consumer.getUserId(), store.getStoreId(), productIds,
+                orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productIds,
                         productFacade.getAmount(productIds));
             }
         }
