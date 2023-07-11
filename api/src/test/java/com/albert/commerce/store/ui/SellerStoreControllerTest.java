@@ -213,11 +213,12 @@ class SellerStoreControllerTest {
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
                                         fieldWithPath("storeId").description("스토어의 아이디"),
+                                        fieldWithPath("userId").description("스토어 오너 아이디"),
                                         fieldWithPath("storeName").description("스토어 네이밍"),
                                         fieldWithPath("address").description("스토어 주소"),
                                         fieldWithPath("phoneNumber").description("스토어 연락처"),
                                         fieldWithPath("email").description("스토어 이메일"),
-                                        fieldWithPath("ownerName").description("스토어 소유주")
+                                        fieldWithPath("ownerName").description("스토어 오너 네임")
                                 )
                         )
                 );

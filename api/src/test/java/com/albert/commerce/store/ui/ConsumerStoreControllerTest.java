@@ -106,7 +106,12 @@ class ConsumerStoreControllerTest {
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
                                         fieldWithPath("storeId").description("스토어 아이디"),
-                                        fieldWithPath("storeName").description("스토어 이름")
+                                        fieldWithPath("storeName").description("스토어 이름"),
+                                        fieldWithPath("userId").description("오너 아이디"),
+                                        fieldWithPath("ownerName").description("오너 네이밍"),
+                                        fieldWithPath("address").description("스토어 이주소"),
+                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
+                                        fieldWithPath("email").description("스토어 이메일")
                                 )
                         )
                 );

@@ -9,8 +9,9 @@ import com.albert.commerce.comment.query.application.CommentFacade;
 import com.albert.commerce.comment.query.dto.CommentNode;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
+import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.query.domain.StoreDataDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -39,7 +40,7 @@ public class CommentController {
     private final CommentFacade commentFacade;
     private final UserDao userDao;
     private final ProductFacade productFacade;
-    private final StoreFacade storeFacade;
+    private final StoreDataDao storeDataDao;
 
     @PostMapping
     public EntityModel<CommentResponse> createComment(
@@ -52,7 +53,9 @@ public class CommentController {
         productFacade.checkId(productId);
 
         StoreId storeId = StoreId.from(commentRequest.storeId());
-        storeFacade.checkId(storeId);
+        if (!storeDataDao.exists(storeId)) {
+            throw new StoreNotFoundException();
+        }
 
         CommentId parentCommentId =
                 commentRequest.parentCommentId() == null ?

@@ -4,17 +4,20 @@ import static com.albert.commerce.common.units.BusinessLinks.GET_MY_STORE_WITH_S
 import static com.albert.commerce.common.units.BusinessLinks.GET_STORE_BY_STORE_ID;
 
 import com.albert.commerce.common.units.BusinessLinks;
+import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
-import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.query.domain.StoreData;
+import com.albert.commerce.store.query.domain.StoreDataDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.albert.commerce.user.query.domain.UserData;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
-    private final StoreFacade storeFacade;
+    private final StoreDataDao storeDataDao;
     private final UserDao userDao;
 
     @PostMapping
@@ -55,10 +58,12 @@ public class SellerStoreController {
     public ResponseEntity getMyStore(Principal principal) {
         String userEmail = principal.getName();
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getUserId());
+        StoreData storeData = storeDataDao.findStoreByUserId(user.getUserId())
+                .orElseThrow(StoreNotFoundException::new);
 
-        sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
-        return ResponseEntity.ok().body(sellerStoreResponse);
+        return ResponseEntity.ok()
+                .body(EntityModel.of(storeData)
+                        .add(GET_MY_STORE_WITH_SELF, BusinessLinks.MY_STORE));
     }
 
     @PutMapping("/my")

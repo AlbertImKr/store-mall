@@ -7,8 +7,9 @@ import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
-import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.StoreNotFoundException;
+import com.albert.commerce.store.query.domain.StoreData;
+import com.albert.commerce.store.query.domain.StoreDataDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.albert.commerce.user.query.domain.UserData;
@@ -36,7 +37,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductFacade productFacade;
     private final UserDao userDao;
-    private final StoreFacade storeFacade;
+    private final StoreDataDao storeDataDao;
 
     @PostMapping
     public ResponseEntity<ProductCreatedResponse> addProduct(
@@ -44,7 +45,8 @@ public class ProductController {
             Principal principal) {
         String userEmail = principal.getName();
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        SellerStoreResponse store = storeFacade.findStoreByUserId(user.getUserId());
+        StoreData store = storeDataDao.findStoreByUserId(user.getUserId()).orElseThrow(
+                StoreNotFoundException::new);
         ProductCreatedResponse productResponse = productService.addProduct(
                 productRequest.toProduct(store.getStoreId()));
         return ResponseEntity.created(BusinessLinks.MY_STORE.toUri())

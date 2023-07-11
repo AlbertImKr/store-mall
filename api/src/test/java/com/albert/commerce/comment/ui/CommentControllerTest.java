@@ -31,9 +31,9 @@ import com.albert.commerce.product.query.domain.ProductDao;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.domain.StoreDao;
+import com.albert.commerce.store.query.domain.StoreData;
+import com.albert.commerce.store.query.domain.StoreDataDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -88,7 +88,7 @@ class CommentControllerTest {
     ProductDao productDao;
 
     @Autowired
-    StoreDao storeDao;
+    StoreDataDao storeDao;
 
     @Autowired
     CommentDao commentDao;
@@ -96,7 +96,7 @@ class CommentControllerTest {
     UserData seller;
     UserData consumer;
 
-    Store store;
+    StoreData store;
 
     Product product;
 

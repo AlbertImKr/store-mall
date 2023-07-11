@@ -13,8 +13,9 @@ import com.albert.commerce.order.query.application.OrderDetail;
 import com.albert.commerce.order.query.application.OrderFacade;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
+import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.query.domain.StoreDataDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.query.domain.UserDao;
 import com.albert.commerce.user.query.domain.UserData;
@@ -44,9 +45,9 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderFacade orderFacade;
     private final OrderAssembler orderAssembler;
+    private final StoreDataDao storeDataDao;
     private final UserDao userDao;
     private final ProductFacade productFacade;
-    private final StoreFacade storeFacade;
     private final PagedResourcesAssembler<OrderDetail> pagedResourcesAssembler;
 
     @GetMapping("/{orderId}")
@@ -71,7 +72,9 @@ public class OrderController {
                 .toList();
         long amount = productFacade.getAmount(productsId);
         StoreId storeId = StoreId.from(orderRequest.storeId());
-        storeFacade.checkId(storeId);
+        if (!storeDataDao.exists(storeId)) {
+            throw new StoreNotFoundException();
+        }
         Order order = orderService.placeOrder(user.getUserId(), storeId, productsId, amount);
 
         // HATEOAS
