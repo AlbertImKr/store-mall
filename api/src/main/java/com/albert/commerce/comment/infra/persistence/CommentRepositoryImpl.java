@@ -66,4 +66,5 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     public boolean exists(CommentId commentId) {
         return commentJpaRepository.existsById(commentId);
     }
+
 }

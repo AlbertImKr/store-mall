@@ -28,7 +28,7 @@ public class Comment extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
     private StoreId storeId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = true))
     @Embedded
     private UserId userId;
     @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id", nullable = true))
@@ -54,5 +54,10 @@ public class Comment extends BaseEntity {
 
     public void update(String detail) {
         this.detail = detail;
+    }
+
+    public void delete() {
+        this.detail = "";
+        this.userId = null;
     }
 }

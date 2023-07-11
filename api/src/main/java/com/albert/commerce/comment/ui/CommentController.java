@@ -19,6 +19,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,5 +75,11 @@ public class CommentController {
         CommentId savedCommentId = commentService.update(CommentId.from(commentId), detail);
         CommentUpdateResponse commentUpdateResponse = CommentUpdateResponse.from(savedCommentId);
         return ResponseEntity.ok().body(commentUpdateResponse);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> delete(@PathVariable String commentId) {
+        commentService.delete(CommentId.from(commentId));
+        return ResponseEntity.noContent().build();
     }
 }

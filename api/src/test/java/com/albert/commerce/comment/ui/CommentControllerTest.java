@@ -8,6 +8,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -245,5 +246,27 @@ class CommentControllerTest {
 
         Comment comment = commentDao.findById(commentResponse.getCommentId()).orElseThrow();
         assertThat(comment.getDetail()).isEqualTo(detail);
+    }
+
+    @DisplayName("Comment를 삭제한다")
+    @Test
+    void deleteComment() throws Exception {
+        // given
+        ProductId productId = product.getProductId();
+        StoreId storeId = store.getStoreId();
+        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        CommentResponse commentResponse = commentService.create(
+                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+
+        // when/then
+        mockMvc.perform(delete("/comments/" + commentResponse.getCommentId().getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        Comment comment = commentDao.findById(commentResponse.getCommentId()).orElseThrow();
+        assertThat(comment.getDetail().isBlank()).isTrue();
+        assertThat(comment.getUserId()).isNull();
     }
 }

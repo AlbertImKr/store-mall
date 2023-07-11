@@ -38,4 +38,11 @@ public class CommentService {
         comment.update(detail);
         return comment.getCommentId();
     }
+
+    @Transactional
+    public void delete(CommentId commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+        comment.delete();
+    }
 }
