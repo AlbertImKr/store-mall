@@ -9,6 +9,7 @@ import com.albert.commerce.comment.infra.persistence.imports.CommentJpaRepositor
 import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.QUser;
 import com.albert.commerce.user.command.domain.UserId;
 import com.querydsl.core.types.Projections;
@@ -82,6 +83,28 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
                 .from(comment)
                 .join(user).on(comment.userId.eq(user.userId))
                 .where(comment.userId.eq(userId))
+                .fetch();
+    }
+
+    @Override
+    public List<CommentResponse> findCommentResponseByStoreId(StoreId storeId) {
+        QComment comment = QComment.comment;
+        QUser user = QUser.user;
+
+        return jpaQueryFactory.select(Projections.fields(CommentResponse.class,
+                        comment.commentId,
+                        comment.userId,
+                        comment.storeId,
+                        comment.productId,
+                        comment.detail,
+                        comment.parentCommentId,
+                        comment.createdTime,
+                        comment.updateTime,
+                        user.nickname
+                ))
+                .from(comment)
+                .join(user).on(comment.userId.eq(user.userId))
+                .where(comment.storeId.eq(storeId))
                 .fetch();
     }
 

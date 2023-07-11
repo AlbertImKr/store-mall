@@ -76,6 +76,12 @@ public class CommentController {
                 commentFacade.findCommentsResponseByUserId(UserId.from(userId)));
     }
 
+    @GetMapping(params = "storeId")
+    public CollectionModel<CommentNode> findCommentsByStoreId(String storeId) {
+        return CollectionModel.of(
+                commentFacade.findCommentsResponseByStoreId(StoreId.from(storeId)));
+    }
+
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentUpdateResponse> updateComment(@PathVariable String commentId,
             @RequestBody String detail) {

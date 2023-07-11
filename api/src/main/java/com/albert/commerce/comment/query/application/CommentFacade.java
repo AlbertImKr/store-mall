@@ -6,6 +6,7 @@ import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.comment.query.dto.CommentNode;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class CommentFacade {
 
     public List<CommentNode> findCommentsResponseByUserId(UserId userId) {
         List<CommentResponse> commentResponses = commentDao.findCommentResponseByUserId(userId);
+        return CommentNode.from(commentResponses);
+    }
+
+    public List<CommentNode> findCommentsResponseByStoreId(StoreId storeId) {
+        List<CommentResponse> commentResponses = commentDao.findCommentResponseByStoreId(storeId);
         return CommentNode.from(commentResponses);
     }
 }
