@@ -1,11 +1,11 @@
 package com.albert.commerce.user.ui;
 
-import static com.albert.commerce.common.units.BusinessLinks.USER_INFO_RESPONSE_LINKS;
-
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.command.application.dto.UserProfileRequest;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final UserFacade userFacade;
+    private final UserDao userDao;
 
 
     @GetMapping("/")
@@ -34,7 +34,9 @@ public class UserController {
 
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(Principal principal) {
-        return userFacade.findByEmail(principal.getName());
+        UserData user = userDao.findByEmail(principal.getName())
+                .orElseThrow(UserNotFoundException::new);
+        return UserInfoResponse.from(user);
     }
 
     @PutMapping("/users/profile")
@@ -46,7 +48,6 @@ public class UserController {
         String email = principal.getName();
         UserInfoResponse userInfoResponse = userService.updateUserInfo(email,
                 userProfileRequest);
-        userInfoResponse.add(USER_INFO_RESPONSE_LINKS);
         return ResponseEntity.ok().body(userInfoResponse);
     }
 }

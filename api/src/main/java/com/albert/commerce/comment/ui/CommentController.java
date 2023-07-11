@@ -11,9 +11,10 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.application.StoreFacade;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.domain.UserId;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -36,7 +37,7 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CommentFacade commentFacade;
-    private final UserFacade userFacade;
+    private final UserDao userDao;
     private final ProductFacade productFacade;
     private final StoreFacade storeFacade;
 
@@ -45,7 +46,7 @@ public class CommentController {
             @RequestBody CommentRequest commentRequest,
             Principal principal) {
         String email = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(email);
+        UserData user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         ProductId productId = ProductId.from(commentRequest.productId());
         productFacade.checkId(productId);
@@ -60,7 +61,7 @@ public class CommentController {
         commentFacade.checkId(parentCommentId);
 
         return EntityModel.of(
-                commentService.create(productId, storeId, parentCommentId, user.getId(),
+                commentService.create(productId, storeId, parentCommentId, user.getUserId(),
                         commentRequest.detail(), user.getNickname()));
     }
 

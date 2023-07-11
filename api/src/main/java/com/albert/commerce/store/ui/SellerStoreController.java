@@ -9,8 +9,9 @@ import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.query.application.StoreFacade;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.net.URI;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
     private final StoreFacade storeFacade;
-    private final UserFacade userFacade;
+    private final UserDao userDao;
 
     @PostMapping
     public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
@@ -40,9 +41,9 @@ public class SellerStoreController {
             return ResponseEntity.badRequest().body(errors);
         }
         String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getId()));
+                newStoreRequest.toStore(user.getUserId()));
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
         String storeId = sellerStoreResponse.getStoreId().getId();
@@ -53,8 +54,8 @@ public class SellerStoreController {
     @GetMapping("/my")
     public ResponseEntity getMyStore(Principal principal) {
         String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
-        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getId());
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getUserId());
 
         sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);
@@ -63,9 +64,10 @@ public class SellerStoreController {
     @PutMapping("/my")
     public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
-        UserInfoResponse user = userFacade.findByEmail(principal.getName());
+        String userEmail = principal.getName();
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
-                updateStoreRequest, user.getId());
+                updateStoreRequest, user.getUserId());
 
         sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
         return ResponseEntity.ok().body(sellerStoreResponse);

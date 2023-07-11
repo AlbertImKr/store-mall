@@ -36,10 +36,8 @@ import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.domain.StoreDao;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,8 +74,6 @@ class CommentControllerTest {
     @Autowired
     UserDao userDao;
 
-    @Autowired
-    UserFacade userFacade;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -97,8 +93,8 @@ class CommentControllerTest {
     @Autowired
     CommentDao commentDao;
 
-    User seller;
-    User consumer;
+    UserData seller;
+    UserData consumer;
 
     Store store;
 
@@ -175,13 +171,15 @@ class CommentControllerTest {
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
         String productIdValue = productId.getId();
-        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        UserData user = userDao.findByEmail(CONSUMER_EMAIL).orElseThrow(UserNotFoundException::new);
         CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
         CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
         commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
 
         mockMvc.perform(get("/comments")
                         .param("productId", productIdValue))
@@ -232,13 +230,16 @@ class CommentControllerTest {
         // given
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        UserData user = userDao.findByEmail(CONSUMER_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
         CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
         CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
         commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
 
         mockMvc.perform(get("/comments")
                         .param("userId", consumer.getUserId().getId()))
@@ -289,13 +290,16 @@ class CommentControllerTest {
         // given
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        UserData user = userDao.findByEmail(CONSUMER_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
         CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
         CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
         commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
+                user.getNickname());
 
         mockMvc.perform(get("/comments")
                         .param("storeId", store.getStoreId().getId()))
@@ -345,9 +349,10 @@ class CommentControllerTest {
         // given
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        UserData user = userDao.findByEmail(CONSUMER_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
         CommentResponse commentResponse = commentService.create(
-                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
         String detail = "Comment를 변경한하다";
 
         mockMvc.perform(put("/comments/" + commentResponse.getCommentId().getId())
@@ -368,9 +373,10 @@ class CommentControllerTest {
         // given
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        UserData user = userDao.findByEmail(CONSUMER_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
         CommentResponse commentResponse = commentService.create(
-                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
 
         // when/then
         mockMvc.perform(delete("/comments/" + commentResponse.getCommentId().getId())

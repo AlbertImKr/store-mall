@@ -22,10 +22,11 @@ import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -68,7 +69,7 @@ class SellerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserFacade userFacade;
+    UserDao userDao;
 
     @Autowired
     StoreJpaRepository storeJpaRepository;
@@ -76,12 +77,12 @@ class SellerStoreControllerTest {
     @Autowired
     UserJpaRepository userJpaRepository;
 
-    UserInfoResponse user;
+    UserData user;
 
     @BeforeEach
     void saveTestUser() {
         userService.createByEmail(TEST_EMAIL);
-        user = userFacade.findByEmail(TEST_EMAIL);
+        user = userDao.findByEmail(TEST_EMAIL).orElseThrow(UserNotFoundException::new);
     }
 
     @AfterEach
@@ -145,7 +146,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
 
         // when
         mockMvc.perform(post("/stores")
@@ -184,7 +185,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -261,7 +262,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";

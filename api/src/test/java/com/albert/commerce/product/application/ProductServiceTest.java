@@ -9,9 +9,10 @@ import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class ProductServiceTest {
     @Autowired
     UserService userService;
     @Autowired
-    UserFacade userFacade;
+    UserDao userDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -38,10 +39,11 @@ class ProductServiceTest {
     void addProduct() {
         // given
         userService.createByEmail(TEST_EMAIL);
-        UserInfoResponse user = userFacade.findByEmail(TEST_EMAIL);
+        UserData user = userDao.findByEmail(TEST_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
-                        "seller@email.com").toStore(user.getId()));
+                        "seller@email.com").toStore(user.getUserId()));
         ProductRequest productRequest = new ProductRequest("testProductName",
                 1000, "test", "testBrand", "test");
 

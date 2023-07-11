@@ -33,8 +33,8 @@ import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
@@ -97,8 +97,8 @@ class OrderControllerTest {
     @Autowired
     EntityManager entityManager;
 
-    User seller;
-    User consumer;
+    UserData seller;
+    UserData consumer;
     SellerStoreResponse store;
     List<String> requestProductsId;
     List<ProductId> productIds;
@@ -166,7 +166,7 @@ class OrderControllerTest {
     class NeedOrderTest {
 
         Order order;
-        User consumer;
+        UserData consumer;
 
         @BeforeEach
         void settingOrder() {

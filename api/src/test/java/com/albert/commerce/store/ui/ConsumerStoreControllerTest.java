@@ -17,9 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
@@ -62,14 +63,14 @@ class ConsumerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserFacade userFacade;
+    UserDao userDao;
 
-    UserInfoResponse user;
+    UserData user;
 
     @BeforeEach
     void saveTestUser() {
         userService.createByEmail(TEST_EMAIL);
-        user = userFacade.findByEmail(TEST_EMAIL);
+        user = userDao.findByEmail(TEST_EMAIL).orElseThrow(UserNotFoundException::new);
     }
 
     @DisplayName("스토어 아이디로 스토어 가져온다")
@@ -84,7 +85,7 @@ class ConsumerStoreControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
         SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getId()));
+                newStoreRequest.toStore(user.getUserId()));
         entityManager.flush();
 
         mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getId()))

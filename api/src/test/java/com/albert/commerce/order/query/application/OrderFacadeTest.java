@@ -14,10 +14,10 @@ import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,10 +56,6 @@ class OrderFacadeTest {
     @Autowired
     ProductFacade productFacade;
 
-    @Autowired
-    UserFacade userFacade;
-
-
     Order order;
     String userEmail = "test@email.com";
 
@@ -68,14 +64,14 @@ class OrderFacadeTest {
     void setOrder() {
         // User 저장
         userService.createByEmail(userEmail);
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         // store 생성
         SellerStoreResponse store = sellerStoreService.createStore(
                 new NewStoreRequest("testStoreName",
                         "testOwnerName",
                         "testAddress",
                         "11111111111",
-                        "testStore@email.com").toStore(user.getId()));
+                        "testStore@email.com").toStore(user.getUserId()));
         List<ProductId> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
@@ -83,7 +79,7 @@ class OrderFacadeTest {
                             "testCategory").toProduct(store.getStoreId()));
             productList.add(productCreatedResponse.getProductId());
         }
-        order = orderService.placeOrder(user.getId(), store.getStoreId(), productList,
+        order = orderService.placeOrder(user.getUserId(), store.getStoreId(), productList,
                 productFacade.getAmount(productList));
     }
 

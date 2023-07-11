@@ -13,10 +13,10 @@ import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +43,6 @@ class OrderServiceTest {
     UserDao userDao;
 
     @Autowired
-    UserFacade userFacade;
-    @Autowired
     UserService userService;
 
     @Autowired
@@ -56,7 +54,7 @@ class OrderServiceTest {
     class needSavedOrderTest {
 
         Order order;
-        UserInfoResponse consumer;
+        UserData consumer;
         String userEmail = "test@email.com";
 
         @DisplayName("Order를 저장한다")
@@ -64,13 +62,13 @@ class OrderServiceTest {
         void save() {
             // given
             userService.createByEmail(userEmail);
-            consumer = userFacade.findByEmail(userEmail);
+            consumer = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
             SellerStoreResponse store = sellerStoreService.createStore(
                     new NewStoreRequest("testStoreName",
                             "testOwnerName",
                             "testAddress",
                             "11111111111",
-                            "testStore@email.com").toStore(consumer.getId()));
+                            "testStore@email.com").toStore(consumer.getUserId()));
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
@@ -80,7 +78,7 @@ class OrderServiceTest {
             }
 
             // when
-            order = orderService.placeOrder(consumer.getId(), store.getStoreId(), productsId,
+            order = orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productsId,
                     productFacade.getAmount(productsId));
 
             // then

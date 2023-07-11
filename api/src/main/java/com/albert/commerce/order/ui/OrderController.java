@@ -15,8 +15,9 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.application.StoreFacade;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderFacade orderFacade;
     private final OrderAssembler orderAssembler;
-    private final UserFacade userFacade;
+    private final UserDao userDao;
     private final ProductFacade productFacade;
     private final StoreFacade storeFacade;
     private final PagedResourcesAssembler<OrderDetail> pagedResourcesAssembler;
@@ -63,14 +64,15 @@ public class OrderController {
     public ResponseEntity<OrderCreatedResponse> placeOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
         String email = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(email);
+        UserData user = userDao.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
         List<ProductId> productsId = orderRequest.productsId().stream()
                 .map(ProductId::from)
                 .toList();
         long amount = productFacade.getAmount(productsId);
         StoreId storeId = StoreId.from(orderRequest.storeId());
         storeFacade.checkId(storeId);
-        Order order = orderService.placeOrder(user.getId(), storeId, productsId, amount);
+        Order order = orderService.placeOrder(user.getUserId(), storeId, productsId, amount);
 
         // HATEOAS
         Link orderLink = BusinessLinks.getOrder(order.getOrderId());
@@ -83,17 +85,18 @@ public class OrderController {
     @DeleteMapping
     public ResponseEntity<Void> cancelOrder(Principal principal,
             @RequestBody DeleteOrderRequest deleteOrderRequest) {
-        String email = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(email);
-        orderService.cancelOrder(deleteOrderRequest, user.getId());
+        String userEmail = principal.getName();
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        orderService.cancelOrder(deleteOrderRequest, user.getUserId());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<PagedModel<OrderResponseEntity>> getAllOrders(Principal principal,
             Pageable pageable) {
-        UserInfoResponse user = userFacade.findByEmail(principal.getName());
-        Page<OrderDetail> orders = orderFacade.findAllByUserId(user.getId(), pageable);
+        String userEmail = principal.getName();
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        Page<OrderDetail> orders = orderFacade.findAllByUserId(user.getUserId(), pageable);
 
         // HATEOAS
         PagedModel<OrderResponseEntity> entityModels = pagedResourcesAssembler.toModel(orders,

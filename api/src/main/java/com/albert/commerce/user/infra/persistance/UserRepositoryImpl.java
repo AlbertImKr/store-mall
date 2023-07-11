@@ -7,7 +7,6 @@ import com.albert.commerce.user.command.domain.User;
 import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.domain.UserDao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +14,12 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class UserRepositoryImpl implements UserRepository, UserDao {
+public class UserRepositoryImpl implements UserRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final UserJpaRepository userJpaRepository;
     private final SequenceGenerator sequenceGenerator;
+
     @Override
     public Optional<User> updateUserInfo(String email, UserProfileRequest userProfileRequest) {
         QUser user = QUser.user;
@@ -48,10 +48,5 @@ public class UserRepositoryImpl implements UserRepository, UserDao {
 
     private UserId nextId() {
         return UserId.from(sequenceGenerator.generate());
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email);
     }
 }

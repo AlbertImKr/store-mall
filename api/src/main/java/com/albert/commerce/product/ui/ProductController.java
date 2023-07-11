@@ -9,8 +9,9 @@ import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.query.application.StoreFacade;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +35,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductFacade productFacade;
-    private final UserFacade userFacade;
+    private final UserDao userDao;
     private final StoreFacade storeFacade;
 
     @PostMapping
@@ -42,8 +43,8 @@ public class ProductController {
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
-        SellerStoreResponse store = storeFacade.findStoreByUserId(user.getId());
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        SellerStoreResponse store = storeFacade.findStoreByUserId(user.getUserId());
         ProductCreatedResponse productResponse = productService.addProduct(
                 productRequest.toProduct(store.getStoreId()));
         return ResponseEntity.created(BusinessLinks.MY_STORE.toUri())
@@ -55,22 +56,23 @@ public class ProductController {
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page
     ) {
-        UserInfoResponse user = userFacade.findByEmail(principal.getName());
+        UserData user = userDao.findByEmail(principal.getName())
+                .orElseThrow(UserNotFoundException::new);
         Pageable pageable = PageRequest.of(
                 page == null ? 0 : page,
                 size == null ? 0 : size
         );
         return ResponseEntity.ok(
-                productFacade.findProductsByUserId(user.getId(), pageable));
+                productFacade.findProductsByUserId(user.getUserId(), pageable));
     }
 
     @PutMapping(value = "/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(Principal principal,
             @PathVariable String productId, @RequestBody ProductRequest productRequest) {
         String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(
-                productService.update(user.getId(), ProductId.from(productId), productRequest));
+                productService.update(user.getUserId(), ProductId.from(productId), productRequest));
     }
 
 
