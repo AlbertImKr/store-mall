@@ -30,4 +30,12 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
         return CommentResponse.of(savedComment, userNickname);
     }
+
+    @Transactional
+    public CommentId update(CommentId commentId, String detail) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+        comment.update(detail);
+        return comment.getCommentId();
+    }
 }

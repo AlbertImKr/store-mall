@@ -1,5 +1,6 @@
 package com.albert.commerce.comment.ui;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -9,12 +10,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
+import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -218,5 +222,28 @@ class CommentControllerTest {
                         )
                 )
         ;
+    }
+
+    @DisplayName("Comment를 업데이트 한다")
+    @Test
+    void updateComment() throws Exception {
+        // given
+        ProductId productId = product.getProductId();
+        StoreId storeId = store.getStoreId();
+        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        CommentResponse commentResponse = commentService.create(
+                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+        String detail = "Comment를 변경한하다";
+
+        mockMvc.perform(put("/comments/" + commentResponse.getCommentId().getId())
+                        .content(detail)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("commentId").exists());
+
+        Comment comment = commentDao.findById(commentResponse.getCommentId()).orElseThrow();
+        assertThat(comment.getDetail()).isEqualTo(detail);
     }
 }
