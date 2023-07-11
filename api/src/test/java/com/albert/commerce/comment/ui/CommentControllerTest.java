@@ -225,6 +225,63 @@ class CommentControllerTest {
         ;
     }
 
+
+    @DisplayName("UserId 로 Comments 조회")
+    @Test
+    void findCommentsByUserId() throws Exception {
+        // given
+        ProductId productId = product.getProductId();
+        StoreId storeId = store.getStoreId();
+        UserInfoResponse user = userFacade.findByEmail(CONSUMER_EMAIL);
+        CommentResponse commentResponse1 = commentService.create(
+                productId, storeId, null, user.getId(), CONSUMER_EMAIL, user.getNickname());
+        CommentResponse commentResponse2 = commentService.create(productId, storeId,
+                commentResponse1.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+        commentService.create(productId, storeId,
+                commentResponse2.getCommentId(), user.getId(), CONSUMER_EMAIL, user.getNickname());
+
+        mockMvc.perform(get("/comments")
+                        .param("userId", consumer.getUserId().getId()))
+                .andDo(print())
+                .andExpect(jsonPath("_embedded.comments[*].commentId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].storeId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].productId").exists())
+                .andExpect(jsonPath("_embedded.comments[*].createdTime").exists())
+                .andExpect(jsonPath("_embedded.comments[*].updateTime").exists())
+                .andExpect(jsonPath("_embedded.comments[*].nickname").exists())
+                .andExpect(jsonPath("_embedded.comments[*].detail").exists())
+                .andExpect(jsonPath("_embedded.comments[*].userId").exists())
+                // restDocs
+                .andDo(document("findCommentsByProductId",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                responseFields(
+                                        fieldWithPath("_embedded.comments[].commentId")
+                                                .description("comment commentId"),
+                                        fieldWithPath("_embedded.comments[].userId")
+                                                .description("comment userId"),
+                                        fieldWithPath("_embedded.comments[].nickname")
+                                                .description("comment 작성자 nickname"),
+                                        fieldWithPath("_embedded.comments[].storeId")
+                                                .description("comment storeId"),
+                                        fieldWithPath("_embedded.comments[].productId")
+                                                .description("comment productId"),
+                                        fieldWithPath("_embedded.comments[].createdTime")
+                                                .description("comment createTime"),
+                                        fieldWithPath("_embedded.comments[].updateTime")
+                                                .description("comment updateTime"),
+                                        fieldWithPath("_embedded.comments[].parentCommentId")
+                                                .description("comment parentCommentId"),
+                                        fieldWithPath("_embedded.comments[].detail")
+                                                .description("comment detail"),
+                                        subsectionWithPath("_embedded.comments[].comment")
+                                                .description("child Comment").optional()
+                                )
+                        )
+                )
+        ;
+    }
+
     @DisplayName("Comment를 업데이트 한다")
     @Test
     void updateComment() throws Exception {

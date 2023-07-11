@@ -12,6 +12,7 @@ import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.query.application.StoreFacade;
 import com.albert.commerce.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.query.application.UserFacade;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,12 @@ public class CommentController {
     public CollectionModel<CommentNode> findCommentsByProductId(String productId) {
         return CollectionModel.of(
                 commentFacade.findCommentsResponseByProductId(ProductId.from(productId)));
+    }
+
+    @GetMapping(params = "userId")
+    public CollectionModel<CommentNode> findCommentsByUserId(String userId) {
+        return CollectionModel.of(
+                commentFacade.findCommentsResponseByUserId(UserId.from(userId)));
     }
 
     @PutMapping("/{commentId}")
