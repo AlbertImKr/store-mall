@@ -4,6 +4,7 @@ import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.query.domain.ProductData;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -54,6 +55,19 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
         return ProductResponse.builder()
                 .createdTime(product.getCreatedTime())
                 .updateTime(product.getUpdateTime())
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .brand(product.getBrand())
+                .storeId(product.getStoreId())
+                .description(product.getDescription())
+                .category(product.getCategory())
+                .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
+                .price(product.getPrice())
+                .build();
+    }
+
+    public static ProductResponse from(ProductData product) {
+        return ProductResponse.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .brand(product.getBrand())

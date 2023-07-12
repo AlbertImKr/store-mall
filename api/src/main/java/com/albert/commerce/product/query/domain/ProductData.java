@@ -1,8 +1,8 @@
-package com.albert.commerce.product.command.domain;
+package com.albert.commerce.product.query.domain;
 
-import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
+import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -12,7 +12,6 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "product")
 @Entity
-public class Product extends BaseEntity {
+public class ProductData {
 
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
@@ -39,30 +38,4 @@ public class Product extends BaseEntity {
     private String brand;
     @Column(nullable = true)
     private String category;
-
-    @Builder
-    public Product(ProductId productId, StoreId storeId, String productName, Money price,
-            String description, String brand, String category) {
-        this.productId = productId;
-        this.storeId = storeId;
-        this.productName = productName;
-        this.price = price;
-        this.description = description;
-        this.brand = brand;
-        this.category = category;
-    }
-
-    public Product update(String productName, Money price, String brand, String category,
-            String description) {
-        this.productName = productName;
-        this.price = price;
-        this.brand = brand;
-        this.category = category;
-        this.description = description;
-        return this;
-    }
-
-    public void updateId(ProductId productId) {
-        this.productId = productId;
-    }
 }

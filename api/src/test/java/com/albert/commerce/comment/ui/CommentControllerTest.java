@@ -25,9 +25,9 @@ import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.product.command.application.dto.ProductService;
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.domain.ProductDao;
+import com.albert.commerce.product.query.domain.ProductData;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
@@ -98,7 +98,7 @@ class CommentControllerTest {
 
     StoreData store;
 
-    Product product;
+    ProductData product;
 
 
     @BeforeEach

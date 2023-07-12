@@ -3,9 +3,9 @@ package com.albert.commerce.product.query.application;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductsAssembler;
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.domain.ProductDao;
+import com.albert.commerce.product.query.domain.ProductData;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +20,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class ProductFacade {
 
-    private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
+    private final PagedResourcesAssembler<ProductData> pagedResourcesAssembler;
     private final ProductsAssembler productsAssembler;
     private final ProductDao productDao;
 
     @Transactional(readOnly = true)
     public PagedModel<ProductResponse> findProductsByUserId(UserId userId,
             Pageable pageable) {
-        Page<Product> products = productDao.findProductsByUserId(userId, pageable);
+        Page<ProductData> products = productDao.findProductsByUserId(userId, pageable);
         return pagedResourcesAssembler.toModel(products, productsAssembler);
     }
 
     @Transactional(readOnly = true)
     public ProductResponse findById(ProductId productId) {
-        Product product = productDao.findById(productId).orElseThrow(ProductNotFoundException::new);
+        ProductData product = productDao.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
         return ProductResponse.from(product);
     }
 
