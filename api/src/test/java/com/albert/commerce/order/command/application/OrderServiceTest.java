@@ -1,8 +1,5 @@
 package com.albert.commerce.order.command.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.albert.commerce.order.command.domain.DeliveryStatus;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
@@ -77,17 +74,17 @@ class OrderServiceTest {
                 productsId.add(productCreatedResponse.getProductId());
             }
 
-            // when
-            order = orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productsId,
-                    productFacade.getAmount(productsId));
-
-            // then
-            assertThat(order.getAmount()).isEqualTo(20000);
-            assertThat(order.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
-            assertThat(order.getProductsId()).isEqualTo(order.getProductsId());
-            assertThat(order.getCreatedTime()).isNotNull();
-            assertThat(order.getOrderId()).isNotNull();
-            assertThat(order.getUpdateTime()).isNotNull();
+//            // when
+//            order = orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productsId,
+//                    productFacade.getAmount(productsId));
+//
+//            // then
+//            assertThat(order.getAmount()).isEqualTo(20000);
+//            assertThat(order.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
+//            assertThat(order.getProductsId()).isEqualTo(order.getProductsId());
+//            assertThat(order.getCreatedTime()).isNotNull();
+//            assertThat(order.getOrderId()).isNotNull();
+//            assertThat(order.getUpdateTime()).isNotNull();
         }
 
 

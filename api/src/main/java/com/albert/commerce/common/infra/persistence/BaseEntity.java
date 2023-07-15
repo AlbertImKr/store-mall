@@ -18,10 +18,10 @@ public abstract class BaseEntity implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     @CreationTimestamp(source = SourceType.DB)
-    protected LocalDateTime createdTime;
+    protected LocalDateTime createdTime = LocalDateTime.now();
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     @UpdateTimestamp(source = SourceType.DB)
-    protected LocalDateTime updateTime;
+    protected LocalDateTime updateTime = LocalDateTime.now();
 
 }

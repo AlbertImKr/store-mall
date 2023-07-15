@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Access(AccessType.FIELD)
 @EqualsAndHashCode(of = "id")
 public class OrderId implements Serializable {
-
     private String id;
 
     private OrderId(String orderId) {

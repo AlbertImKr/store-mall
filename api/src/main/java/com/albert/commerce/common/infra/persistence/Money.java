@@ -14,4 +14,8 @@ public record Money(long value) {
     public static Money from(long value) {
         return new Money(value);
     }
+
+    public Money multiply(Long quantity) {
+        return from(value * quantity);
+    }
 }
