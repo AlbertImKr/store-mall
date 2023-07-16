@@ -23,7 +23,7 @@ import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
@@ -130,7 +130,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -185,11 +185,11 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        SellerStoreResponse store = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getUserId()));
+        StoreId storeId = sellerStoreService.createStore(user.getEmail(),
+                newStoreRequest);
 
         ProductCreatedResponse productCreatedResponse =
-                productService.addProduct(productRequest.toProduct(store.getStoreId()));
+                productService.addProduct(productRequest.toProduct(storeId));
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
                 CHANGED_PRICE,
@@ -219,7 +219,7 @@ class ProductControllerTest {
                         links(
                                 halLinks(),
                                 linkWithRel("self").description("현재 연결한 link"),
-                                linkWithRel("my-store").description("my-store link")
+                                linkWithRel("my-storeId").description("my-storeId link")
                         ),
                         responseFields(
                                 subsectionWithPath("_links").ignored(),
@@ -283,10 +283,10 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            SellerStoreResponse store = sellerStoreService.createStore(
-                    newStoreRequest.toStore(user.getUserId()));
+            StoreId storeId = sellerStoreService.createStore(user.getEmail(),
+                    newStoreRequest);
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest.toProduct(store.getStoreId()));
+                productService.addProduct(productRequest.toProduct(storeId));
             }
         }
 

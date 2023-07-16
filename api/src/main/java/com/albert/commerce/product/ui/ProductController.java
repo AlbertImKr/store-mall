@@ -45,7 +45,7 @@ public class ProductController {
             Principal principal) {
         String userEmail = principal.getName();
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        StoreData store = storeDataDao.findStoreByUserId(user.getUserId()).orElseThrow(
+        StoreData store = storeDataDao.getMyStoreByUserEmail(user.getUserId()).orElseThrow(
                 StoreNotFoundException::new);
         ProductCreatedResponse productResponse = productService.addProduct(
                 productRequest.toProduct(store.getStoreId()));

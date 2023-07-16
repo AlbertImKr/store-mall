@@ -9,7 +9,7 @@ import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepositor
 import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -60,22 +60,23 @@ class OrderServiceTest {
             // given
             userService.createByEmail(userEmail);
             consumer = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-            SellerStoreResponse store = sellerStoreService.createStore(
+            StoreId storeId = sellerStoreService.createStore(
+                    consumer.getEmail(),
                     new NewStoreRequest("testStoreName",
                             "testOwnerName",
                             "testAddress",
                             "11111111111",
-                            "testStore@email.com").toStore(consumer.getUserId()));
+                            "testStore@email.com"));
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 ProductCreatedResponse productCreatedResponse = productService.addProduct(
                         new ProductRequest("testProductName", 10000, "test", "testBrand",
-                                "testCategory").toProduct(store.getStoreId()));
+                                "testCategory").toProduct(storeId));
                 productsId.add(productCreatedResponse.getProductId());
             }
 
 //            // when
-//            order = orderService.placeOrder(consumer.getUserId(), store.getStoreId(), productsId,
+//            order = orderService.placeOrder(consumer.getUserId(), storeId.getStoreId(), productsId,
 //                    productFacade.getAmount(productsId));
 //
 //            // then

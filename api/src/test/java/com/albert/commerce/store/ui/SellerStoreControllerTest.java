@@ -146,7 +146,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(post("/stores")
@@ -185,7 +185,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -263,7 +263,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getUserId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";

@@ -7,8 +7,8 @@ import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.ui.OrderController;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.ui.ProductController;
-import com.albert.commerce.store.ui.ConsumerStoreController;
 import com.albert.commerce.store.ui.SellerStoreController;
+import com.albert.commerce.store.ui.StoreQueryController;
 import com.albert.commerce.user.ui.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
@@ -21,7 +21,7 @@ public final class BusinessLinks {
     }
 
     public static final Link MY_STORE =
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(StoreQueryController.class)
                             .getMyStore(null))
                     .withRel("my-store");
 
@@ -30,7 +30,7 @@ public final class BusinessLinks {
                 .slash(storeId)
                 .withSelfRel();
     }    public static final Link GET_MY_STORE_WITH_SELF = WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+                    WebMvcLinkBuilder.methodOn(StoreQueryController.class)
                             .getMyStore(null))
             .withSelfRel();
     public static final Link CREATE_STORE =
@@ -38,7 +38,7 @@ public final class BusinessLinks {
                             .createStore(null, null, null))
                     .withRel("create-store");
     public static final Link GET_STORE =
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ConsumerStoreController.class)
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(StoreQueryController.class)
                             .getStore(null))
                     .withRel("get-store");
 

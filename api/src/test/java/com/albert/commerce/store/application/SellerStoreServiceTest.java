@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.query.domain.StoreData;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -27,6 +29,9 @@ class SellerStoreServiceTest {
     private SellerStoreService sellerStoreService;
 
     @Autowired
+    private StoreFacade storeFacade;
+
+    @Autowired
     private UserService userService;
     @Autowired
     private UserDao userDao;
@@ -47,10 +52,10 @@ class SellerStoreServiceTest {
         UserData user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         // when
-        SellerStoreResponse store = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getUserId()));
+        StoreId storeId = sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // then
+        StoreData store = storeFacade.getStoreById(storeId);
         assertThat(store.getStoreName()).isEqualTo(TEST_STORE_NAME);
         assertThat(store.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(store.getOwnerName()).isEqualTo(TEST_OWNER);

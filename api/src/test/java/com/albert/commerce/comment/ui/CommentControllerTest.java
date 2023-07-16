@@ -111,8 +111,8 @@ class CommentControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 SELLER_EMAIL);
-        sellerStoreService.createStore(newStoreRequest.toStore(seller.getUserId()));
-        store = storeDao.findStoreByUserId(seller.getUserId())
+        sellerStoreService.createStore(seller.getEmail(), newStoreRequest);
+        store = storeDao.getMyStoreByUserEmail(seller.getUserId())
                 .orElseThrow(StoreNotFoundException::new);
 
         ProductRequest productRequest = new ProductRequest("product", 10000,

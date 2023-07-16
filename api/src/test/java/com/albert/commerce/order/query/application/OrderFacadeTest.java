@@ -14,7 +14,7 @@ import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepositor
 import com.albert.commerce.product.query.application.ProductFacade;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -59,7 +59,7 @@ class OrderFacadeTest {
     OrderId orderId;
     String userEmail = "test@email.com";
     UserData user;
-    SellerStoreResponse store;
+    StoreId storeId;
     Map<String, Long> productIdAndQuantity = new HashMap<>();
 
     @DisplayName("Order를 저장한다")
@@ -69,20 +69,20 @@ class OrderFacadeTest {
         userService.createByEmail(userEmail);
         user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         // store 생성
-        store = sellerStoreService.createStore(
+        storeId = sellerStoreService.createStore(user.getEmail(),
                 new NewStoreRequest("testStoreName",
                         "testOwnerName",
                         "testAddress",
                         "11111111111",
-                        "testStore@email.com").toStore(user.getUserId()));
+                        "testStore@email.com"));
         for (int i = 0; i < 10; i++) {
             ProductCreatedResponse productCreatedResponse = productService.addProduct(
                     new ProductRequest("testProductName", 10000, "test", "testBrand",
-                            "testCategory").toProduct(store.getStoreId()));
+                            "testCategory").toProduct(storeId));
             productIdAndQuantity.put(productCreatedResponse.getProductId().getId(), (long) i);
         }
         orderId = orderService.placeOrder(userEmail, new OrderRequest(productIdAndQuantity
-                , store.getStoreId().getId()
+                , storeId.getId()
         ));
     }
 
@@ -93,7 +93,7 @@ class OrderFacadeTest {
         assertThat(orderData.getOrderId()).isEqualTo(orderId);
         assertThat(orderData.getUserId()).isEqualTo(user.getUserId());
         assertThat(orderData.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
-        assertThat(orderData.getStoreId()).isEqualTo(store.getStoreId());
+        assertThat(orderData.getStoreId()).isEqualTo(storeId);
         assertThat(
                 orderData.getOrderLineDetails().stream()
                         .map(OrderLineDetail::getProductId)

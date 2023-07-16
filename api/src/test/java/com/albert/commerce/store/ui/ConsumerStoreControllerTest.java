@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -84,11 +84,11 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getUserId()));
+        StoreId storeId = sellerStoreService.createStore(user.getEmail(),
+                newStoreRequest);
         entityManager.flush();
 
-        mockMvc.perform(get("/stores/" + sellerStoreResponse.getStoreId().getId()))
+        mockMvc.perform(get("/stores/" + storeId.getId()))
                 .andDo(print())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())

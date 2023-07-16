@@ -8,7 +8,7 @@ import com.albert.commerce.product.command.application.dto.ProductCreatedRespons
 import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -44,15 +44,15 @@ class ProductServiceTest {
         userService.createByEmail(TEST_EMAIL);
         UserData user = userDao.findByEmail(TEST_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        SellerStoreResponse store = sellerStoreService.createStore(
+        StoreId storeId = sellerStoreService.createStore(user.getEmail(),
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
-                        "seller@email.com").toStore(user.getUserId()));
+                        "seller@email.com"));
         ProductRequest productRequest = new ProductRequest("testProductName",
                 1000, "test", "testBrand", "test");
 
         // when
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest.toProduct(store.getStoreId()));
+                productRequest.toProduct(storeId));
 
         // then
         Assertions.assertAll(
