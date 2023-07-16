@@ -76,9 +76,9 @@ class OrderFacadeTest {
                         "11111111111",
                         "testStore@email.com"));
         for (int i = 0; i < 10; i++) {
-            ProductCreatedResponse productCreatedResponse = productService.addProduct(
+            ProductCreatedResponse productCreatedResponse = productService.addProduct(userEmail,
                     new ProductRequest("testProductName", 10000, "test", "testBrand",
-                            "testCategory").toProduct(storeId));
+                            "testCategory"));
             productIdAndQuantity.put(productCreatedResponse.getProductId().getId(), (long) i);
         }
         orderId = orderService.placeOrder(userEmail, new OrderRequest(productIdAndQuantity

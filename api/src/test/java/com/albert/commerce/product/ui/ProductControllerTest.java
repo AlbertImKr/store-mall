@@ -189,7 +189,7 @@ class ProductControllerTest {
                 newStoreRequest);
 
         ProductCreatedResponse productCreatedResponse =
-                productService.addProduct(productRequest.toProduct(storeId));
+                productService.addProduct(user.getEmail(), productRequest);
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
                 CHANGED_PRICE,
@@ -286,7 +286,7 @@ class ProductControllerTest {
             StoreId storeId = sellerStoreService.createStore(user.getEmail(),
                     newStoreRequest);
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest.toProduct(storeId));
+                productService.addProduct(user.getEmail(), productRequest);
             }
         }
 

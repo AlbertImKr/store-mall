@@ -122,14 +122,15 @@ class OrderControllerTest {
                 "address", "01001000100",
                 "test@email.com");
         storeId = sellerStoreService.createStore(consumer.getEmail(), newStoreRequest);
+        storeId = sellerStoreService.createStore(seller.getEmail(), newStoreRequest);
         requestProductsId = new HashMap<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ProductRequest productRequest = new ProductRequest("product" + i, 10000,
                     "testProduct",
                     "test", "test");
-            ProductCreatedResponse product = productService.addProduct(
-                    productRequest.toProduct(storeId));
+            ProductCreatedResponse product = productService.addProduct(seller.getEmail(),
+                    productRequest);
             productIds.add(product.getProductId());
             requestProductsId.put(product.getProductId().getId(), (long) i);
         }
@@ -140,8 +141,6 @@ class OrderControllerTest {
     @DisplayName("주문을 생성한다")
     @Test
     void createOrder() throws Exception {
-        // given
-
         // when
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)

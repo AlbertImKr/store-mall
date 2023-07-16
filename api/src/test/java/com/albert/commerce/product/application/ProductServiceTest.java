@@ -52,7 +52,7 @@ class ProductServiceTest {
 
         // when
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest.toProduct(storeId));
+                user.getEmail(), productRequest);
 
         // then
         Assertions.assertAll(

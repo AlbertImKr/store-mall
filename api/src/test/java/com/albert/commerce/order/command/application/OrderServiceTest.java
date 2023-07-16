@@ -69,9 +69,9 @@ class OrderServiceTest {
                             "testStore@email.com"));
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                ProductCreatedResponse productCreatedResponse = productService.addProduct(
+                ProductCreatedResponse productCreatedResponse = productService.addProduct(consumer.getEmail(),
                         new ProductRequest("testProductName", 10000, "test", "testBrand",
-                                "testCategory").toProduct(storeId));
+                                "testCategory"));
                 productsId.add(productCreatedResponse.getProductId());
             }
 

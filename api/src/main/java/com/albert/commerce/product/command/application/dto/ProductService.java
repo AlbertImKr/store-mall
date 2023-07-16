@@ -7,7 +7,12 @@ import com.albert.commerce.product.command.application.ProductRequest;
 import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.command.domain.ProductRepository;
-import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.store.StoreNotFoundException;
+import com.albert.commerce.store.query.domain.StoreData;
+import com.albert.commerce.store.query.domain.StoreDataDao;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UserDao userDao;
+    private final StoreDataDao storeDataDao;
 
     @Transactional
-    public ProductCreatedResponse addProduct(Product product) {
-        return ProductCreatedResponse.from(productRepository.save(product));
+    public ProductCreatedResponse addProduct(String userEmail, ProductRequest productRequest) {
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        StoreData store = storeDataDao.getMyStoreByUserEmail(user.getUserId()).orElseThrow(
+                StoreNotFoundException::new);
+        return ProductCreatedResponse.from(productRepository.save(productRequest.toProduct(store.getStoreId())));
     }
 
     @Transactional
-    public ProductResponse update(UserId userId, ProductId productId,
+    public ProductResponse update(String userEmail, ProductId productId,
             ProductRequest productRequest) {
-        Product product = productRepository.findByUserIdAndProductId(userId,
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        Product product = productRepository.findByUserIdAndProductId(user.getUserId(),
                 productId).orElseThrow(ProductNotFoundException::new);
 
         Product changedProduct = product.update(

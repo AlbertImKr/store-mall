@@ -118,8 +118,8 @@ class CommentControllerTest {
         ProductRequest productRequest = new ProductRequest("product", 10000,
                 "testProduct",
                 "test", "test");
-        ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest.toProduct(store.getStoreId()));
+        ProductCreatedResponse productCreatedResponse = productService.addProduct(seller.getEmail(),
+                productRequest);
         product = productDao.findById(productCreatedResponse.getProductId()).orElseThrow(
                 ProductNotFoundException::new);
     }
