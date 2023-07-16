@@ -3,9 +3,15 @@ package com.albert.commerce.comment.command.application;
 import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.command.domain.CommentRepository;
+import com.albert.commerce.comment.query.application.CommentFacade;
 import com.albert.commerce.product.command.domain.ProductId;
+import com.albert.commerce.product.query.application.ProductFacade;
+import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.store.query.domain.StoreDataDao;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,19 +22,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserDao userDao;
+    private final ProductFacade productFacade;
+    private final StoreDataDao storeDataDao;
+    private final CommentFacade commentFacade;
 
     @Transactional
-    public CommentResponse create(ProductId productId, StoreId storeId, CommentId parentCommentId,
-            UserId userId, String detail, String userNickname) {
-        Comment comment = Comment.builder()
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
-                .parentCommentId(parentCommentId)
-                .build();
-        Comment savedComment = commentRepository.save(comment);
-        return CommentResponse.of(savedComment, userNickname);
+    public CommentId create(String userEmail, CommentRequest commentRequest) {
+        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+
+        ProductId productId = ProductId.from(commentRequest.productId());
+        productFacade.checkId(productId);
+
+        StoreId storeId = StoreId.from(commentRequest.storeId());
+        if (!storeDataDao.exists(storeId)) {
+            throw new StoreNotFoundException();
+        }
+
+        CommentId parentCommentId = commentRequest.parentCommentId() == null ?
+                null :
+                CommentId.from(commentRequest.parentCommentId());
+        commentFacade.checkId(parentCommentId);
+        Comment comment = commentRequest.toEntity(productId, storeId, user.getUserId(), parentCommentId);
+        return commentRepository.save(comment).getCommentId();
     }
 
     @Transactional

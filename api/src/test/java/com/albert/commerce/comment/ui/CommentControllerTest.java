@@ -17,9 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.comment.command.application.CommentRequest;
-import com.albert.commerce.comment.command.application.CommentResponse;
 import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.command.domain.Comment;
+import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.ProductRequest;
@@ -172,14 +172,13 @@ class CommentControllerTest {
         StoreId storeId = store.getStoreId();
         String productIdValue = productId.getId();
         UserData user = userDao.findByEmail(CONSUMER_EMAIL).orElseThrow(UserNotFoundException::new);
-        CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
-        CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
-        commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
+        CommentId commentResponse1 = commentService.create(
+                user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));
+        CommentId commentResponse2 = commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), commentResponse1.getId(), "detail"));
+        commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), commentResponse2.getId(), "detail"));
 
         mockMvc.perform(get("/comments")
                         .param("productId", productIdValue))
@@ -232,14 +231,12 @@ class CommentControllerTest {
         StoreId storeId = store.getStoreId();
         UserData user = userDao.findByEmail(CONSUMER_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
-        CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
-        commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
+        CommentId commentId1 = commentService.create(CONSUMER_EMAIL,
+                new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));
+        CommentId commentId2 = commentService.create(CONSUMER_EMAIL,
+                new CommentRequest(productId.getId(), storeId.getId(), commentId1.getId(), "detail"));
+        commentService.create(CONSUMER_EMAIL,
+                new CommentRequest(productId.getId(), storeId.getId(), commentId2.getId(), "detail"));
 
         mockMvc.perform(get("/comments")
                         .param("userId", consumer.getUserId().getId()))
@@ -292,14 +289,12 @@ class CommentControllerTest {
         StoreId storeId = store.getStoreId();
         UserData user = userDao.findByEmail(CONSUMER_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        CommentResponse commentResponse1 = commentService.create(
-                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
-        CommentResponse commentResponse2 = commentService.create(productId, storeId,
-                commentResponse1.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
-        commentService.create(productId, storeId,
-                commentResponse2.getCommentId(), user.getUserId(), CONSUMER_EMAIL,
-                user.getNickname());
+        CommentId commentId1 = commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));
+        CommentId commentId2 = commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), commentId1.getId(), "detail"));
+        commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), commentId2.getId(), "detail"));
 
         mockMvc.perform(get("/comments")
                         .param("storeId", store.getStoreId().getId()))
@@ -351,11 +346,11 @@ class CommentControllerTest {
         StoreId storeId = store.getStoreId();
         UserData user = userDao.findByEmail(CONSUMER_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        CommentResponse commentResponse = commentService.create(
-                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
+        CommentId commentId = commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));
         String detail = "Comment를 변경한하다";
 
-        mockMvc.perform(put("/comments/" + commentResponse.getCommentId().getId())
+        mockMvc.perform(put("/comments/" + commentId.getId())
                         .content(detail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON))
@@ -363,7 +358,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("commentId").exists());
 
-        Comment comment = commentDao.findById(commentResponse.getCommentId()).orElseThrow();
+        Comment comment = commentDao.findById(commentId).orElseThrow();
         assertThat(comment.getDetail()).isEqualTo(detail);
     }
 
@@ -375,17 +370,17 @@ class CommentControllerTest {
         StoreId storeId = store.getStoreId();
         UserData user = userDao.findByEmail(CONSUMER_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        CommentResponse commentResponse = commentService.create(
-                productId, storeId, null, user.getUserId(), CONSUMER_EMAIL, user.getNickname());
+        CommentId commentId = commentService.create(user.getEmail(),
+                new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));
 
         // when/then
-        mockMvc.perform(delete("/comments/" + commentResponse.getCommentId().getId())
+        mockMvc.perform(delete("/comments/" + commentId.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        Comment comment = commentDao.findById(commentResponse.getCommentId()).orElseThrow();
+        Comment comment = commentDao.findById(commentId).orElseThrow();
         assertThat(comment.getDetail().isBlank()).isTrue();
         assertThat(comment.getUserId()).isNull();
     }
