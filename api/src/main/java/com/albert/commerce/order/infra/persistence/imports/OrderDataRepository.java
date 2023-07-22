@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
-public interface OrderDataResponsibility extends Repository<OrderData, ProductId> {
+public interface OrderDataRepository extends Repository<OrderData, ProductId> {
 
     List<OrderData> findByUserIdAndOrderId(UserId userId, OrderId orderId);
 

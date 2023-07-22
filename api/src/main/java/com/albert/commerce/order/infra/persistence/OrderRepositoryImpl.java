@@ -4,7 +4,7 @@ import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.order.command.domain.Order;
 import com.albert.commerce.order.command.domain.OrderId;
 import com.albert.commerce.order.command.domain.OrderRepository;
-import com.albert.commerce.order.infra.persistence.imports.OrderJpaResponsibility;
+import com.albert.commerce.order.infra.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepository {
 
-    private final OrderJpaResponsibility orderJpaResponsibility;
+    private final OrderJpaRepository orderJpaRepository;
     private final SequenceGenerator sequenceGenerator;
 
     @Override
     public Order save(Order order) {
         order.updateId(nextId());
-        return orderJpaResponsibility.save(order);
+        return orderJpaRepository.save(order);
     }
 
     private OrderId nextId() {
@@ -32,21 +32,21 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public boolean exist(OrderId orderId, UserId userId) {
-        return orderJpaResponsibility.existsByOrderIdAndUserId(orderId, userId);
+        return orderJpaRepository.existsByOrderIdAndUserId(orderId, userId);
     }
 
     @Override
     public void deleteById(OrderId orderId) {
-        orderJpaResponsibility.deleteById(orderId);
+        orderJpaRepository.deleteById(orderId);
     }
 
     @Override
     public Optional<Order> findByUserIdAndOrderId(UserId userId, OrderId orderId) {
-        return orderJpaResponsibility.findByUserIdAndOrderId(userId, orderId);
+        return orderJpaRepository.findByUserIdAndOrderId(userId, orderId);
     }
 
     @Override
     public Page<Order> findAllByUserId(UserId userId, Pageable pageable) {
-        return orderJpaResponsibility.findAllByUserId(userId, pageable);
+        return orderJpaRepository.findAllByUserId(userId, pageable);
     }
 }
