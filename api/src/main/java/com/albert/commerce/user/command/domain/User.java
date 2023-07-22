@@ -52,7 +52,7 @@ public class User {
 
     @Builder
     private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
-            String phoneNumber, String address, boolean isActive) {
+            String phoneNumber, String address) {
         this.userId = userId;
         this.nickname = nickname;
         this.email = email;
@@ -60,7 +60,6 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.isActive = isActive;
     }
 
     public static User createByEmail(String email) {
@@ -68,7 +67,6 @@ public class User {
                 .nickname("user")
                 .email(email)
                 .role(USER)
-                .isActive(false)
                 .build();
     }
 

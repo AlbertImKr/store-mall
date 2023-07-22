@@ -31,7 +31,6 @@ class UserInfoResponseTest {
                 .dateOfBirth(testDateOfBirth)
                 .phoneNumber(testPhoneNumber)
                 .address(testAddress)
-                .isActive(testIsActive)
                 .build();
 
         UserInfoResponse userInfoResponse = UserInfoResponse.from(user);
