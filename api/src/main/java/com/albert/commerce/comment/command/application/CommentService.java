@@ -39,9 +39,9 @@ public class CommentService {
             throw new StoreNotFoundException();
         }
 
-        CommentId parentCommentId = commentRequest.parentCommentId() == null ?
-                null :
-                CommentId.from(commentRequest.parentCommentId());
+        CommentId parentCommentId = commentRequest.parentCommentId() != null ?
+                CommentId.from(commentRequest.parentCommentId()) :
+                null;
         commentFacade.checkId(parentCommentId);
         Comment comment = Comment.builder()
                 .productId(productId)
