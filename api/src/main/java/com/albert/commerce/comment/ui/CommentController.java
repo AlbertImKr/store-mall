@@ -2,7 +2,6 @@ package com.albert.commerce.comment.ui;
 
 import com.albert.commerce.comment.command.application.CommentRequest;
 import com.albert.commerce.comment.command.application.CommentService;
-import com.albert.commerce.comment.command.application.CommentUpdateResponse;
 import com.albert.commerce.comment.command.domain.CommentId;
 import java.security.Principal;
 import java.util.Map;
@@ -35,11 +34,10 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentUpdateResponse> updateComment(@PathVariable String commentId,
+    public ResponseEntity<Map<String, String>> updateComment(@PathVariable String commentId,
             @RequestBody String detail) {
-        CommentId savedCommentId = commentService.update(CommentId.from(commentId), detail);
-        CommentUpdateResponse commentUpdateResponse = CommentUpdateResponse.from(savedCommentId);
-        return ResponseEntity.ok().body(commentUpdateResponse);
+        commentService.update(CommentId.from(commentId), detail);
+        return ResponseEntity.ok().body(Map.of("commentId", commentId));
     }
 
     @DeleteMapping("/{commentId}")
