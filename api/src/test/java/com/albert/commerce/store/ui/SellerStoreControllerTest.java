@@ -14,10 +14,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
@@ -107,29 +105,12 @@ class SellerStoreControllerTest {
                         .content(objectMapper.writeValueAsString(newStoreRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("address").exists())
-                .andExpect(jsonPath("phoneNumber").exists())
-                .andExpect(jsonPath("email").exists())
-                .andExpect(jsonPath("ownerName").exists())
-                .andExpect(redirectedUrl(BusinessLinks.MY_STORE.toUri().toString()))
+                .andExpect(jsonPath("storeId").exists())
                 //restDocs
                 .andDo(document(
                                 "createStoreSuccess", preprocessResponse(prettyPrint()),
-                                links(
-                                        halLinks(),
-                                        linkWithRel("self").description("지금 요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다")
-                                ),
                                 responseFields(
-                                        subsectionWithPath("_links").ignored(),
-                                        fieldWithPath("storeId").description("스토어 아이디"),
-                                        fieldWithPath("storeName").description("스토어 네이밍"),
-                                        fieldWithPath("address").description("스토어 주소"),
-                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
-                                        fieldWithPath("email").description("스토어 이메일"),
-                                        fieldWithPath("ownerName").description("스토어 소유주")
+                                        fieldWithPath("storeId").description("스토어 아이디")
                                 )
                         )
                 );

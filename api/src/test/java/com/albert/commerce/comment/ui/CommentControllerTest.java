@@ -22,9 +22,9 @@ import com.albert.commerce.comment.command.domain.Comment;
 import com.albert.commerce.comment.command.domain.CommentId;
 import com.albert.commerce.comment.query.domain.CommentDao;
 import com.albert.commerce.product.ProductNotFoundException;
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.domain.ProductDao;
 import com.albert.commerce.product.query.domain.ProductData;
@@ -139,25 +139,12 @@ class CommentControllerTest {
                         .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("commentId").exists())
-                .andExpect(jsonPath("storeId").exists())
-                .andExpect(jsonPath("productId").exists())
-                .andExpect(jsonPath("nickname").exists())
-                .andExpect(jsonPath("detail").exists())
                 // restDocs
                 .andDo(document("saveComment",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("commentId").description("댓글 아이디"),
-                                fieldWithPath("createdTime").description("댓글 생성시간"),
-                                fieldWithPath("updateTime").description("댓글 업데이트시간"),
-                                fieldWithPath("nickname").description("댓글 작성"),
-                                fieldWithPath("parentCommentId").description("상위 comment 아이디"),
-                                fieldWithPath("userId").description("작성자 아이디"),
-                                fieldWithPath("storeId").description("스토어 아이디"),
-                                fieldWithPath("productId").description("상품 아이디"),
-                                fieldWithPath("nickname").description("유저 네이밍"),
-                                fieldWithPath("detail").description("댓글 내용")
+                                fieldWithPath("commentId").description("댓글 아이디")
                         )
 
                 ))
@@ -229,7 +216,7 @@ class CommentControllerTest {
         // given
         ProductId productId = product.getProductId();
         StoreId storeId = store.getStoreId();
-        UserData user = userDao.findByEmail(CONSUMER_EMAIL)
+        userDao.findByEmail(CONSUMER_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
         CommentId commentId1 = commentService.create(CONSUMER_EMAIL,
                 new CommentRequest(productId.getId(), storeId.getId(), null, "detail"));

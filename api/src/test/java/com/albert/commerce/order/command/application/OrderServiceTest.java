@@ -1,9 +1,9 @@
 package com.albert.commerce.order.command.application;
 
 import com.albert.commerce.order.command.domain.Order;
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.product.query.application.ProductFacade;

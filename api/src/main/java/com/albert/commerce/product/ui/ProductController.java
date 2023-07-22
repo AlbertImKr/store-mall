@@ -1,10 +1,10 @@
 package com.albert.commerce.product.ui;
 
 import com.albert.commerce.common.units.BusinessLinks;
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.product.command.application.dto.ProductResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
 import com.albert.commerce.product.command.domain.ProductId;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;

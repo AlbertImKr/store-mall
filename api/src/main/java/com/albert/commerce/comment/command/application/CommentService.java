@@ -43,7 +43,13 @@ public class CommentService {
                 null :
                 CommentId.from(commentRequest.parentCommentId());
         commentFacade.checkId(parentCommentId);
-        Comment comment = commentRequest.toEntity(productId, storeId, user.getUserId(), parentCommentId);
+        Comment comment = Comment.builder()
+                .productId(productId)
+                .storeId(storeId)
+                .userId(user.getUserId())
+                .detail(commentRequest.detail())
+                .parentCommentId(parentCommentId)
+                .build();
         return commentRepository.save(comment).getCommentId();
     }
 

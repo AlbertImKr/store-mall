@@ -3,12 +3,11 @@ package com.albert.commerce.product.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.common.infra.persistence.Money;
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
 import com.albert.commerce.user.query.domain.UserDao;
@@ -44,7 +43,7 @@ class ProductServiceTest {
         userService.createByEmail(TEST_EMAIL);
         UserData user = userDao.findByEmail(TEST_EMAIL)
                 .orElseThrow(UserNotFoundException::new);
-        StoreId storeId = sellerStoreService.createStore(user.getEmail(),
+        sellerStoreService.createStore(user.getEmail(),
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
                         "seller@email.com"));
         ProductRequest productRequest = new ProductRequest("testProductName",

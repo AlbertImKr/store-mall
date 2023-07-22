@@ -5,6 +5,7 @@ import com.albert.commerce.comment.command.application.CommentService;
 import com.albert.commerce.comment.command.application.CommentUpdateResponse;
 import com.albert.commerce.comment.command.domain.CommentId;
 import java.security.Principal;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
@@ -25,11 +26,12 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public EntityModel<CommentId> createComment(
+    public EntityModel<Map<String, String>> createComment(
             @RequestBody CommentRequest commentRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        return EntityModel.of(commentService.create(userEmail, commentRequest));
+        CommentId commentId = commentService.create(userEmail, commentRequest);
+        return EntityModel.of(Map.of("commentId", commentId.getId()));
     }
 
     @PutMapping("/{commentId}")

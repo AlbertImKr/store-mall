@@ -4,6 +4,7 @@ import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
+import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.store.command.domain.StoreRepository;
 import com.albert.commerce.user.UserNotFoundException;
@@ -28,7 +29,15 @@ public class SellerStoreService {
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
-        return storeRepository.save(newStoreRequest.toStore(userId)).getStoreId();
+        Store store = Store.builder()
+                .userId(userId)
+                .storeName(newStoreRequest.storeName())
+                .ownerName(newStoreRequest.ownerName())
+                .address(newStoreRequest.address())
+                .phoneNumber(newStoreRequest.phoneNumber())
+                .email(newStoreRequest.email())
+                .build();
+        return storeRepository.save(store).getStoreId();
     }
 
     @Transactional
