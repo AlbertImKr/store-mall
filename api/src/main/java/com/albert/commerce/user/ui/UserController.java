@@ -1,13 +1,12 @@
 package com.albert.commerce.user.ui;
 
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.command.application.dto.UserProfileRequest;
-import jakarta.validation.Valid;
+import com.albert.commerce.user.command.domain.UserId;
 import java.security.Principal;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,15 +18,11 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/users/profile")
-    public ResponseEntity updateUserInfo(Principal principal,
-            @Valid @RequestBody UserProfileRequest userProfileRequest, Errors errors) {
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
+    public ResponseEntity<Map<String, String>> updateUserInfo(Principal principal,
+            @RequestBody UserProfileRequest userProfileRequest) {
         String email = principal.getName();
-        UserInfoResponse userInfoResponse = userService.updateUserInfo(email,
-                userProfileRequest);
-        return ResponseEntity.ok().body(userInfoResponse);
+        UserId userId = userService.updateUserInfo(email, userProfileRequest);
+        return ResponseEntity.ok().body(Map.of("userId", userId.getId()));
     }
 }
 

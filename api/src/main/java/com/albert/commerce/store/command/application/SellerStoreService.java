@@ -2,7 +2,6 @@ package com.albert.commerce.store.command.application;
 
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.command.domain.Store;
 import com.albert.commerce.store.command.domain.StoreId;
@@ -41,10 +40,9 @@ public class SellerStoreService {
     }
 
     @Transactional
-    public SellerStoreResponse updateMyStore(UpdateStoreRequest updateStoreRequest,
-            String userEmail) {
+    public StoreId updateMyStore(UpdateStoreRequest updateStoreRequest, String userEmail) {
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        return SellerStoreResponse.from(storeRepository.updateMyStore(updateStoreRequest, user.getUserId())
-                .orElseThrow(StoreNotFoundException::new));
+        return storeRepository.updateMyStore(updateStoreRequest, user.getUserId())
+                .orElseThrow(StoreNotFoundException::new).getStoreId();
     }
 }

@@ -38,9 +38,9 @@ public class Product {
     private Money price;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = true)
+    @Column
     private String brand;
-    @Column(nullable = true)
+    @Column
     private String category;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -63,7 +63,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product update(String productName, Money price, String brand, String category,
+    public void update(String productName, Money price, String brand, String category,
             String description) {
         this.productName = productName;
         this.price = price;
@@ -71,7 +71,6 @@ public class Product {
         this.category = category;
         this.description = description;
         this.updateTime = LocalDateTime.now();
-        return this;
     }
 
     public void updateId(ProductId productId) {

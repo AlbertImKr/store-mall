@@ -1,15 +1,14 @@
 package com.albert.commerce.order.ui;
 
-import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.order.command.application.DeleteOrderRequest;
-import com.albert.commerce.order.command.application.OrderCreatedResponse;
 import com.albert.commerce.order.command.application.OrderRequest;
 import com.albert.commerce.order.command.application.OrderService;
 import com.albert.commerce.order.command.domain.OrderId;
 import java.security.Principal;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,16 +24,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderCreatedResponse> placeOrder(Principal principal,
+    public ResponseEntity<Map<String, String>> placeOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
         String userEmail = principal.getName();
         OrderId orderId = orderService.placeOrder(userEmail, orderRequest);
 
-        // HATEOAS
-        Link orderLink = BusinessLinks.getOrder(orderId);
-        OrderCreatedResponse orderCreatedResponse = OrderCreatedResponse.from(orderId);
-
-        return ResponseEntity.created(orderLink.toUri()).body(orderCreatedResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("orderId", orderId.getId()));
     }
 
 

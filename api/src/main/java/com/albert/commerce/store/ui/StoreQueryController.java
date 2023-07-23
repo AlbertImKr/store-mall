@@ -25,12 +25,14 @@ public class StoreQueryController {
     private final StoreFacade storeFacade;
 
     @GetMapping("/my")
-    public ResponseEntity getMyStore(Principal principal) {
+    public ResponseEntity<EntityModel<StoreData>> getMyStore(Principal principal) {
         String userEmail = principal.getName();
         StoreData storeData = storeFacade.getMyStoreByUserEmail(userEmail);
         return ResponseEntity.ok()
-                .body(EntityModel.of(storeData)
-                        .add(GET_MY_STORE_WITH_SELF, BusinessLinks.MY_STORE));
+                .body(
+                        EntityModel.of(storeData)
+                                .add(GET_MY_STORE_WITH_SELF, BusinessLinks.MY_STORE)
+                );
     }
 
     @GetMapping("/{storeId}")
