@@ -6,8 +6,8 @@ import com.albert.commerce.comment.command.domain.CommentId;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +25,13 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public EntityModel<Map<String, String>> createComment(
+    public ResponseEntity<Map<String, String>> createComment(
             @RequestBody CommentRequest commentRequest,
             Principal principal) {
         String userEmail = principal.getName();
         CommentId commentId = commentService.create(userEmail, commentRequest);
-        return EntityModel.of(Map.of("commentId", commentId.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("commentId", commentId.getId()));
     }
 
     @PutMapping("/{commentId}")
