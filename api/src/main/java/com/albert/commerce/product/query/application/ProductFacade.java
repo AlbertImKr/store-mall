@@ -3,10 +3,12 @@ package com.albert.commerce.product.query.application;
 import com.albert.commerce.product.ProductNotFoundException;
 import com.albert.commerce.product.command.application.dto.ProductResponse;
 import com.albert.commerce.product.command.application.dto.ProductsAssembler;
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.product.query.domain.ProductDao;
-import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.product.query.domain.ProductData;
+import com.albert.commerce.user.UserNotFoundException;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,20 +22,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class ProductFacade {
 
-    private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
+    private final PagedResourcesAssembler<ProductData> pagedResourcesAssembler;
     private final ProductsAssembler productsAssembler;
     private final ProductDao productDao;
+    private final UserDao userDao;
 
     @Transactional(readOnly = true)
-    public PagedModel<ProductResponse> findProductsByUserId(UserId userId,
+    public PagedModel<ProductResponse> findProductsByUserId(String userEmail,
             Pageable pageable) {
-        Page<Product> products = productDao.findProductsByUserId(userId, pageable);
+        UserData userData = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        Page<ProductData> products = productDao.findProductsByUserId(userData.getUserId(), pageable);
         return pagedResourcesAssembler.toModel(products, productsAssembler);
     }
 
     @Transactional(readOnly = true)
     public ProductResponse findById(ProductId productId) {
-        Product product = productDao.findById(productId).orElseThrow(ProductNotFoundException::new);
+        ProductData product = productDao.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
         return ProductResponse.from(product);
     }
 

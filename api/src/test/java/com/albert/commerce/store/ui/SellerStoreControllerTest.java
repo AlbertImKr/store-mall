@@ -14,18 +14,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -68,7 +67,7 @@ class SellerStoreControllerTest {
     EntityManager entityManager;
 
     @Autowired
-    UserFacade userFacade;
+    UserDao userDao;
 
     @Autowired
     StoreJpaRepository storeJpaRepository;
@@ -76,12 +75,12 @@ class SellerStoreControllerTest {
     @Autowired
     UserJpaRepository userJpaRepository;
 
-    UserInfoResponse user;
+    UserData user;
 
     @BeforeEach
     void saveTestUser() {
         userService.createByEmail(TEST_EMAIL);
-        user = userFacade.findByEmail(TEST_EMAIL);
+        user = userDao.findByEmail(TEST_EMAIL).orElseThrow(UserNotFoundException::new);
     }
 
     @AfterEach
@@ -106,29 +105,12 @@ class SellerStoreControllerTest {
                         .content(objectMapper.writeValueAsString(newStoreRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.my-store").exists())
-                .andExpect(jsonPath("address").exists())
-                .andExpect(jsonPath("phoneNumber").exists())
-                .andExpect(jsonPath("email").exists())
-                .andExpect(jsonPath("ownerName").exists())
-                .andExpect(redirectedUrl(BusinessLinks.MY_STORE.toUri().toString()))
+                .andExpect(jsonPath("storeId").exists())
                 //restDocs
                 .andDo(document(
                                 "createStoreSuccess", preprocessResponse(prettyPrint()),
-                                links(
-                                        halLinks(),
-                                        linkWithRel("self").description("지금 요청한 링크"),
-                                        linkWithRel("my-store").description("My 스토어에 연결한다")
-                                ),
                                 responseFields(
-                                        subsectionWithPath("_links").ignored(),
-                                        fieldWithPath("storeId").description("스토어 아이디"),
-                                        fieldWithPath("storeName").description("스토어 네이밍"),
-                                        fieldWithPath("address").description("스토어 주소"),
-                                        fieldWithPath("phoneNumber").description("스토어 연락처"),
-                                        fieldWithPath("email").description("스토어 이메일"),
-                                        fieldWithPath("ownerName").description("스토어 소유주")
+                                        fieldWithPath("storeId").description("스토어 아이디")
                                 )
                         )
                 );
@@ -145,7 +127,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(post("/stores")
@@ -184,7 +166,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -212,11 +194,12 @@ class SellerStoreControllerTest {
                                 responseFields(
                                         subsectionWithPath("_links").ignored(),
                                         fieldWithPath("storeId").description("스토어의 아이디"),
+                                        fieldWithPath("userId").description("스토어 오너 아이디"),
                                         fieldWithPath("storeName").description("스토어 네이밍"),
                                         fieldWithPath("address").description("스토어 주소"),
                                         fieldWithPath("phoneNumber").description("스토어 연락처"),
                                         fieldWithPath("email").description("스토어 이메일"),
-                                        fieldWithPath("ownerName").description("스토어 소유주")
+                                        fieldWithPath("ownerName").description("스토어 오너 네임")
                                 )
                         )
                 );
@@ -261,7 +244,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";

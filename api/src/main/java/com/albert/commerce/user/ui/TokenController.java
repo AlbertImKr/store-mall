@@ -30,7 +30,7 @@ public class TokenController {
         return authorizedClient.getAccessToken();
     }
 
-    @GetMapping(path = "/newAccessToken", params = "")
+    @GetMapping(path = "/newAccessToken")
     public OAuth2AccessToken newAccessToken(OAuth2AuthenticationToken authentication,
             HttpServletRequest request, HttpServletResponse response) {
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(

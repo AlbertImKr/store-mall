@@ -2,7 +2,9 @@ package com.albert.commerce.user.command.domain;
 
 import static com.albert.commerce.user.command.domain.Role.USER;
 
-import com.albert.commerce.common.infra.persistence.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User {
 
     @EmbeddedId
     private UserId userId;
@@ -39,9 +42,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean isActive;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime createdTime;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime updateTime;
+
     @Builder
-    public User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
-            String phoneNumber, String address, boolean isActive) {
+    private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+            String phoneNumber, String address) {
         this.userId = userId;
         this.nickname = nickname;
         this.email = email;
@@ -49,7 +60,6 @@ public class User extends BaseEntity {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.isActive = isActive;
     }
 
     public static User createByEmail(String email) {
@@ -57,11 +67,12 @@ public class User extends BaseEntity {
                 .nickname("user")
                 .email(email)
                 .role(USER)
-                .isActive(false)
                 .build();
     }
 
     public void updateId(UserId userId) {
         this.userId = userId;
+        this.createdTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 }

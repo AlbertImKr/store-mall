@@ -4,10 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.store.command.domain.StoreId;
+import com.albert.commerce.store.query.application.StoreFacade;
+import com.albert.commerce.store.query.domain.StoreData;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +29,12 @@ class SellerStoreServiceTest {
     private SellerStoreService sellerStoreService;
 
     @Autowired
+    private StoreFacade storeFacade;
+
+    @Autowired
     private UserService userService;
     @Autowired
-    private UserFacade userFacade;
+    private UserDao userDao;
 
     @DisplayName("User는 Store를 하나 만들 수 있습니다.")
     @Test
@@ -43,13 +49,13 @@ class SellerStoreServiceTest {
                 .build();
         String email = "seller@email.com";
         userService.createByEmail(email);
-        UserInfoResponse user = userFacade.findByEmail(email);
+        UserData user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         // when
-        SellerStoreResponse store = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getId()));
+        StoreId storeId = sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         // then
+        StoreData store = storeFacade.getStoreById(storeId);
         assertThat(store.getStoreName()).isEqualTo(TEST_STORE_NAME);
         assertThat(store.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(store.getOwnerName()).isEqualTo(TEST_OWNER);

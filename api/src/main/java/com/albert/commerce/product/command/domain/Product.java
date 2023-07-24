@@ -1,15 +1,19 @@
 package com.albert.commerce.product.command.domain;
 
-import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.store.command.domain.StoreId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +21,9 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "product")
 @Entity
-public class Product extends BaseEntity {
+public class Product {
 
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
@@ -33,10 +38,18 @@ public class Product extends BaseEntity {
     private Money price;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = true)
+    @Column
     private String brand;
-    @Column(nullable = true)
+    @Column
     private String category;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime createdTime;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime updateTime;
 
     @Builder
     public Product(ProductId productId, StoreId storeId, String productName, Money price,
@@ -50,17 +63,19 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
-    public Product update(String productName, Money price, String brand, String category,
+    public void update(String productName, Money price, String brand, String category,
             String description) {
         this.productName = productName;
         this.price = price;
         this.brand = brand;
         this.category = category;
         this.description = description;
-        return this;
+        this.updateTime = LocalDateTime.now();
     }
 
     public void updateId(ProductId productId) {
         this.productId = productId;
+        this.createdTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 }

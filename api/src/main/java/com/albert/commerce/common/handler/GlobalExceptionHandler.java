@@ -7,7 +7,7 @@ import com.albert.commerce.product.UnauthorizedModificationException;
 import com.albert.commerce.store.MyStoreNotFoundException;
 import com.albert.commerce.store.StoreNotFoundException;
 import com.albert.commerce.store.command.application.StoreAlreadyExistsException;
-import com.albert.commerce.store.ui.SellerStoreController;
+import com.albert.commerce.store.ui.StoreQueryController;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 
     private static String getMyStoreRequestPath() {
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-                SellerStoreController.class).getMyStore(null)).toUri().getPath();
+                StoreQueryController.class).getMyStore(null)).toUri().getPath();
     }
 
     @ExceptionHandler(StoreNotFoundException.class)

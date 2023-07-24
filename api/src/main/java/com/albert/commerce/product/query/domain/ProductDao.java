@@ -1,6 +1,5 @@
 package com.albert.commerce.product.query.domain;
 
-import com.albert.commerce.product.command.domain.Product;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.user.command.domain.UserId;
 import java.util.List;
@@ -10,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProductDao {
 
-    Page<Product> findProductsByUserId(UserId userId, Pageable pageable);
+    Page<ProductData> findProductsByUserId(UserId userId, Pageable pageable);
 
-    Optional<Product> findById(ProductId productId);
+    Optional<ProductData> findById(ProductId productId);
 
     boolean exists(ProductId productId);
 

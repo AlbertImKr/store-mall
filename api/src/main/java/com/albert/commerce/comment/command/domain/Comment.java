@@ -1,14 +1,17 @@
 package com.albert.commerce.comment.command.domain;
 
-import com.albert.commerce.common.infra.persistence.BaseEntity;
 import com.albert.commerce.product.command.domain.ProductId;
 import com.albert.commerce.store.command.domain.StoreId;
 import com.albert.commerce.user.command.domain.UserId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Comment extends BaseEntity {
+public class Comment {
 
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "comment_id", nullable = false))
@@ -28,7 +31,7 @@ public class Comment extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
     private StoreId storeId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = true))
     @Embedded
     private UserId userId;
     @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id", nullable = true))
@@ -36,6 +39,14 @@ public class Comment extends BaseEntity {
     private CommentId parentCommentId;
 
     private String detail;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime createdTime;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime updateTime;
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
@@ -50,5 +61,18 @@ public class Comment extends BaseEntity {
 
     public void updateId(CommentId commentId) {
         this.commentId = commentId;
+        this.createdTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
+
+    public void update(String detail) {
+        this.detail = detail;
+        this.updateTime = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.detail = "";
+        this.userId = null;
+        this.updateTime = LocalDateTime.now();
     }
 }

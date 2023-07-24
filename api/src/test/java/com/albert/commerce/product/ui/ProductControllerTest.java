@@ -17,19 +17,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.infra.presentation.imports.StoreJpaRepository;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.user.query.application.UserFacade;
 import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -100,15 +99,12 @@ class ProductControllerTest {
     @Autowired
     ProductJpaRepository productJpaRepository;
 
-    @Autowired
-    UserFacade userFacade;
-
-    UserInfoResponse user;
+    UserData user;
 
     @BeforeEach
     void saveTestUser() {
         userService.createByEmail(TEST_USER_EMAIL);
-        user = userFacade.findByEmail(TEST_USER_EMAIL);
+        user = userDao.findByEmail(TEST_USER_EMAIL).orElseThrow(UserNotFoundException::new);
     }
 
     @AfterEach
@@ -133,7 +129,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -188,11 +184,11 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        SellerStoreResponse store = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getId()));
+        sellerStoreService.createStore(user.getEmail(),
+                newStoreRequest);
 
         ProductCreatedResponse productCreatedResponse =
-                productService.addProduct(productRequest.toProduct(store.getStoreId()));
+                productService.addProduct(user.getEmail(), productRequest);
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
                 CHANGED_PRICE,
@@ -286,10 +282,10 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            SellerStoreResponse store = sellerStoreService.createStore(
-                    newStoreRequest.toStore(user.getId()));
+            sellerStoreService.createStore(user.getEmail(),
+                    newStoreRequest);
             for (int i = 0; i < 100; i++) {
-                productService.addProduct(productRequest.toProduct(store.getStoreId()));
+                productService.addProduct(user.getEmail(), productRequest);
             }
         }
 

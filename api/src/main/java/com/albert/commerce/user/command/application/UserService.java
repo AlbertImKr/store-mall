@@ -2,9 +2,9 @@ package com.albert.commerce.user.command.application;
 
 
 import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
 import com.albert.commerce.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.user.command.domain.User;
+import com.albert.commerce.user.command.domain.UserId;
 import com.albert.commerce.user.command.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfoResponse updateUserInfo(String email, UserProfileRequest userProfileRequest) {
-        return UserInfoResponse.from(userRepository.updateUserInfo(email, userProfileRequest)
-                .orElseThrow(UserNotFoundException::new));
+    public UserId updateUserInfo(String email, UserProfileRequest userProfileRequest) {
+        User user = userRepository.updateUserInfo(email, userProfileRequest)
+                .orElseThrow(UserNotFoundException::new);
+        return user.getUserId();
     }
 }

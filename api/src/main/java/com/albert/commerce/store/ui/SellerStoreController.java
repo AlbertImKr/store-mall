@@ -1,24 +1,17 @@
 package com.albert.commerce.store.ui;
 
-import static com.albert.commerce.common.units.BusinessLinks.GET_MY_STORE_WITH_SELF;
-import static com.albert.commerce.common.units.BusinessLinks.GET_STORE_BY_STORE_ID;
-
 import com.albert.commerce.common.units.BusinessLinks;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
 import com.albert.commerce.store.command.application.dto.UpdateStoreRequest;
-import com.albert.commerce.store.query.application.StoreFacade;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.store.command.domain.StoreId;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,45 +23,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SellerStoreController {
 
     private final SellerStoreService sellerStoreService;
-    private final StoreFacade storeFacade;
-    private final UserFacade userFacade;
 
     @PostMapping
-    public ResponseEntity createStore(@RequestBody NewStoreRequest newStoreRequest, Errors errors,
+    public ResponseEntity<Map<String, String>> createStore(@RequestBody NewStoreRequest newStoreRequest,
             Principal principal) {
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
         String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.createStore(
-                newStoreRequest.toStore(user.getId()));
+        StoreId storeId = sellerStoreService.createStore(userEmail, newStoreRequest);
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
-        String storeId = sellerStoreResponse.getStoreId().getId();
-        sellerStoreResponse.add(GET_STORE_BY_STORE_ID(storeId));
-        return ResponseEntity.created(myStore).body(sellerStoreResponse);
-    }
-
-    @GetMapping("/my")
-    public ResponseEntity getMyStore(Principal principal) {
-        String userEmail = principal.getName();
-        UserInfoResponse user = userFacade.findByEmail(userEmail);
-        SellerStoreResponse sellerStoreResponse = storeFacade.findStoreByUserId(user.getId());
-
-        sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
-        return ResponseEntity.ok().body(sellerStoreResponse);
+        return ResponseEntity.created(myStore).body(Map.of("storeId", storeId.getId()));
     }
 
     @PutMapping("/my")
-    public ResponseEntity updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
+    public ResponseEntity<Map<String, String>> updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
-        UserInfoResponse user = userFacade.findByEmail(principal.getName());
-        SellerStoreResponse sellerStoreResponse = sellerStoreService.updateMyStore(
-                updateStoreRequest, user.getId());
-
-        sellerStoreResponse.add(GET_MY_STORE_WITH_SELF);
-        return ResponseEntity.ok().body(sellerStoreResponse);
+        String userEmail = principal.getName();
+        StoreId storeId = sellerStoreService.updateMyStore(updateStoreRequest, userEmail);
+        return ResponseEntity.ok().body(Map.of("storeId", storeId.getId()));
     }
 
 }

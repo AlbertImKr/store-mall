@@ -3,21 +3,24 @@ package com.albert.commerce.product.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.albert.commerce.common.infra.persistence.Money;
-import com.albert.commerce.product.command.application.ProductRequest;
+import com.albert.commerce.product.command.application.ProductService;
 import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductService;
+import com.albert.commerce.product.command.application.dto.ProductRequest;
 import com.albert.commerce.store.command.application.SellerStoreService;
 import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.application.dto.SellerStoreResponse;
+import com.albert.commerce.user.UserNotFoundException;
 import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.query.application.UserFacade;
+import com.albert.commerce.user.query.domain.UserDao;
+import com.albert.commerce.user.query.domain.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @SpringBootTest
 class ProductServiceTest {
 
@@ -28,7 +31,7 @@ class ProductServiceTest {
     @Autowired
     UserService userService;
     @Autowired
-    UserFacade userFacade;
+    UserDao userDao;
 
     @Autowired
     SellerStoreService sellerStoreService;
@@ -38,16 +41,17 @@ class ProductServiceTest {
     void addProduct() {
         // given
         userService.createByEmail(TEST_EMAIL);
-        UserInfoResponse user = userFacade.findByEmail(TEST_EMAIL);
-        SellerStoreResponse store = sellerStoreService.createStore(
+        UserData user = userDao.findByEmail(TEST_EMAIL)
+                .orElseThrow(UserNotFoundException::new);
+        sellerStoreService.createStore(user.getEmail(),
                 new NewStoreRequest("storeName", "orderName", "address", "100-0001-0001",
-                        "seller@email.com").toStore(user.getId()));
+                        "seller@email.com"));
         ProductRequest productRequest = new ProductRequest("testProductName",
                 1000, "test", "testBrand", "test");
 
         // when
         ProductCreatedResponse productCreatedResponse = productService.addProduct(
-                productRequest.toProduct(store.getStoreId()));
+                user.getEmail(), productRequest);
 
         // then
         Assertions.assertAll(

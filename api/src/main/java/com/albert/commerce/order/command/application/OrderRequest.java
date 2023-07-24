@@ -1,9 +1,9 @@
 package com.albert.commerce.order.command.application;
 
-import java.util.List;
+import java.util.Map;
 
 public record OrderRequest(
-        List<String> productsId,
+        Map<String, Long> productsIdAndQuantity,
         String storeId
 ) {
 

@@ -5,13 +5,14 @@ import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.Objects;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 @Access(AccessType.FIELD)
+@EqualsAndHashCode(of = "id")
 public class ProductId implements Serializable {
 
     private String id;
@@ -29,22 +30,4 @@ public class ProductId implements Serializable {
     public String getId() {
         return id;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ProductId productId)) {
-            return false;
-        }
-        return Objects.equals(getId(), productId.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-
 }
