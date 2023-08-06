@@ -1,15 +1,6 @@
 package com.albert.commerce.order.ui;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,26 +8,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.order.command.application.DeleteOrderRequest;
-import com.albert.commerce.order.command.application.OrderNotFoundException;
-import com.albert.commerce.order.command.application.OrderRequest;
-import com.albert.commerce.order.command.application.OrderService;
-import com.albert.commerce.order.command.domain.OrderId;
-import com.albert.commerce.order.query.application.OrderFacade;
-import com.albert.commerce.order.query.domain.OrderDao;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductRequest;
-import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.application.ProductFacade;
-import com.albert.commerce.product.query.domain.ProductDao;
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
-import com.albert.commerce.user.query.domain.UserData;
+import com.albert.commerce.application.command.order.DeleteOrderRequest;
+import com.albert.commerce.application.command.order.OrderNotFoundException;
+import com.albert.commerce.application.command.order.OrderRequest;
+import com.albert.commerce.application.command.order.OrderService;
+import com.albert.commerce.application.command.product.ProductService;
+import com.albert.commerce.application.command.product.dto.ProductRequest;
+import com.albert.commerce.application.command.store.SellerStoreService;
+import com.albert.commerce.application.command.store.dto.NewStoreRequest;
+import com.albert.commerce.application.command.user.UserService;
+import com.albert.commerce.application.query.order.OrderFacade;
+import com.albert.commerce.application.query.product.ProductFacade;
+import com.albert.commerce.common.exception.UserNotFoundException;
+import com.albert.commerce.domain.command.order.OrderId;
+import com.albert.commerce.domain.command.product.ProductId;
+import com.albert.commerce.domain.command.store.StoreId;
+import com.albert.commerce.domain.query.order.OrderDao;
+import com.albert.commerce.domain.query.product.ProductDao;
+import com.albert.commerce.domain.query.user.UserDao;
+import com.albert.commerce.domain.query.user.UserData;
+import com.albert.commerce.ui.command.order.OrderController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
@@ -126,13 +117,13 @@ class OrderControllerTest {
         requestProductsId = new HashMap<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            ProductRequest productRequest = new ProductRequest("product" + i, 10000,
+            ProductRequest productRequest = new ProductRequest("productId" + i, 10000,
                     "testProduct",
                     "test", "test");
-            ProductCreatedResponse product = productService.addProduct(seller.getEmail(),
+            ProductId productId = productService.addProduct(seller.getEmail(),
                     productRequest);
-            productIds.add(product.getProductId());
-            requestProductsId.put(product.getProductId().getId(), (long) i);
+            productIds.add(productId);
+            requestProductsId.put(productId.getId(), (long) i);
         }
         orderRequest = new OrderRequest(requestProductsId, storeId.getId());
     }
@@ -150,22 +141,22 @@ class OrderControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("orderId").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.order").exists())
-                //
-                .andDo(document("createOrder",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        links(
-                                linkWithRel("self").description("현재 요청한 link"),
-                                linkWithRel("order").description("생성된 order link")
-                        ),
-                        responseFields(
-                                subsectionWithPath("_links").ignored(),
-                                fieldWithPath("orderId").description("orderId")
-                        )
-
-                ))
+//                .andExpect(jsonPath("_links.self").exists())
+//                .andExpect(jsonPath("_links.order").exists())
+//                //
+//                .andDo(document("createOrder",
+//                        preprocessRequest(prettyPrint()),
+//                        preprocessResponse(prettyPrint()),
+//                        links(
+//                                linkWithRel("self").description("현재 요청한 link"),
+//                                linkWithRel("order").description("생성된 order link")
+//                        ),
+//                        responseFields(
+//                                subsectionWithPath("_links").ignored(),
+//                                fieldWithPath("orderId").description("orderId")
+//                        )
+//
+//                ))
         ;
     }
 

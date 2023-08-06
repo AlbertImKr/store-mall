@@ -1,19 +1,19 @@
 package com.albert.commerce.order.command.application;
 
-import com.albert.commerce.order.command.domain.Order;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductRequest;
-import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.product.query.application.ProductFacade;
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
-import com.albert.commerce.user.query.domain.UserData;
+import com.albert.commerce.application.command.order.OrderService;
+import com.albert.commerce.application.command.product.ProductService;
+import com.albert.commerce.application.command.product.dto.ProductRequest;
+import com.albert.commerce.application.command.store.SellerStoreService;
+import com.albert.commerce.application.command.store.dto.NewStoreRequest;
+import com.albert.commerce.application.command.user.UserService;
+import com.albert.commerce.application.query.product.ProductFacade;
+import com.albert.commerce.common.exception.UserNotFoundException;
+import com.albert.commerce.domain.command.order.Order;
+import com.albert.commerce.domain.command.product.ProductId;
+import com.albert.commerce.domain.command.store.StoreId;
+import com.albert.commerce.domain.query.user.UserDao;
+import com.albert.commerce.domain.query.user.UserData;
+import com.albert.commerce.infra.command.product.persistence.imports.ProductJpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,10 +69,10 @@ class OrderServiceTest {
                             "testStore@email.com"));
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                ProductCreatedResponse productCreatedResponse = productService.addProduct(consumer.getEmail(),
+                ProductId productId = productService.addProduct(consumer.getEmail(),
                         new ProductRequest("testProductName", 10000, "test", "testBrand",
                                 "testCategory"));
-                productsId.add(productCreatedResponse.getProductId());
+                productsId.add(productId);
             }
 
 //            // when

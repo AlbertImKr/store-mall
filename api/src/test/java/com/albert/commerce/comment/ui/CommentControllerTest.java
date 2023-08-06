@@ -16,28 +16,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.comment.command.application.CommentRequest;
-import com.albert.commerce.comment.command.application.CommentService;
-import com.albert.commerce.comment.command.domain.Comment;
-import com.albert.commerce.comment.command.domain.CommentId;
-import com.albert.commerce.comment.query.domain.CommentDao;
-import com.albert.commerce.product.ProductNotFoundException;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductRequest;
-import com.albert.commerce.product.command.domain.ProductId;
-import com.albert.commerce.product.query.domain.ProductDao;
-import com.albert.commerce.product.query.domain.ProductData;
-import com.albert.commerce.store.StoreNotFoundException;
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.store.query.domain.StoreData;
-import com.albert.commerce.store.query.domain.StoreDataDao;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
-import com.albert.commerce.user.query.domain.UserData;
+import com.albert.commerce.application.command.comment.CommentRequest;
+import com.albert.commerce.application.command.comment.CommentService;
+import com.albert.commerce.application.command.product.ProductService;
+import com.albert.commerce.application.command.product.dto.ProductRequest;
+import com.albert.commerce.application.command.store.SellerStoreService;
+import com.albert.commerce.application.command.store.dto.NewStoreRequest;
+import com.albert.commerce.application.command.user.UserService;
+import com.albert.commerce.common.exception.ProductNotFoundException;
+import com.albert.commerce.common.exception.StoreNotFoundException;
+import com.albert.commerce.common.exception.UserNotFoundException;
+import com.albert.commerce.domain.command.comment.Comment;
+import com.albert.commerce.domain.command.comment.CommentId;
+import com.albert.commerce.domain.command.product.ProductId;
+import com.albert.commerce.domain.command.store.StoreId;
+import com.albert.commerce.domain.query.comment.CommentDao;
+import com.albert.commerce.domain.query.product.ProductDao;
+import com.albert.commerce.domain.query.product.ProductData;
+import com.albert.commerce.domain.query.store.StoreData;
+import com.albert.commerce.domain.query.store.StoreDataDao;
+import com.albert.commerce.domain.query.user.UserDao;
+import com.albert.commerce.domain.query.user.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -118,9 +117,9 @@ class CommentControllerTest {
         ProductRequest productRequest = new ProductRequest("product", 10000,
                 "testProduct",
                 "test", "test");
-        ProductCreatedResponse productCreatedResponse = productService.addProduct(seller.getEmail(),
+        ProductId productId = productService.addProduct(seller.getEmail(),
                 productRequest);
-        product = productDao.findById(productCreatedResponse.getProductId()).orElseThrow(
+        product = productDao.findById(productId).orElseThrow(
                 ProductNotFoundException::new);
     }
 

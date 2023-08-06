@@ -14,13 +14,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.store.command.domain.StoreId;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
-import com.albert.commerce.user.query.domain.UserData;
+import com.albert.commerce.application.command.store.SellerStoreService;
+import com.albert.commerce.application.command.store.dto.NewStoreRequest;
+import com.albert.commerce.application.command.user.UserService;
+import com.albert.commerce.common.exception.UserNotFoundException;
+import com.albert.commerce.domain.command.store.StoreId;
+import com.albert.commerce.domain.query.user.UserDao;
+import com.albert.commerce.domain.query.user.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;

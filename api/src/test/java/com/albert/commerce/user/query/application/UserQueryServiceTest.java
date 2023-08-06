@@ -3,9 +3,9 @@
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static org.mockito.BDDMockito.given;
 //
-//import com.albert.commerce.user.command.domain.Role;
-//import com.albert.commerce.user.command.domain.User;
-//import com.albert.commerce.user.command.domain.UserId;
+//import com.albert.commerce.domain.command.user.Role;
+//import com.albert.commerce.domain.command.user.User;
+//import com.albert.commerce.domain.command.user.UserId;
 //import com.albert.commerce.user.query.domain.UserQueryDao;
 //import java.time.LocalDate;
 //import org.junit.jupiter.api.DisplayName;
