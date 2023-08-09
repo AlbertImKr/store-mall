@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class MessagePublisherImpl implements MessagePublisher {
 
     private final MessageChannel commandChannel;
-    private final MessageChannel internalDomainEventChannel;
+    private final MessageChannel domainEventChannel;
 
     @Override
     public void publish(Command command) {
@@ -21,6 +21,6 @@ public class MessagePublisherImpl implements MessagePublisher {
 
     @Override
     public void publish(DomainEvent domainEvent) {
-        internalDomainEventChannel.send(new GenericMessage<>(domainEvent));
+        domainEventChannel.send(new GenericMessage<>(domainEvent));
     }
 }

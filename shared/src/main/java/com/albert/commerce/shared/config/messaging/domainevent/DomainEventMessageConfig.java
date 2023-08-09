@@ -30,16 +30,20 @@ public class DomainEventMessageConfig {
     private String domainEventListenerBasePackage;
     @Value("${commerce.messaging.base-package.domain-event}")
     private String domainEventBasePackage;
+    @Value("${commerce.messaging.base-package.api}")
+    private String apiBasePackage;
 
     @Bean
     public Set<String> domainEventClassNames() {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forPackage(domainEventListenerBasePackage))
+                        .setUrls(ClasspathHelper.forPackage(apiBasePackage))
                         .setScanners(new MethodAnnotationsScanner()));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(ServiceActivator.class);
 
         return methods.stream()
+                .filter(method -> method.getDeclaringClass().getPackage().getName()
+                        .matches(domainEventListenerBasePackage))
                 .filter(method -> method.getParameterTypes().length != 0)
                 .filter(method -> DomainEvent.class.isAssignableFrom(method.getParameterTypes()[0]))
                 .map(method -> method.getParameterTypes()[0].getName())
@@ -48,7 +52,7 @@ public class DomainEventMessageConfig {
 
     @Bean
     public DomainEventClassResolver domainEventClassResolver() {
-        Reflections reflections = new Reflections(domainEventBasePackage);
+        Reflections reflections = new Reflections(apiBasePackage);
         Set<Class<? extends DomainEvent>> domainEventClasses = reflections.getSubTypesOf(DomainEvent.class);
         return new DomainEventClassResolver(domainEventClasses);
     }
