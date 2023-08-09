@@ -2,12 +2,12 @@ package com.albert.commerce.api.store.infra.presentation;
 
 import com.albert.commerce.api.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
+import com.albert.commerce.api.store.command.domain.QStore;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.api.user.command.domain.UserId;
-import com.albert.commerce.store.command.domain.QStore;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

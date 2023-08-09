@@ -2,14 +2,14 @@ package com.albert.commerce.api.product.infra.persistence;
 
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.product.command.domain.QProduct;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductDataJpaRepository;
 import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
+import com.albert.commerce.api.product.query.domain.QProductData;
+import com.albert.commerce.api.store.command.domain.QStore;
 import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.UserId;
-import com.albert.commerce.product.command.domain.QProduct;
-import com.albert.commerce.product.query.domain.QProductData;
-import com.albert.commerce.store.command.domain.QStore;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
