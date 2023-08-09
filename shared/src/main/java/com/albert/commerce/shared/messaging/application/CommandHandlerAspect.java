@@ -1,8 +1,8 @@
-package com.albert.shared.messaging.application;
+package com.albert.commerce.shared.messaging.application;
 
-import com.albert.shared.messaging.domain.event.DomainEvent;
-import com.albert.shared.messaging.domain.event.Events;
-import com.albert.shared.messaging.infra.messaging.publisher.MessagePublisher;
+import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
+import com.albert.commerce.shared.messaging.domain.event.Events;
+import com.albert.commerce.shared.messaging.infra.messaging.publisher.MessagePublisher;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;

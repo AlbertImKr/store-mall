@@ -1,6 +1,6 @@
-package com.albert.shared.config.messaging.domainevent;
+package com.albert.commerce.shared.config.messaging.domainevent;
 
-import com.albert.shared.messaging.domain.event.DomainEvent;
+import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;

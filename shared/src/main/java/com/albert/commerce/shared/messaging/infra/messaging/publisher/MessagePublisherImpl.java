@@ -1,7 +1,7 @@
-package com.albert.shared.messaging.infra.messaging.publisher;
+package com.albert.commerce.shared.messaging.infra.messaging.publisher;
 
-import com.albert.shared.messaging.application.Command;
-import com.albert.shared.messaging.domain.event.DomainEvent;
+import com.albert.commerce.shared.messaging.application.Command;
+import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;

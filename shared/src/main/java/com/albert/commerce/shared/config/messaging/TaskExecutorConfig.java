@@ -1,4 +1,4 @@
-package com.albert.shared.config.messaging;
+package com.albert.commerce.shared.config.messaging;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
