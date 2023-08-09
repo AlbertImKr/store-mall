@@ -1,6 +1,7 @@
 package com.albert.commerce.api.store.command.domain;
 
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -55,6 +56,15 @@ public class Store {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        Events.raise(StoreCreatedEvent.builder()
+                .storeId(storeId)
+                .storeName(storeName)
+                .userId(userId)
+                .ownerName(ownerName)
+                .address(address)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .build());
     }
 
     public void updateId(StoreId storeId) {
