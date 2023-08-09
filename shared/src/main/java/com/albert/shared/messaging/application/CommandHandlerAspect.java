@@ -18,7 +18,7 @@ public class CommandHandlerAspect {
 
     private final MessagePublisher messagePublisher;
 
-    @Before("execution(* com.albert.commerce.*.command.application.*Service.*(..))"
+    @Before("execution(* com.albert.commerce.api.*.command.application.*Service.*(..))"
             + "&& @annotation(org.springframework.transaction.annotation.Transactional)")
     public void beforeTransactionalCommandExecution() {
         if (!isEventTransactionSynchronizationRegistered()) {
