@@ -1,8 +1,6 @@
 spring:
-  config:
-    activate:
-      on-profile: api
   profiles:
+    active: api
     group:
       api: db,oauth2,messaging
 

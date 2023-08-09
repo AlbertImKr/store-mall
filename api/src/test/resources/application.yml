@@ -1,4 +1,6 @@
 spring:
   profiles:
-    include: testdb,oauth2
+    active: test
+    group:
+      test: testdb,oauth2,messaging
 
