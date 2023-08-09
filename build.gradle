@@ -99,3 +99,8 @@ project(':authorization-server') {
     }
 }
 
+project(':api') {
+    dependencies {
+        implementation project(":shared")
+    }
+}
