@@ -1,0 +1,18 @@
+package com.albert.commerce.api.product;
+
+import com.albert.commerce.api.common.exception.BusinessException;
+import com.albert.commerce.api.common.exception.ErrorMessage;
+
+public class UnauthorizedModificationException extends BusinessException {
+
+    private static final ErrorMessage errorMessage = ErrorMessage.UNAUTHORIZED_MODIFICATION_ERROR;
+
+    public UnauthorizedModificationException() {
+        super(errorMessage.getMessage());
+    }
+
+    @Override
+    public ErrorMessage getErrorMessage() {
+        return errorMessage;
+    }
+}

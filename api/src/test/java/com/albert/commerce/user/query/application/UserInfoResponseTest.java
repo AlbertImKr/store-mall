@@ -2,10 +2,10 @@ package com.albert.commerce.user.query.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.user.command.application.dto.UserInfoResponse;
-import com.albert.commerce.user.command.domain.Role;
-import com.albert.commerce.user.command.domain.User;
-import com.albert.commerce.user.command.domain.UserId;
+import com.albert.commerce.api.user.command.application.dto.UserInfoResponse;
+import com.albert.commerce.api.user.command.domain.Role;
+import com.albert.commerce.api.user.command.domain.User;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

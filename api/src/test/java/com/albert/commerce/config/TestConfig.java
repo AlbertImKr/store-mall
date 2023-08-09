@@ -1,9 +1,9 @@
 package com.albert.commerce.config;
 
-import com.albert.commerce.common.infra.persistence.SequenceGenerator;
-import com.albert.commerce.user.command.domain.UserRepository;
-import com.albert.commerce.user.infra.persistance.UserRepositoryImpl;
-import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
+import com.albert.commerce.api.common.infra.persistence.SequenceGenerator;
+import com.albert.commerce.api.user.command.domain.UserRepository;
+import com.albert.commerce.api.user.infra.persistance.UserRepositoryImpl;
+import com.albert.commerce.api.user.infra.persistance.imports.UserJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

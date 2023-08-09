@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.command.application.dto.UserProfileRequest;
-import com.albert.commerce.user.infra.persistance.imports.UserJpaRepository;
+import com.albert.commerce.api.user.command.application.UserService;
+import com.albert.commerce.api.user.command.application.dto.UserProfileRequest;
+import com.albert.commerce.api.user.infra.persistance.imports.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;

@@ -2,16 +2,16 @@ package com.albert.commerce.product.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.common.infra.persistence.Money;
-import com.albert.commerce.product.command.application.ProductService;
-import com.albert.commerce.product.command.application.dto.ProductCreatedResponse;
-import com.albert.commerce.product.command.application.dto.ProductRequest;
-import com.albert.commerce.store.command.application.SellerStoreService;
-import com.albert.commerce.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.user.UserNotFoundException;
-import com.albert.commerce.user.command.application.UserService;
-import com.albert.commerce.user.query.domain.UserDao;
-import com.albert.commerce.user.query.domain.UserData;
+import com.albert.commerce.api.common.infra.persistence.Money;
+import com.albert.commerce.api.product.command.application.ProductService;
+import com.albert.commerce.api.product.command.application.dto.ProductCreatedResponse;
+import com.albert.commerce.api.product.command.application.dto.ProductRequest;
+import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
+import com.albert.commerce.api.user.UserNotFoundException;
+import com.albert.commerce.api.user.command.application.UserService;
+import com.albert.commerce.api.user.query.domain.UserDao;
+import com.albert.commerce.api.user.query.domain.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
