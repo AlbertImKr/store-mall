@@ -1,4 +1,4 @@
-package com.albert.shared.domain.event;
+package com.albert.shared.messaging.domain.event;
 
 import java.util.ArrayList;
 import java.util.List;
