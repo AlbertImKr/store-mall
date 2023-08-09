@@ -1,4 +1,9 @@
 spring:
+  config:
+    activate:
+      on-profile: api
   profiles:
-    include: db,oauth2
+    group:
+      api: db,oauth2,messaging
+
 
