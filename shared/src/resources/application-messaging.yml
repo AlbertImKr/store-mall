@@ -1,0 +1,12 @@
+commerce:
+  messaging:
+    base-package:
+      command: com.albert.shared.messaging.application
+      domain-event: com.albert.commerce.*.command.domain
+      domain-event-listener: com.albert.commerce.messaging.infra.messaging.listener.domainevent
+    task-executor:
+      # MAX DB Connection 절반 정도를 권장
+      core-pool-size: 8
+      max-pool-size: 16
+      queue-capacity: 100
+      thread-name-prefix: "task-executor-"
