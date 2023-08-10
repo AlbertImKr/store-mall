@@ -18,38 +18,10 @@ import jakarta.persistence.Enumerated;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Subselect;
-import org.hibernate.annotations.Synchronize;
-import org.springframework.data.annotation.Immutable;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Immutable
-@Subselect("""
-        select
-             o.order_id,
-             o.store_id as store_id,
-             p.product_id as product_id,
-             o.user_id as user_id,
-             o.created_time,
-             u.nickname as nickname,
-             p.product_name,
-             o.delivery_status,
-             ol.amount
-        from
-             order_line ol
-                 join purchase_order o
-             on  o.order_id = ol.order_id
-                 join user u
-             on o.user_id = u.user_id
-                 join product p
-             on ol.product_id = p.product_id
-        """
-)
-@Synchronize({"purchase_order", "order_products_id", "product", "user"})
 public class OrderData {
 
     @EmbeddedId

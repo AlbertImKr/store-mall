@@ -10,7 +10,7 @@ public interface StoreDataDao {
 
     boolean exists(StoreId storeId);
 
-    Optional<StoreData> getMyStoreByUserEmail(UserId id);
+    StoreData save(StoreData storeData);
 
     Optional<StoreData> findByUserId(UserId userId);
 }

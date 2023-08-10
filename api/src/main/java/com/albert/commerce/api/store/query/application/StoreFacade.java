@@ -27,4 +27,8 @@ public class StoreFacade {
     public StoreData getStoreById(StoreId storeId) {
         return storeDataDao.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
+
+    public void save(StoreData storeData) {
+        storeDataDao.save(storeData);
+    }
 }

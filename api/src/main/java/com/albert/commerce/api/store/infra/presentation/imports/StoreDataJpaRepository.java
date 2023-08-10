@@ -9,5 +9,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StoreDataJpaRepository extends JpaRepository<StoreData, StoreId> {
 
     Optional<StoreData> findByUserId(UserId userId);
-
 }

@@ -12,4 +12,5 @@ public interface StoreRepository {
 
     Optional<Store> updateMyStore(UpdateStoreRequest updateStoreRequest, UserId userId);
 
+    Optional<Store> findByUserId(UserId userId);
 }

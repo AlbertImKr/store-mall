@@ -15,7 +15,6 @@ public class StoreDataDaoImpl implements StoreDataDao {
 
     private final StoreDataJpaRepository storeDataJpaRepository;
 
-
     @Override
     public Optional<StoreData> findById(StoreId storeId) {
         return storeDataJpaRepository.findById(storeId);
@@ -27,8 +26,8 @@ public class StoreDataDaoImpl implements StoreDataDao {
     }
 
     @Override
-    public Optional<StoreData> getMyStoreByUserEmail(UserId userId) {
-        return storeDataJpaRepository.findByUserId(userId);
+    public StoreData save(StoreData storeData) {
+        return storeDataJpaRepository.save(storeData);
     }
 
     @Override

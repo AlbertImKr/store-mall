@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "store")
 public class Store {
 
-
     @EmbeddedId
     private StoreId storeId;
     @Column(nullable = false)
@@ -56,20 +55,21 @@ public class Store {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        Events.raise(StoreCreatedEvent.builder()
-                .storeId(storeId)
-                .storeName(storeName)
-                .userId(userId)
-                .ownerName(ownerName)
-                .address(address)
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .build());
     }
 
     public void updateId(StoreId storeId) {
         this.storeId = storeId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();
+        StoreCreatedEvent storeCreatedEvent = StoreCreatedEvent.builder()
+                .storeId(storeId)
+                .userId(userId)
+                .storeName(storeName)
+                .ownerName(ownerName)
+                .address(address)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .build();
+        Events.raise(storeCreatedEvent);
     }
 }

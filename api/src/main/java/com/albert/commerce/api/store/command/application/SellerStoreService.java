@@ -45,4 +45,8 @@ public class SellerStoreService {
         return storeRepository.updateMyStore(updateStoreRequest, user.getUserId())
                 .orElseThrow(StoreNotFoundException::new).getStoreId();
     }
+
+    public Store getStoreByUserEmail(UserId userId) {
+        return storeRepository.findByUserId(userId).orElseThrow(StoreNotFoundException::new);
+    }
 }

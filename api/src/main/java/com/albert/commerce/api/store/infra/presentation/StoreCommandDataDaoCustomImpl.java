@@ -55,4 +55,8 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
         store.updateId(nextId());
         return storeJpaRepository.save(store);
     }
+
+    public Optional<Store> findByUserId(UserId userId) {
+        return storeJpaRepository.findByUserId(userId);
+    }
 }
