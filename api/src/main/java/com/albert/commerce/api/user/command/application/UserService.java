@@ -32,4 +32,11 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
         return user.getUserId();
     }
+
+
+    public UserId findIdByEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(UserNotFoundException::new);
+        return user.getUserId();
+    }
 }

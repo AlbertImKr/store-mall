@@ -2,6 +2,7 @@ package com.albert.commerce.api.store.query.application;
 
 import com.albert.commerce.api.store.StoreNotFoundException;
 import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.store.query.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
 import com.albert.commerce.api.user.UserNotFoundException;
@@ -30,5 +31,18 @@ public class StoreFacade {
 
     public void save(StoreData storeData) {
         storeDataDao.save(storeData);
+    }
+
+    @Transactional
+    public void update(UpdateStoreRequest updateStoreRequest) {
+        StoreData storeData = storeDataDao.findById(updateStoreRequest.storeId())
+                .orElseThrow(StoreNotFoundException::new);
+        storeData.update(
+                updateStoreRequest.storeName(),
+                updateStoreRequest.ownerName(),
+                updateStoreRequest.address(),
+                updateStoreRequest.phoneNumber(),
+                updateStoreRequest.email()
+        );
     }
 }

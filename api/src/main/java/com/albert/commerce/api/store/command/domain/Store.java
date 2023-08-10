@@ -72,4 +72,21 @@ public class Store {
                 .build();
         Events.raise(storeCreatedEvent);
     }
+
+    public void update(String storeName, String ownerName, String address, String email, String phoneNumber) {
+        this.storeName = storeName;
+        this.ownerName = ownerName;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        StoreUpdateEvent storeUpdateEvent = StoreUpdateEvent.builder()
+                .storeId(storeId)
+                .storeName(storeName)
+                .ownerName(ownerName)
+                .address(address)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build();
+        Events.raise(storeUpdateEvent);
+    }
 }

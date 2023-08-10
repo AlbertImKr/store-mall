@@ -47,4 +47,12 @@ public class StoreData {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
+
+    public void update(String storeName, String ownerName, String address, String phoneNumber, String email) {
+        this.storeName = storeName;
+        this.ownerName = ownerName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
 }

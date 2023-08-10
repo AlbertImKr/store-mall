@@ -49,4 +49,9 @@ public class UserRepositoryImpl implements UserRepository {
     private UserId nextId() {
         return UserId.from(sequenceGenerator.generate());
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepository.findByEmail(email);
+    }
 }

@@ -35,11 +35,11 @@ public class SellerStoreController {
     }
 
     @PutMapping("/my")
-    public ResponseEntity<Map<String, String>> updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
+    public ResponseEntity<Void> updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        StoreId storeId = sellerStoreService.updateMyStore(updateStoreRequest, userEmail);
-        return ResponseEntity.ok().body(Map.of("storeId", storeId.getId()));
+        sellerStoreService.updateMyStore(updateStoreRequest, userEmail);
+        return ResponseEntity.ok().build();
     }
 
 }

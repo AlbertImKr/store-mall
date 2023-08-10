@@ -53,7 +53,7 @@ public class OrderData {
     private Money amount;
 
     @Builder
-    public OrderData(OrderId orderId, UserId userId, LocalDateTime createdTime, String nickname, String productName,
+    private OrderData(OrderId orderId, UserId userId, LocalDateTime createdTime, String nickname, String productName,
             StoreId storeId, ProductId productsId, DeliveryStatus deliveryStatus, Money amount) {
         this.orderId = orderId;
         this.userId = userId;
