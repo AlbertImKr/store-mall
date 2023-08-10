@@ -1,7 +1,6 @@
 package com.albert.commerce.api.product.command.application.dto;
 
 import com.albert.commerce.api.product.command.domain.Product;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
@@ -20,7 +19,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 public class ProductResponse extends RepresentationModel<ProductResponse> {
 
-    private final ProductId productId;
+    private final DomainId productId;
     private final String productName;
     private final Money price;
     private final String description;
@@ -36,7 +35,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     private LocalDateTime updateTime;
 
     @Builder
-    private ProductResponse(ProductId productId, String productName, Money price,
+    private ProductResponse(DomainId productId, String productName, Money price,
             String description,
             String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime,
             Links links, DomainId storeId) {

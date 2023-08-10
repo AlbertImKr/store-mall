@@ -2,7 +2,6 @@ package com.albert.commerce.api.order.query.application;
 
 import com.albert.commerce.api.order.command.application.OrderNotFoundException;
 import com.albert.commerce.api.order.command.domain.Order;
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.product.ProductNotFoundException;
 import com.albert.commerce.api.product.query.domain.ProductDao;
@@ -10,6 +9,7 @@ import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class OrderFacade {
     private final ProductDao productDao;
 
     @Transactional(readOnly = true)
-    public OrderDetail findById(OrderId orderId, String userEmail) {
+    public OrderDetail findById(DomainId orderId, String userEmail) {
         UserData userData = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         Order order = orderRepository.findByUserIdAndOrderId(userData.getUserId(), orderId)
                 .orElseThrow(OrderNotFoundException::new);

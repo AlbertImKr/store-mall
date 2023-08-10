@@ -2,12 +2,10 @@ package com.albert.commerce.api.comment.infra.persistence;
 
 import com.albert.commerce.api.comment.command.application.CommentResponse;
 import com.albert.commerce.api.comment.command.domain.Comment;
-import com.albert.commerce.api.comment.command.domain.CommentId;
 import com.albert.commerce.api.comment.command.domain.CommentRepository;
 import com.albert.commerce.api.comment.command.domain.QComment;
 import com.albert.commerce.api.comment.infra.persistence.imports.CommentJpaRepository;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.user.command.domain.QUser;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
@@ -26,8 +24,8 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     private final SequenceGenerator sequenceGenerator;
     private final JPAQueryFactory jpaQueryFactory;
 
-    private CommentId nextId() {
-        return CommentId.from(sequenceGenerator.generate());
+    private DomainId nextId() {
+        return DomainId.from(sequenceGenerator.generate());
     }
 
     @Override
@@ -37,12 +35,12 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     }
 
     @Override
-    public Optional<Comment> findById(CommentId commentId) {
+    public Optional<Comment> findById(DomainId commentId) {
         return commentJpaRepository.findById(commentId);
     }
 
     @Override
-    public List<CommentResponse> findCommentResponseByProductId(ProductId productId) {
+    public List<CommentResponse> findCommentResponseByProductId(DomainId productId) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 
@@ -108,7 +106,7 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     }
 
     @Override
-    public boolean exists(CommentId commentId) {
+    public boolean exists(DomainId commentId) {
         return commentJpaRepository.existsById(commentId);
     }
 

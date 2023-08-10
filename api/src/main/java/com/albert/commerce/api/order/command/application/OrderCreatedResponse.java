@@ -1,6 +1,6 @@
 package com.albert.commerce.api.order.command.application;
 
-import com.albert.commerce.api.order.command.domain.OrderId;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.Builder;
@@ -11,15 +11,15 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 public class OrderCreatedResponse extends RepresentationModel<OrderCreatedResponse> {
 
-    private final OrderId orderId;
+    private final DomainId orderId;
 
     @Builder
-    protected OrderCreatedResponse(OrderId orderId, Links links) {
+    protected OrderCreatedResponse(DomainId orderId, Links links) {
         this.add(links);
         this.orderId = orderId;
     }
 
-    public static OrderCreatedResponse from(OrderId orderId) {
+    public static OrderCreatedResponse from(DomainId orderId) {
         return OrderCreatedResponse.builder()
                 .orderId(orderId)
                 .links(Links.of(BusinessLinks.CREATE_ORDER_LINK, BusinessLinks.getOrder(orderId)))

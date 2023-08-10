@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.infra.persistence;
 
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.QProduct;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductDataJpaRepository;
 import com.albert.commerce.api.product.query.domain.ProductDao;
@@ -39,7 +38,7 @@ public class ProductDataDaoImpl implements ProductDao {
     }
 
     @Override
-    public Optional<ProductData> findById(ProductId productId) {
+    public Optional<ProductData> findById(DomainId productId) {
         QProductData qProduct = QProductData.productData;
         ProductData product = jpaQueryFactory.selectFrom(qProduct)
                 .where(qProduct.productId.eq(productId))
@@ -48,12 +47,12 @@ public class ProductDataDaoImpl implements ProductDao {
     }
 
     @Override
-    public boolean exists(ProductId productId) {
+    public boolean exists(DomainId productId) {
         return productDataJpaRepository.existsById(productId);
     }
 
     @Override
-    public long getAmount(List<ProductId> productsId) {
+    public long getAmount(List<DomainId> productsId) {
         QProductData qProduct = QProductData.productData;
         return jpaQueryFactory.select(qProduct.price)
                 .from(qProduct)
@@ -65,7 +64,7 @@ public class ProductDataDaoImpl implements ProductDao {
     }
 
     @Override
-    public boolean isValidProductsId(List<ProductId> productsId) {
+    public boolean isValidProductsId(List<DomainId> productsId) {
         QProduct qProduct = QProduct.product;
         return Objects.equals((long) productsId.size(),
                 jpaQueryFactory.select(qProduct.productId.count())

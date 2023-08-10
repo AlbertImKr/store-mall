@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.query.domain;
 
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
@@ -17,14 +16,14 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "product")
+@Table(name = "product_query")
 @Entity
 public class ProductData {
 
     @EmbeddedId
-    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    private ProductId productId;
-    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
+    private DomainId productId;
+    @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
     private DomainId storeId;
     @Column(nullable = false)

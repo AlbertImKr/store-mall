@@ -1,7 +1,6 @@
 package com.albert.commerce.api.order.infra.persistence;
 
 import com.albert.commerce.api.order.command.domain.Order;
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.common.domain.DomainId;
@@ -25,23 +24,23 @@ public class OrderRepositoryImpl implements OrderRepository {
         return orderJpaRepository.save(order);
     }
 
-    private OrderId nextId() {
+    private DomainId nextId() {
         String generate = sequenceGenerator.generate();
-        return OrderId.from(generate);
+        return DomainId.from(generate);
     }
 
     @Override
-    public boolean exist(OrderId orderId, DomainId userId) {
+    public boolean exist(DomainId orderId, DomainId userId) {
         return orderJpaRepository.existsByOrderIdAndUserId(orderId, userId);
     }
 
     @Override
-    public void deleteById(OrderId orderId) {
+    public void deleteById(DomainId orderId) {
         orderJpaRepository.deleteById(orderId);
     }
 
     @Override
-    public Optional<Order> findByUserIdAndOrderId(DomainId userId, OrderId orderId) {
+    public Optional<Order> findByUserIdAndOrderId(DomainId userId, DomainId orderId) {
         return orderJpaRepository.findByUserIdAndOrderId(userId, orderId);
     }
 

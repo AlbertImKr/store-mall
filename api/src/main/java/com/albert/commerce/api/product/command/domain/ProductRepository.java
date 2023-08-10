@@ -7,5 +7,5 @@ public interface ProductRepository {
 
     Product save(Product product);
 
-    Optional<Product> findByUserIdAndProductId(DomainId userId, ProductId productId);
+    Optional<Product> findByUserIdAndProductId(DomainId userId, DomainId productId);
 }

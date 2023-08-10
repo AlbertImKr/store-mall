@@ -1,7 +1,6 @@
 package com.albert.commerce.api.product.infra.persistence;
 
 import com.albert.commerce.api.product.command.domain.Product;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.ProductRepository;
 import com.albert.commerce.api.product.command.domain.QProduct;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
@@ -42,12 +41,12 @@ public class ProductRepositoryImpl implements ProductRepository {
         return productJpaRepository.save(product);
     }
 
-    private ProductId nextId() {
-        return ProductId.from(sequenceGenerator.generate());
+    private DomainId nextId() {
+        return DomainId.from(sequenceGenerator.generate());
     }
 
     @Override
-    public Optional<Product> findByUserIdAndProductId(DomainId userId, ProductId productId) {
+    public Optional<Product> findByUserIdAndProductId(DomainId userId, DomainId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.select(qProduct)
                 .from(qProduct)

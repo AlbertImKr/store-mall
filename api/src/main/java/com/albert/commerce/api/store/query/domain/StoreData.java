@@ -26,6 +26,7 @@ public class StoreData {
     private String storeName;
     @Embedded
     @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
     private DomainId userId;
     @Column(nullable = false)
     private String ownerName;

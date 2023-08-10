@@ -2,7 +2,7 @@ package com.albert.commerce.api.product.ui;
 
 import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,10 @@ public class ProductController {
             @RequestBody ProductRequest productRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        ProductId productId = productService.addProduct(userEmail, productRequest);
+        DomainId productId = productService.addProduct(userEmail, productRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(Map.of("productId", productId.getId()));
+                .body(Map.of("productId", productId.getValue()));
     }
 
 
@@ -39,7 +39,7 @@ public class ProductController {
     public ResponseEntity<Map<String, String>> updateProduct(Principal principal,
             @PathVariable String productId, @RequestBody ProductRequest productRequest) {
         String userEmail = principal.getName();
-        productService.update(userEmail, ProductId.from(productId), productRequest);
+        productService.update(userEmail, DomainId.from(productId), productRequest);
         return ResponseEntity.ok(Map.of("productId", productId));
     }
 }

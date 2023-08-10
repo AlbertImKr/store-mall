@@ -1,25 +1,25 @@
 package com.albert.commerce.api.comment.command.application;
 
-import com.albert.commerce.api.comment.command.domain.CommentId;
+import com.albert.commerce.common.domain.DomainId;
 import lombok.Builder;
 import org.springframework.hateoas.RepresentationModel;
 
 public class CommentUpdateResponse extends RepresentationModel<CommentUpdateResponse> {
 
-    private final CommentId commentId;
+    private final DomainId commentId;
 
     @Builder
-    public CommentUpdateResponse(CommentId commentId) {
+    public CommentUpdateResponse(DomainId commentId) {
         this.commentId = commentId;
     }
 
-    public static CommentUpdateResponse from(CommentId commentId) {
+    public static CommentUpdateResponse from(DomainId commentId) {
         return CommentUpdateResponse.builder()
                 .commentId(commentId)
                 .build();
     }
 
-    public CommentId getCommentId() {
+    public DomainId getCommentId() {
         return commentId;
     }
 }

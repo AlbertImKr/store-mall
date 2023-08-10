@@ -1,6 +1,5 @@
 package com.albert.commerce.api.order.infra.persistence;
 
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderDataRepository;
 import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.query.domain.OrderData;
@@ -23,7 +22,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderData> findByUserIdAndOrderId(DomainId userId, OrderId orderId) {
+    public List<OrderData> findByUserIdAndOrderId(DomainId userId, DomainId orderId) {
         return orderDataRepository.findByUserIdAndOrderId(userId, orderId);
     }
 }

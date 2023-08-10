@@ -31,8 +31,8 @@ import lombok.NoArgsConstructor;
 public class Order {
 
     @EmbeddedId
-    @AttributeOverride(name = "id", column = @Column(name = "order_id", nullable = false))
-    private OrderId orderId;
+    @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false))
+    private DomainId orderId;
     @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
     private DomainId userId;
@@ -55,7 +55,7 @@ public class Order {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Order(OrderId orderId, DomainId userId, List<OrderLine> orderLines, DomainId storeId) {
+    private Order(DomainId orderId, DomainId userId, List<OrderLine> orderLines, DomainId storeId) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderLines = orderLines;
@@ -63,7 +63,7 @@ public class Order {
         this.storeId = storeId;
     }
 
-    public void updateId(OrderId orderId) {
+    public void updateId(DomainId orderId) {
         this.orderId = orderId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();

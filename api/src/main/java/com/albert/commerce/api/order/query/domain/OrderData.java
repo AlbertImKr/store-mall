@@ -1,8 +1,6 @@
 package com.albert.commerce.api.order.query.domain;
 
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
-import com.albert.commerce.api.order.command.domain.OrderId;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
@@ -14,6 +12,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,11 +20,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "order_query")
 public class OrderData {
 
     @EmbeddedId
-    @AttributeOverride(name = "id", column = @Column(name = "order_id", nullable = false))
-    private OrderId orderId;
+    @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false))
+    private DomainId orderId;
     @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
     private DomainId userId;
@@ -43,8 +43,8 @@ public class OrderData {
     @Embedded
     private DomainId storeId;
     @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    private ProductId productId;
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
+    private DomainId productId;
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
     @Convert(converter = MoneyConverter.class)
@@ -52,8 +52,8 @@ public class OrderData {
     private Money amount;
 
     @Builder
-    private OrderData(OrderId orderId, DomainId userId, LocalDateTime createdTime, String nickname, String productName,
-            DomainId storeId, ProductId productsId, DeliveryStatus deliveryStatus, Money amount) {
+    private OrderData(DomainId orderId, DomainId userId, LocalDateTime createdTime, String nickname, String productName,
+            DomainId storeId, DomainId productsId, DeliveryStatus deliveryStatus, Money amount) {
         this.orderId = orderId;
         this.userId = userId;
         this.createdTime = createdTime;

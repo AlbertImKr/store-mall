@@ -1,8 +1,8 @@
 package com.albert.commerce.api.order.ui;
 
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.query.application.OrderDetail;
 import com.albert.commerce.api.order.query.application.OrderFacade;
+import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,7 @@ public class OrderQueryController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetail> getOrder(Principal principal,
             @PathVariable String orderId) {
-        OrderDetail order = orderFacade.findById(OrderId.from(orderId), principal.getName());
+        OrderDetail order = orderFacade.findById(DomainId.from(orderId), principal.getName());
 
         // HATEOAS
         return ResponseEntity.ok(order);

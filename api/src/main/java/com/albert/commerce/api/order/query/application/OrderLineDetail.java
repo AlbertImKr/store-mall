@@ -1,8 +1,8 @@
 package com.albert.commerce.api.order.query.application;
 
 import com.albert.commerce.api.order.command.domain.OrderLine;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public class OrderLineDetail {
 
-    private ProductId productId;
+    private DomainId productId;
 
     private Money price;
 
@@ -22,7 +22,7 @@ public class OrderLineDetail {
     private String productDescription;
 
     @Builder
-    public OrderLineDetail(ProductId productId, Money price, long quantity, Money amount, String productName,
+    public OrderLineDetail(DomainId productId, Money price, long quantity, Money amount, String productName,
             String productDescription) {
         this.productId = productId;
         this.price = price;

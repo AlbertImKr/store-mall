@@ -3,7 +3,7 @@ package com.albert.commerce.api.order.ui;
 import com.albert.commerce.api.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
-import com.albert.commerce.api.order.command.domain.OrderId;
+import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class OrderController {
     public ResponseEntity<Map<String, String>> placeOrder(Principal principal,
             @RequestBody OrderRequest orderRequest) {
         String userEmail = principal.getName();
-        OrderId orderId = orderService.placeOrder(userEmail, orderRequest);
+        DomainId orderId = orderService.placeOrder(userEmail, orderRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("orderId", orderId.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("orderId", orderId.getValue()));
     }
 
 

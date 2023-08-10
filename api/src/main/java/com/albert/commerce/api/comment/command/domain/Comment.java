@@ -1,6 +1,5 @@
 package com.albert.commerce.api.comment.command.domain;
 
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.domain.DomainId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -22,20 +21,20 @@ import lombok.NoArgsConstructor;
 public class Comment {
 
     @EmbeddedId
-    @AttributeOverride(name = "id", column = @Column(name = "comment_id", nullable = false))
-    private CommentId commentId;
+    @AttributeOverride(name = "value", column = @Column(name = "comment_id", nullable = false))
+    private DomainId commentId;
     @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    private ProductId productId;
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
+    private DomainId productId;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     private DomainId storeId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id"))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
     @Embedded
     private DomainId userId;
-    @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id"))
+    @AttributeOverride(name = "value", column = @Column(name = "parent_comment_id"))
     @Embedded
-    private CommentId parentCommentId;
+    private DomainId parentCommentId;
 
     private String detail;
 
@@ -48,8 +47,8 @@ public class Comment {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Comment(CommentId commentId, ProductId productId, DomainId storeId,
-            DomainId userId, CommentId parentCommentId, String detail) {
+    private Comment(DomainId commentId, DomainId productId, DomainId storeId,
+            DomainId userId, DomainId parentCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
@@ -58,7 +57,7 @@ public class Comment {
         this.detail = detail;
     }
 
-    public void updateId(CommentId commentId) {
+    public void updateId(DomainId commentId) {
         this.commentId = commentId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();

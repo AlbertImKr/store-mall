@@ -26,15 +26,15 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @EmbeddedId
-    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    private ProductId productId;
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
+    private DomainId productId;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     private DomainId storeId;
     @Column(nullable = false)
     private String productName;
     @Convert(converter = MoneyConverter.class)
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private Money price;
     @Column(nullable = false)
     private String description;
@@ -52,7 +52,7 @@ public class Product {
     protected LocalDateTime updateTime;
 
     @Builder
-    public Product(ProductId productId, DomainId storeId, String productName, Money price,
+    public Product(DomainId productId, DomainId storeId, String productName, Money price,
             String description, String brand, String category) {
         this.productId = productId;
         this.storeId = storeId;
@@ -73,7 +73,7 @@ public class Product {
         this.updateTime = LocalDateTime.now();
     }
 
-    public void updateId(ProductId productId) {
+    public void updateId(DomainId productId) {
         this.productId = productId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();

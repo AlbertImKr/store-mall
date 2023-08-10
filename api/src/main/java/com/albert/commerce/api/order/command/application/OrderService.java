@@ -1,11 +1,9 @@
 package com.albert.commerce.api.order.command.application;
 
 import com.albert.commerce.api.order.command.domain.Order;
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.command.domain.OrderLine;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.product.ProductNotFoundException;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.store.command.application.StoreService;
@@ -34,19 +32,19 @@ public class OrderService {
     @Transactional
     public void cancelOrder(DeleteOrderRequest deleteOrderRequest, String userEmail) {
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        OrderId orderId = OrderId.from(deleteOrderRequest.orderId());
+        DomainId orderId = DomainId.from(deleteOrderRequest.orderId());
         checkOrder(orderId, user.getUserId());
         orderRepository.deleteById(orderId);
     }
 
-    private void checkOrder(OrderId orderId, DomainId userId) {
+    private void checkOrder(DomainId orderId, DomainId userId) {
         if (!orderRepository.exist(orderId, userId)) {
             throw new OrderNotFoundException();
         }
     }
 
     @Transactional
-    public OrderId placeOrder(String userEmail, OrderRequest orderRequest) {
+    public DomainId placeOrder(String userEmail, OrderRequest orderRequest) {
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         DomainId storeId = DomainId.from(orderRequest.storeId());
         if (!storeService.exists(storeId)) {
@@ -54,7 +52,7 @@ public class OrderService {
         }
         Map<String, Long> productsIdAndQuantity = orderRequest.productsIdAndQuantity();
         List<ProductData> products = productsIdAndQuantity.keySet().stream()
-                .map(productId -> productDao.findById(ProductId.from(productId))
+                .map(productId -> productDao.findById(DomainId.from(productId))
                         .orElseThrow(ProductNotFoundException::new))
                 .toList();
         Order order = Order.builder()
@@ -64,7 +62,7 @@ public class OrderService {
                         products.stream()
                                 .map(productData -> {
                                             Money price = productData.getPrice();
-                                            Long quantity = productsIdAndQuantity.get(productData.getProductId().getId());
+                                            Long quantity = productsIdAndQuantity.get(productData.getProductId().getValue());
                                             Money amount = price.multiply(quantity);
                                             return OrderLine.builder()
                                                     .productId(productData.getProductId())

@@ -29,6 +29,7 @@ public class Store {
     @Column(nullable = false)
     private String storeName;
     @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
     private DomainId userId;
     @Column(nullable = false)
     private String ownerName;

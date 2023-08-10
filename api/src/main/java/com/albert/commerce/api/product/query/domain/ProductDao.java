@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.query.domain;
 
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +10,11 @@ public interface ProductDao {
 
     Page<ProductData> findProductsByUserId(DomainId userId, Pageable pageable);
 
-    Optional<ProductData> findById(ProductId productId);
+    Optional<ProductData> findById(DomainId productId);
 
-    boolean exists(ProductId productId);
+    boolean exists(DomainId productId);
 
-    long getAmount(List<ProductId> productsId);
+    long getAmount(List<DomainId> productsId);
 
-    boolean isValidProductsId(List<ProductId> productsId);
+    boolean isValidProductsId(List<DomainId> productsId);
 }

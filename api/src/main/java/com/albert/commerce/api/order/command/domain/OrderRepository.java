@@ -9,11 +9,11 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    boolean exist(OrderId orderId, DomainId id);
+    boolean exist(DomainId orderId, DomainId id);
 
-    void deleteById(OrderId orderId);
+    void deleteById(DomainId orderId);
 
-    Optional<Order> findByUserIdAndOrderId(DomainId userId, OrderId orderId);
+    Optional<Order> findByUserIdAndOrderId(DomainId userId, DomainId orderId);
 
     Page<Order> findAllByUserId(DomainId userId, Pageable pageable);
 }

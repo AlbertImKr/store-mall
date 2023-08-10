@@ -3,13 +3,12 @@ package com.albert.commerce.common.units;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.ui.OrderController;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.ui.ProductController;
 import com.albert.commerce.api.store.ui.StoreController;
 import com.albert.commerce.api.store.ui.StoreQueryController;
 import com.albert.commerce.api.user.ui.UserController;
+import com.albert.commerce.common.domain.DomainId;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -49,17 +48,17 @@ public final class BusinessLinks {
                             .getStore(null))
                     .withRel("get-store");
 
-    public static Link getProductSelfRel(ProductId productId) {
+    public static Link getProductSelfRel(DomainId productId) {
         return WebMvcLinkBuilder
                 .linkTo(methodOn(ProductController.class).addProduct(null, null))
-                .slash(productId.getId())
+                .slash(productId.getValue())
                 .withSelfRel();
     }
 
 
-    public static Link getOrder(OrderId orderId) {
+    public static Link getOrder(DomainId orderId) {
         return WebMvcLinkBuilder.linkTo(OrderController.class)
-                .slash(orderId.getId())
+                .slash(orderId.getValue())
                 .withRel("order");
     }
 
