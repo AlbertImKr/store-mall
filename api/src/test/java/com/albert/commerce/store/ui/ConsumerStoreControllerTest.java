@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.common.domain.DomainId;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -57,7 +57,7 @@ class ConsumerStoreControllerTest {
     UserService userService;
 
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     EntityManager entityManager;
@@ -84,11 +84,10 @@ class ConsumerStoreControllerTest {
                 .phoneNumber(TEST_HONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        StoreId storeId = sellerStoreService.createStore(user.getEmail(),
-                newStoreRequest);
+        DomainId storeId = storeService.createStore(user.getEmail(), newStoreRequest);
         entityManager.flush();
 
-        mockMvc.perform(get("/stores/" + storeId.getId()))
+        mockMvc.perform(get("/stores/" + storeId.getValue()))
                 .andDo(print())
                 .andExpect(jsonPath("storeId").exists())
                 .andExpect(jsonPath("storeName").exists())

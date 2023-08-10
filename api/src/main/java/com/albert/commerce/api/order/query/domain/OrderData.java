@@ -1,11 +1,11 @@
 package com.albert.commerce.api.order.query.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.UserId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -40,9 +40,9 @@ public class OrderData {
     @Column(name = "product_name")
     private String productName;
 
-    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private StoreId storeId;
+    private DomainId storeId;
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
     private ProductId productId;
@@ -54,7 +54,7 @@ public class OrderData {
 
     @Builder
     private OrderData(OrderId orderId, UserId userId, LocalDateTime createdTime, String nickname, String productName,
-            StoreId storeId, ProductId productsId, DeliveryStatus deliveryStatus, Money amount) {
+            DomainId storeId, ProductId productsId, DeliveryStatus deliveryStatus, Money amount) {
         this.orderId = orderId;
         this.userId = userId;
         this.createdTime = createdTime;

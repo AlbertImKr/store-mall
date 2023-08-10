@@ -1,7 +1,8 @@
 package com.albert.commerce.api.store.query.domain;
 
-import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.user.command.domain.UserId;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
@@ -20,7 +21,8 @@ import lombok.NoArgsConstructor;
 public class StoreData {
 
     @EmbeddedId
-    private StoreId storeId;
+    @AttributeOverride(name = "value", column = @Column(name = "store_id"))
+    private DomainId storeId;
     @Column(nullable = false)
     private String storeName;
     @Embedded
@@ -36,7 +38,7 @@ public class StoreData {
     private String email;
 
     @Builder
-    public StoreData(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
+    private StoreData(DomainId storeId, String storeName, UserId userId, String ownerName, String address,
             String phoneNumber,
             String email) {
         this.storeId = storeId;

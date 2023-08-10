@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
@@ -61,7 +61,7 @@ class SellerStoreControllerTest {
     @Autowired
     UserService userService;
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     EntityManager entityManager;
@@ -127,7 +127,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
+        storeService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(post("/stores")
@@ -166,7 +166,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
+        storeService.createStore(user.getEmail(), newStoreRequest);
 
         // when
         mockMvc.perform(get("/stores/my")
@@ -244,7 +244,7 @@ class SellerStoreControllerTest {
                 .phoneNumber(TEST_PHONE_NUMBER)
                 .address(TEST_ADDRESS)
                 .build();
-        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
+        storeService.createStore(user.getEmail(), newStoreRequest);
 
         String newStoreName = "newStoreName";
         String newEmail = "new@email.com";

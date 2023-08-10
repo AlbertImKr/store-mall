@@ -1,9 +1,9 @@
 package com.albert.commerce.api.product.query.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -26,7 +26,7 @@ public class ProductData {
     private ProductId productId;
     @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private StoreId storeId;
+    private DomainId storeId;
     @Column(nullable = false)
     private String productName;
     @Convert(converter = MoneyConverter.class)
@@ -34,8 +34,8 @@ public class ProductData {
     private Money price;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = true)
+    @Column
     private String brand;
-    @Column(nullable = true)
+    @Column
     private String category;
 }

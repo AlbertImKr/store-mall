@@ -1,16 +1,15 @@
 package com.albert.commerce.order.command.application;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.product.command.application.ProductService;
-import com.albert.commerce.api.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.product.query.application.ProductFacade;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -35,7 +34,7 @@ class OrderServiceTest {
     ProductJpaRepository productJpaRepository;
 
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     UserDao userDao;
@@ -61,7 +60,7 @@ class OrderServiceTest {
             // given
             userService.createByEmail(userEmail);
             consumer = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-            StoreId storeId = sellerStoreService.createStore(
+            DomainId storeId = storeService.createStore(
                     consumer.getEmail(),
                     new NewStoreRequest("testStoreName",
                             "testOwnerName",
@@ -70,10 +69,10 @@ class OrderServiceTest {
                             "testStore@email.com"));
             List<ProductId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                ProductCreatedResponse productCreatedResponse = productService.addProduct(consumer.getEmail(),
+                ProductId productId = productService.addProduct(consumer.getEmail(),
                         new ProductRequest("testProductName", 10000, "test", "testBrand",
                                 "testCategory"));
-                productsId.add(productCreatedResponse.getProductId());
+                productsId.add(productId);
             }
 
 //            // when

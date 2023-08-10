@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.api.order.command.application.OrderNotFoundException;
 import com.albert.commerce.api.order.command.application.OrderRequest;
@@ -31,9 +32,8 @@ import com.albert.commerce.api.product.command.application.dto.ProductRequest;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.application.ProductFacade;
 import com.albert.commerce.api.product.query.domain.ProductDao;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -79,7 +79,7 @@ class OrderControllerTest {
     OrderService orderService;
 
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     UserService userService;
@@ -108,7 +108,7 @@ class OrderControllerTest {
 
     UserData seller;
     UserData consumer;
-    StoreId storeId;
+    DomainId storeId;
     Map<String, Long> requestProductsId;
     List<ProductId> productIds;
     OrderRequest orderRequest;
@@ -122,8 +122,8 @@ class OrderControllerTest {
         NewStoreRequest newStoreRequest = new NewStoreRequest("testStoreName", "testOwner",
                 "address", "01001000100",
                 "test@email.com");
-        storeId = sellerStoreService.createStore(consumer.getEmail(), newStoreRequest);
-        storeId = sellerStoreService.createStore(seller.getEmail(), newStoreRequest);
+        storeId = storeService.createStore(consumer.getEmail(), newStoreRequest);
+        storeId = storeService.createStore(seller.getEmail(), newStoreRequest);
         requestProductsId = new HashMap<>();
         productIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -135,7 +135,7 @@ class OrderControllerTest {
             productIds.add(product.getProductId());
             requestProductsId.put(product.getProductId().getId(), (long) i);
         }
-        orderRequest = new OrderRequest(requestProductsId, storeId.getId());
+        orderRequest = new OrderRequest(requestProductsId, storeId.getValue());
     }
 
 
@@ -194,7 +194,7 @@ class OrderControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("orderId").exists())
                     .andExpect(jsonPath("userId").value(consumer.getUserId().getId()))
-                    .andExpect(jsonPath("storeId").value(storeId.getId()))
+                    .andExpect(jsonPath("storeId").value(storeId.getValue()))
                     .andExpect(jsonPath("deliveryStatus").exists())
                     .andExpect(jsonPath("orderLineDetails").isArray())
                     .andExpect(jsonPath("orderLineDetails.*.productId").exists())

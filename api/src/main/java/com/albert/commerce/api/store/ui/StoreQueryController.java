@@ -1,7 +1,7 @@
 package com.albert.commerce.api.store.ui;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.units.BusinessLinks;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.StoreFacade;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import java.security.Principal;
@@ -35,7 +35,7 @@ public class StoreQueryController {
 
     @GetMapping("/{storeId}")
     public ResponseEntity<EntityModel<StoreData>> getStore(@PathVariable String storeId) {
-        StoreData storeData = storeFacade.getStoreById(StoreId.from(storeId));
+        StoreData storeData = storeFacade.getStoreById(DomainId.from(storeId));
         return ResponseEntity.ok().body(
                 EntityModel.of(storeData).add(
                         WebMvcLinkBuilder.linkTo(SellerStoreController.class).slash(storeId)

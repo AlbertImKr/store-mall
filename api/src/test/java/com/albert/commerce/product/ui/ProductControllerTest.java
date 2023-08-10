@@ -18,10 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.api.product.command.application.ProductService;
-import com.albert.commerce.api.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.api.user.UserNotFoundException;
@@ -79,7 +79,7 @@ class ProductControllerTest {
     UserDao userDao;
 
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     ProductService productService;
@@ -129,7 +129,7 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(user.getEmail(), newStoreRequest);
+        storeService.createStore(user.getEmail(), newStoreRequest);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -184,10 +184,10 @@ class ProductControllerTest {
                 .address(TEST_ADDRESS)
                 .build();
 
-        sellerStoreService.createStore(user.getEmail(),
+        storeService.createStore(user.getEmail(),
                 newStoreRequest);
 
-        ProductCreatedResponse productCreatedResponse =
+        ProductId productId =
                 productService.addProduct(user.getEmail(), productRequest);
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
@@ -198,7 +198,7 @@ class ProductControllerTest {
         );
 
         // when,then
-        mockMvc.perform(put("/products/" + productCreatedResponse.getProductId().getId())
+        mockMvc.perform(put("/products/" + productId.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
                 .andExpect(status().isOk())
@@ -282,7 +282,7 @@ class ProductControllerTest {
                     .phoneNumber(TEST_PHONE_NUMBER)
                     .address(TEST_ADDRESS)
                     .build();
-            sellerStoreService.createStore(user.getEmail(),
+            storeService.createStore(user.getEmail(),
                     newStoreRequest);
             for (int i = 0; i < 100; i++) {
                 productService.addProduct(user.getEmail(), productRequest);

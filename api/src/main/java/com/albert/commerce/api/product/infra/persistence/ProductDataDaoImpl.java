@@ -1,5 +1,6 @@
 package com.albert.commerce.api.product.infra.persistence;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.QProduct;
@@ -8,7 +9,6 @@ import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.product.query.domain.QProductData;
 import com.albert.commerce.api.store.command.domain.QStore;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -29,7 +29,7 @@ public class ProductDataDaoImpl implements ProductDao {
     private final ProductDataJpaRepository productDataJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
-    private static JPQLQuery<StoreId> getStoreIdByUserId(UserId userId) {
+    private static JPQLQuery<DomainId> getStoreIdByUserId(UserId userId) {
         QStore qStore = QStore.store;
         return JPAExpressions
                 .select(qStore.storeId)
@@ -79,7 +79,7 @@ public class ProductDataDaoImpl implements ProductDao {
     public Page<ProductData> findProductsByUserId(UserId userId, Pageable pageable) {
 
         QProductData qProduct = QProductData.productData;
-        JPQLQuery<StoreId> storeIdQuery = getStoreIdByUserId(userId);
+        JPQLQuery<DomainId> storeIdQuery = getStoreIdByUserId(userId);
         List<ProductData> contentProducts = jpaQueryFactory.selectFrom(qProduct)
                 .where(
                         qProduct.storeId.eq(
@@ -93,7 +93,7 @@ public class ProductDataDaoImpl implements ProductDao {
                 () -> getProductCount(qProduct, storeIdQuery));
     }
 
-    private Long getProductCount(QProductData qProduct, JPQLQuery<StoreId> storeIdQuery) {
+    private Long getProductCount(QProductData qProduct, JPQLQuery<DomainId> storeIdQuery) {
         return jpaQueryFactory
                 .select(qProduct.count())
                 .from(qProduct)

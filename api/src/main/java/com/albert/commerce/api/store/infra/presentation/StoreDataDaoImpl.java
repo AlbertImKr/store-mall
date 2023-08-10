@@ -1,6 +1,6 @@
 package com.albert.commerce.api.store.infra.presentation;
 
-import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreDataJpaRepository;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
@@ -16,12 +16,12 @@ public class StoreDataDaoImpl implements StoreDataDao {
     private final StoreDataJpaRepository storeDataJpaRepository;
 
     @Override
-    public Optional<StoreData> findById(StoreId storeId) {
+    public Optional<StoreData> findById(DomainId storeId) {
         return storeDataJpaRepository.findById(storeId);
     }
 
     @Override
-    public boolean exists(StoreId storeId) {
+    public boolean exists(DomainId storeId) {
         return storeDataJpaRepository.existsById(storeId);
     }
 

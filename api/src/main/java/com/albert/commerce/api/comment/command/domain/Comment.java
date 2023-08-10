@@ -1,7 +1,7 @@
 package com.albert.commerce.api.comment.command.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,16 +25,16 @@ public class Comment {
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "comment_id", nullable = false))
     private CommentId commentId;
+    @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    @Embedded
     private ProductId productId;
-    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private StoreId storeId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = true))
+    @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
+    private DomainId storeId;
+    @AttributeOverride(name = "id", column = @Column(name = "user_id"))
     @Embedded
     private UserId userId;
-    @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id", nullable = true))
+    @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id"))
     @Embedded
     private CommentId parentCommentId;
 
@@ -49,7 +49,7 @@ public class Comment {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Comment(CommentId commentId, ProductId productId, StoreId storeId,
+    private Comment(CommentId commentId, ProductId productId, DomainId storeId,
             UserId userId, CommentId parentCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;

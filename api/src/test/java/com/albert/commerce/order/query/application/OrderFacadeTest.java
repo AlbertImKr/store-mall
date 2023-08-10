@@ -2,6 +2,7 @@ package com.albert.commerce.order.query.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
@@ -10,14 +11,12 @@ import com.albert.commerce.api.order.query.application.OrderDetail;
 import com.albert.commerce.api.order.query.application.OrderFacade;
 import com.albert.commerce.api.order.query.application.OrderLineDetail;
 import com.albert.commerce.api.product.command.application.ProductService;
-import com.albert.commerce.api.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.product.query.application.ProductFacade;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -47,7 +46,7 @@ class OrderFacadeTest {
     ProductJpaRepository productJpaRepository;
 
     @Autowired
-    SellerStoreService sellerStoreService;
+    StoreService storeService;
 
     @Autowired
     UserDao userDao;
@@ -62,7 +61,7 @@ class OrderFacadeTest {
     OrderId orderId;
     String userEmail = "test@email.com";
     UserData user;
-    StoreId storeId;
+    DomainId storeId;
     Map<String, Long> productIdAndQuantity = new HashMap<>();
 
     @DisplayName("Order를 저장한다")
@@ -72,20 +71,20 @@ class OrderFacadeTest {
         userService.createByEmail(userEmail);
         user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
         // store 생성
-        storeId = sellerStoreService.createStore(user.getEmail(),
+        storeId = storeService.createStore(user.getEmail(),
                 new NewStoreRequest("testStoreName",
                         "testOwnerName",
                         "testAddress",
                         "11111111111",
                         "testStore@email.com"));
         for (int i = 0; i < 10; i++) {
-            ProductCreatedResponse productCreatedResponse = productService.addProduct(userEmail,
+            ProductId productId = productService.addProduct(userEmail,
                     new ProductRequest("testProductName", 10000, "test", "testBrand",
                             "testCategory"));
-            productIdAndQuantity.put(productCreatedResponse.getProductId().getId(), (long) i);
+            productIdAndQuantity.put(productId.getId(), (long) i);
         }
         orderId = orderService.placeOrder(userEmail, new OrderRequest(productIdAndQuantity
-                , storeId.getId()
+                , storeId.getValue()
         ));
     }
 

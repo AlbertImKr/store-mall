@@ -1,5 +1,6 @@
 package com.albert.commerce.api.order.command.application;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.order.command.domain.OrderId;
@@ -10,8 +11,7 @@ import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.store.StoreNotFoundException;
-import com.albert.commerce.api.store.command.domain.StoreId;
-import com.albert.commerce.api.store.query.domain.StoreDataDao;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -29,7 +29,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserDao userDao;
-    private final StoreDataDao storeDataDao;
+    private final StoreService storeService;
     private final ProductDao productDao;
 
     @Transactional
@@ -49,8 +49,8 @@ public class OrderService {
     @Transactional
     public OrderId placeOrder(String userEmail, OrderRequest orderRequest) {
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        StoreId storeId = StoreId.from(orderRequest.storeId());
-        if (!storeDataDao.exists(storeId)) {
+        DomainId storeId = DomainId.from(orderRequest.storeId());
+        if (!storeService.exists(storeId)) {
             throw new StoreNotFoundException();
         }
         Map<String, Long> productsIdAndQuantity = orderRequest.productsIdAndQuantity();

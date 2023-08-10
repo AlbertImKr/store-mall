@@ -1,10 +1,10 @@
 package com.albert.commerce.api.store.command.application;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.store.StoreNotFoundException;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.command.domain.Store;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.command.domain.UserId;
@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class SellerStoreService {
+public class StoreService {
 
     private final StoreRepository storeRepository;
     private final UserService userService;
 
     @Transactional
-    public StoreId createStore(String userEmail, NewStoreRequest newStoreRequest) {
+    public DomainId createStore(String userEmail, NewStoreRequest newStoreRequest) {
         UserId userId = userService.findIdByEmail(userEmail);
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
@@ -51,5 +51,9 @@ public class SellerStoreService {
     @Transactional(readOnly = true)
     public Store getStoreByUserEmail(UserId userId) {
         return storeRepository.findByUserId(userId).orElseThrow(StoreNotFoundException::new);
+    }
+
+    public boolean exists(DomainId storeId) {
+        return storeRepository.exists(storeId);
     }
 }

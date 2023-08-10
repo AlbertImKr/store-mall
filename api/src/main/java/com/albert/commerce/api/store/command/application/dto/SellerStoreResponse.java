@@ -1,8 +1,9 @@
 package com.albert.commerce.api.store.command.application.dto;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.store.command.domain.Store;
-import com.albert.commerce.api.store.command.domain.StoreId;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse> {
 
-    private StoreId storeId;
+    private DomainId storeId;
     private String storeName;
     private String address;
     private String phoneNumber;
@@ -24,7 +25,7 @@ public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse
     private String ownerName;
 
     @Builder
-    private SellerStoreResponse(StoreId storeId, String storeName, String address,
+    private SellerStoreResponse(DomainId storeId, String storeName, String address,
             String phoneNumber,
             String email, String ownerName, Links links) {
         this.storeId = storeId;
@@ -49,4 +50,26 @@ public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SellerStoreResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return Objects.equals(getStoreId(), that.getStoreId()) && Objects.equals(getStoreName(),
+                that.getStoreName()) && Objects.equals(getAddress(), that.getAddress())
+                && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(getEmail(),
+                that.getEmail()) && Objects.equals(getOwnerName(), that.getOwnerName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getStoreId(), getStoreName(), getAddress(), getPhoneNumber(), getEmail(),
+                getOwnerName());
+    }
 }

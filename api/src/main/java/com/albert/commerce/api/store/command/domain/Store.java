@@ -1,10 +1,12 @@
 package com.albert.commerce.api.store.command.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -23,7 +25,8 @@ import lombok.NoArgsConstructor;
 public class Store {
 
     @EmbeddedId
-    private StoreId storeId;
+    @AttributeOverride(name = "value", column = @Column(name = "store_id"))
+    private DomainId storeId;
     @Column(nullable = false)
     private String storeName;
     @Column(nullable = false)
@@ -46,7 +49,7 @@ public class Store {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Store(StoreId storeId, String storeName, UserId userId, String ownerName,
+    private Store(DomainId storeId, String storeName, UserId userId, String ownerName,
             String address, String phoneNumber, String email) {
         this.storeId = storeId;
         this.storeName = storeName;
@@ -57,7 +60,7 @@ public class Store {
         this.email = email;
     }
 
-    public void updateId(StoreId storeId) {
+    public void updateId(DomainId storeId) {
         this.storeId = storeId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();

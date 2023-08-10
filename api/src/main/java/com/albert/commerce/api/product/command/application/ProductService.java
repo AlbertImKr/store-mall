@@ -6,7 +6,7 @@ import com.albert.commerce.api.product.command.application.dto.ProductRequest;
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.ProductRepository;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -21,12 +21,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserDao userDao;
-    private final SellerStoreService sellerStoreService;
+    private final StoreService storeService;
 
     @Transactional
     public ProductId addProduct(String userEmail, ProductRequest productRequest) {
         UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        Store store = sellerStoreService.getStoreByUserEmail(user.getUserId());
+        Store store = storeService.getStoreByUserEmail(user.getUserId());
 
         Product product = Product.builder()
                 .storeId(store.getStoreId())

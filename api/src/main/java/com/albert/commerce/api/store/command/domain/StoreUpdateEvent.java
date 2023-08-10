@@ -1,11 +1,12 @@
 package com.albert.commerce.api.store.command.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import lombok.Builder;
 
 public class StoreUpdateEvent extends DomainEvent {
 
-    StoreId storeId;
+    DomainId storeId;
     String storeName;
     String address;
     String phoneNumber;
@@ -13,7 +14,7 @@ public class StoreUpdateEvent extends DomainEvent {
     String ownerName;
 
     @Builder
-    private StoreUpdateEvent(StoreId storeId, String storeName, String address, String phoneNumber, String email,
+    private StoreUpdateEvent(DomainId storeId, String storeName, String address, String phoneNumber, String email,
             String ownerName) {
         this.storeId = storeId;
         this.storeName = storeName;
@@ -23,7 +24,7 @@ public class StoreUpdateEvent extends DomainEvent {
         this.ownerName = ownerName;
     }
 
-    public StoreId getStoreId() {
+    public DomainId getStoreId() {
         return storeId;
     }
 

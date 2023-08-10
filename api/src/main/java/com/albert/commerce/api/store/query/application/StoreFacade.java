@@ -1,7 +1,7 @@
 package com.albert.commerce.api.store.query.application;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.store.StoreNotFoundException;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
@@ -25,7 +25,7 @@ public class StoreFacade {
         return storeDataDao.findByUserId(user.getUserId()).orElseThrow(StoreNotFoundException::new);
     }
 
-    public StoreData getStoreById(StoreId storeId) {
+    public StoreData getStoreById(DomainId storeId) {
         return storeDataDao.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
 

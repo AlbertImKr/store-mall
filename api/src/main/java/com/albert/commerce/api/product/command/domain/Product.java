@@ -1,8 +1,8 @@
 package com.albert.commerce.api.product.command.domain;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.common.infra.persistence.converters.MoneyConverter;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -28,9 +28,9 @@ public class Product {
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
     private ProductId productId;
-    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private StoreId storeId;
+    @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
+    private DomainId storeId;
     @Column(nullable = false)
     private String productName;
     @Convert(converter = MoneyConverter.class)
@@ -52,7 +52,7 @@ public class Product {
     protected LocalDateTime updateTime;
 
     @Builder
-    public Product(ProductId productId, StoreId storeId, String productName, Money price,
+    public Product(ProductId productId, DomainId storeId, String productName, Money price,
             String description, String brand, String category) {
         this.productId = productId;
         this.storeId = storeId;

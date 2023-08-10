@@ -1,15 +1,16 @@
 package com.albert.commerce.api.product.command.application.dto;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
@@ -25,7 +26,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     private final String description;
     private final String brand;
     private final String category;
-    private final StoreId storeId;
+    private final DomainId storeId;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
@@ -38,7 +39,7 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     private ProductResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime,
-            Links links, StoreId storeId) {
+            Links links, DomainId storeId) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -77,5 +78,31 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
                 .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
                 .price(product.getPrice())
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return Objects.equals(getProductId(), that.getProductId()) && Objects.equals(getProductName(),
+                that.getProductName()) && Objects.equals(getPrice(), that.getPrice()) && Objects.equals(
+                getDescription(), that.getDescription()) && Objects.equals(getBrand(), that.getBrand())
+                && Objects.equals(getCategory(), that.getCategory()) && Objects.equals(getStoreId(),
+                that.getStoreId()) && Objects.equals(getCreatedTime(), that.getCreatedTime())
+                && Objects.equals(getUpdateTime(), that.getUpdateTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getProductId(), getProductName(), getPrice(), getDescription(),
+                getBrand(),
+                getCategory(), getStoreId(), getCreatedTime(), getUpdateTime());
     }
 }

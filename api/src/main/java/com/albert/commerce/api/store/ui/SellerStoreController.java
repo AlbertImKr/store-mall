@@ -1,10 +1,10 @@
 package com.albert.commerce.api.store.ui;
 
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.common.units.BusinessLinks;
-import com.albert.commerce.api.store.command.application.SellerStoreService;
+import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Map;
@@ -22,23 +22,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/stores", produces = MediaTypes.HAL_JSON_VALUE)
 public class SellerStoreController {
 
-    private final SellerStoreService sellerStoreService;
+    private final StoreService storeService;
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createStore(@RequestBody NewStoreRequest newStoreRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        StoreId storeId = sellerStoreService.createStore(userEmail, newStoreRequest);
+        DomainId storeId = storeService.createStore(userEmail, newStoreRequest);
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
-        return ResponseEntity.created(myStore).body(Map.of("storeId", storeId.getId()));
+        return ResponseEntity.created(myStore).body(Map.of("storeId", storeId.getValue()));
     }
 
     @PutMapping("/my")
     public ResponseEntity<Void> updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        sellerStoreService.updateMyStore(updateStoreRequest, userEmail);
+        storeService.updateMyStore(updateStoreRequest, userEmail);
         return ResponseEntity.ok().build();
     }
 

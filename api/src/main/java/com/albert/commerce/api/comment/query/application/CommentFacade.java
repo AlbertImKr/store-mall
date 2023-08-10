@@ -5,8 +5,8 @@ import com.albert.commerce.api.comment.command.application.CommentResponse;
 import com.albert.commerce.api.comment.command.domain.CommentId;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
 import com.albert.commerce.api.comment.query.dto.CommentNode;
+import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class CommentFacade {
         return CommentNode.from(commentResponses);
     }
 
-    public List<CommentNode> findCommentsResponseByStoreId(StoreId storeId) {
+    public List<CommentNode> findCommentsResponseByStoreId(DomainId storeId) {
         List<CommentResponse> commentResponses = commentDao.findCommentResponseByStoreId(storeId);
         return CommentNode.from(commentResponses);
     }
