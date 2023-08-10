@@ -1,9 +1,9 @@
 package com.albert.commerce.api.store.ui;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.store.query.application.StoreFacade;
 import com.albert.commerce.api.store.query.domain.StoreData;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.units.BusinessLinks;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
@@ -38,7 +38,7 @@ public class StoreQueryController {
         StoreData storeData = storeFacade.getStoreById(DomainId.from(storeId));
         return ResponseEntity.ok().body(
                 EntityModel.of(storeData).add(
-                        WebMvcLinkBuilder.linkTo(SellerStoreController.class).slash(storeId)
+                        WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId)
                                 .withSelfRel(),
                         BusinessLinks.GET_STORE
                 ));

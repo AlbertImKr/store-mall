@@ -1,7 +1,7 @@
 package com.albert.commerce.api.product;
 
-import com.albert.commerce.api.common.exception.BusinessException;
-import com.albert.commerce.api.common.exception.ErrorMessage;
+import com.albert.commerce.common.exception.BusinessException;
+import com.albert.commerce.common.exception.ErrorMessage;
 
 public class ProductNotFoundException extends BusinessException {
 

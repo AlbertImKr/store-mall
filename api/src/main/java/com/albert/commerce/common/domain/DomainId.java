@@ -1,4 +1,4 @@
-package com.albert.commerce.api.common.domain;
+package com.albert.commerce.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;

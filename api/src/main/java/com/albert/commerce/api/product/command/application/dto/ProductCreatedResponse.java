@@ -1,9 +1,10 @@
 package com.albert.commerce.api.product.command.application.dto;
 
-import com.albert.commerce.api.common.infra.persistence.Money;
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.units.BusinessLinks;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +47,29 @@ public class ProductCreatedResponse extends RepresentationModel<ProductCreatedRe
                 .price(product.getPrice())
                 .build()
                 .add(BusinessLinks.getProductSelfRel(product.getProductId()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductCreatedResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return Objects.equals(getProductId(), that.getProductId()) && Objects.equals(getProductName(),
+                that.getProductName()) && Objects.equals(getPrice(), that.getPrice()) && Objects.equals(
+                getDescription(), that.getDescription()) && Objects.equals(getBrand(), that.getBrand())
+                && Objects.equals(getCategory(), that.getCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getProductId(), getProductName(), getPrice(), getDescription(),
+                getBrand(),
+                getCategory());
     }
 }

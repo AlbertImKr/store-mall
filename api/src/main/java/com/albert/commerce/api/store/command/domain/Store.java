@@ -1,7 +1,7 @@
 package com.albert.commerce.api.store.command.domain;
 
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

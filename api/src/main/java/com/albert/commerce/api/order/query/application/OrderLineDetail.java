@@ -1,9 +1,9 @@
 package com.albert.commerce.api.order.query.application;
 
-import com.albert.commerce.api.common.infra.persistence.Money;
 import com.albert.commerce.api.order.command.domain.OrderLine;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
+import com.albert.commerce.common.infra.persistence.Money;
 import lombok.Builder;
 import lombok.Getter;
 

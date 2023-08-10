@@ -1,6 +1,6 @@
 package com.albert.commerce.api.store.command.domain;
 
-import com.albert.commerce.api.common.domain.DomainId;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import lombok.Builder;
 

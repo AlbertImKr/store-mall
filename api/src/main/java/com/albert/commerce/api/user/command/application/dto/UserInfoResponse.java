@@ -1,11 +1,12 @@
 package com.albert.commerce.api.user.command.application.dto;
 
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.user.command.domain.Role;
 import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.units.BusinessLinks;
 import java.time.LocalDate;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
@@ -49,5 +50,29 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
                 .isActive(user.isActive())
                 .build()
                 .add(BusinessLinks.USER_INFO_RESPONSE_LINKS);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserInfoResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return isActive() == that.isActive() && Objects.equals(getId(), that.getId()) && Objects.equals(
+                getNickname(), that.getNickname()) && Objects.equals(getEmail(), that.getEmail())
+                && getRole() == that.getRole() && Objects.equals(getDateOfBirth(), that.getDateOfBirth())
+                && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(
+                getAddress(), that.getAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getNickname(), getEmail(), getRole(), getDateOfBirth(),
+                getPhoneNumber(), getAddress(), isActive());
     }
 }

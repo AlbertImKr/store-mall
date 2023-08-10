@@ -1,7 +1,7 @@
 package com.albert.commerce.api.order.command.application;
 
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.order.command.domain.OrderId;
+import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;

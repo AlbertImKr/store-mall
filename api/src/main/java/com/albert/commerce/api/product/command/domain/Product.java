@@ -1,8 +1,8 @@
 package com.albert.commerce.api.product.command.domain;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.infra.persistence.Money;
-import com.albert.commerce.api.common.infra.persistence.converters.MoneyConverter;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;

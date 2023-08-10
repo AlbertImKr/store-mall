@@ -1,8 +1,8 @@
-package com.albert.commerce.api.common.exception;
+package com.albert.commerce.common.exception;
 
 public abstract class BusinessException extends RuntimeException {
 
-    public BusinessException(String message) {
+    protected BusinessException(String message) {
         super(message);
     }
 

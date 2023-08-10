@@ -1,4 +1,4 @@
-package com.albert.commerce.api.common.exception;
+package com.albert.commerce.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

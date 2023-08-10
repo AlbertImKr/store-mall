@@ -1,6 +1,6 @@
 package com.albert.commerce.api.store.query.application.dto;
 
-import com.albert.commerce.api.common.domain.DomainId;
+import com.albert.commerce.common.domain.DomainId;
 import lombok.Builder;
 
 @Builder

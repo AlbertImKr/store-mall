@@ -2,7 +2,6 @@ package com.albert.commerce.order.query.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
@@ -21,6 +20,7 @@ import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,13 +1,14 @@
 package com.albert.commerce.api.store.command.application;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.store.StoreNotFoundException;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.StoreAlreadyExistsException;
+import com.albert.commerce.common.exception.StoreNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

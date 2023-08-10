@@ -1,6 +1,5 @@
 package com.albert.commerce.order.command.application;
 
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.product.command.application.ProductService;
@@ -14,6 +13,7 @@ import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

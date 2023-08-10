@@ -1,6 +1,6 @@
-package com.albert.commerce.api.common.infra.persistence.converters;
+package com.albert.commerce.common.infra.persistence.converters;
 
-import com.albert.commerce.api.common.infra.persistence.Money;
+import com.albert.commerce.common.infra.persistence.Money;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

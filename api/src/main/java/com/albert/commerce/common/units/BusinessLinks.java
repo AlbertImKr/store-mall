@@ -1,4 +1,4 @@
-package com.albert.commerce.api.common.units;
+package com.albert.commerce.common.units;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -7,7 +7,7 @@ import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.ui.OrderController;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.ui.ProductController;
-import com.albert.commerce.api.store.ui.SellerStoreController;
+import com.albert.commerce.api.store.ui.StoreController;
 import com.albert.commerce.api.store.ui.StoreQueryController;
 import com.albert.commerce.api.user.ui.UserController;
 import org.springframework.hateoas.Link;
@@ -26,7 +26,7 @@ public final class BusinessLinks {
                     .withRel("my-store");
 
     public static final Link CREATE_STORE =
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerStoreController.class)
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(StoreController.class)
                             .createStore(null, null))
                     .withRel("create-store");
     public static final Link GET_USER_PROFILE =

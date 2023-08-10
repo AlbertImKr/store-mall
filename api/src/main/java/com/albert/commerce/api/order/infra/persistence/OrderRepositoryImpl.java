@@ -1,11 +1,11 @@
 package com.albert.commerce.api.order.infra.persistence;
 
-import com.albert.commerce.api.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

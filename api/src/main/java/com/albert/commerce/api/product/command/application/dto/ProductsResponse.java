@@ -1,6 +1,7 @@
 package com.albert.commerce.api.product.command.application.dto;
 
-import com.albert.commerce.api.common.units.BusinessLinks;
+import com.albert.commerce.common.units.BusinessLinks;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,20 +16,37 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class ProductsResponse extends RepresentationModel<ProductsResponse> {
 
-    public Page<ProductResponse> productsResponse;
+    private Page<ProductResponse> pageProductsResponse;
 
     @Builder
-    private ProductsResponse(Page<ProductResponse> productsResponse, Links links) {
-        this.productsResponse = productsResponse;
+    private ProductsResponse(Page<ProductResponse> pageProductsResponse, Links links) {
+        this.pageProductsResponse = pageProductsResponse;
         super.add(links);
     }
 
     public static ProductsResponse from(Page<ProductResponse> productsResponse) {
         return ProductsResponse.builder()
-                .productsResponse(productsResponse)
+                .pageProductsResponse(productsResponse)
                 .links(Links.of(BusinessLinks.MY_STORE))
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductsResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return Objects.equals(getPageProductsResponse(), that.getPageProductsResponse());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getPageProductsResponse());
+    }
 }

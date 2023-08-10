@@ -1,12 +1,12 @@
 package com.albert.commerce.api.order.query.domain;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.infra.persistence.Money;
-import com.albert.commerce.api.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

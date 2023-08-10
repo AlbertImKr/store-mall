@@ -1,8 +1,8 @@
 package com.albert.commerce.api.store.command.application.dto;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.store.command.domain.Store;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;

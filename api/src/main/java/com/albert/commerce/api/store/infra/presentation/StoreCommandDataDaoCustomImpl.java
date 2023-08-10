@@ -1,11 +1,11 @@
 package com.albert.commerce.api.store.infra.presentation;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.albert.commerce.api.comment.command.application;
 
 import com.albert.commerce.api.comment.command.domain.CommentId;
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;

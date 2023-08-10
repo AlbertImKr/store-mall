@@ -1,11 +1,11 @@
 package com.albert.commerce.api.product.command.application.dto;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.infra.persistence.Money;
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.units.BusinessLinks;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;

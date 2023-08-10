@@ -1,8 +1,8 @@
 package com.albert.commerce.api.comment.command.domain;
 
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;

@@ -1,13 +1,13 @@
 package com.albert.commerce.api.store.query.application;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.store.StoreNotFoundException;
 import com.albert.commerce.api.store.query.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.StoreNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,10 +1,10 @@
 package com.albert.commerce.api.store.infra.presentation;
 
-import com.albert.commerce.api.common.domain.DomainId;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreDataJpaRepository;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

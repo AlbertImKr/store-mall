@@ -1,7 +1,7 @@
 package com.albert.commerce.api.order.command.application;
 
-import com.albert.commerce.api.common.exception.BusinessException;
-import com.albert.commerce.api.common.exception.ErrorMessage;
+import com.albert.commerce.common.exception.BusinessException;
+import com.albert.commerce.common.exception.ErrorMessage;
 
 public class OrderNotFoundException extends BusinessException {
 

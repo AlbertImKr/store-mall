@@ -1,12 +1,12 @@
 package com.albert.commerce.api.user.infra.persistance;
 
-import com.albert.commerce.api.common.infra.persistence.SequenceGenerator;
 import com.albert.commerce.api.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.api.user.command.domain.QUser;
 import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.command.domain.UserRepository;
 import com.albert.commerce.api.user.infra.persistance.imports.UserJpaRepository;
+import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

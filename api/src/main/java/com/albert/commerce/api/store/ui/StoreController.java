@@ -1,10 +1,10 @@
 package com.albert.commerce.api.store.ui;
 
-import com.albert.commerce.api.common.domain.DomainId;
-import com.albert.commerce.api.common.units.BusinessLinks;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.units.BusinessLinks;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping(path = "/stores", produces = MediaTypes.HAL_JSON_VALUE)
-public class SellerStoreController {
+public class StoreController {
 
     private final StoreService storeService;
 

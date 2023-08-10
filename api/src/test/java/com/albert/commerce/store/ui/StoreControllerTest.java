@@ -45,7 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithMockUser("test@email.com")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class SellerStoreControllerTest {
+class StoreControllerTest {
 
     private static final String TEST_STORE_NAME = "testStoreName";
     private static final String TEST_EMAIL = "test@email.com";

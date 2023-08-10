@@ -1,4 +1,4 @@
-package com.albert.commerce.api.common.units;
+package com.albert.commerce.common.units;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
