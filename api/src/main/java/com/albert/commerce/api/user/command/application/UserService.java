@@ -4,8 +4,8 @@ package com.albert.commerce.api.user.command.application;
 import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.api.user.command.domain.User;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.command.domain.UserRepository;
+import com.albert.commerce.common.domain.DomainId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +27,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserId updateUserInfo(String email, UserProfileRequest userProfileRequest) {
-        User user = userRepository.updateUserInfo(email, userProfileRequest)
-                .orElseThrow(UserNotFoundException::new);
-        return user.getUserId();
+    public void updateUserInfo(String email, UserProfileRequest userProfileRequest) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        user.update(
+                userProfileRequest.address(),
+                userProfileRequest.nickname(),
+                userProfileRequest.dateOfBirth(),
+                userProfileRequest.phoneNumber()
+        );
     }
 
 
-    public UserId findIdByEmail(String userEmail) {
+    public DomainId findIdByEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
         return user.getUserId();

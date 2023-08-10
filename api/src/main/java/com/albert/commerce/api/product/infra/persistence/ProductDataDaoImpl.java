@@ -7,7 +7,6 @@ import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.product.query.domain.QProductData;
 import com.albert.commerce.api.store.command.domain.QStore;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.querydsl.jpa.JPAExpressions;
@@ -29,7 +28,7 @@ public class ProductDataDaoImpl implements ProductDao {
     private final ProductDataJpaRepository productDataJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
-    private static JPQLQuery<DomainId> getStoreIdByUserId(UserId userId) {
+    private static JPQLQuery<DomainId> getStoreIdByUserId(DomainId userId) {
         QStore qStore = QStore.store;
         return JPAExpressions
                 .select(qStore.storeId)
@@ -76,7 +75,7 @@ public class ProductDataDaoImpl implements ProductDao {
     }
 
     @Override
-    public Page<ProductData> findProductsByUserId(UserId userId, Pageable pageable) {
+    public Page<ProductData> findProductsByUserId(DomainId userId, Pageable pageable) {
 
         QProductData qProduct = QProductData.productData;
         JPQLQuery<DomainId> storeIdQuery = getStoreIdByUserId(userId);

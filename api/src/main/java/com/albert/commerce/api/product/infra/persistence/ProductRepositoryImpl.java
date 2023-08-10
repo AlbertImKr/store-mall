@@ -6,7 +6,6 @@ import com.albert.commerce.api.product.command.domain.ProductRepository;
 import com.albert.commerce.api.product.command.domain.QProduct;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.store.command.domain.QStore;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.jpa.JPAExpressions;
@@ -22,7 +21,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    private static JPQLQuery<DomainId> getStoreIdByUserId(UserId userId) {
+    private static JPQLQuery<DomainId> getStoreIdByUserId(DomainId userId) {
         QStore qStore = QStore.store;
         return JPAExpressions
                 .select(qStore.storeId)
@@ -48,7 +47,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findByUserIdAndProductId(UserId userId, ProductId productId) {
+    public Optional<Product> findByUserIdAndProductId(DomainId userId, ProductId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.select(qProduct)
                 .from(qProduct)

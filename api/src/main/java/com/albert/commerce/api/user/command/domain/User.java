@@ -1,8 +1,10 @@
 package com.albert.commerce.api.user.command.domain;
 
+import com.albert.commerce.common.domain.DomainId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -23,7 +25,8 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @EmbeddedId
-    private UserId userId;
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
+    private DomainId userId;
     @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
@@ -31,11 +34,11 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(nullable = true)
+    @Column
     private LocalDate dateOfBirth;
-    @Column(nullable = true)
+    @Column
     private String phoneNumber;
-    @Column(nullable = true)
+    @Column
     private String address;
     @Column(nullable = false)
     private boolean isActive;
@@ -49,7 +52,7 @@ public class User {
     protected LocalDateTime updateTime;
 
     @Builder
-    private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+    private User(DomainId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber, String address) {
         this.userId = userId;
         this.nickname = nickname;
@@ -68,9 +71,16 @@ public class User {
                 .build();
     }
 
-    public void updateId(UserId userId) {
+    public void updateId(DomainId userId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.userId = userId;
-        this.createdTime = LocalDateTime.now();
-        this.updateTime = LocalDateTime.now();
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
+    }
+
+    public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber) {
+        this.address = address;
+        this.nickname = nickname;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
     }
 }

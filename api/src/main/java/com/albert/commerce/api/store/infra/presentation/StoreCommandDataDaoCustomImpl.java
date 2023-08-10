@@ -3,10 +3,8 @@ package com.albert.commerce.api.store.infra.presentation;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class StoreCommandDataDaoCustomImpl implements StoreRepository {
 
-    private final JPAQueryFactory jpaQueryFactory;
     private final StoreJpaRepository storeJpaRepository;
     private final SequenceGenerator sequenceGenerator;
 
@@ -24,7 +21,7 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     }
 
     @Override
-    public boolean existsByUserId(UserId userId) {
+    public boolean existsByUserId(DomainId userId) {
         return storeJpaRepository.existsByUserId(userId);
     }
 
@@ -35,7 +32,7 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     }
 
     @Override
-    public Optional<Store> findByUserId(UserId userId) {
+    public Optional<Store> findByUserId(DomainId userId) {
         return storeJpaRepository.findByUserId(userId);
     }
 

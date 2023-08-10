@@ -1,7 +1,6 @@
 package com.albert.commerce.api.comment.command.domain;
 
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -33,7 +32,7 @@ public class Comment {
     private DomainId storeId;
     @AttributeOverride(name = "id", column = @Column(name = "user_id"))
     @Embedded
-    private UserId userId;
+    private DomainId userId;
     @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id"))
     @Embedded
     private CommentId parentCommentId;
@@ -50,7 +49,7 @@ public class Comment {
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, DomainId storeId,
-            UserId userId, CommentId parentCommentId, String detail) {
+            DomainId userId, CommentId parentCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;

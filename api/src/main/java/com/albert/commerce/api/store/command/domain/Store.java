@@ -1,6 +1,5 @@
 package com.albert.commerce.api.store.command.domain;
 
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,7 +29,7 @@ public class Store {
     @Column(nullable = false)
     private String storeName;
     @Column(nullable = false)
-    private UserId userId;
+    private DomainId userId;
     @Column(nullable = false)
     private String ownerName;
     @Column(nullable = false)
@@ -49,7 +48,7 @@ public class Store {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Store(DomainId storeId, String storeName, UserId userId, String ownerName,
+    private Store(DomainId storeId, String storeName, DomainId userId, String ownerName,
             String address, String phoneNumber, String email) {
         this.storeId = storeId;
         this.storeName = storeName;

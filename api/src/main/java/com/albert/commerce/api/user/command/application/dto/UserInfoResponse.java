@@ -2,8 +2,8 @@ package com.albert.commerce.api.user.command.application.dto;
 
 import com.albert.commerce.api.user.command.domain.Role;
 import com.albert.commerce.api.user.command.domain.User;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -15,7 +15,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Builder
 public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
-    private UserId id;
+    private DomainId id;
     private String nickname;
     private String email;
     private Role role;

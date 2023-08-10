@@ -9,7 +9,6 @@ import com.albert.commerce.api.comment.infra.persistence.imports.CommentJpaRepos
 import com.albert.commerce.api.comment.query.domain.CommentDao;
 import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.user.command.domain.QUser;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.core.types.Projections;
@@ -65,7 +64,7 @@ public class CommentRepositoryImpl implements CommentRepository, CommentDao {
     }
 
     @Override
-    public List<CommentResponse> findCommentResponseByUserId(UserId userId) {
+    public List<CommentResponse> findCommentResponseByUserId(DomainId userId) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 

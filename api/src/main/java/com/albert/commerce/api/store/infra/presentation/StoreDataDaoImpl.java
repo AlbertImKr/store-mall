@@ -3,7 +3,6 @@ package com.albert.commerce.api.store.infra.presentation;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreDataJpaRepository;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class StoreDataDaoImpl implements StoreDataDao {
     }
 
     @Override
-    public Optional<StoreData> findByUserId(UserId userId) {
+    public Optional<StoreData> findByUserId(DomainId userId) {
         return storeDataJpaRepository.findByUserId(userId);
     }
 }

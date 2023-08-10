@@ -1,6 +1,5 @@
 package com.albert.commerce.api.order.command.domain;
 
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -34,10 +33,10 @@ public class Order {
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "order_id", nullable = false))
     private OrderId orderId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
-    private UserId userId;
-    @AttributeOverride(name = "id", column = @Column(name = "store_id", nullable = false))
+    private DomainId userId;
+    @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
     private DomainId storeId;
     @ElementCollection(fetch = FetchType.LAZY)
@@ -56,7 +55,7 @@ public class Order {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, DomainId storeId) {
+    private Order(OrderId orderId, DomainId userId, List<OrderLine> orderLines, DomainId storeId) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderLines = orderLines;

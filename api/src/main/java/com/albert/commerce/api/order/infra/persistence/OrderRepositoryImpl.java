@@ -4,7 +4,7 @@ import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderJpaRepository;
-import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public boolean exist(OrderId orderId, UserId userId) {
+    public boolean exist(OrderId orderId, DomainId userId) {
         return orderJpaRepository.existsByOrderIdAndUserId(orderId, userId);
     }
 
@@ -41,12 +41,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findByUserIdAndOrderId(UserId userId, OrderId orderId) {
+    public Optional<Order> findByUserIdAndOrderId(DomainId userId, OrderId orderId) {
         return orderJpaRepository.findByUserIdAndOrderId(userId, orderId);
     }
 
     @Override
-    public Page<Order> findAllByUserId(UserId userId, Pageable pageable) {
+    public Page<Order> findAllByUserId(DomainId userId, Pageable pageable) {
         return orderJpaRepository.findAllByUserId(userId, pageable);
     }
 }

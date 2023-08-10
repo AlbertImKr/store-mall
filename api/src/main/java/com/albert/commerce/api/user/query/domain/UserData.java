@@ -1,7 +1,8 @@
 package com.albert.commerce.api.user.query.domain;
 
 import com.albert.commerce.api.user.command.domain.Role;
-import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -14,11 +15,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "user")
+@Table(name = "user_query")
 public class UserData {
 
     @EmbeddedId
-    private UserId userId;
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
+    private DomainId userId;
     @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
@@ -26,16 +28,16 @@ public class UserData {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(nullable = true)
+    @Column
     private LocalDate dateOfBirth;
-    @Column(nullable = true)
+    @Column
     private String phoneNumber;
-    @Column(nullable = true)
+    @Column
     private String address;
     @Column(nullable = false)
     private boolean isActive;
 
-    public UserId getUserId() {
+    public DomainId getUserId() {
         return userId;
     }
 

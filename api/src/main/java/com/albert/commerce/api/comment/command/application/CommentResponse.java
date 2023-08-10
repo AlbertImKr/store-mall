@@ -2,7 +2,6 @@ package com.albert.commerce.api.comment.command.application;
 
 import com.albert.commerce.api.comment.command.domain.CommentId;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -23,13 +22,13 @@ public class CommentResponse {
     private String nickname;
     private CommentId parentCommentId;
     private String detail;
-    private UserId userId;
+    private DomainId userId;
 
     @Builder
     private CommentResponse(CommentId commentId, DomainId storeId, ProductId productId,
             LocalDateTime createdTime, LocalDateTime updateTime, String nickname,
             CommentId parentCommentId,
-            String detail, UserId userId) {
+            String detail, DomainId userId) {
         this.commentId = commentId;
         this.storeId = storeId;
         this.productId = productId;

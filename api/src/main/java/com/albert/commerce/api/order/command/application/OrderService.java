@@ -10,7 +10,6 @@ import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.user.UserNotFoundException;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
@@ -40,7 +39,7 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    private void checkOrder(OrderId orderId, UserId userId) {
+    private void checkOrder(OrderId orderId, DomainId userId) {
         if (!orderRepository.exist(orderId, userId)) {
             throw new OrderNotFoundException();
         }

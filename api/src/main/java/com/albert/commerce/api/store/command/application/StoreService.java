@@ -5,7 +5,6 @@ import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.user.command.application.UserService;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.StoreAlreadyExistsException;
 import com.albert.commerce.common.exception.StoreNotFoundException;
@@ -22,7 +21,7 @@ public class StoreService {
 
     @Transactional
     public DomainId createStore(String userEmail, NewStoreRequest newStoreRequest) {
-        UserId userId = userService.findIdByEmail(userEmail);
+        DomainId userId = userService.findIdByEmail(userEmail);
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
@@ -39,7 +38,7 @@ public class StoreService {
 
     @Transactional
     public void updateMyStore(UpdateStoreRequest updateStoreRequest, String userEmail) {
-        UserId userId = userService.findIdByEmail(userEmail);
+        DomainId userId = userService.findIdByEmail(userEmail);
         Store store = storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
         store.update(updateStoreRequest.storeName(),
@@ -50,7 +49,7 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public Store getStoreByUserEmail(UserId userId) {
+    public Store getStoreByUserEmail(DomainId userId) {
         return storeRepository.findByUserId(userId).orElseThrow(StoreNotFoundException::new);
     }
 

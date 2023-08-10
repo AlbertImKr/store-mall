@@ -3,7 +3,6 @@ package com.albert.commerce.api.order.query.application;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.order.command.domain.OrderId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
@@ -20,7 +19,7 @@ import org.springframework.hateoas.RepresentationModel;
 public final class OrderDetail extends RepresentationModel<OrderDetail> {
 
     private OrderId orderId;
-    private UserId userId;
+    private DomainId userId;
     private DeliveryStatus deliveryStatus;
     private List<OrderLineDetail> orderLineDetails;
     private LocalDateTime createdTime;
@@ -28,7 +27,7 @@ public final class OrderDetail extends RepresentationModel<OrderDetail> {
 
 
     @QueryProjection
-    public OrderDetail(OrderId orderId, UserId userId,
+    public OrderDetail(OrderId orderId, DomainId userId,
             DeliveryStatus deliveryStatus, List<OrderLineDetail> orderLineDetails, LocalDateTime createdTime,
             DomainId storeId) {
         this.orderId = orderId;

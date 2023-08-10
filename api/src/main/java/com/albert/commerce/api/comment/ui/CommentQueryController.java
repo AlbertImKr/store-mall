@@ -3,7 +3,6 @@ package com.albert.commerce.api.comment.ui;
 import com.albert.commerce.api.comment.query.application.CommentFacade;
 import com.albert.commerce.api.comment.query.dto.CommentNode;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -28,7 +27,7 @@ public class CommentQueryController {
     @GetMapping(params = "userId")
     public CollectionModel<CommentNode> findCommentsByUserId(String userId) {
         return CollectionModel.of(
-                commentFacade.findCommentsResponseByUserId(UserId.from(userId)));
+                commentFacade.findCommentsResponseByUserId(DomainId.from(userId)));
     }
 
     @GetMapping(params = "storeId")

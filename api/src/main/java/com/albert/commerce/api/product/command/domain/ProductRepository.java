@@ -1,11 +1,11 @@
 package com.albert.commerce.api.product.command.domain;
 
-import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.Optional;
 
 public interface ProductRepository {
 
     Product save(Product product);
 
-    Optional<Product> findByUserIdAndProductId(UserId userId, ProductId productId);
+    Optional<Product> findByUserIdAndProductId(DomainId userId, ProductId productId);
 }

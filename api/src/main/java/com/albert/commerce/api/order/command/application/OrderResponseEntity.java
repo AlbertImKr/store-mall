@@ -4,7 +4,6 @@ import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import org.springframework.hateoas.RepresentationModel;
 public class OrderResponseEntity extends RepresentationModel<ProductResponse> {
 
     private final OrderId orderId;
-    private final UserId userId;
+    private final DomainId userId;
     private final DomainId storeId;
     private final ProductId productId;
     private final DeliveryStatus deliveryStatus;
@@ -27,7 +26,7 @@ public class OrderResponseEntity extends RepresentationModel<ProductResponse> {
 
     @Builder
     protected OrderResponseEntity(Links links, OrderId orderId,
-            UserId userId, DomainId storeId, ProductId productId,
+            DomainId userId, DomainId storeId, ProductId productId,
             DeliveryStatus deliveryStatus, Money amount, LocalDateTime createdTime) {
         this.orderId = orderId;
         this.userId = userId;

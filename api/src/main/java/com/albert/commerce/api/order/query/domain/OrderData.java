@@ -3,7 +3,6 @@ package com.albert.commerce.api.order.query.domain;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
@@ -27,9 +26,9 @@ public class OrderData {
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "order_id", nullable = false))
     private OrderId orderId;
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
-    private UserId userId;
+    private DomainId userId;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;
@@ -53,7 +52,7 @@ public class OrderData {
     private Money amount;
 
     @Builder
-    private OrderData(OrderId orderId, UserId userId, LocalDateTime createdTime, String nickname, String productName,
+    private OrderData(OrderId orderId, DomainId userId, LocalDateTime createdTime, String nickname, String productName,
             DomainId storeId, ProductId productsId, DeliveryStatus deliveryStatus, Money amount) {
         this.orderId = orderId;
         this.userId = userId;

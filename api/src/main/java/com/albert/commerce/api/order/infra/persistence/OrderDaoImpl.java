@@ -4,7 +4,7 @@ import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderDataRepository;
 import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.query.domain.OrderData;
-import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,12 +18,12 @@ public class OrderDaoImpl implements OrderDao {
     private final OrderDataRepository orderDataRepository;
 
     @Override
-    public Page<OrderData> findAllByUserId(UserId userId, Pageable pageable) {
+    public Page<OrderData> findAllByUserId(DomainId userId, Pageable pageable) {
         return orderDataRepository.findByUserId(userId, pageable);
     }
 
     @Override
-    public List<OrderData> findByUserIdAndOrderId(UserId userId, OrderId orderId) {
+    public List<OrderData> findByUserIdAndOrderId(DomainId userId, OrderId orderId) {
         return orderDataRepository.findByUserIdAndOrderId(userId, orderId);
     }
 }

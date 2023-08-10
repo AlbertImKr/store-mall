@@ -1,6 +1,5 @@
 package com.albert.commerce.api.store.query.domain;
 
-import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.domain.DomainId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -27,7 +26,7 @@ public class StoreData {
     private String storeName;
     @Embedded
     @Column(nullable = false)
-    private UserId userId;
+    private DomainId userId;
     @Column(nullable = false)
     private String ownerName;
     @Column(nullable = false)
@@ -38,7 +37,7 @@ public class StoreData {
     private String email;
 
     @Builder
-    private StoreData(DomainId storeId, String storeName, UserId userId, String ownerName, String address,
+    private StoreData(DomainId storeId, String storeName, DomainId userId, String ownerName, String address,
             String phoneNumber,
             String email) {
         this.storeId = storeId;
