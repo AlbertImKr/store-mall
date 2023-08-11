@@ -5,6 +5,7 @@ import com.albert.commerce.api.order.command.domain.OrderRepository;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order save(Order order) {
-        order.updateId(nextId());
+        order.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return orderJpaRepository.save(order);
     }
 

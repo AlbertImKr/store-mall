@@ -10,4 +10,6 @@ public interface OrderDao {
     Page<OrderData> findAllByUserId(DomainId userId, Pageable pageable);
 
     List<OrderData> findByUserIdAndOrderId(DomainId userId, DomainId orderId);
+
+    OrderData save(OrderData order);
 }

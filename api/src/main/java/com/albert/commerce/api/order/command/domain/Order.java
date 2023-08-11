@@ -1,6 +1,7 @@
 package com.albert.commerce.api.order.command.domain;
 
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -63,9 +64,19 @@ public class Order {
         this.storeId = storeId;
     }
 
-    public void updateId(DomainId orderId) {
+    public void updateId(DomainId orderId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;
-        this.createdTime = LocalDateTime.now();
-        this.updateTime = LocalDateTime.now();
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
+        OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
+                .orderId(orderId)
+                .userId(userId)
+                .storeId(storeId)
+                .orderLines(orderLines)
+                .deliveryStatus(deliveryStatus)
+                .createdTime(createdTime)
+                .updateTime(updateTime)
+                .build();
+        Events.raise(orderCreatedEvent);
     }
 }

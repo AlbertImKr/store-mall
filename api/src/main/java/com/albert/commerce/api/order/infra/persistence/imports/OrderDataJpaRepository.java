@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderDataRepository extends JpaRepository<OrderData, DomainId> {
+public interface OrderDataJpaRepository extends JpaRepository<OrderData, DomainId> {
 
     List<OrderData> findByUserIdAndOrderId(DomainId userId, DomainId orderId);
 

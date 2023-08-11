@@ -10,16 +10,12 @@ import lombok.Getter;
 @Getter
 public class OrderLineDetail {
 
-    private DomainId productId;
-
-    private Money price;
-
-    private long quantity;
-
-    private Money amount;
-
-    private String productName;
-    private String productDescription;
+    private final DomainId productId;
+    private final Money price;
+    private final long quantity;
+    private final Money amount;
+    private final String productName;
+    private final String productDescription;
 
     @Builder
     public OrderLineDetail(DomainId productId, Money price, long quantity, Money amount, String productName,

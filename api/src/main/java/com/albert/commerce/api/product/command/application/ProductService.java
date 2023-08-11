@@ -54,4 +54,9 @@ public class ProductService {
                 LocalDateTime.now()
         );
     }
+
+    public Product getProductById(DomainId productId) {
+        return productRepository.findByProductId(productId)
+                .orElseThrow(ProductNotFoundException::new);
+    }
 }

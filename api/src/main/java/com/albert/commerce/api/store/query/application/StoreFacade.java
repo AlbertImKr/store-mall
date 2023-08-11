@@ -25,6 +25,7 @@ public class StoreFacade {
         return storeDataDao.findByUserId(user.getUserId()).orElseThrow(StoreNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     public StoreData getStoreById(DomainId storeId) {
         return storeDataDao.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }

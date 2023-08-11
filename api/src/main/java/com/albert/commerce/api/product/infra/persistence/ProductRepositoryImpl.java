@@ -58,4 +58,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         return Optional.ofNullable(product);
     }
 
+
+    @Override
+    public Optional<Product> findByProductId(DomainId productId) {
+        return productJpaRepository.findById(productId);
+    }
 }

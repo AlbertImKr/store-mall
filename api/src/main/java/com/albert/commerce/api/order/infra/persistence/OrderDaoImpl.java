@@ -1,6 +1,6 @@
 package com.albert.commerce.api.order.infra.persistence;
 
-import com.albert.commerce.api.order.infra.persistence.imports.OrderDataRepository;
+import com.albert.commerce.api.order.infra.persistence.imports.OrderDataJpaRepository;
 import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.query.domain.OrderData;
 import com.albert.commerce.common.domain.DomainId;
@@ -14,15 +14,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderDaoImpl implements OrderDao {
 
-    private final OrderDataRepository orderDataRepository;
+    private final OrderDataJpaRepository orderDataJpaRepository;
 
     @Override
     public Page<OrderData> findAllByUserId(DomainId userId, Pageable pageable) {
-        return orderDataRepository.findByUserId(userId, pageable);
+        return orderDataJpaRepository.findByUserId(userId, pageable);
     }
 
     @Override
     public List<OrderData> findByUserIdAndOrderId(DomainId userId, DomainId orderId) {
-        return orderDataRepository.findByUserIdAndOrderId(userId, orderId);
+        return orderDataJpaRepository.findByUserIdAndOrderId(userId, orderId);
+    }
+
+    @Override
+    public OrderData save(OrderData order) {
+        return orderDataJpaRepository.save(order);
     }
 }

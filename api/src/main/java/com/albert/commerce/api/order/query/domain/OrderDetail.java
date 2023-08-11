@@ -1,4 +1,4 @@
-package com.albert.commerce.api.order.command.domain;
+package com.albert.commerce.api.order.query.domain;
 
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
@@ -14,44 +14,53 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class OrderLine {
+public class OrderDetail {
 
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
     @Embedded
     private DomainId productId;
-
+    private String productName;
+    private long quantity;
     @Convert(converter = MoneyConverter.class)
     @Column(name = "price")
     private Money price;
-
-    @Column(name = "quantity")
-    private long quantity;
-
     @Convert(converter = MoneyConverter.class)
-    @Column(name = "amount")
+    @Column(name = "ammount")
     private Money amount;
+    private String productDescription;
 
     @Builder
-    public OrderLine(DomainId productId, Money price, long quantity, Money amount) {
+    public OrderDetail(DomainId productId, String productName, long quantity, Money price, Money amount,
+            String productDescription) {
         this.productId = productId;
-        this.price = price;
+        this.productName = productName;
         this.quantity = quantity;
+        this.price = price;
         this.amount = amount;
+        this.productDescription = productDescription;
     }
 
     public DomainId getProductId() {
         return productId;
     }
 
-    public Money getPrice() {
-        return price;
+    public String getProductName() {
+        return productName;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
+    public Money getPrice() {
+        return price;
+    }
+
     public Money getAmount() {
         return amount;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
     }
 }
