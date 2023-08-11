@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.albert.commerce.api.order.command.application.DeleteOrderRequest;
-import com.albert.commerce.api.order.command.application.OrderNotFoundException;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.query.application.OrderFacade;
@@ -34,6 +33,7 @@ import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.OrderNotFoundException;
 import com.albert.commerce.common.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;

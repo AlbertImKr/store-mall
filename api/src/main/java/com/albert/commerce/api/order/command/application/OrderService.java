@@ -3,18 +3,18 @@ package com.albert.commerce.api.order.command.application;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.order.command.domain.OrderLine;
 import com.albert.commerce.api.order.command.domain.OrderRepository;
-import com.albert.commerce.api.product.query.domain.ProductDao;
-import com.albert.commerce.api.product.query.domain.ProductData;
+import com.albert.commerce.api.product.command.application.ProductService;
+import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.store.command.application.StoreService;
-import com.albert.commerce.api.user.query.domain.UserDao;
-import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.api.user.command.application.UserService;
+import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.common.domain.DomainId;
-import com.albert.commerce.common.exception.ProductNotFoundException;
+import com.albert.commerce.common.exception.OrderNotFoundException;
 import com.albert.commerce.common.exception.StoreNotFoundException;
-import com.albert.commerce.common.exception.UserNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +25,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final UserDao userDao;
+    private final UserService userService;
     private final StoreService storeService;
-    private final ProductDao productDao;
+    private final ProductService productService;
 
-    @Transactional
-    public void cancelOrder(DeleteOrderRequest deleteOrderRequest, String userEmail) {
-        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
-        DomainId orderId = DomainId.from(deleteOrderRequest.orderId());
-        checkOrder(orderId, user.getUserId());
-        orderRepository.deleteById(orderId);
+    private static Order toOrder(User user, DomainId storeId, Map<String, Long> productsIdAndQuantity,
+            List<Product> products) {
+        return Order.builder()
+                .storeId(storeId)
+                .userId(user.getUserId())
+                .orderLines(getOrderLines(productsIdAndQuantity, products))
+                .build();
     }
 
     private void checkOrder(DomainId orderId, DomainId userId) {
@@ -43,38 +44,50 @@ public class OrderService {
         }
     }
 
+    private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {
+        return products.stream()
+                .map(toOrderLine(productsIdAndQuantity))
+                .toList();
+    }
+
+    private static Function<Product, OrderLine> toOrderLine(Map<String, Long> productsIdAndQuantity) {
+        return productData -> {
+            Money price = productData.getPrice();
+            Long quantity = productsIdAndQuantity.get(productData.getProductId().getValue());
+            Money amount = price.multiply(quantity);
+            return OrderLine.builder()
+                    .productId(productData.getProductId())
+                    .price(price)
+                    .quantity(quantity)
+                    .amount(amount)
+                    .build();
+        };
+    }
+
+    @Transactional
+    public void cancelOrder(DeleteOrderRequest deleteOrderRequest, String userEmail) {
+        DomainId userId = userService.findIdByEmail(userEmail);
+        DomainId orderId = DomainId.from(deleteOrderRequest.orderId());
+        checkOrder(orderId, userId);
+        orderRepository.deleteById(orderId);
+    }
+
     @Transactional
     public DomainId placeOrder(String userEmail, OrderRequest orderRequest) {
-        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByEmail(userEmail);
         DomainId storeId = DomainId.from(orderRequest.storeId());
         if (!storeService.exists(storeId)) {
             throw new StoreNotFoundException();
         }
         Map<String, Long> productsIdAndQuantity = orderRequest.productsIdAndQuantity();
-        List<ProductData> products = productsIdAndQuantity.keySet().stream()
-                .map(productId -> productDao.findById(DomainId.from(productId))
-                        .orElseThrow(ProductNotFoundException::new))
-                .toList();
-        Order order = Order.builder()
-                .storeId(storeId)
-                .userId(user.getUserId())
-                .orderLines(
-                        products.stream()
-                                .map(productData -> {
-                                            Money price = productData.getPrice();
-                                            Long quantity = productsIdAndQuantity.get(productData.getProductId().getValue());
-                                            Money amount = price.multiply(quantity);
-                                            return OrderLine.builder()
-                                                    .productId(productData.getProductId())
-                                                    .price(price)
-                                                    .quantity(quantity)
-                                                    .amount(amount)
-                                                    .build();
-                                        }
-                                )
-                                .toList()
-                )
-                .build();
+        List<Product> products = getProducts(productsIdAndQuantity);
+        Order order = toOrder(user, storeId, productsIdAndQuantity, products);
         return orderRepository.save(order).getOrderId();
+    }
+
+    private List<Product> getProducts(Map<String, Long> productsIdAndQuantity) {
+        return productsIdAndQuantity.keySet().stream()
+                .map(productId -> productService.getProductById(DomainId.from(productId)))
+                .toList();
     }
 }
