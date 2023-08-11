@@ -5,22 +5,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.DeliveryStatus;
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.query.application.OrderDetail;
 import com.albert.commerce.api.order.query.application.OrderFacade;
 import com.albert.commerce.api.order.query.application.OrderLineDetail;
 import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.product.query.application.ProductFacade;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +56,7 @@ class OrderFacadeTest {
     @Autowired
     ProductFacade productFacade;
 
-    OrderId orderId;
+    DomainId orderId;
     String userEmail = "test@email.com";
     UserData user;
     DomainId storeId;
@@ -78,10 +76,10 @@ class OrderFacadeTest {
                         "11111111111",
                         "testStore@email.com"));
         for (int i = 0; i < 10; i++) {
-            ProductId productId = productService.addProduct(userEmail,
+            DomainId productId = productService.addProduct(userEmail,
                     new ProductRequest("testProductName", 10000, "test", "testBrand",
                             "testCategory"));
-            productIdAndQuantity.put(productId.getId(), (long) i);
+            productIdAndQuantity.put(productId.getValue(), (long) i);
         }
         orderId = orderService.placeOrder(userEmail, new OrderRequest(productIdAndQuantity
                 , storeId.getValue()
@@ -99,7 +97,7 @@ class OrderFacadeTest {
         assertThat(
                 orderData.getOrderLineDetails().stream()
                         .map(OrderLineDetail::getProductId)
-                        .map(ProductId::getId)
+                        .map(DomainId::getValue)
                         .toList()
         ).containsAll(
                 new ArrayList<>(productIdAndQuantity.keySet())

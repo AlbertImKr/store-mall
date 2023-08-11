@@ -21,23 +21,20 @@ import com.albert.commerce.api.order.command.application.DeleteOrderRequest;
 import com.albert.commerce.api.order.command.application.OrderNotFoundException;
 import com.albert.commerce.api.order.command.application.OrderRequest;
 import com.albert.commerce.api.order.command.application.OrderService;
-import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.query.application.OrderFacade;
 import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.ui.OrderController;
 import com.albert.commerce.api.product.command.application.ProductService;
-import com.albert.commerce.api.product.command.application.dto.ProductCreatedResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.application.ProductFacade;
 import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
@@ -110,7 +107,7 @@ class OrderControllerTest {
     UserData consumer;
     DomainId storeId;
     Map<String, Long> requestProductsId;
-    List<ProductId> productIds;
+    List<DomainId> productIds;
     OrderRequest orderRequest;
 
     @BeforeEach
@@ -130,10 +127,10 @@ class OrderControllerTest {
             ProductRequest productRequest = new ProductRequest("product" + i, 10000,
                     "testProduct",
                     "test", "test");
-            ProductCreatedResponse product = productService.addProduct(seller.getEmail(),
+            DomainId productId = productService.addProduct(seller.getEmail(),
                     productRequest);
-            productIds.add(product.getProductId());
-            requestProductsId.put(product.getProductId().getId(), (long) i);
+            productIds.add(productId);
+            requestProductsId.put(productId.getValue(), (long) i);
         }
         orderRequest = new OrderRequest(requestProductsId, storeId.getValue());
     }
@@ -175,7 +172,7 @@ class OrderControllerTest {
     @Nested
     class NeedOrderTest {
 
-        OrderId orderId;
+        DomainId orderId;
         UserData consumer;
 
         @BeforeEach
@@ -189,11 +186,11 @@ class OrderControllerTest {
         @DisplayName("주문을 id로 조회한다")
         @Test
         void getOrder() throws Exception {
-            mockMvc.perform(get("/orders/" + orderId.getId()))
+            mockMvc.perform(get("/orders/" + orderId.getValue()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("orderId").exists())
-                    .andExpect(jsonPath("userId").value(consumer.getUserId().getId()))
+                    .andExpect(jsonPath("userId").value(consumer.getUserId().getValue()))
                     .andExpect(jsonPath("storeId").value(storeId.getValue()))
                     .andExpect(jsonPath("deliveryStatus").exists())
                     .andExpect(jsonPath("orderLineDetails").isArray())
@@ -242,7 +239,7 @@ class OrderControllerTest {
         @Test
         void deleteOrder() throws Exception {
             // given
-            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest(orderId.getId(), "wrong order");
+            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest(orderId.getValue(), "wrong order");
 
             // when
             mockMvc.perform(delete("/orders")

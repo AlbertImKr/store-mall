@@ -1,7 +1,4 @@
-package com.albert.commerce.api.user;
-
-import com.albert.commerce.common.exception.BusinessException;
-import com.albert.commerce.common.exception.ErrorMessage;
+package com.albert.commerce.common.exception;
 
 public class UserNotFoundException extends BusinessException {
 

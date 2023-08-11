@@ -2,13 +2,13 @@ package com.albert.commerce.product.application;
 
 import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ class ProductServiceTest {
                 1000, "test", "testBrand", "test");
 
         // when
-        ProductId productId = productService.addProduct(user.getEmail(), productRequest);
+        DomainId productId = productService.addProduct(user.getEmail(), productRequest);
 
         // then
 //        Assertions.assertAll(

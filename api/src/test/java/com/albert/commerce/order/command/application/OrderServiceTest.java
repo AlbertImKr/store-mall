@@ -4,16 +4,15 @@ import com.albert.commerce.api.order.command.application.OrderService;
 import com.albert.commerce.api.order.command.domain.Order;
 import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.product.query.application.ProductFacade;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
-import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,9 +66,9 @@ class OrderServiceTest {
                             "testAddress",
                             "11111111111",
                             "testStore@email.com"));
-            List<ProductId> productsId = new ArrayList<>();
+            List<DomainId> productsId = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                ProductId productId = productService.addProduct(consumer.getEmail(),
+                DomainId productId = productService.addProduct(consumer.getEmail(),
                         new ProductRequest("testProductName", 10000, "test", "testBrand",
                                 "testCategory"));
                 productsId.add(productId);

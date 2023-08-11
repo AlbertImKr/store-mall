@@ -83,4 +83,11 @@ public class UserData {
     public boolean isActive() {
         return isActive;
     }
+
+    public void update(LocalDate dateOfBirth, String address, String nickname, String phoneNumber) {
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
 }

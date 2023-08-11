@@ -19,16 +19,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
-import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
-import com.albert.commerce.api.user.UserNotFoundException;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.infra.persistance.imports.UserJpaRepository;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -187,7 +187,7 @@ class ProductControllerTest {
         storeService.createStore(user.getEmail(),
                 newStoreRequest);
 
-        ProductId productId =
+        DomainId productId =
                 productService.addProduct(user.getEmail(), productRequest);
         productRequest = new ProductRequest(
                 CHANGED_PRODUCT_NAME,
@@ -198,7 +198,7 @@ class ProductControllerTest {
         );
 
         // when,then
-        mockMvc.perform(put("/products/" + productId.getId())
+        mockMvc.perform(put("/products/" + productId.getValue())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
                 .andExpect(status().isOk())

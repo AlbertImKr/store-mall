@@ -94,5 +94,13 @@ public class User {
         this.nickname = nickname;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
+        UserUpdateEvent userUpdateEvent = UserUpdateEvent.builder()
+                .userId(userId)
+                .address(address)
+                .nickname(nickname)
+                .dateOfBirth(dateOfBirth)
+                .phoneNumber(phoneNumber)
+                .build();
+        Events.raise(userUpdateEvent);
     }
 }
