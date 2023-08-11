@@ -2,6 +2,7 @@ package com.albert.commerce.api.product.query.application;
 
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductsAssembler;
+import com.albert.commerce.api.product.query.application.dto.ProductUpdateRequest;
 import com.albert.commerce.api.product.query.domain.ProductDao;
 import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.user.query.domain.UserDao;
@@ -60,5 +61,19 @@ public class ProductFacade {
     @Transactional
     public void save(ProductData productData) {
         productDao.save(productData);
+    }
+
+    @Transactional
+    public void update(ProductUpdateRequest productUpdateRequest) {
+        ProductData productData = productDao.findById(productUpdateRequest.getProductId())
+                .orElseThrow(ProductNotFoundException::new);
+        productData.update(
+                productUpdateRequest.getProductName(),
+                productUpdateRequest.getDescription(),
+                productUpdateRequest.getBrand(),
+                productUpdateRequest.getPrice(),
+                productUpdateRequest.getCategory(),
+                productUpdateRequest.getUpdateTime()
+        );
     }
 }

@@ -9,6 +9,7 @@ import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,8 @@ public class ProductService {
                 new Money(productRequest.price()),
                 productRequest.brand(),
                 productRequest.category(),
-                productRequest.description());
+                productRequest.description(),
+                LocalDateTime.now()
+        );
     }
 }

@@ -3,6 +3,9 @@ package com.albert.commerce.api.product.query.domain;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -10,6 +13,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -36,6 +40,14 @@ public class ProductData {
     private String brand;
     @Column
     private String category;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime createdTime;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime updateTime;
 
     @Builder
     public ProductData(DomainId productId, DomainId storeId, String productName, Money price, String description,
@@ -75,5 +87,15 @@ public class ProductData {
 
     public String getCategory() {
         return category;
+    }
+
+    public void update(String productName, String description, String brand, Money price, String category,
+            LocalDateTime updateTime) {
+        this.productName = productName;
+        this.description = description;
+        this.brand = brand;
+        this.price = price;
+        this.category = category;
+        this.updateTime = updateTime;
     }
 }

@@ -65,13 +65,23 @@ public class Product {
     }
 
     public void update(String productName, Money price, String brand, String category,
-            String description) {
+            String description, LocalDateTime updateTime) {
         this.productName = productName;
         this.price = price;
         this.brand = brand;
         this.category = category;
         this.description = description;
-        this.updateTime = LocalDateTime.now();
+        this.updateTime = updateTime;
+        ProductUpdatedEvent productUpdatedEvent = ProductUpdatedEvent.builder()
+                .productId(productId)
+                .productName(productName)
+                .price(price)
+                .brand(brand)
+                .category(category)
+                .description(description)
+                .updateTime(updateTime)
+                .build();
+        Events.raise(productUpdatedEvent);
     }
 
     public void updateId(DomainId productId, LocalDateTime createdTime, LocalDateTime updateTime) {
