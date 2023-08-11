@@ -91,6 +91,11 @@ public class ProductDataDaoImpl implements ProductDao {
                 () -> getProductCount(qProduct, storeIdQuery));
     }
 
+    @Override
+    public ProductData save(ProductData productData) {
+        return productDataJpaRepository.save(productData);
+    }
+
     private Long getProductCount(QProductData qProduct, JPQLQuery<DomainId> storeIdQuery) {
         return jpaQueryFactory
                 .select(qProduct.count())

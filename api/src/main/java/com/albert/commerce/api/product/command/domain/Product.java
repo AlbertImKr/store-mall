@@ -3,6 +3,7 @@ package com.albert.commerce.api.product.command.domain;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
+import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -73,9 +74,19 @@ public class Product {
         this.updateTime = LocalDateTime.now();
     }
 
-    public void updateId(DomainId productId) {
+    public void updateId(DomainId productId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.productId = productId;
-        this.createdTime = LocalDateTime.now();
-        this.updateTime = LocalDateTime.now();
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
+        ProductCreatedEvent productCreatedEvent = ProductCreatedEvent.builder()
+                .productId(productId)
+                .productName(productName)
+                .description(description)
+                .storeId(storeId)
+                .brand(brand)
+                .category(category)
+                .price(price)
+                .build();
+        Events.raise(productCreatedEvent);
     }
 }

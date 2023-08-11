@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.query.application;
 
-import com.albert.commerce.api.product.ProductNotFoundException;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
 import com.albert.commerce.api.product.command.application.dto.ProductsAssembler;
 import com.albert.commerce.api.product.query.domain.ProductDao;
@@ -8,6 +7,7 @@ import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.common.exception.UserNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +55,10 @@ public class ProductFacade {
             throw new ProductNotFoundException();
         }
         return productDao.getAmount(productsId);
+    }
+
+    @Transactional
+    public void save(ProductData productData) {
+        productDao.save(productData);
     }
 }

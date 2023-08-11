@@ -10,6 +10,7 @@ import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -37,7 +38,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        product.updateId(nextId());
+        product.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return productJpaRepository.save(product);
     }
 

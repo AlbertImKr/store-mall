@@ -1,12 +1,12 @@
 package com.albert.commerce.common.handler;
 
-import com.albert.commerce.api.product.ProductNotFoundException;
-import com.albert.commerce.api.product.UnauthorizedModificationException;
 import com.albert.commerce.api.store.ui.StoreQueryController;
 import com.albert.commerce.common.exception.ErrorResponse;
 import com.albert.commerce.common.exception.MyStoreNotFoundException;
+import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.common.exception.StoreAlreadyExistsException;
 import com.albert.commerce.common.exception.StoreNotFoundException;
+import com.albert.commerce.common.exception.UnauthorizedModificationException;
 import com.albert.commerce.common.units.BusinessLinks;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;

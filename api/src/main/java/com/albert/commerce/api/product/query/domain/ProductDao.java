@@ -17,4 +17,6 @@ public interface ProductDao {
     long getAmount(List<DomainId> productsId);
 
     boolean isValidProductsId(List<DomainId> productsId);
+
+    ProductData save(ProductData productData);
 }

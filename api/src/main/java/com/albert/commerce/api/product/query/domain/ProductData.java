@@ -11,11 +11,10 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Table(name = "product_query")
 @Entity
 public class ProductData {
@@ -37,4 +36,44 @@ public class ProductData {
     private String brand;
     @Column
     private String category;
+
+    @Builder
+    public ProductData(DomainId productId, DomainId storeId, String productName, Money price, String description,
+            String brand, String category) {
+        this.productId = productId;
+        this.storeId = storeId;
+        this.productName = productName;
+        this.price = price;
+        this.description = description;
+        this.brand = brand;
+        this.category = category;
+    }
+
+    public DomainId getProductId() {
+        return productId;
+    }
+
+    public DomainId getStoreId() {
+        return storeId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Money getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getCategory() {
+        return category;
+    }
 }
