@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,6 +37,20 @@ public class UserData {
     private String address;
     @Column(nullable = false)
     private boolean isActive;
+
+    @Builder
+    private UserData(DomainId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+            String phoneNumber,
+            String address, boolean isActive) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.email = email;
+        this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.isActive = isActive;
+    }
 
     public DomainId getUserId() {
         return userId;

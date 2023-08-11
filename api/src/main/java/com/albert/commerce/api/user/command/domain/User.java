@@ -1,6 +1,7 @@
 package com.albert.commerce.api.user.command.domain;
 
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -65,7 +66,7 @@ public class User {
 
     public static User createByEmail(String email) {
         return User.builder()
-                .nickname("user")
+                .nickname(email)
                 .email(email)
                 .role(Role.USER)
                 .build();
@@ -75,6 +76,17 @@ public class User {
         this.userId = userId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
+        UserCreatedEvent userCreatedEvent = UserCreatedEvent.builder()
+                .userId(userId)
+                .nickname(nickname)
+                .email(email)
+                .role(role)
+                .dateOfBirth(dateOfBirth)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .isActive(isActive)
+                .build();
+        Events.raise(userCreatedEvent);
     }
 
     public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber) {

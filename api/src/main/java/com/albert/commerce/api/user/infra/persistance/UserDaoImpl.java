@@ -17,4 +17,9 @@ public class UserDaoImpl implements UserDao {
     public Optional<UserData> findByEmail(String email) {
         return userDataJpaRepository.findByEmail(email);
     }
+
+    @Override
+    public UserData save(UserData userData) {
+        return userDataJpaRepository.save(userData);
+    }
 }
