@@ -99,6 +99,7 @@ public class DomainEventMessageConfig {
                 ConfigurableListableBeanFactory beanFactory) {
             for (String className : domainEventClassNames) {
                 PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
+                channel.setBeanName(className);
                 beanFactory.registerSingleton(className, channel);
                 this.registerChannel(className, channel);
             }
