@@ -1,6 +1,7 @@
 package com.albert.commerce.api.comment.command.domain;
 
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -57,10 +58,21 @@ public class Comment {
         this.detail = detail;
     }
 
-    public void updateId(DomainId commentId) {
+    public void updateId(DomainId commentId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.commentId = commentId;
-        this.createdTime = LocalDateTime.now();
-        this.updateTime = LocalDateTime.now();
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
+        CommentCreatedEvent commentCreatedEvent = CommentCreatedEvent.builder()
+                .commentId(commentId)
+                .productId(productId)
+                .storeId(storeId)
+                .userId(userId)
+                .parentCommentId(parentCommentId)
+                .createdTime(createdTime)
+                .detail(detail)
+                .updateTime(updateTime)
+                .build();
+        Events.raise(commentCreatedEvent);
     }
 
     public void update(String detail) {

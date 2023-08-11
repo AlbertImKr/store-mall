@@ -37,7 +37,7 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     }
 
     @Override
-    public boolean exists(DomainId storeId) {
+    public boolean existsById(DomainId storeId) {
         return storeJpaRepository.existsById(storeId);
     }
 }

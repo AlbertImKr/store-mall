@@ -17,4 +17,6 @@ public interface CommentDao {
     List<CommentResponse> findCommentResponseByUserId(DomainId userId);
 
     List<CommentResponse> findCommentResponseByStoreId(DomainId storeId);
+
+    CommentData save(CommentData comment);
 }

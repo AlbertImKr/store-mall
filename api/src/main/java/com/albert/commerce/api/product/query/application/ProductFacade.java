@@ -37,7 +37,7 @@ public class ProductFacade {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse findById(DomainId productId) {
+    public ProductResponse getProductId(DomainId productId) {
         ProductData product = productDao.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
         return ProductResponse.from(product);

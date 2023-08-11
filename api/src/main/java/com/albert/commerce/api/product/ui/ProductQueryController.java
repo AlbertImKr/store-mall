@@ -40,6 +40,6 @@ public class ProductQueryController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable DomainId productId) {
-        return ResponseEntity.ok(productFacade.findById(productId));
+        return ResponseEntity.ok(productFacade.getProductId(productId));
     }
 }

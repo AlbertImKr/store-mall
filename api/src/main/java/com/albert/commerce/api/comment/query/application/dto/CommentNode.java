@@ -1,4 +1,4 @@
-package com.albert.commerce.api.comment.query.dto;
+package com.albert.commerce.api.comment.query.application.dto;
 
 import com.albert.commerce.api.comment.command.application.CommentResponse;
 import com.albert.commerce.common.domain.DomainId;

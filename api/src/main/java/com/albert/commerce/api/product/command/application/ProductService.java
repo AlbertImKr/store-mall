@@ -59,4 +59,11 @@ public class ProductService {
         return productRepository.findByProductId(productId)
                 .orElseThrow(ProductNotFoundException::new);
     }
+
+    public void checkId(DomainId productId) {
+        if (productRepository.existsById(productId)) {
+            return;
+        }
+        throw new ProductNotFoundException();
+    }
 }

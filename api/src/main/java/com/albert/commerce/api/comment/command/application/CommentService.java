@@ -2,14 +2,10 @@ package com.albert.commerce.api.comment.command.application;
 
 import com.albert.commerce.api.comment.command.domain.Comment;
 import com.albert.commerce.api.comment.command.domain.CommentRepository;
-import com.albert.commerce.api.comment.query.application.CommentFacade;
-import com.albert.commerce.api.product.query.application.ProductFacade;
+import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.store.command.application.StoreService;
-import com.albert.commerce.api.user.query.domain.UserDao;
-import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.common.domain.DomainId;
-import com.albert.commerce.common.exception.StoreNotFoundException;
-import com.albert.commerce.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,35 +16,44 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserDao userDao;
-    private final ProductFacade productFacade;
+    private final UserService userService;
+    private final ProductService productService;
     private final StoreService storeService;
-    private final CommentFacade commentFacade;
 
     @Transactional
     public DomainId create(String userEmail, CommentRequest commentRequest) {
-        UserData user = userDao.findByEmail(userEmail).orElseThrow(UserNotFoundException::new);
+        DomainId userId = userService.findIdByEmail(userEmail);
 
         DomainId productId = DomainId.from(commentRequest.productId());
-        productFacade.checkId(productId);
+        productService.checkId(productId);
 
         DomainId storeId = DomainId.from(commentRequest.storeId());
-        if (!storeService.exists(storeId)) {
-            throw new StoreNotFoundException();
-        }
+        storeService.checkId(storeId);
 
-        DomainId parentCommentId = commentRequest.parentCommentId() != null ?
-                DomainId.from(commentRequest.parentCommentId()) :
+        DomainId parentCommentId = getParentCommentId(commentRequest.parentCommentId());
+        Comment comment = toComment(commentRequest, userId, productId, storeId, parentCommentId);
+        return commentRepository.save(comment).getCommentId();
+    }
+
+    private DomainId getParentCommentId(String parentCommentIdValue) {
+        DomainId parentCommentId = parentCommentIdValue != null ?
+                DomainId.from(parentCommentIdValue) :
                 null;
-        commentFacade.checkId(parentCommentId);
-        Comment comment = Comment.builder()
+        if (parentCommentId != null && !commentRepository.existsById(parentCommentId)) {
+            throw new CommentNotFoundException();
+        }
+        return parentCommentId;
+    }
+
+    private static Comment toComment(CommentRequest commentRequest, DomainId userId, DomainId productId,
+            DomainId storeId, DomainId parentCommentId) {
+        return Comment.builder()
                 .productId(productId)
                 .storeId(storeId)
-                .userId(user.getUserId())
+                .userId(userId)
                 .detail(commentRequest.detail())
                 .parentCommentId(parentCommentId)
                 .build();
-        return commentRepository.save(comment).getCommentId();
     }
 
     @Transactional

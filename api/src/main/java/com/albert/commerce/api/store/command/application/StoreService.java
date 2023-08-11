@@ -53,7 +53,10 @@ public class StoreService {
         return storeRepository.findByUserId(userId).orElseThrow(StoreNotFoundException::new);
     }
 
-    public boolean exists(DomainId storeId) {
-        return storeRepository.exists(storeId);
+    public void checkId(DomainId storeId) {
+        if (storeRepository.existsById(storeId)) {
+            return;
+        }
+        throw new StoreNotFoundException();
     }
 }

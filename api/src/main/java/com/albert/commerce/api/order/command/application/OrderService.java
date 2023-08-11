@@ -10,7 +10,6 @@ import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.OrderNotFoundException;
-import com.albert.commerce.common.exception.StoreNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.util.List;
 import java.util.Map;
@@ -76,9 +75,7 @@ public class OrderService {
     public DomainId placeOrder(String userEmail, OrderRequest orderRequest) {
         User user = userService.getUserByEmail(userEmail);
         DomainId storeId = DomainId.from(orderRequest.storeId());
-        if (!storeService.exists(storeId)) {
-            throw new StoreNotFoundException();
-        }
+        storeService.checkId(storeId);
         Map<String, Long> productsIdAndQuantity = orderRequest.productsIdAndQuantity();
         List<Product> products = getProducts(productsIdAndQuantity);
         Order order = toOrder(user, storeId, productsIdAndQuantity, products);

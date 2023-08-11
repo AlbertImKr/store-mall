@@ -10,4 +10,6 @@ public interface ProductRepository {
     Optional<Product> findByUserIdAndProductId(DomainId userId, DomainId productId);
 
     Optional<Product> findByProductId(DomainId productId);
+
+    boolean existsById(DomainId productId);
 }

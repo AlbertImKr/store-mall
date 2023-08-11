@@ -66,7 +66,7 @@ public class OrderFacade {
     private List<OrderDetail> getOrderDetails(List<OrderDetailRequest> orderDetailRequests) {
         return orderDetailRequests.stream()
                 .map(orderDetailRequest -> {
-                            ProductResponse product = productFacade.findById(orderDetailRequest.getProductId());
+                            ProductResponse product = productFacade.getProductId(orderDetailRequest.getProductId());
                             return OrderDetail.builder()
                                     .productId(product.getProductId())
                                     .productName(product.getProductName())

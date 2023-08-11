@@ -1,7 +1,7 @@
 package com.albert.commerce.api.comment.ui;
 
 import com.albert.commerce.api.comment.query.application.CommentFacade;
-import com.albert.commerce.api.comment.query.dto.CommentNode;
+import com.albert.commerce.api.comment.query.application.dto.CommentNode;
 import com.albert.commerce.common.domain.DomainId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;

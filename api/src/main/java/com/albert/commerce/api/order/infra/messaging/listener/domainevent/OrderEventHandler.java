@@ -12,9 +12,15 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class OrderCreatedEventHandler {
+public class OrderEventHandler {
 
     private final OrderFacade orderFacade;
+
+    @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCreatedEvent")
+    public void handleProductCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
+        OrderCreatedRequest orderCreatedRequest = toOrderCreatedRequestFrom(orderCreatedEvent);
+        orderFacade.save(orderCreatedRequest);
+    }
 
     private static OrderCreatedRequest toOrderCreatedRequestFrom(OrderCreatedEvent orderCreatedEvent) {
         return OrderCreatedRequest.builder()
@@ -30,7 +36,7 @@ public class OrderCreatedEventHandler {
 
     private static List<OrderDetailRequest> toOrderDetailRequestsFrom(List<OrderLine> orderLines) {
         return orderLines.stream()
-                .map(OrderCreatedEventHandler::toOrderDetailRequestFrom)
+                .map(OrderEventHandler::toOrderDetailRequestFrom)
                 .toList();
     }
 
@@ -41,11 +47,5 @@ public class OrderCreatedEventHandler {
                 .quantity(orderLine.getQuantity())
                 .amount(orderLine.getAmount())
                 .build();
-    }
-
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCreatedEvent")
-    public void handleProductCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
-        OrderCreatedRequest orderCreatedRequest = toOrderCreatedRequestFrom(orderCreatedEvent);
-        orderFacade.save(orderCreatedRequest);
     }
 }

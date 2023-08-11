@@ -7,7 +7,7 @@ public interface CommentRepository {
 
     Comment save(Comment comment);
 
-    boolean exists(DomainId parentCommentId);
+    boolean existsById(DomainId domainId);
 
     Optional<Comment> findById(DomainId commentId);
 }

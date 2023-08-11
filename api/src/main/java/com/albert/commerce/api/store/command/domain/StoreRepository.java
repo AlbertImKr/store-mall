@@ -11,5 +11,5 @@ public interface StoreRepository {
 
     Optional<Store> findByUserId(DomainId userId);
 
-    boolean exists(DomainId storeId);
+    boolean existsById(DomainId storeId);
 }
