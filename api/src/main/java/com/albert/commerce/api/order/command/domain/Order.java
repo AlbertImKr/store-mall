@@ -44,6 +44,7 @@ public class Order {
     @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_id"))
     @OrderColumn(name = "order_line_id")
     private List<OrderLine> orderLines;
+    @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
@@ -68,7 +69,17 @@ public class Order {
         this.orderId = orderId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
-        OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
+        Events.raise(toOrderCreatedEvent());
+    }
+
+    public void cancel(LocalDateTime updateTime) {
+        this.deliveryStatus = DeliveryStatus.CANCELED;
+        this.updateTime = updateTime;
+        Events.raise(toOrderCancelEvent());
+    }
+
+    private OrderCreatedEvent toOrderCreatedEvent() {
+        return OrderCreatedEvent.builder()
                 .orderId(orderId)
                 .userId(userId)
                 .storeId(storeId)
@@ -77,6 +88,9 @@ public class Order {
                 .createdTime(createdTime)
                 .updateTime(updateTime)
                 .build();
-        Events.raise(orderCreatedEvent);
+    }
+
+    private OrderCancelEvent toOrderCancelEvent() {
+        return new OrderCancelEvent(this.orderId, this.updateTime);
     }
 }

@@ -1,5 +1,6 @@
 package com.albert.commerce.api.order.query.application;
 
+import com.albert.commerce.api.order.query.application.dto.OrderCanceledRequest;
 import com.albert.commerce.api.order.query.application.dto.OrderCreatedRequest;
 import com.albert.commerce.api.order.query.application.dto.OrderDetailRequest;
 import com.albert.commerce.api.order.query.domain.OrderDao;
@@ -13,6 +14,7 @@ import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.user.query.application.UserFacade;
 import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.exception.OrderNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,13 @@ public class OrderFacade {
     private final OrderDao orderDao;
     private final ProductFacade productFacade;
     private final StoreFacade storeFacade;
+
+    @Transactional
+    public void cancel(OrderCanceledRequest orderCanceledRequest) {
+        OrderData orderData = orderDao.findById(orderCanceledRequest.orderId())
+                .orElseThrow(OrderNotFoundException::new);
+        orderData.cancel(orderCanceledRequest.updatedTime());
+    }
 
     private static Money getTotalAmount(List<OrderDetail> orderDetails) {
         return Money.from(orderDetails.stream()

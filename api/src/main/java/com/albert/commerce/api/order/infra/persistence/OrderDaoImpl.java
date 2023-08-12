@@ -5,6 +5,7 @@ import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.query.domain.OrderData;
 import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +30,10 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public OrderData save(OrderData order) {
         return orderDataJpaRepository.save(order);
+    }
+
+    @Override
+    public Optional<OrderData> findById(DomainId orderId) {
+        return orderDataJpaRepository.findById(orderId);
     }
 }

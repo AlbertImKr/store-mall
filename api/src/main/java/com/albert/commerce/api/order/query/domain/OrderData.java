@@ -4,6 +4,9 @@ import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -38,13 +41,18 @@ public class OrderData {
     private String storeName;
     @Embedded
     private OrderDetails orderDetails;
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime createdTime;
     @Convert(converter = MoneyConverter.class)
     @Column(name = "amount")
     private Money amount;
-    @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    protected LocalDateTime updateTime;
+    @Column(name = "delivery_status")
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus deliveryStatus;
 
     @Builder
     private OrderData(DomainId orderId, DomainId userId, String orderUserNickName, DomainId storeId, String storeName,
@@ -58,5 +66,10 @@ public class OrderData {
         this.deliveryStatus = deliveryStatus;
         this.amount = amount;
         this.createdTime = createdTime;
+    }
+
+    public void cancel(LocalDateTime updatedTime) {
+        this.deliveryStatus = DeliveryStatus.CANCELED;
+        this.updateTime = updatedTime;
     }
 }

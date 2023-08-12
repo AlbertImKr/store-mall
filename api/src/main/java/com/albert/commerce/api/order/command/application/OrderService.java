@@ -11,6 +11,7 @@ import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.OrderNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -37,12 +38,6 @@ public class OrderService {
                 .build();
     }
 
-    private void checkOrder(DomainId orderId, DomainId userId) {
-        if (!orderRepository.exist(orderId, userId)) {
-            throw new OrderNotFoundException();
-        }
-    }
-
     private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {
         return products.stream()
                 .map(toOrderLine(productsIdAndQuantity))
@@ -67,8 +62,9 @@ public class OrderService {
     public void cancelOrder(DeleteOrderRequest deleteOrderRequest, String userEmail) {
         DomainId userId = userService.findIdByEmail(userEmail);
         DomainId orderId = DomainId.from(deleteOrderRequest.orderId());
-        checkOrder(orderId, userId);
-        orderRepository.deleteById(orderId);
+        Order order = orderRepository.findByUserIdAndOrderId(orderId, userId)
+                .orElseThrow(OrderNotFoundException::new);
+        order.cancel(LocalDateTime.now());
     }
 
     @Transactional

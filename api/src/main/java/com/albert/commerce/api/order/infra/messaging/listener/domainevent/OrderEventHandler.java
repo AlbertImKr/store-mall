@@ -1,8 +1,10 @@
 package com.albert.commerce.api.order.infra.messaging.listener.domainevent;
 
+import com.albert.commerce.api.order.command.domain.OrderCancelEvent;
 import com.albert.commerce.api.order.command.domain.OrderCreatedEvent;
 import com.albert.commerce.api.order.command.domain.OrderLine;
 import com.albert.commerce.api.order.query.application.OrderFacade;
+import com.albert.commerce.api.order.query.application.dto.OrderCanceledRequest;
 import com.albert.commerce.api.order.query.application.dto.OrderCreatedRequest;
 import com.albert.commerce.api.order.query.application.dto.OrderDetailRequest;
 import java.util.List;
@@ -17,9 +19,20 @@ public class OrderEventHandler {
     private final OrderFacade orderFacade;
 
     @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCreatedEvent")
-    public void handleProductCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
+    public void handleOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
         OrderCreatedRequest orderCreatedRequest = toOrderCreatedRequestFrom(orderCreatedEvent);
         orderFacade.save(orderCreatedRequest);
+    }
+
+    @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCancelEvent")
+    public void handleOrderCancelEvent(OrderCancelEvent orderCancelEvent) {
+        OrderCanceledRequest orderCanceledRequest = toOrderCanceledRequest(orderCancelEvent);
+        orderFacade.cancel(orderCanceledRequest);
+    }
+
+    private static OrderCanceledRequest toOrderCanceledRequest(OrderCancelEvent orderCancelEvent) {
+        return new OrderCanceledRequest(orderCancelEvent.getOrderId(),
+                orderCancelEvent.getUpdatedTime());
     }
 
     private static OrderCreatedRequest toOrderCreatedRequestFrom(OrderCreatedEvent orderCreatedEvent) {
