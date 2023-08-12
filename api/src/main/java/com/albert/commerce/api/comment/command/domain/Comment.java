@@ -88,9 +88,14 @@ public class Comment {
         return new CommentUpdatedEvent(commentId, this.detail, this.updateTime);
     }
 
-    public void delete() {
+    public void delete(LocalDateTime updateTime) {
         this.detail = "";
         this.userId = null;
-        this.updateTime = LocalDateTime.now();
+        this.updateTime = updateTime;
+        Events.raise(toCommentDeletedEvent());
+    }
+
+    private CommentDeletedEvent toCommentDeletedEvent() {
+        return new CommentDeletedEvent(this.commentId, this.updateTime);
     }
 }

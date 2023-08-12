@@ -9,12 +9,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "comment_query")
 @Entity
 public class CommentData {
 
@@ -114,6 +116,12 @@ public class CommentData {
 
     public void update(String detail, LocalDateTime updatedTime) {
         this.detail = detail;
+        this.updatedTime = updatedTime;
+    }
+
+    public void delete(LocalDateTime updatedTime) {
+        this.detail = null;
+        this.userId = null;
         this.updatedTime = updatedTime;
     }
 }

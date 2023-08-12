@@ -3,6 +3,7 @@ package com.albert.commerce.api.comment.query.application;
 import com.albert.commerce.api.comment.command.application.CommentNotFoundException;
 import com.albert.commerce.api.comment.command.application.CommentResponse;
 import com.albert.commerce.api.comment.query.application.dto.CommentCreatedRequest;
+import com.albert.commerce.api.comment.query.application.dto.CommentDeletedRequest;
 import com.albert.commerce.api.comment.query.application.dto.CommentNode;
 import com.albert.commerce.api.comment.query.application.dto.CommentUpdatedRequest;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
@@ -58,6 +59,13 @@ public class CommentFacade {
         CommentData commentData = commentDao.findById(commentUpdatedRequest.commentId())
                 .orElseThrow(CommentNotFoundException::new);
         commentData.update(commentUpdatedRequest.detail(), commentUpdatedRequest.updatedTime());
+    }
+
+    @Transactional
+    public void delete(CommentDeletedRequest commentDeletedRequest) {
+        CommentData commentData = commentDao.findById(commentDeletedRequest.commentId())
+                .orElseThrow(CommentNotFoundException::new);
+        commentData.delete(commentDeletedRequest.updatedTime());
     }
 
     private static CommentData toComment(CommentCreatedRequest commentCreatedRequest, ProductResponse product,

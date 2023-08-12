@@ -69,6 +69,6 @@ public class CommentService {
     public void delete(DomainId commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
-        comment.delete();
+        comment.delete(LocalDateTime.now());
     }
 }

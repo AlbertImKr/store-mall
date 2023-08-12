@@ -1,9 +1,11 @@
 package com.albert.commerce.api.comment.infra.messaging.listener.domainevent;
 
 import com.albert.commerce.api.comment.command.domain.CommentCreatedEvent;
+import com.albert.commerce.api.comment.command.domain.CommentDeletedEvent;
 import com.albert.commerce.api.comment.command.domain.CommentUpdatedEvent;
 import com.albert.commerce.api.comment.query.application.CommentFacade;
 import com.albert.commerce.api.comment.query.application.dto.CommentCreatedRequest;
+import com.albert.commerce.api.comment.query.application.dto.CommentDeletedRequest;
 import com.albert.commerce.api.comment.query.application.dto.CommentUpdatedRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -25,6 +27,15 @@ public class CommentEventHandler {
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         CommentUpdatedRequest commentCreatedRequest = toCommentCreatedRequest(commentUpdatedEvent);
         commentFacade.update(commentCreatedRequest);
+    }
+
+    @ServiceActivator(inputChannel = "com.albert.commerce.api.comment.command.domain.CommentDeletedEvent")
+    public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
+        CommentDeletedRequest commentCreatedRequest = new CommentDeletedRequest(
+                commentDeletedEvent.getCommentId(),
+                commentDeletedEvent.getUpdatedTime()
+        );
+        commentFacade.delete(commentCreatedRequest);
     }
 
     private static CommentCreatedRequest toCommentCreatedRequest(CommentCreatedEvent commentCreatedEvent) {

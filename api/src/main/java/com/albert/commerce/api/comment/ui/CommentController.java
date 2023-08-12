@@ -2,7 +2,7 @@ package com.albert.commerce.api.comment.ui;
 
 import com.albert.commerce.api.comment.command.application.CommentRequest;
 import com.albert.commerce.api.comment.command.application.CommentService;
-import com.albert.commerce.api.comment.query.application.dto.CommentUpdateRequest;
+import com.albert.commerce.api.comment.command.application.CommentUpdateRequest;
 import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import java.util.Map;
