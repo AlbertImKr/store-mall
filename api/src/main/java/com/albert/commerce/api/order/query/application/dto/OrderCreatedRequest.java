@@ -1,7 +1,7 @@
 package com.albert.commerce.api.order.query.application.dto;
 
-import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.units.DeliveryStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

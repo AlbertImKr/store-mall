@@ -1,6 +1,7 @@
 package com.albert.commerce.api.order.command.domain;
 
 import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.common.units.DeliveryStatus;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

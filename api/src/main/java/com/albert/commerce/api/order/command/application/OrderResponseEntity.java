@@ -1,9 +1,9 @@
 package com.albert.commerce.api.order.command.application;
 
-import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
+import com.albert.commerce.common.units.DeliveryStatus;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.albert.commerce.api.order.command.domain;
+package com.albert.commerce.common.units;
 
 public enum DeliveryStatus {
     PENDING,

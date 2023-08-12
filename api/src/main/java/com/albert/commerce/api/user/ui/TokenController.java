@@ -21,7 +21,6 @@ public class TokenController {
     private final DefaultOAuth2AuthorizedClientManager oAuth2AuthorizedClientManager;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
-
     @GetMapping("/token")
     public OAuth2AccessToken getToken(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
@@ -62,5 +61,4 @@ public class TokenController {
         assert authorizedClient != null;
         return authorizedClient.getAccessToken();
     }
-
 }

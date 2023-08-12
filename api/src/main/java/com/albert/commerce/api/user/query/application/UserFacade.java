@@ -36,4 +36,8 @@ public class UserFacade {
     public UserData getUserById(DomainId userId) {
         return userDao.findById(userId).orElseThrow(UserNotFoundException::new);
     }
+
+    public UserData getUserByEmail(String email) {
+        return userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    }
 }

@@ -1,9 +1,9 @@
 package com.albert.commerce.api.order.query.domain;
 
-import com.albert.commerce.api.order.command.domain.DeliveryStatus;
 import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
+import com.albert.commerce.common.units.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
