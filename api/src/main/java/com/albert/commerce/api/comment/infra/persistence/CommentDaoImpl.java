@@ -1,7 +1,6 @@
 package com.albert.commerce.api.comment.infra.persistence;
 
 import com.albert.commerce.api.comment.command.application.CommentResponse;
-import com.albert.commerce.api.comment.command.domain.Comment;
 import com.albert.commerce.api.comment.command.domain.QComment;
 import com.albert.commerce.api.comment.infra.persistence.imports.CommentDataJpaRepository;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
@@ -89,8 +88,8 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public Optional<Comment> findById(DomainId commentId) {
-        return Optional.empty();
+    public Optional<CommentData> findById(DomainId commentId) {
+        return commentDataJpaRepository.findById(commentId);
     }
 
     @Override

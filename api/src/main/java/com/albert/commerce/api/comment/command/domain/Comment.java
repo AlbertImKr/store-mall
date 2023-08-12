@@ -62,7 +62,17 @@ public class Comment {
         this.commentId = commentId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
-        CommentCreatedEvent commentCreatedEvent = CommentCreatedEvent.builder()
+        Events.raise(toCommentCreatedEvent());
+    }
+
+    public void update(String detail, LocalDateTime updateTime) {
+        this.detail = detail;
+        this.updateTime = updateTime;
+        Events.raise(toCommentUpdatedEvent());
+    }
+
+    private CommentCreatedEvent toCommentCreatedEvent() {
+        return CommentCreatedEvent.builder()
                 .commentId(commentId)
                 .productId(productId)
                 .storeId(storeId)
@@ -72,12 +82,10 @@ public class Comment {
                 .detail(detail)
                 .updateTime(updateTime)
                 .build();
-        Events.raise(commentCreatedEvent);
     }
 
-    public void update(String detail) {
-        this.detail = detail;
-        this.updateTime = LocalDateTime.now();
+    private CommentUpdatedEvent toCommentUpdatedEvent() {
+        return new CommentUpdatedEvent(commentId, this.detail, this.updateTime);
     }
 
     public void delete() {

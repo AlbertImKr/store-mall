@@ -1,8 +1,10 @@
 package com.albert.commerce.api.comment.query.application;
 
+import com.albert.commerce.api.comment.command.application.CommentNotFoundException;
 import com.albert.commerce.api.comment.command.application.CommentResponse;
 import com.albert.commerce.api.comment.query.application.dto.CommentCreatedRequest;
 import com.albert.commerce.api.comment.query.application.dto.CommentNode;
+import com.albert.commerce.api.comment.query.application.dto.CommentUpdatedRequest;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
 import com.albert.commerce.api.comment.query.domain.CommentData;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
@@ -15,6 +17,7 @@ import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
@@ -41,12 +44,20 @@ public class CommentFacade {
         return CommentNode.from(commentResponses);
     }
 
+    @Transactional
     public CommentData create(CommentCreatedRequest commentCreatedRequest) {
         ProductResponse product = productFacade.getProductId(commentCreatedRequest.getProductId());
         UserData user = userFacade.getUserById(commentCreatedRequest.getUserId());
         StoreData store = storeFacade.getStoreById(commentCreatedRequest.getStoreId());
         CommentData comment = toComment(commentCreatedRequest, product, user, store);
         return commentDao.save(comment);
+    }
+
+    @Transactional
+    public void update(CommentUpdatedRequest commentUpdatedRequest) {
+        CommentData commentData = commentDao.findById(commentUpdatedRequest.commentId())
+                .orElseThrow(CommentNotFoundException::new);
+        commentData.update(commentUpdatedRequest.detail(), commentUpdatedRequest.updatedTime());
     }
 
     private static CommentData toComment(CommentCreatedRequest commentCreatedRequest, ProductResponse product,

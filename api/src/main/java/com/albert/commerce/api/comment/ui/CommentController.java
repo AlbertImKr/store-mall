@@ -2,6 +2,7 @@ package com.albert.commerce.api.comment.ui;
 
 import com.albert.commerce.api.comment.command.application.CommentRequest;
 import com.albert.commerce.api.comment.command.application.CommentService;
+import com.albert.commerce.api.comment.query.application.dto.CommentUpdateRequest;
 import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import java.util.Map;
@@ -36,8 +37,8 @@ public class CommentController {
 
     @PutMapping("/{commentId}")
     public ResponseEntity<Map<String, String>> updateComment(@PathVariable String commentId,
-            @RequestBody String detail) {
-        commentService.update(DomainId.from(commentId), detail);
+            @RequestBody CommentUpdateRequest commentUpdateRequest) {
+        commentService.update(DomainId.from(commentId), commentUpdateRequest.detail());
         return ResponseEntity.ok().body(Map.of("commentId", commentId));
     }
 

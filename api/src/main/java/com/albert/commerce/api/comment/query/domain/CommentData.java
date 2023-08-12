@@ -111,4 +111,9 @@ public class CommentData {
     public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
+
+    public void update(String detail, LocalDateTime updatedTime) {
+        this.detail = detail;
+        this.updatedTime = updatedTime;
+    }
 }

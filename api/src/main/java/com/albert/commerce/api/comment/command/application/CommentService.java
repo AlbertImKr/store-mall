@@ -6,6 +6,7 @@ import com.albert.commerce.api.product.command.application.ProductService;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.common.domain.DomainId;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +61,7 @@ public class CommentService {
     public DomainId update(DomainId commentId, String detail) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
-        comment.update(detail);
+        comment.update(detail, LocalDateTime.now());
         return comment.getCommentId();
     }
 
