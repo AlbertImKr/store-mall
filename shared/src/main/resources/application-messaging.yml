@@ -1,0 +1,12 @@
+commerce:
+  messaging:
+    base-package:
+      command: com.albert.commerce.shared.messaging.application
+      api: com.albert.commerce.api
+      domain-event: com.albert.commerce.api.*.command.domain
+      domain-event-listener: com.albert.commerce.api.*.infra.messaging.listener.domainevent
+    task-executor:
+      core-pool-size: 8
+      max-pool-size: 16
+      queue-capacity: 100
+      thread-name-prefix: "task-executor-"

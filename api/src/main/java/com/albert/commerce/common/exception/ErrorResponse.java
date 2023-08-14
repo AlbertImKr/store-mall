@@ -1,6 +1,7 @@
 package com.albert.commerce.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import org.springframework.hateoas.RepresentationModel;
 
 public class ErrorResponse extends RepresentationModel<ErrorResponse> {
@@ -19,4 +20,22 @@ public class ErrorResponse extends RepresentationModel<ErrorResponse> {
         return errorMessage;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ErrorResponse that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        return getErrorMessage() == that.getErrorMessage();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getErrorMessage());
+    }
 }

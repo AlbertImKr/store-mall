@@ -56,6 +56,14 @@ allprojects {
         annotationProcessor 'jakarta.annotation:jakarta.annotation-api:2.1.1'
         annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 
+        // integration
+        implementation 'org.springframework.boot:spring-boot-starter-integration:3.1.0'
+        implementation 'org.springframework.integration:spring-integration-http:6.1.0'
+        testImplementation 'org.springframework.integration:spring-integration-test:6.1.0'
+
+        // reflections
+        implementation 'org.reflections:reflections:0.9.11'
+
         // RestDocs
         asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.0'
         testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0'
@@ -99,3 +107,8 @@ project(':authorization-server') {
     }
 }
 
+project(':api') {
+    dependencies {
+        implementation project(":shared")
+    }
+}
