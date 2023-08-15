@@ -10,8 +10,8 @@ public class CommandClassResolver {
 
     private final Map<String, Class<? extends Command>> classMap;
 
-    public CommandClassResolver(Set<Class<? extends Command>> classMap) {
-        this.classMap = classMap.stream()
+    public CommandClassResolver(Set<Class<? extends Command>> classSet) {
+        this.classMap = classSet.stream()
                 .collect(Collectors.toMap(Class::getName, Function.identity()));
     }
 

@@ -10,8 +10,8 @@ public class DomainEventClassResolver {
 
     private final Map<String, Class<? extends DomainEvent>> classMap;
 
-    public DomainEventClassResolver(Set<Class<? extends DomainEvent>> classMap) {
-        this.classMap = classMap.stream()
+    public DomainEventClassResolver(Set<Class<? extends DomainEvent>> classSet) {
+        this.classMap = classSet.stream()
                 .collect(Collectors.toMap(Class::getName, Function.identity()));
     }
 
