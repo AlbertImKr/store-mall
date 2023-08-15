@@ -15,7 +15,6 @@ import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.ExecutorChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -28,17 +27,15 @@ public class CommandMessageConfig {
     @Value("${commerce.messaging.base-package.command}")
     private String commandBasePackage;
 
-    @Bean
+    @Bean(COMMAND_CHANNEL)
     public DirectChannel commandChannel() {
-        return MessageChannels.direct(COMMAND_CHANNEL).getObject();
+        return new DirectChannel();
     }
 
     @Bean
-    public IntegrationFlow commandRoutingFlow(
-            CommandClassResolver commandClassResolver) {
+    public IntegrationFlow commandRoutingFlow() {
         return IntegrationFlow.from(COMMAND_CHANNEL)
-                .route(Command.class,
-                        (Command command) -> commandClassResolver.resolve(command.getClass().getSimpleName()))
+                .route(command -> command.getClass().getSimpleName())
                 .get();
     }
 

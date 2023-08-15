@@ -18,8 +18,4 @@ public class CommandClassResolver {
     public Set<String> getNames() {
         return classMap.keySet();
     }
-
-    public Object resolve(String commandClassname) {
-        return classMap.get(commandClassname);
-    }
 }
