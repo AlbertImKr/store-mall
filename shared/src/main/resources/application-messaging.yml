@@ -10,3 +10,4 @@ commerce:
       max-pool-size: 16
       queue-capacity: 100
       thread-name-prefix: "task-executor-"
+      await-termination-seconds: 60
