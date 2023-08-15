@@ -42,11 +42,7 @@ public class DomainEventMessageConfig {
         Set<Method> methods = reflections.getMethodsAnnotatedWith(ServiceActivator.class);
 
         return methods.stream()
-                .filter(method -> method.getDeclaringClass().getPackage().getName()
-                        .matches(domainEventListenerBasePackage))
-                .filter(method -> method.getParameterTypes().length != 0)
-                .filter(method -> DomainEvent.class.isAssignableFrom(method.getParameterTypes()[0]))
-                .map(method -> method.getParameterTypes()[0].getSimpleName())
+                .map(method -> method.getAnnotation(ServiceActivator.class).inputChannel())
                 .collect(Collectors.toSet());
     }
 

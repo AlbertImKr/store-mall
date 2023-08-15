@@ -47,7 +47,7 @@ public class CommandMessageConfig {
     }
 
     @Component
-    static class CommandExecutorChannelRegistry {
+    private static class CommandExecutorChannelRegistry {
 
         private final CommandClassResolver commandClassResolver;
         private final Map<String, ExecutorChannel> commandChannels = new ConcurrentHashMap<>();
