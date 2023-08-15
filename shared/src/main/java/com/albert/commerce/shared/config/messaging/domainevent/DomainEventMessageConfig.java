@@ -46,7 +46,7 @@ public class DomainEventMessageConfig {
                         .matches(domainEventListenerBasePackage))
                 .filter(method -> method.getParameterTypes().length != 0)
                 .filter(method -> DomainEvent.class.isAssignableFrom(method.getParameterTypes()[0]))
-                .map(method -> method.getParameterTypes()[0].getName())
+                .map(method -> method.getParameterTypes()[0].getSimpleName())
                 .collect(Collectors.toSet());
     }
 
@@ -73,7 +73,7 @@ public class DomainEventMessageConfig {
     @Bean
     public MessageHandler domainEventSender(Set<String> domainEventClassNames) {
         return message -> {
-            String domainEventClassName = message.getPayload().getClass().getName();
+            String domainEventClassName = message.getPayload().getClass().getSimpleName();
             if (domainEventClassNames.contains(domainEventClassName)) {
                 Optional<PublishSubscribeChannel> channel = DomainEventChannelRegistry.findChannel(
                         domainEventClassName);

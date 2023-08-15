@@ -12,7 +12,7 @@ public class CommandClassResolver {
 
     public CommandClassResolver(Set<Class<? extends Command>> classSet) {
         this.classMap = classSet.stream()
-                .collect(Collectors.toMap(Class::getName, Function.identity()));
+                .collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
     }
 
     public Set<String> getNames() {

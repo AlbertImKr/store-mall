@@ -12,7 +12,7 @@ public class DomainEventClassResolver {
 
     public DomainEventClassResolver(Set<Class<? extends DomainEvent>> classSet) {
         this.classMap = classSet.stream()
-                .collect(Collectors.toMap(Class::getName, Function.identity()));
+                .collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
     }
 
     public boolean contains(String domainEventName) {

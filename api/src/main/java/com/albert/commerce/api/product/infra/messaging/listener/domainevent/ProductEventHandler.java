@@ -15,7 +15,7 @@ public class ProductEventHandler {
 
     private final ProductFacade productFacade;
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.product.command.domain.ProductCreatedEvent")
+    @ServiceActivator(inputChannel = "ProductCreatedEvent")
     public void handleProductCreatedEvent(ProductCreatedEvent productCreatedEvent) {
         ProductData productData = ProductData.builder()
                 .productId(productCreatedEvent.getProductId())
@@ -29,7 +29,7 @@ public class ProductEventHandler {
         productFacade.save(productData);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.product.command.domain.ProductUpdatedEvent")
+    @ServiceActivator(inputChannel = "ProductUpdatedEvent")
     public void handleProductUpdatedEvent(ProductUpdatedEvent productUpdatedEvent) {
         ProductUpdateRequest productUpdateRequest = ProductUpdateRequest.builder()
                 .productId(productUpdatedEvent.getProductId())

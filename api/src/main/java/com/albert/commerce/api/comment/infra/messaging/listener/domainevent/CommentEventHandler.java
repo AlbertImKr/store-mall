@@ -17,19 +17,19 @@ public class CommentEventHandler {
 
     private final CommentFacade commentFacade;
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.comment.command.domain.CommentCreatedEvent")
+    @ServiceActivator(inputChannel = "CommentCreatedEvent")
     public void handleCommentCreatedEvent(CommentCreatedEvent commentCreatedEvent) {
         CommentCreatedRequest commentCreatedRequest = toCommentCreatedRequest(commentCreatedEvent);
         commentFacade.create(commentCreatedRequest);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.comment.command.domain.CommentUpdatedEvent")
+    @ServiceActivator(inputChannel = "CommentUpdatedEvent")
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         CommentUpdatedRequest commentCreatedRequest = toCommentCreatedRequest(commentUpdatedEvent);
         commentFacade.update(commentCreatedRequest);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.comment.command.domain.CommentDeletedEvent")
+    @ServiceActivator(inputChannel = "CommentDeletedEvent")
     public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
         CommentDeletedRequest commentCreatedRequest = new CommentDeletedRequest(
                 commentDeletedEvent.getCommentId(),

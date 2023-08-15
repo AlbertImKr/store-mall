@@ -15,7 +15,7 @@ public class UserEventHandler {
 
     private final UserFacade userFacade;
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.user.command.domain.UserCreatedEvent")
+    @ServiceActivator(inputChannel = "UserCreatedEvent")
     public void handleUserCreateEvent(UserCreatedEvent userCreatedEvent) {
         UserData userData = UserData.builder()
                 .userId(userCreatedEvent.getUserId())
@@ -30,7 +30,7 @@ public class UserEventHandler {
         userFacade.save(userData);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.user.command.domain.UserUpdateEvent")
+    @ServiceActivator(inputChannel = "UserUpdateEvent")
     public void handleUserUpdateEvent(UserUpdateEvent userUpdateEvent) {
         UserUpdateRequest userUpdateRequest = UserUpdateRequest.builder()
                 .userId(userUpdateEvent.getUserId())

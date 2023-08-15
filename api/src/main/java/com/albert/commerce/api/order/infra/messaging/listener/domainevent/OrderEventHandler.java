@@ -18,13 +18,13 @@ public class OrderEventHandler {
 
     private final OrderFacade orderFacade;
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCreatedEvent")
+    @ServiceActivator(inputChannel = "OrderCreatedEvent")
     public void handleOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
         OrderCreatedRequest orderCreatedRequest = toOrderCreatedRequestFrom(orderCreatedEvent);
         orderFacade.save(orderCreatedRequest);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.order.command.domain.OrderCancelEvent")
+    @ServiceActivator(inputChannel = "OrderCancelEvent")
     public void handleOrderCancelEvent(OrderCancelEvent orderCancelEvent) {
         OrderCanceledRequest orderCanceledRequest = toOrderCanceledRequest(orderCancelEvent);
         orderFacade.cancel(orderCanceledRequest);

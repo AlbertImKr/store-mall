@@ -15,7 +15,7 @@ public class StoreEventHandler {
 
     private final StoreFacade storeFacade;
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.store.command.domain.StoreCreatedEvent")
+    @ServiceActivator(inputChannel = "StoreCreatedEvent")
     public void handleStoreCreateEvent(StoreCreatedEvent storeCreatedEvent) {
         StoreData storeData = StoreData.builder()
                 .storeId(storeCreatedEvent.getStoreId())
@@ -29,7 +29,7 @@ public class StoreEventHandler {
         storeFacade.save(storeData);
     }
 
-    @ServiceActivator(inputChannel = "com.albert.commerce.api.store.command.domain.StoreUpdateEvent")
+    @ServiceActivator(inputChannel = "StoreUpdateEvent")
     public void handleStoreUpdateEvent(StoreUpdateEvent storeUpdateEvent) {
         UpdateStoreRequest updateStoreRequest = UpdateStoreRequest.builder()
                 .storeId(storeUpdateEvent.getStoreId())
