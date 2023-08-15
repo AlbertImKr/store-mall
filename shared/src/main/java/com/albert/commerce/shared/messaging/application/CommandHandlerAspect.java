@@ -1,6 +1,5 @@
 package com.albert.commerce.shared.messaging.application;
 
-import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.albert.commerce.shared.messaging.infra.messaging.publisher.MessagePublisher;
 import java.util.List;
@@ -38,11 +37,8 @@ public class CommandHandlerAspect {
 
         @Override
         public void afterCommit() {
-            List<DomainEvent> events = Events.getEvents();
-            for (DomainEvent event : events) {
-                messagePublisher.publish(event);
-            }
-            Events.clear();
+            Events.getEvents()
+                    .forEach(messagePublisher::publish);
         }
 
         @Override
