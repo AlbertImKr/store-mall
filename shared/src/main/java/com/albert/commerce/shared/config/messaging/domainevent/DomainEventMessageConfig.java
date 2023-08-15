@@ -54,10 +54,14 @@ public class DomainEventMessageConfig {
     }
 
     @Bean
-    public boolean registerChannel(GenericWebApplicationContext context, TaskExecutor messageTaskExecutor,
-            Set<String> domainEventClassNames) {
+    public boolean registerChannel(
+            GenericWebApplicationContext context,
+            TaskExecutor messageTaskExecutor,
+            Set<String> domainEventClassNames
+    ) {
         for (String className : domainEventClassNames) {
-            context.registerBean(className, PublishSubscribeChannel.class, messageTaskExecutor, true);
+            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
+            context.registerBean(className, PublishSubscribeChannel.class, () -> channel);
         }
         return true;
     }
