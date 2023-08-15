@@ -14,11 +14,13 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.endpoint.EventDrivenConsumer;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -61,30 +63,17 @@ public class DomainEventMessageConfig {
     @Bean
     public EventDrivenConsumer domainEventHandler(PublishSubscribeChannel domainEventChannel,
             MessageHandler domainEventSender) {
-        EventDrivenConsumer consumer = new EventDrivenConsumer(domainEventChannel, domainEventSender);
-        consumer.start();
-        return consumer;
+        return new EventDrivenConsumer(domainEventChannel, domainEventSender);
     }
 
     @Bean
-    public MessageHandler domainEventSender(Set<String> domainEventClassNames) {
+    public MessageHandler domainEventSender(ApplicationContext applicationContext) {
         return message -> {
             String domainEventClassName = message.getPayload().getClass().getSimpleName();
-            if (domainEventClassNames.contains(domainEventClassName)) {
-                Optional<PublishSubscribeChannel> channel = DomainEventChannelRegistry.findChannel(
-                        domainEventClassName);
-                if (channel.isPresent()) {
-                    channel.get().send(message);
-                } else {
-                    throw new IllegalArgumentException(
-                            "No channel found for domain event class: " + domainEventClassName);
-                }
-            } else {
-                throw new IllegalArgumentException("Unsupported domain event class: " + domainEventClassName);
-            }
+            MessageChannel messageChannel = applicationContext.getBean(MessageChannel.class, domainEventClassName);
+            messageChannel.send(message);
         };
     }
-
 
     @Component
     private static class DomainEventChannelRegistry {
@@ -109,5 +98,4 @@ public class DomainEventMessageConfig {
             channels.put(className, channel);
         }
     }
-
 }
