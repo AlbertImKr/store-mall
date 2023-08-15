@@ -19,6 +19,9 @@ public class Events {
     }
 
     public static void raise(DomainEvent event) {
+        if (event == null) {
+            return;
+        }
         getEvents().add(event);
     }
 

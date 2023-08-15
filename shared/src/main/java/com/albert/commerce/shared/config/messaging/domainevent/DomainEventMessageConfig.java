@@ -24,6 +24,8 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 @Configuration
 public class DomainEventMessageConfig {
 
+    public static final String DOMAIN_EVENT_CHANNEL = "domainEventChannel";
+
     @Value("${commerce.messaging.base-package.domain-event-listener}")
     private String domainEventListenerBasePackage;
     @Value("${commerce.messaging.base-package.domain-event}")
@@ -60,7 +62,7 @@ public class DomainEventMessageConfig {
         return true;
     }
 
-    @Bean
+    @Bean(DOMAIN_EVENT_CHANNEL)
     public PublishSubscribeChannel domainEventChannel(ThreadPoolTaskExecutor messageTaskExecutor) {
         return new PublishSubscribeChannel(messageTaskExecutor);
     }
