@@ -1,6 +1,6 @@
 package com.albert.commerce.api.product.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.shared.messaging.domain.event.Events;
@@ -28,10 +28,10 @@ public class Product {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
-    private DomainId productId;
+    private ProductId productId;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
-    private DomainId storeId;
+    private StoreId storeId;
     @Column(nullable = false)
     private String productName;
     @Convert(converter = MoneyConverter.class)
@@ -53,7 +53,7 @@ public class Product {
     protected LocalDateTime updateTime;
 
     @Builder
-    public Product(DomainId productId, DomainId storeId, String productName, Money price,
+    public Product(ProductId productId, StoreId storeId, String productName, Money price,
             String description, String brand, String category) {
         this.productId = productId;
         this.storeId = storeId;
@@ -84,7 +84,7 @@ public class Product {
         Events.raise(productUpdatedEvent);
     }
 
-    public void updateId(DomainId productId, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public void updateId(ProductId productId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.productId = productId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;

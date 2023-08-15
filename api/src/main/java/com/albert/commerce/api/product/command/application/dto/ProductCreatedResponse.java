@@ -1,7 +1,7 @@
 package com.albert.commerce.api.product.command.application.dto;
 
 import com.albert.commerce.api.product.command.domain.Product;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductCreatedResponse extends RepresentationModel<ProductCreatedResponse> {
 
-    private DomainId productId;
+    private ProductId productId;
     private String productName;
     private Money price;
     private String description;
@@ -26,7 +26,7 @@ public class ProductCreatedResponse extends RepresentationModel<ProductCreatedRe
     private String category;
 
     @Builder
-    private ProductCreatedResponse(DomainId productId, String productName, Money price,
+    private ProductCreatedResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category) {
         this.productId = productId;

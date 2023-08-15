@@ -1,11 +1,13 @@
 package com.albert.commerce.api.product.infra.persistence;
 
 import com.albert.commerce.api.product.command.domain.Product;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.ProductRepository;
 import com.albert.commerce.api.product.command.domain.QProduct;
 import com.albert.commerce.api.product.infra.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.api.store.command.domain.QStore;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -21,33 +23,11 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    private static JPQLQuery<DomainId> getStoreIdByUserId(DomainId userId) {
-        QStore qStore = QStore.store;
-        return JPAExpressions
-                .select(qStore.storeId)
-                .from(qStore)
-                .where(qStore.userId.eq(
-                        userId
-                ));
-    }
-
-
     private final SequenceGenerator sequenceGenerator;
     private final ProductJpaRepository productJpaRepository;
 
-
     @Override
-    public Product save(Product product) {
-        product.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
-        return productJpaRepository.save(product);
-    }
-
-    private DomainId nextId() {
-        return DomainId.from(sequenceGenerator.generate());
-    }
-
-    @Override
-    public Optional<Product> findByUserIdAndProductId(DomainId userId, DomainId productId) {
+    public Optional<Product> findByUserIdAndProductId(UserId userId, ProductId productId) {
         QProduct qProduct = QProduct.product;
         Product product = jpaQueryFactory.select(qProduct)
                 .from(qProduct)
@@ -59,12 +39,32 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findByProductId(DomainId productId) {
+    public Product save(Product product) {
+        product.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
+        return productJpaRepository.save(product);
+    }
+
+    @Override
+    public Optional<Product> findByProductId(ProductId productId) {
         return productJpaRepository.findById(productId);
     }
 
     @Override
-    public boolean existsById(DomainId productId) {
+    public boolean existsById(ProductId productId) {
         return productJpaRepository.existsById(productId);
+    }
+
+    private ProductId nextId() {
+        return ProductId.from(sequenceGenerator.generate());
+    }
+
+    private static JPQLQuery<StoreId> getStoreIdByUserId(UserId userId) {
+        QStore qStore = QStore.store;
+        return JPAExpressions
+                .select(qStore.storeId)
+                .from(qStore)
+                .where(qStore.userId.eq(
+                        userId
+                ));
     }
 }

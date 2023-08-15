@@ -1,23 +1,26 @@
 package com.albert.commerce.api.comment.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.comment.command.domain.CommentId;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
 public class CommentCreatedRequest {
 
-    private final DomainId commentId;
-    private final DomainId productId;
-    private final DomainId storeId;
-    private final DomainId userId;
-    private final DomainId parentCommentId;
+    private final CommentId commentId;
+    private final ProductId productId;
+    private final StoreId storeId;
+    private final UserId userId;
+    private final CommentId parentCommentId;
     private final String detail;
     private final LocalDateTime createdTime;
     private final LocalDateTime updateTime;
 
     @Builder
-    private CommentCreatedRequest(DomainId commentId, DomainId productId, DomainId storeId, DomainId userId,
-            DomainId parentCommentId, String detail, LocalDateTime createdTime, LocalDateTime updateTime) {
+    private CommentCreatedRequest(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
+            CommentId parentCommentId, String detail, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
@@ -28,23 +31,23 @@ public class CommentCreatedRequest {
         this.updateTime = updateTime;
     }
 
-    public DomainId getCommentId() {
+    public CommentId getCommentId() {
         return commentId;
     }
 
-    public DomainId getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 
-    public DomainId getStoreId() {
+    public StoreId getStoreId() {
         return storeId;
     }
 
-    public DomainId getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 
-    public DomainId getParentCommentId() {
+    public CommentId getParentCommentId() {
         return parentCommentId;
     }
 

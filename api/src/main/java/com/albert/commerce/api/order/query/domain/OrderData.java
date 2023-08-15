@@ -1,6 +1,8 @@
 package com.albert.commerce.api.order.query.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.order.command.domain.OrderId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.albert.commerce.common.units.DeliveryStatus;
@@ -28,15 +30,15 @@ public class OrderData {
 
     @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false))
     @EmbeddedId
-    private DomainId orderId;
+    private OrderId orderId;
     @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
-    private DomainId userId;
+    private UserId userId;
     @Column(name = "order_user_nickname")
     private String orderUserNickName;
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private DomainId storeId;
+    private StoreId storeId;
     @Column(name = "store_name")
     private String storeName;
     @Embedded
@@ -55,7 +57,7 @@ public class OrderData {
     private DeliveryStatus deliveryStatus;
 
     @Builder
-    private OrderData(DomainId orderId, DomainId userId, String orderUserNickName, DomainId storeId, String storeName,
+    private OrderData(OrderId orderId, UserId userId, String orderUserNickName, StoreId storeId, String storeName,
             OrderDetails orderDetails, DeliveryStatus deliveryStatus, Money amount, LocalDateTime createdTime) {
         this.orderId = orderId;
         this.userId = userId;

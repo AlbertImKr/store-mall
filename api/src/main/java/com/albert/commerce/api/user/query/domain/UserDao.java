@@ -1,6 +1,6 @@
 package com.albert.commerce.api.user.query.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.Optional;
 
 public interface UserDao {
@@ -9,5 +9,5 @@ public interface UserDao {
 
     UserData save(UserData userData);
 
-    Optional<UserData> findById(DomainId userId);
+    Optional<UserData> findById(UserId userId);
 }

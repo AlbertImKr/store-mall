@@ -1,6 +1,6 @@
 package com.albert.commerce.api.order.query.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import jakarta.persistence.AttributeOverride;
@@ -18,7 +18,7 @@ public class OrderDetail {
 
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
     @Embedded
-    private DomainId productId;
+    private ProductId productId;
     private String productName;
     private long quantity;
     @Convert(converter = MoneyConverter.class)
@@ -30,7 +30,7 @@ public class OrderDetail {
     private String productDescription;
 
     @Builder
-    public OrderDetail(DomainId productId, String productName, long quantity, Money price, Money amount,
+    public OrderDetail(ProductId productId, String productName, long quantity, Money price, Money amount,
             String productDescription) {
         this.productId = productId;
         this.productName = productName;
@@ -40,7 +40,7 @@ public class OrderDetail {
         this.productDescription = productDescription;
     }
 
-    public DomainId getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 

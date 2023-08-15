@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import java.time.LocalDateTime;
@@ -8,7 +7,7 @@ import lombok.Builder;
 
 public class ProductUpdatedEvent extends DomainEvent {
 
-    private final DomainId productId;
+    private final ProductId productId;
     private final String productName;
     private final Money price;
     private final String brand;
@@ -18,7 +17,7 @@ public class ProductUpdatedEvent extends DomainEvent {
 
     @Builder
     private ProductUpdatedEvent(
-            DomainId productId,
+            ProductId productId,
             String productName,
             Money price,
             String brand,
@@ -35,7 +34,7 @@ public class ProductUpdatedEvent extends DomainEvent {
         this.updateTime = updateTime;
     }
 
-    public DomainId getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 

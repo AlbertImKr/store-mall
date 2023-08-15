@@ -3,7 +3,7 @@ package com.albert.commerce.api.comment.ui;
 import com.albert.commerce.api.comment.command.application.CommentRequest;
 import com.albert.commerce.api.comment.command.application.CommentService;
 import com.albert.commerce.api.comment.command.application.CommentUpdateRequest;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.comment.command.domain.CommentId;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class CommentController {
             @RequestBody CommentRequest commentRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        DomainId commentId = commentService.create(userEmail, commentRequest);
+        CommentId commentId = commentService.create(userEmail, commentRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("commentId", commentId.getValue()));
     }
@@ -38,13 +38,13 @@ public class CommentController {
     @PutMapping("/{commentId}")
     public ResponseEntity<Map<String, String>> updateComment(@PathVariable String commentId,
             @RequestBody CommentUpdateRequest commentUpdateRequest) {
-        commentService.update(DomainId.from(commentId), commentUpdateRequest.detail());
+        commentService.update(CommentId.from(commentId), commentUpdateRequest.detail());
         return ResponseEntity.ok().body(Map.of("commentId", commentId));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> delete(@PathVariable String commentId) {
-        commentService.delete(DomainId.from(commentId));
+        commentService.delete(CommentId.from(commentId));
         return ResponseEntity.noContent().build();
     }
 }

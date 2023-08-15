@@ -1,12 +1,15 @@
 package com.albert.commerce.api.comment.infra.persistence;
 
 import com.albert.commerce.api.comment.command.application.CommentResponse;
+import com.albert.commerce.api.comment.command.domain.CommentId;
 import com.albert.commerce.api.comment.command.domain.QComment;
 import com.albert.commerce.api.comment.infra.persistence.imports.CommentDataJpaRepository;
 import com.albert.commerce.api.comment.query.domain.CommentDao;
 import com.albert.commerce.api.comment.query.domain.CommentData;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.domain.QUser;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -22,7 +25,7 @@ public class CommentDaoImpl implements CommentDao {
     private final CommentDataJpaRepository commentDataJpaRepository;
 
     @Override
-    public List<CommentResponse> findCommentResponseByProductId(DomainId productId) {
+    public List<CommentResponse> findCommentResponseByProductId(ProductId productId) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 
@@ -44,7 +47,7 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public List<CommentResponse> findCommentResponseByUserId(DomainId userId) {
+    public List<CommentResponse> findCommentResponseByUserId(UserId userId) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 
@@ -66,7 +69,7 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public List<CommentResponse> findCommentResponseByStoreId(DomainId storeId) {
+    public List<CommentResponse> findCommentResponseByStoreId(StoreId storeId) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
 
@@ -88,12 +91,12 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public Optional<CommentData> findById(DomainId commentId) {
+    public Optional<CommentData> findById(CommentId commentId) {
         return commentDataJpaRepository.findById(commentId);
     }
 
     @Override
-    public boolean exists(DomainId commentId) {
+    public boolean exists(CommentId commentId) {
         return false;
     }
 

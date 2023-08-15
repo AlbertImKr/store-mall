@@ -1,7 +1,7 @@
 package com.albert.commerce.api.user.query.domain;
 
 import com.albert.commerce.api.user.command.domain.Role;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -21,7 +21,7 @@ public class UserData {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "user_id"))
-    private DomainId userId;
+    private UserId userId;
     @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
@@ -39,7 +39,7 @@ public class UserData {
     private boolean isActive;
 
     @Builder
-    private UserData(DomainId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+    private UserData(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber,
             String address, boolean isActive) {
         this.userId = userId;
@@ -52,7 +52,7 @@ public class UserData {
         this.isActive = isActive;
     }
 
-    public DomainId getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 

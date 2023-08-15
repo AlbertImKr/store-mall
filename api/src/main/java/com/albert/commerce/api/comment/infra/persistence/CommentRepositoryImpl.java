@@ -1,9 +1,9 @@
 package com.albert.commerce.api.comment.infra.persistence;
 
 import com.albert.commerce.api.comment.command.domain.Comment;
+import com.albert.commerce.api.comment.command.domain.CommentId;
 import com.albert.commerce.api.comment.command.domain.CommentRepository;
 import com.albert.commerce.api.comment.infra.persistence.imports.CommentJpaRepository;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,8 +17,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     private final CommentJpaRepository commentJpaRepository;
     private final SequenceGenerator sequenceGenerator;
 
-    private DomainId nextId() {
-        return DomainId.from(sequenceGenerator.generate());
+    @Override
+    public Optional<Comment> findById(CommentId commentId) {
+        return commentJpaRepository.findById(commentId);
     }
 
     @Override
@@ -28,13 +29,12 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Optional<Comment> findById(DomainId commentId) {
-        return commentJpaRepository.findById(commentId);
+    public boolean existsById(CommentId commentId) {
+        return commentJpaRepository.existsById(commentId);
     }
 
-    @Override
-    public boolean existsById(DomainId domainId) {
-        return commentJpaRepository.existsById(domainId);
+    private CommentId nextId() {
+        return CommentId.from(sequenceGenerator.generate());
     }
 
 }

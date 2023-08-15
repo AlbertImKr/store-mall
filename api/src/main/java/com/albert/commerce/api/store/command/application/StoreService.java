@@ -3,9 +3,10 @@ package com.albert.commerce.api.store.command.application;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.command.domain.Store;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.user.command.application.UserService;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.exception.StoreAlreadyExistsException;
 import com.albert.commerce.common.exception.StoreNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class StoreService {
     private final UserService userService;
 
     @Transactional
-    public DomainId createStore(String userEmail, NewStoreRequest newStoreRequest) {
-        DomainId userId = userService.findIdByEmail(userEmail);
+    public StoreId createStore(String userEmail, NewStoreRequest newStoreRequest) {
+        UserId userId = userService.findIdByEmail(userEmail);
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
@@ -38,7 +39,7 @@ public class StoreService {
 
     @Transactional
     public void updateMyStore(UpdateStoreRequest updateStoreRequest, String userEmail) {
-        DomainId userId = userService.findIdByEmail(userEmail);
+        UserId userId = userService.findIdByEmail(userEmail);
         Store store = storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
         store.update(updateStoreRequest.storeName(),
@@ -49,11 +50,11 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public Store getStoreByUserEmail(DomainId userId) {
+    public Store getStoreByUserEmail(UserId userId) {
         return storeRepository.findByUserId(userId).orElseThrow(StoreNotFoundException::new);
     }
 
-    public void checkId(DomainId storeId) {
+    public void checkId(StoreId storeId) {
         if (storeRepository.existsById(storeId)) {
             return;
         }

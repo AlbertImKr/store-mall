@@ -1,6 +1,8 @@
 package com.albert.commerce.api.comment.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -23,19 +25,19 @@ public class Comment {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "comment_id", nullable = false))
-    private DomainId commentId;
+    private CommentId commentId;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
-    private DomainId productId;
+    private ProductId productId;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
-    private DomainId storeId;
+    private StoreId storeId;
     @AttributeOverride(name = "value", column = @Column(name = "user_id"))
     @Embedded
-    private DomainId userId;
+    private UserId userId;
     @AttributeOverride(name = "value", column = @Column(name = "parent_comment_id"))
     @Embedded
-    private DomainId parentCommentId;
+    private CommentId parentCommentId;
 
     private String detail;
 
@@ -48,8 +50,8 @@ public class Comment {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Comment(DomainId commentId, DomainId productId, DomainId storeId,
-            DomainId userId, DomainId parentCommentId, String detail) {
+    private Comment(CommentId commentId, ProductId productId, StoreId storeId,
+            UserId userId, CommentId parentCommentId, String detail) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
@@ -58,7 +60,7 @@ public class Comment {
         this.detail = detail;
     }
 
-    public void updateId(DomainId commentId, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public void updateId(CommentId commentId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.commentId = commentId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;

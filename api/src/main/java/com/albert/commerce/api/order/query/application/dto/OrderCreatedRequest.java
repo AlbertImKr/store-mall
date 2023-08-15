@@ -1,6 +1,8 @@
 package com.albert.commerce.api.order.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.order.command.domain.OrderId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.units.DeliveryStatus;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,16 +10,16 @@ import lombok.Builder;
 
 public class OrderCreatedRequest {
 
-    private final DomainId orderId;
-    private final DomainId userId;
-    private final DomainId storeId;
+    private final OrderId orderId;
+    private final UserId userId;
+    private final StoreId storeId;
     private final List<OrderDetailRequest> orderDetailRequests;
     private final DeliveryStatus deliveryStatus;
     private final LocalDateTime createdTime;
     private final LocalDateTime updateTime;
 
     @Builder
-    private OrderCreatedRequest(DomainId orderId, DomainId userId, DomainId storeId,
+    private OrderCreatedRequest(OrderId orderId, UserId userId, StoreId storeId,
             List<OrderDetailRequest> orderDetailRequests,
             DeliveryStatus deliveryStatus, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;
@@ -29,15 +31,15 @@ public class OrderCreatedRequest {
         this.updateTime = updateTime;
     }
 
-    public DomainId getOrderId() {
+    public OrderId getOrderId() {
         return orderId;
     }
 
-    public DomainId getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 
-    public DomainId getStoreId() {
+    public StoreId getStoreId() {
         return storeId;
     }
 

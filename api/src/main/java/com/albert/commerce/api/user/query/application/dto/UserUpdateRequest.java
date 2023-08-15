@@ -1,19 +1,19 @@
 package com.albert.commerce.api.user.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.time.LocalDate;
 import lombok.Builder;
 
 public class UserUpdateRequest {
 
-    private final DomainId userId;
+    private final UserId userId;
     private final String address;
     private final String nickname;
     private final LocalDate dateOfBirth;
     private final String phoneNumber;
 
     @Builder
-    private UserUpdateRequest(DomainId userId, String address, String nickname, LocalDate dateOfBirth,
+    private UserUpdateRequest(UserId userId, String address, String nickname, LocalDate dateOfBirth,
             String phoneNumber) {
         this.userId = userId;
         this.address = address;
@@ -22,7 +22,7 @@ public class UserUpdateRequest {
         this.phoneNumber = phoneNumber;
     }
 
-    public DomainId getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 

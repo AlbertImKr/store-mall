@@ -1,6 +1,5 @@
 package com.albert.commerce.api.user.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -27,7 +26,7 @@ public class User {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "user_id"))
-    private DomainId userId;
+    private UserId userId;
     @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
@@ -53,7 +52,7 @@ public class User {
     protected LocalDateTime updateTime;
 
     @Builder
-    private User(DomainId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+    private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber, String address) {
         this.userId = userId;
         this.nickname = nickname;
@@ -72,7 +71,7 @@ public class User {
                 .build();
     }
 
-    public void updateId(DomainId userId, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public void updateId(UserId userId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.userId = userId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;

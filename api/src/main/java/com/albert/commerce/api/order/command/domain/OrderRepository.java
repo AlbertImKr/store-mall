@@ -1,6 +1,6 @@
 package com.albert.commerce.api.order.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,11 +9,11 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    boolean exist(DomainId orderId, DomainId id);
+    boolean exist(OrderId orderId, UserId userId);
 
-    void deleteById(DomainId orderId);
+    void deleteById(OrderId orderId);
 
-    Optional<Order> findByUserIdAndOrderId(DomainId userId, DomainId orderId);
+    Optional<Order> findByUserIdAndOrderId(UserId userId, OrderId orderId);
 
-    Page<Order> findAllByUserId(DomainId userId, Pageable pageable);
+    Page<Order> findAllByUserId(UserId userId, Pageable pageable);
 }

@@ -9,12 +9,14 @@ import com.albert.commerce.api.comment.query.application.dto.CommentUpdatedReque
 import com.albert.commerce.api.comment.query.domain.CommentDao;
 import com.albert.commerce.api.comment.query.domain.CommentData;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.application.ProductFacade;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.StoreFacade;
 import com.albert.commerce.api.store.query.domain.StoreData;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.application.UserFacade;
 import com.albert.commerce.api.user.query.domain.UserData;
-import com.albert.commerce.common.domain.DomainId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,18 +31,18 @@ public class CommentFacade {
     private final StoreFacade storeFacade;
     private final UserFacade userFacade;
 
-    public List<CommentNode> findCommentsResponseByProductId(DomainId productId) {
+    public List<CommentNode> findCommentsResponseByProductId(ProductId productId) {
         List<CommentResponse> commentResponses =
                 commentDao.findCommentResponseByProductId(productId);
         return CommentNode.from(commentResponses);
     }
 
-    public List<CommentNode> findCommentsResponseByUserId(DomainId userId) {
+    public List<CommentNode> findCommentsResponseByUserId(UserId userId) {
         List<CommentResponse> commentResponses = commentDao.findCommentResponseByUserId(userId);
         return CommentNode.from(commentResponses);
     }
 
-    public List<CommentNode> findCommentsResponseByStoreId(DomainId storeId) {
+    public List<CommentNode> findCommentsResponseByStoreId(StoreId storeId) {
         List<CommentResponse> commentResponses = commentDao.findCommentResponseByStoreId(storeId);
         return CommentNode.from(commentResponses);
     }

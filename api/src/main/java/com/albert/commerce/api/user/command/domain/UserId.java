@@ -1,4 +1,4 @@
-package com.albert.commerce.common.domain;
+package com.albert.commerce.api.user.command.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "value")
 @Embeddable
-public class DomainId implements Serializable {
+public class UserId implements Serializable {
 
     @JsonValue
     private String value;
 
-    private DomainId(String value) {
+    private UserId(String value) {
         this.value = value;
     }
 
-    public static DomainId from(String value) {
-        return new DomainId(value);
+    public static UserId from(String value) {
+        return new UserId(value);
     }
 
     public String getValue() {

@@ -3,8 +3,8 @@ package com.albert.commerce.api.user.command.application;
 
 import com.albert.commerce.api.user.command.application.dto.UserProfileRequest;
 import com.albert.commerce.api.user.command.domain.User;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.command.domain.UserRepository;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public DomainId findIdByEmail(String userEmail) {
+    public UserId findIdByEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
         return user.getUserId();

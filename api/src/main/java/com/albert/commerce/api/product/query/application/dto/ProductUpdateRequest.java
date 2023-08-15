@@ -1,13 +1,13 @@
 package com.albert.commerce.api.product.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
 public class ProductUpdateRequest {
 
-    private final DomainId productId;
+    private final ProductId productId;
     private final String productName;
     private final Money price;
     private final String brand;
@@ -16,7 +16,7 @@ public class ProductUpdateRequest {
     private final LocalDateTime updateTime;
 
     @Builder
-    private ProductUpdateRequest(DomainId productId, String productName, Money price, String brand, String category,
+    private ProductUpdateRequest(ProductId productId, String productName, Money price, String brand, String category,
             String description, LocalDateTime updateTime) {
         this.productId = productId;
         this.productName = productName;
@@ -27,7 +27,7 @@ public class ProductUpdateRequest {
         this.updateTime = updateTime;
     }
 
-    public DomainId getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 

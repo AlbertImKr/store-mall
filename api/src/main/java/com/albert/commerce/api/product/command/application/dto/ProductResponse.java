@@ -1,8 +1,9 @@
 package com.albert.commerce.api.product.command.application.dto;
 
 import com.albert.commerce.api.product.command.domain.Product;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.domain.ProductData;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,13 +20,13 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 public class ProductResponse extends RepresentationModel<ProductResponse> {
 
-    private final DomainId productId;
+    private final ProductId productId;
     private final String productName;
     private final Money price;
     private final String description;
     private final String brand;
     private final String category;
-    private final DomainId storeId;
+    private final StoreId storeId;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
@@ -35,10 +36,10 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
     private LocalDateTime updateTime;
 
     @Builder
-    private ProductResponse(DomainId productId, String productName, Money price,
+    private ProductResponse(ProductId productId, String productName, Money price,
             String description,
             String brand, String category, LocalDateTime createdTime, LocalDateTime updateTime,
-            Links links, DomainId storeId) {
+            Links links, StoreId storeId) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;

@@ -2,11 +2,12 @@ package com.albert.commerce.api.product.command.application;
 
 import com.albert.commerce.api.product.command.application.dto.ProductRequest;
 import com.albert.commerce.api.product.command.domain.Product;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.command.domain.ProductRepository;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.user.command.application.UserService;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.time.LocalDateTime;
@@ -23,8 +24,8 @@ public class ProductService {
     private final StoreService storeService;
 
     @Transactional
-    public DomainId addProduct(String userEmail, ProductRequest productRequest) {
-        DomainId userId = userService.findIdByEmail(userEmail);
+    public ProductId addProduct(String userEmail, ProductRequest productRequest) {
+        UserId userId = userService.findIdByEmail(userEmail);
         Store store = storeService.getStoreByUserEmail(userId);
 
         Product product = Product.builder()
@@ -39,9 +40,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void update(String userEmail, DomainId productId,
+    public void update(String userEmail, ProductId productId,
             ProductRequest productRequest) {
-        DomainId userId = userService.findIdByEmail(userEmail);
+        UserId userId = userService.findIdByEmail(userEmail);
         Product product = productRepository.findByUserIdAndProductId(userId,
                 productId).orElseThrow(ProductNotFoundException::new);
 
@@ -55,12 +56,12 @@ public class ProductService {
         );
     }
 
-    public Product getProductById(DomainId productId) {
+    public Product getProductById(ProductId productId) {
         return productRepository.findByProductId(productId)
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public void checkId(DomainId productId) {
+    public void checkId(ProductId productId) {
         if (productRepository.existsById(productId)) {
             return;
         }

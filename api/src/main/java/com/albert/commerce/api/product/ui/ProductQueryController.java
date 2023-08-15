@@ -1,8 +1,8 @@
 package com.albert.commerce.api.product.ui;
 
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
+import com.albert.commerce.api.product.command.domain.ProductId;
 import com.albert.commerce.api.product.query.application.ProductFacade;
-import com.albert.commerce.common.domain.DomainId;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +39,7 @@ public class ProductQueryController {
 
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable DomainId productId) {
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable ProductId productId) {
         return ResponseEntity.ok(productFacade.getProductId(productId));
     }
 }

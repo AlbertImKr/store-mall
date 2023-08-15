@@ -1,11 +1,11 @@
 package com.albert.commerce.api.store.query.application;
 
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.StoreNotFoundException;
 import com.albert.commerce.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class StoreFacade {
     }
 
     @Transactional(readOnly = true)
-    public StoreData getStoreById(DomainId storeId) {
+    public StoreData getStoreById(StoreId storeId) {
         return storeDataDao.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
 

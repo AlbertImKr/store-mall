@@ -1,6 +1,7 @@
 package com.albert.commerce.api.order.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.units.DeliveryStatus;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,13 +35,13 @@ public class Order {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false))
-    private DomainId orderId;
+    private OrderId orderId;
     @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     @Embedded
-    private DomainId userId;
+    private UserId userId;
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private DomainId storeId;
+    private StoreId storeId;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_id"))
     @OrderColumn(name = "order_line_id")
@@ -58,7 +59,7 @@ public class Order {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Order(DomainId orderId, DomainId userId, List<OrderLine> orderLines, DomainId storeId) {
+    private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, StoreId storeId) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderLines = orderLines;
@@ -66,7 +67,7 @@ public class Order {
         this.storeId = storeId;
     }
 
-    public void updateId(DomainId orderId, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public void updateId(OrderId orderId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;

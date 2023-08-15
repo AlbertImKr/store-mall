@@ -1,8 +1,8 @@
 package com.albert.commerce.api.comment.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.comment.command.domain.CommentId;
 import java.time.LocalDateTime;
 
-public record CommentDeletedRequest(DomainId commentId, LocalDateTime updatedTime) {
+public record CommentDeletedRequest(CommentId commentId, LocalDateTime updatedTime) {
 
 }

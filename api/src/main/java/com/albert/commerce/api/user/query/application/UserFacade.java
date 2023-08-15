@@ -1,9 +1,9 @@
 package com.albert.commerce.api.user.query.application;
 
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.application.dto.UserUpdateRequest;
 import com.albert.commerce.api.user.query.domain.UserDao;
 import com.albert.commerce.api.user.query.domain.UserData;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class UserFacade {
     }
 
     @Transactional(readOnly = true)
-    public UserData getUserById(DomainId userId) {
+    public UserData getUserById(UserId userId) {
         return userDao.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 

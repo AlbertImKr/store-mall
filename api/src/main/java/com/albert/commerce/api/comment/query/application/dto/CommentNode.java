@@ -1,7 +1,10 @@
 package com.albert.commerce.api.comment.query.application.dto;
 
 import com.albert.commerce.api.comment.command.application.CommentResponse;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.comment.command.domain.CommentId;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,14 +21,14 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(value = "comment", itemRelation = "comment", collectionRelation = "comments")
 public class CommentNode {
 
-    private DomainId commentId;
-    private DomainId userId;
+    private CommentId commentId;
+    private UserId userId;
     private String nickname;
-    private DomainId storeId;
-    private DomainId productId;
+    private StoreId storeId;
+    private ProductId productId;
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
-    private DomainId parentCommentId;
+    private CommentId parentCommentId;
     private String detail;
 
     @JsonProperty(value = "comment")
@@ -38,7 +41,7 @@ public class CommentNode {
     }
 
     private static void addChildToSeed(List<CommentNode> seedCommentNodes,
-            Map<DomainId, CommentNode> childCommentNodes) {
+            Map<CommentId, CommentNode> childCommentNodes) {
         for (CommentNode seedComment : seedCommentNodes) {
             CommentNode currentComment = seedComment;
             while (childCommentNodes.containsKey(currentComment.getCommentId())) {
@@ -49,7 +52,7 @@ public class CommentNode {
         }
     }
 
-    private static Map<DomainId, CommentNode> getChildCommentNodesEntry(
+    private static Map<CommentId, CommentNode> getChildCommentNodesEntry(
             List<CommentResponse> commentResponses) {
         return commentResponses.stream()
                 .filter(commentResponse -> commentResponse.getParentCommentId() != null)

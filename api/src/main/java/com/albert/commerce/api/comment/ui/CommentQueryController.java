@@ -2,7 +2,9 @@ package com.albert.commerce.api.comment.ui;
 
 import com.albert.commerce.api.comment.query.application.CommentFacade;
 import com.albert.commerce.api.comment.query.application.dto.CommentNode;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
@@ -20,18 +22,18 @@ public class CommentQueryController {
     @GetMapping(params = "productId")
     public CollectionModel<CommentNode> findCommentsByProductId(String productId) {
         return CollectionModel.of(
-                commentFacade.findCommentsResponseByProductId(DomainId.from(productId)));
+                commentFacade.findCommentsResponseByProductId(ProductId.from(productId)));
     }
 
     @GetMapping(params = "userId")
     public CollectionModel<CommentNode> findCommentsByUserId(String userId) {
         return CollectionModel.of(
-                commentFacade.findCommentsResponseByUserId(DomainId.from(userId)));
+                commentFacade.findCommentsResponseByUserId(UserId.from(userId)));
     }
 
     @GetMapping(params = "storeId")
     public CollectionModel<CommentNode> findCommentsByStoreId(String storeId) {
         return CollectionModel.of(
-                commentFacade.findCommentsResponseByStoreId(DomainId.from(storeId)));
+                commentFacade.findCommentsResponseByStoreId(StoreId.from(storeId)));
     }
 }

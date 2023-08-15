@@ -1,6 +1,7 @@
 package com.albert.commerce.api.product.query.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.infra.persistence.converters.MoneyConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,10 +26,10 @@ public class ProductData {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
-    private DomainId productId;
+    private ProductId productId;
     @AttributeOverride(name = "value", column = @Column(name = "store_id", nullable = false))
     @Embedded
-    private DomainId storeId;
+    private StoreId storeId;
     @Column(nullable = false)
     private String productName;
     @Convert(converter = MoneyConverter.class)
@@ -50,7 +51,7 @@ public class ProductData {
     protected LocalDateTime updateTime;
 
     @Builder
-    public ProductData(DomainId productId, DomainId storeId, String productName, Money price, String description,
+    public ProductData(ProductId productId, StoreId storeId, String productName, Money price, String description,
             String brand, String category) {
         this.productId = productId;
         this.storeId = storeId;
@@ -61,11 +62,11 @@ public class ProductData {
         this.category = category;
     }
 
-    public DomainId getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 
-    public DomainId getStoreId() {
+    public StoreId getStoreId() {
         return storeId;
     }
 

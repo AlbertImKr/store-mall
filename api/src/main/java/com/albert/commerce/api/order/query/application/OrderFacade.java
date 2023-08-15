@@ -9,11 +9,12 @@ import com.albert.commerce.api.order.query.domain.OrderDetail;
 import com.albert.commerce.api.order.query.domain.OrderDetails;
 import com.albert.commerce.api.product.command.application.dto.ProductResponse;
 import com.albert.commerce.api.product.query.application.ProductFacade;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.StoreFacade;
 import com.albert.commerce.api.store.query.domain.StoreData;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.application.UserFacade;
 import com.albert.commerce.api.user.query.domain.UserData;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.exception.OrderNotFoundException;
 import com.albert.commerce.common.infra.persistence.Money;
 import java.util.List;
@@ -61,8 +62,8 @@ public class OrderFacade {
 
     @Transactional
     public void save(OrderCreatedRequest orderCreatedRequest) {
-        DomainId userId = orderCreatedRequest.getUserId();
-        DomainId storeId = orderCreatedRequest.getStoreId();
+        UserId userId = orderCreatedRequest.getUserId();
+        StoreId storeId = orderCreatedRequest.getStoreId();
         UserData userData = userFacade.getUserById(userId);
         StoreData storeData = storeFacade.getStoreById(storeId);
         List<OrderDetailRequest> orderDetailRequests = orderCreatedRequest.getOrderDetailRequests();

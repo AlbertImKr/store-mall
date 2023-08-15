@@ -1,6 +1,6 @@
 package com.albert.commerce.api.store.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,12 +25,12 @@ public class Store {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "store_id"))
-    private DomainId storeId;
+    private StoreId storeId;
     @Column(nullable = false)
     private String storeName;
     @Column(nullable = false)
     @AttributeOverride(name = "value", column = @Column(name = "user_id"))
-    private DomainId userId;
+    private UserId userId;
     @Column(nullable = false)
     private String ownerName;
     @Column(nullable = false)
@@ -49,7 +49,7 @@ public class Store {
     protected LocalDateTime updateTime;
 
     @Builder
-    private Store(DomainId storeId, String storeName, DomainId userId, String ownerName,
+    private Store(StoreId storeId, String storeName, UserId userId, String ownerName,
             String address, String phoneNumber, String email) {
         this.storeId = storeId;
         this.storeName = storeName;
@@ -60,7 +60,7 @@ public class Store {
         this.email = email;
     }
 
-    public void updateId(DomainId storeId) {
+    public void updateId(StoreId storeId) {
         this.storeId = storeId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();

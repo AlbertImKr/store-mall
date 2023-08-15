@@ -1,13 +1,12 @@
 package com.albert.commerce.api.comment.command.domain;
 
-import com.albert.commerce.common.domain.DomainId;
 import java.util.Optional;
 
 public interface CommentRepository {
 
     Comment save(Comment comment);
 
-    boolean existsById(DomainId domainId);
+    boolean existsById(CommentId commentId);
 
-    Optional<Comment> findById(DomainId commentId);
+    Optional<Comment> findById(CommentId commentId);
 }

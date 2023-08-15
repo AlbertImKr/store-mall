@@ -3,7 +3,7 @@ package com.albert.commerce.api.store.ui;
 import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.net.URI;
 import java.security.Principal;
@@ -28,7 +28,7 @@ public class StoreController {
     public ResponseEntity<Map<String, String>> createStore(@RequestBody NewStoreRequest newStoreRequest,
             Principal principal) {
         String userEmail = principal.getName();
-        DomainId storeId = storeService.createStore(userEmail, newStoreRequest);
+        StoreId storeId = storeService.createStore(userEmail, newStoreRequest);
 
         URI myStore = BusinessLinks.MY_STORE.toUri();
         return ResponseEntity.created(myStore).body(Map.of("storeId", storeId.getValue()));

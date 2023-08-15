@@ -1,9 +1,9 @@
 package com.albert.commerce.api.user.infra.persistance;
 
 import com.albert.commerce.api.user.command.domain.User;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.command.domain.UserRepository;
 import com.albert.commerce.api.user.infra.persistance.imports.UserJpaRepository;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -27,8 +27,8 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.save(user);
     }
 
-    private DomainId nextId() {
-        return DomainId.from(sequenceGenerator.generate());
+    private UserId nextId() {
+        return UserId.from(sequenceGenerator.generate());
     }
 
     @Override

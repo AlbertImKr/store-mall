@@ -1,9 +1,10 @@
 package com.albert.commerce.api.order.infra.persistence;
 
+import com.albert.commerce.api.order.command.domain.OrderId;
 import com.albert.commerce.api.order.infra.persistence.imports.OrderDataJpaRepository;
 import com.albert.commerce.api.order.query.domain.OrderDao;
 import com.albert.commerce.api.order.query.domain.OrderData;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,12 @@ public class OrderDaoImpl implements OrderDao {
     private final OrderDataJpaRepository orderDataJpaRepository;
 
     @Override
-    public Page<OrderData> findAllByUserId(DomainId userId, Pageable pageable) {
+    public Page<OrderData> findAllByUserId(UserId userId, Pageable pageable) {
         return orderDataJpaRepository.findByUserId(userId, pageable);
     }
 
     @Override
-    public List<OrderData> findByUserIdAndOrderId(DomainId userId, DomainId orderId) {
+    public List<OrderData> findByUserIdAndOrderId(UserId userId, OrderId orderId) {
         return orderDataJpaRepository.findByUserIdAndOrderId(userId, orderId);
     }
 
@@ -33,7 +34,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Optional<OrderData> findById(DomainId orderId) {
+    public Optional<OrderData> findById(OrderId orderId) {
         return orderDataJpaRepository.findById(orderId);
     }
 }

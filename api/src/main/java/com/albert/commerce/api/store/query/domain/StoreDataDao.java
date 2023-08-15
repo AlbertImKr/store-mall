@@ -1,15 +1,16 @@
 package com.albert.commerce.api.store.query.domain;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.Optional;
 
 public interface StoreDataDao {
 
-    Optional<StoreData> findById(DomainId storeId);
+    Optional<StoreData> findById(StoreId storeId);
 
-    boolean exists(DomainId storeId);
+    boolean exists(StoreId storeId);
 
     StoreData save(StoreData storeData);
 
-    Optional<StoreData> findByUserId(DomainId userId);
+    Optional<StoreData> findByUserId(UserId userId);
 }

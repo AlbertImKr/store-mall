@@ -1,7 +1,7 @@
 package com.albert.commerce.api.store.command.application.dto;
 
 import com.albert.commerce.api.store.command.domain.Store;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -17,12 +17,12 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class ConsumerStoreResponse extends RepresentationModel<ConsumerStoreResponse> {
 
-    private DomainId storeId;
+    private StoreId storeId;
     private String storeName;
 
 
     @Builder
-    private ConsumerStoreResponse(DomainId storeId, String storeName, Links links) {
+    private ConsumerStoreResponse(StoreId storeId, String storeName, Links links) {
         this.storeId = storeId;
         this.storeName = storeName;
         super.add(links);

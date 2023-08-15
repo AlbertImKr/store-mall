@@ -1,9 +1,10 @@
 package com.albert.commerce.api.store.infra.presentation;
 
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreDataJpaRepository;
 import com.albert.commerce.api.store.query.domain.StoreData;
 import com.albert.commerce.api.store.query.domain.StoreDataDao;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,12 +16,12 @@ public class StoreDataDaoImpl implements StoreDataDao {
     private final StoreDataJpaRepository storeDataJpaRepository;
 
     @Override
-    public Optional<StoreData> findById(DomainId storeId) {
+    public Optional<StoreData> findById(StoreId storeId) {
         return storeDataJpaRepository.findById(storeId);
     }
 
     @Override
-    public boolean exists(DomainId storeId) {
+    public boolean exists(StoreId storeId) {
         return storeDataJpaRepository.existsById(storeId);
     }
 
@@ -30,7 +31,7 @@ public class StoreDataDaoImpl implements StoreDataDao {
     }
 
     @Override
-    public Optional<StoreData> findByUserId(DomainId userId) {
+    public Optional<StoreData> findByUserId(UserId userId) {
         return storeDataJpaRepository.findByUserId(userId);
     }
 }

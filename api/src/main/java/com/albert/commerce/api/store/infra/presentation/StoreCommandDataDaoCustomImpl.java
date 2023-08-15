@@ -1,9 +1,10 @@
 package com.albert.commerce.api.store.infra.presentation;
 
 import com.albert.commerce.api.store.command.domain.Store;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.command.domain.StoreRepository;
 import com.albert.commerce.api.store.infra.presentation.imports.StoreJpaRepository;
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,14 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     private final StoreJpaRepository storeJpaRepository;
     private final SequenceGenerator sequenceGenerator;
 
-    private DomainId nextId() {
-        return DomainId.from(sequenceGenerator.generate());
+    @Override
+    public boolean existsByUserId(UserId userId) {
+        return storeJpaRepository.existsByUserId(userId);
     }
 
     @Override
-    public boolean existsByUserId(DomainId userId) {
-        return storeJpaRepository.existsByUserId(userId);
+    public Optional<Store> findByUserId(UserId userId) {
+        return storeJpaRepository.findByUserId(userId);
     }
 
     @Override
@@ -32,12 +34,11 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     }
 
     @Override
-    public Optional<Store> findByUserId(DomainId userId) {
-        return storeJpaRepository.findByUserId(userId);
+    public boolean existsById(StoreId storeId) {
+        return storeJpaRepository.existsById(storeId);
     }
 
-    @Override
-    public boolean existsById(DomainId storeId) {
-        return storeJpaRepository.existsById(storeId);
+    private StoreId nextId() {
+        return StoreId.from(sequenceGenerator.generate());
     }
 }

@@ -2,8 +2,8 @@ package com.albert.commerce.api.user.command.application.dto;
 
 import com.albert.commerce.api.user.command.domain.Role;
 import com.albert.commerce.api.user.command.domain.User;
+import com.albert.commerce.api.user.command.domain.UserId;
 import com.albert.commerce.api.user.query.domain.UserData;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -15,7 +15,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Builder
 public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
-    private DomainId id;
+    private UserId userId;
     private String nickname;
     private String email;
     private Role role;
@@ -26,7 +26,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
     public static UserInfoResponse from(User user) {
         return UserInfoResponse.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .role(user.getRole())
@@ -40,7 +40,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
     public static UserInfoResponse from(UserData user) {
         return UserInfoResponse.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .role(user.getRole())
@@ -63,7 +63,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
         if (!super.equals(o)) {
             return false;
         }
-        return isActive() == that.isActive() && Objects.equals(getId(), that.getId()) && Objects.equals(
+        return isActive() == that.isActive() && Objects.equals(getUserId(), that.getUserId()) && Objects.equals(
                 getNickname(), that.getNickname()) && Objects.equals(getEmail(), that.getEmail())
                 && getRole() == that.getRole() && Objects.equals(getDateOfBirth(), that.getDateOfBirth())
                 && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(
@@ -72,7 +72,7 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), getNickname(), getEmail(), getRole(), getDateOfBirth(),
+        return Objects.hash(super.hashCode(), getUserId(), getNickname(), getEmail(), getRole(), getDateOfBirth(),
                 getPhoneNumber(), getAddress(), isActive());
     }
 }

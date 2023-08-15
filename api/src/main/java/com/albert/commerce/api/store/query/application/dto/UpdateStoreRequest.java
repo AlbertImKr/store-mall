@@ -1,11 +1,11 @@
 package com.albert.commerce.api.store.query.application.dto;
 
-import com.albert.commerce.common.domain.DomainId;
+import com.albert.commerce.api.store.command.domain.StoreId;
 import lombok.Builder;
 
 @Builder
 public record UpdateStoreRequest(
-        DomainId storeId,
+        StoreId storeId,
         String storeName,
         String address,
         String phoneNumber,

@@ -1,8 +1,8 @@
 package com.albert.commerce.api.store.ui;
 
+import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.store.query.application.StoreFacade;
 import com.albert.commerce.api.store.query.domain.StoreData;
-import com.albert.commerce.common.domain.DomainId;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class StoreQueryController {
 
     @GetMapping("/{storeId}")
     public ResponseEntity<EntityModel<StoreData>> getStore(@PathVariable String storeId) {
-        StoreData storeData = storeFacade.getStoreById(DomainId.from(storeId));
+        StoreData storeData = storeFacade.getStoreById(StoreId.from(storeId));
         return ResponseEntity.ok().body(
                 EntityModel.of(storeData).add(
                         WebMvcLinkBuilder.linkTo(StoreController.class).slash(storeId)
