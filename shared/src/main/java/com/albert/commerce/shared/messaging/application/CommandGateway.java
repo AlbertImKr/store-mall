@@ -7,4 +7,5 @@ import org.springframework.integration.annotation.MessagingGateway;
 @MessagingGateway(defaultRequestChannel = COMMAND_CHANNEL)
 public interface CommandGateway {
 
+    <T> T request(Command command);
 }
