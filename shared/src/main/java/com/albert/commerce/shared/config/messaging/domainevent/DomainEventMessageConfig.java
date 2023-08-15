@@ -2,28 +2,24 @@ package com.albert.commerce.shared.config.messaging.domainevent;
 
 import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.endpoint.EventDrivenConsumer;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
 @Configuration
 public class DomainEventMessageConfig {
@@ -56,6 +52,15 @@ public class DomainEventMessageConfig {
     }
 
     @Bean
+    public boolean registerChannel(GenericWebApplicationContext context, TaskExecutor messageTaskExecutor,
+            Set<String> domainEventClassNames) {
+        for (String className : domainEventClassNames) {
+            context.registerBean(className, PublishSubscribeChannel.class, messageTaskExecutor, true);
+        }
+        return true;
+    }
+
+    @Bean
     public PublishSubscribeChannel domainEventChannel(ThreadPoolTaskExecutor messageTaskExecutor) {
         return new PublishSubscribeChannel(messageTaskExecutor);
     }
@@ -70,32 +75,8 @@ public class DomainEventMessageConfig {
     public MessageHandler domainEventSender(ApplicationContext applicationContext) {
         return message -> {
             String domainEventClassName = message.getPayload().getClass().getSimpleName();
-            MessageChannel messageChannel = applicationContext.getBean(MessageChannel.class, domainEventClassName);
+            MessageChannel messageChannel = applicationContext.getBean(domainEventClassName, MessageChannel.class);
             messageChannel.send(message);
         };
-    }
-
-    @Component
-    private static class DomainEventChannelRegistry {
-
-        private static final Map<String, PublishSubscribeChannel> channels = new ConcurrentHashMap<>();
-
-        public DomainEventChannelRegistry(Set<String> domainEventClassNames, Executor messageTaskExecutor,
-                ConfigurableListableBeanFactory beanFactory) {
-            for (String className : domainEventClassNames) {
-                PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
-                channel.setBeanName(className);
-                beanFactory.registerSingleton(className, channel);
-                this.registerChannel(className, channel);
-            }
-        }
-
-        public static Optional<PublishSubscribeChannel> findChannel(String className) {
-            return Optional.ofNullable(channels.get(className));
-        }
-
-        public void registerChannel(String className, PublishSubscribeChannel channel) {
-            channels.put(className, channel);
-        }
     }
 }
