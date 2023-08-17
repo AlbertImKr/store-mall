@@ -5,7 +5,7 @@ import com.albert.commerce.query.application.user.dto.UserCreatedEvent;
 import com.albert.commerce.query.application.user.dto.UserUpdateEvent;
 import com.albert.commerce.query.domain.user.UserData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -14,7 +14,7 @@ public class UserEventHandler {
 
     private final UserFacade userFacade;
 
-    @ServiceActivator(inputChannel = "UserCreatedEvent")
+    @KafkaListener(topics = "UserCreatedEvent")
     public void handleUserCreateEvent(UserCreatedEvent userCreatedEvent) {
         UserData userData = UserData.builder()
                 .userId(userCreatedEvent.userId())
@@ -29,7 +29,7 @@ public class UserEventHandler {
         userFacade.save(userData);
     }
 
-    @ServiceActivator(inputChannel = "UserUpdateEvent")
+    @KafkaListener(topics = "UserUpdateEvent")
     public void handleUserUpdateEvent(UserUpdateEvent userUpdateEvent) {
         userFacade.update(userUpdateEvent);
     }

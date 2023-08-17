@@ -11,3 +11,7 @@ commerce:
       queue-capacity: 100
       thread-name-prefix: "task-executor-"
       await-termination-seconds: 60
+spring:
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
