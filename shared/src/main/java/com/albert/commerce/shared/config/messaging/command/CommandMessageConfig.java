@@ -1,6 +1,6 @@
 package com.albert.commerce.shared.config.messaging.command;
 
-import com.albert.commerce.shared.messaging.application.Command;
+import com.albert.commerce.shared.messaging.domain.event.Command;
 import com.albert.commerce.shared.messaging.application.CommandGateway;
 import java.util.Set;
 import org.reflections.Reflections;
@@ -51,7 +51,7 @@ public class CommandMessageConfig {
             CommandClassResolver commandClassResolver
     ) {
         for (String className : commandClassResolver.getNames()) {
-            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
+            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor);
             context.registerBean(className, PublishSubscribeChannel.class, () -> channel);
         }
         return true;

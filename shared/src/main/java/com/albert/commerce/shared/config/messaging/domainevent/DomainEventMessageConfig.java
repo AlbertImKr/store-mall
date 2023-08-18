@@ -1,19 +1,15 @@
 package com.albert.commerce.shared.config.messaging.domainevent;
 
 import com.albert.commerce.shared.messaging.domain.event.DomainEvent;
-import java.lang.reflect.Method;
+import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.endpoint.EventDrivenConsumer;
 import org.springframework.messaging.MessageChannel;
@@ -26,29 +22,12 @@ public class DomainEventMessageConfig {
 
     public static final String DOMAIN_EVENT_CHANNEL = "domainEventChannel";
 
-    @Value("${commerce.messaging.base-package.domain-event-listener}")
-    private String domainEventListenerBasePackage;
     @Value("${commerce.messaging.base-package.domain-event}")
     private String domainEventBasePackage;
-    @Value("${commerce.messaging.base-package.api}")
-    private String apiBasePackage;
-
-    @Bean
-    public Set<String> domainEventClassNames() {
-        Reflections reflections = new Reflections(
-                new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forPackage(apiBasePackage))
-                        .setScanners(new MethodAnnotationsScanner()));
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(ServiceActivator.class);
-
-        return methods.stream()
-                .map(method -> method.getAnnotation(ServiceActivator.class).inputChannel())
-                .collect(Collectors.toSet());
-    }
 
     @Bean
     public DomainEventClassResolver domainEventClassResolver() {
-        Reflections reflections = new Reflections(apiBasePackage);
+        Reflections reflections = new Reflections(domainEventBasePackage);
         Set<Class<? extends DomainEvent>> domainEventClasses = reflections.getSubTypesOf(DomainEvent.class);
         return new DomainEventClassResolver(domainEventClasses);
     }
@@ -56,31 +35,41 @@ public class DomainEventMessageConfig {
     @Bean
     public boolean registerChannel(
             GenericWebApplicationContext context,
-            TaskExecutor messageTaskExecutor,
-            Set<String> domainEventClassNames
+            @Qualifier("messageTaskExecutor") TaskExecutor messageTaskExecutor,
+            DomainEventClassResolver domainEventClassResolver
     ) {
-        for (String className : domainEventClassNames) {
-            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
+        for (String className : domainEventClassResolver.getClassNames()) {
+            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor);
             context.registerBean(className, PublishSubscribeChannel.class, () -> channel);
         }
         return true;
     }
 
     @Bean(DOMAIN_EVENT_CHANNEL)
-    public PublishSubscribeChannel domainEventChannel(ThreadPoolTaskExecutor messageTaskExecutor) {
+    public PublishSubscribeChannel domainEventChannel(
+            @Qualifier("messageTaskExecutor") ThreadPoolTaskExecutor messageTaskExecutor
+    ) {
         return new PublishSubscribeChannel(messageTaskExecutor);
     }
 
     @Bean
-    public EventDrivenConsumer domainEventHandler(PublishSubscribeChannel domainEventChannel,
-            MessageHandler domainEventSender) {
+    public EventDrivenConsumer domainEventHandler(
+            PublishSubscribeChannel domainEventChannel,
+            MessageHandler domainEventSender
+    ) {
         return new EventDrivenConsumer(domainEventChannel, domainEventSender);
     }
 
     @Bean
-    public MessageHandler domainEventSender(ApplicationContext applicationContext) {
+    public MessageHandler domainEventSender(
+            ApplicationContext applicationContext,
+            DomainEventClassResolver domainEventClassResolver
+    ) {
         return message -> {
             String domainEventClassName = message.getPayload().getClass().getSimpleName();
+            if (domainEventClassResolver.contains(domainEventClassName)) {
+                throw new NoSuchElementException();
+            }
             MessageChannel messageChannel = applicationContext.getBean(domainEventClassName, MessageChannel.class);
             messageChannel.send(message);
         };

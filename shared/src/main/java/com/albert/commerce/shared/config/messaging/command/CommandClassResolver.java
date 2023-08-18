@@ -1,6 +1,6 @@
 package com.albert.commerce.shared.config.messaging.command;
 
-import com.albert.commerce.shared.messaging.application.Command;
+import com.albert.commerce.shared.messaging.domain.event.Command;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
