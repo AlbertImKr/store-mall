@@ -3,12 +3,12 @@ package com.albert.commerce.command.units;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.albert.commerce.command.adapter.in.web.OrderController;
+import com.albert.commerce.command.adapter.in.web.ProductController;
+import com.albert.commerce.command.adapter.in.web.StoreController;
+import com.albert.commerce.command.adapter.in.web.UserController;
 import com.albert.commerce.command.domain.order.OrderId;
 import com.albert.commerce.command.domain.product.ProductId;
-import com.albert.commerce.command.interfaces.OrderController;
-import com.albert.commerce.command.interfaces.ProductController;
-import com.albert.commerce.command.interfaces.StoreController;
-import com.albert.commerce.command.interfaces.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;

@@ -2,9 +2,7 @@ package com.albert.commerce.shared.config.messaging.command;
 
 import com.albert.commerce.shared.messaging.application.Command;
 import com.albert.commerce.shared.messaging.application.CommandGateway;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.channel.ExecutorChannel;
+import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
 @Configuration
 @IntegrationComponentScan(basePackageClasses = {CommandGateway.class})
@@ -46,23 +44,16 @@ public class CommandMessageConfig {
         return new CommandClassResolver(commandClasses);
     }
 
-    @Component
-    private static class CommandExecutorChannelRegistry {
-
-        private final CommandClassResolver commandClassResolver;
-        private final Map<String, ExecutorChannel> commandChannels = new ConcurrentHashMap<>();
-
-        public CommandExecutorChannelRegistry(CommandClassResolver commandClassResolver) {
-            this.commandClassResolver = commandClassResolver;
+    @Bean
+    public boolean registerCommand(
+            GenericWebApplicationContext context,
+            TaskExecutor messageTaskExecutor,
+            CommandClassResolver commandClassResolver
+    ) {
+        for (String className : commandClassResolver.getNames()) {
+            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor, true);
+            context.registerBean(className, PublishSubscribeChannel.class, () -> channel);
         }
-
-        public void registerCommandChannels(TaskExecutor messageTaskExecutor) {
-            Set<String> commandNames = commandClassResolver.getNames();
-
-            for (String commandName : commandNames) {
-                ExecutorChannel executorChannel = new ExecutorChannel(messageTaskExecutor);
-                commandChannels.put(commandName, executorChannel);
-            }
-        }
+        return true;
     }
 }
