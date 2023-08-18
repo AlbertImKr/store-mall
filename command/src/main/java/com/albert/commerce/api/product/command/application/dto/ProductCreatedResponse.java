@@ -2,8 +2,8 @@ package com.albert.commerce.api.product.command.application.dto;
 
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
+import com.albert.commerce.api.units.BusinessLinks;
 import com.albert.commerce.common.infra.persistence.Money;
-import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;

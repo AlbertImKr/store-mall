@@ -1,9 +1,9 @@
 package com.albert.commerce.api.user.command.application.dto;
 
+import com.albert.commerce.api.units.BusinessLinks;
 import com.albert.commerce.api.user.command.domain.Role;
 import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.api.user.command.domain.UserId;
-import com.albert.commerce.common.units.BusinessLinks;
 import java.time.LocalDate;
 import java.util.Objects;
 import lombok.Builder;

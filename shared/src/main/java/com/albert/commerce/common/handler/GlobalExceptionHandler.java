@@ -6,7 +6,6 @@ import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.common.exception.StoreAlreadyExistsException;
 import com.albert.commerce.common.exception.StoreNotFoundException;
 import com.albert.commerce.common.exception.UnauthorizedModificationException;
-import com.albert.commerce.common.units.BusinessLinks;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -55,8 +54,7 @@ public class GlobalExceptionHandler {
         Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
         ErrorResponse errorResponse = new ErrorResponse(myStoreNotFoundException.getErrorMessage());
         return errorResponse.add(
-                selfRel,
-                BusinessLinks.CREATE_STORE
+                selfRel
         );
     }
 
@@ -69,8 +67,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 unauthorizedModificationException.getErrorMessage());
         return errorResponse.add(
-                selfRel,
-                BusinessLinks.CREATE_STORE
+                selfRel
         );
     }
 }
