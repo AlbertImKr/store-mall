@@ -9,6 +9,7 @@ import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.command.domain.UserId;
+import com.albert.commerce.common.exception.CommentNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

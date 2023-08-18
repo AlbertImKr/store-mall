@@ -1,6 +1,5 @@
 package com.albert.commerce.api.product.command.application.dto;
 
-import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,7 +26,6 @@ public class ProductsResponse extends RepresentationModel<ProductsResponse> {
     public static ProductsResponse from(Page<ProductResponse> productsResponse) {
         return ProductsResponse.builder()
                 .pageProductsResponse(productsResponse)
-                .links(Links.of(BusinessLinks.MY_STORE))
                 .build();
     }
 

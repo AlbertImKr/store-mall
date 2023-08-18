@@ -1,17 +1,16 @@
 package com.albert.commerce.api.user.command.application.dto;
 
-import com.albert.commerce.api.user.query.domain.UserData;
+import com.albert.commerce.api.user.command.domain.User;
 import java.util.List;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 @Getter
-public class CustomUserDetails extends User {
+public class CustomUserDetails extends org.springframework.security.core.userdetails.User {
 
-    private final UserData user;
+    private final User user;
 
-    public CustomUserDetails(UserData user) {
+    public CustomUserDetails(User user) {
         super(user.getEmail(), null,
                 List.of(new SimpleGrantedAuthority(user.getRole().getKey())));
         this.user = user;

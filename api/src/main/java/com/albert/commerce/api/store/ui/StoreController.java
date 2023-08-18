@@ -4,8 +4,6 @@ import com.albert.commerce.api.store.command.application.StoreService;
 import com.albert.commerce.api.store.command.application.dto.NewStoreRequest;
 import com.albert.commerce.api.store.command.application.dto.UpdateStoreRequest;
 import com.albert.commerce.api.store.command.domain.StoreId;
-import com.albert.commerce.common.units.BusinessLinks;
-import java.net.URI;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +28,7 @@ public class StoreController {
         String userEmail = principal.getName();
         StoreId storeId = storeService.createStore(userEmail, newStoreRequest);
 
-        URI myStore = BusinessLinks.MY_STORE.toUri();
-        return ResponseEntity.created(myStore).body(Map.of("storeId", storeId.getValue()));
+        return ResponseEntity.ok().body(Map.of("storeId", storeId.getValue()));
     }
 
     @PutMapping("/my")

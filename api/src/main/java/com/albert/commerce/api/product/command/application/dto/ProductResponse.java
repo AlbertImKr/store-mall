@@ -2,7 +2,6 @@ package com.albert.commerce.api.product.command.application.dto;
 
 import com.albert.commerce.api.product.command.domain.Product;
 import com.albert.commerce.api.product.command.domain.ProductId;
-import com.albert.commerce.api.product.query.domain.ProductData;
 import com.albert.commerce.api.store.command.domain.StoreId;
 import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.BusinessLinks;
@@ -67,18 +66,6 @@ public class ProductResponse extends RepresentationModel<ProductResponse> {
                 .build();
     }
 
-    public static ProductResponse from(ProductData product) {
-        return ProductResponse.builder()
-                .productId(product.getProductId())
-                .productName(product.getProductName())
-                .brand(product.getBrand())
-                .storeId(product.getStoreId())
-                .description(product.getDescription())
-                .category(product.getCategory())
-                .links(Links.of(BusinessLinks.getProductSelfRel(product.getProductId())))
-                .price(product.getPrice())
-                .build();
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -2,7 +2,6 @@ package com.albert.commerce.api.store.command.application.dto;
 
 import com.albert.commerce.api.store.command.domain.Store;
 import com.albert.commerce.api.store.command.domain.StoreId;
-import com.albert.commerce.common.units.BusinessLinks;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,7 +45,6 @@ public class SellerStoreResponse extends RepresentationModel<SellerStoreResponse
                 .email(store.getEmail())
                 .phoneNumber(store.getPhoneNumber())
                 .ownerName(store.getOwnerName())
-                .links(Links.of(BusinessLinks.MY_STORE))
                 .build();
     }
 

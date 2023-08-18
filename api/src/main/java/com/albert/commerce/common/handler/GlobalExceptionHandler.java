@@ -1,6 +1,5 @@
 package com.albert.commerce.common.handler;
 
-import com.albert.commerce.api.store.ui.StoreQueryController;
 import com.albert.commerce.common.exception.ErrorResponse;
 import com.albert.commerce.common.exception.MyStoreNotFoundException;
 import com.albert.commerce.common.exception.ProductNotFoundException;
@@ -10,7 +9,6 @@ import com.albert.commerce.common.exception.UnauthorizedModificationException;
 import com.albert.commerce.common.units.BusinessLinks;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,14 +26,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 storeAlreadyExistsException.getErrorMessage());
         return errorResponse.add(
-                selfRel,
-                BusinessLinks.MY_STORE
+                selfRel
         );
-    }
-
-    private static String getMyStoreRequestPath() {
-        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-                StoreQueryController.class).getMyStore(null)).toUri().getPath();
     }
 
     @ExceptionHandler(StoreNotFoundException.class)
@@ -44,12 +36,8 @@ public class GlobalExceptionHandler {
             HttpServletRequest httpServletRequest) {
         Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
         ErrorResponse errorResponse = new ErrorResponse(storeNotFoundException.getErrorMessage());
-        if (httpServletRequest.getRequestURI().equals(getMyStoreRequestPath())) {
-            return errorResponse.add(selfRel, BusinessLinks.CREATE_STORE);
-        }
         return errorResponse.add(
-                selfRel,
-                BusinessLinks.GET_STORE
+                selfRel
         );
     }
 
@@ -82,7 +70,6 @@ public class GlobalExceptionHandler {
                 unauthorizedModificationException.getErrorMessage());
         return errorResponse.add(
                 selfRel,
-                BusinessLinks.MY_STORE,
                 BusinessLinks.CREATE_STORE
         );
     }

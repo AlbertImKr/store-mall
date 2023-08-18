@@ -3,7 +3,6 @@ package com.albert.commerce.api.user.command.application.dto;
 import com.albert.commerce.api.user.command.domain.Role;
 import com.albert.commerce.api.user.command.domain.User;
 import com.albert.commerce.api.user.command.domain.UserId;
-import com.albert.commerce.api.user.query.domain.UserData;
 import com.albert.commerce.common.units.BusinessLinks;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -38,19 +37,6 @@ public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
                 .add(BusinessLinks.USER_INFO_RESPONSE_LINKS);
     }
 
-    public static UserInfoResponse from(UserData user) {
-        return UserInfoResponse.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .dateOfBirth(user.getDateOfBirth())
-                .phoneNumber(user.getPhoneNumber())
-                .address(user.getAddress())
-                .isActive(user.isActive())
-                .build()
-                .add(BusinessLinks.USER_INFO_RESPONSE_LINKS);
-    }
 
     @Override
     public boolean equals(Object o) {

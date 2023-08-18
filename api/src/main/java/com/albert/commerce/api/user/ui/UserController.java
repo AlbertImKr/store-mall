@@ -2,8 +2,6 @@ package com.albert.commerce.api.user.ui;
 
 import com.albert.commerce.api.user.command.application.UserService;
 import com.albert.commerce.api.user.command.application.dto.UserProfileRequest;
-import com.albert.commerce.api.user.query.application.UserFacade;
-import com.albert.commerce.api.user.query.domain.UserData;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final UserFacade userFacade;
 
     @PutMapping("/users/profile")
     public ResponseEntity<Void> updateUserInfo(Principal principal,
@@ -32,12 +29,6 @@ public class UserController {
     @GetMapping("/")
     public OAuth2User mainPage(@AuthenticationPrincipal OAuth2User oAuth2User) {
         return oAuth2User;
-    }
-
-    @GetMapping("/users/profile")
-    public ResponseEntity<UserData> getUserInfo(Principal principal) {
-        UserData user = userFacade.getUserByEmail(principal.getName());
-        return ResponseEntity.ok().body(user);
     }
 }
 
