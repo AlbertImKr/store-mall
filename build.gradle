@@ -111,7 +111,7 @@ project(':authorization-server') {
     }
 }
 
-project(':api') {
+project(':command') {
     dependencies {
         implementation project(":shared")
     }
