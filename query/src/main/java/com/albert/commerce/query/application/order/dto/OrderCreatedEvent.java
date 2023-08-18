@@ -1,6 +1,6 @@
 package com.albert.commerce.query.application.order.dto;
 
-import com.albert.commerce.query.common.units.DeliveryStatus;
+import com.albert.commerce.common.units.DeliveryStatus;
 import com.albert.commerce.query.domain.order.OrderId;
 import com.albert.commerce.query.domain.store.StoreId;
 import com.albert.commerce.query.domain.user.UserId;

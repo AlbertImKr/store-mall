@@ -1,8 +1,8 @@
 package com.albert.commerce.query.application.store;
 
+import com.albert.commerce.common.exception.StoreNotFoundException;
+import com.albert.commerce.common.exception.UserNotFoundException;
 import com.albert.commerce.query.application.store.dto.StoreUpdatedEvent;
-import com.albert.commerce.query.common.exception.StoreNotFoundException;
-import com.albert.commerce.query.common.exception.UserNotFoundException;
 import com.albert.commerce.query.domain.store.StoreData;
 import com.albert.commerce.query.domain.store.StoreDataDao;
 import com.albert.commerce.query.domain.store.StoreId;

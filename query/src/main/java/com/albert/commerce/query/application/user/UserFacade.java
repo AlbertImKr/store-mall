@@ -1,7 +1,7 @@
 package com.albert.commerce.query.application.user;
 
+import com.albert.commerce.common.exception.UserNotFoundException;
 import com.albert.commerce.query.application.user.dto.UserUpdateEvent;
-import com.albert.commerce.query.common.exception.UserNotFoundException;
 import com.albert.commerce.query.domain.user.UserDao;
 import com.albert.commerce.query.domain.user.UserData;
 import com.albert.commerce.query.domain.user.UserId;

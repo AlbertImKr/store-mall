@@ -1,8 +1,8 @@
 package com.albert.commerce.query.application.product;
 
+import com.albert.commerce.common.exception.ProductNotFoundException;
 import com.albert.commerce.query.application.product.dto.ProductCreatedEvent;
 import com.albert.commerce.query.application.product.dto.ProductUpdatedEvent;
-import com.albert.commerce.query.common.exception.ProductNotFoundException;
 import com.albert.commerce.query.domain.product.ProductDao;
 import com.albert.commerce.query.domain.product.ProductData;
 import com.albert.commerce.query.domain.product.ProductId;
