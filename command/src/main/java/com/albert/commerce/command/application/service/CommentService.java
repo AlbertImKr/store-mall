@@ -1,6 +1,5 @@
 package com.albert.commerce.command.application.service;
 
-import com.albert.commerce.command.adapter.in.web.dto.CommentRequest;
 import com.albert.commerce.command.application.port.out.CommentRepository;
 import com.albert.commerce.command.domain.comment.Comment;
 import com.albert.commerce.command.domain.comment.CommentId;
@@ -8,8 +7,12 @@ import com.albert.commerce.command.domain.product.ProductId;
 import com.albert.commerce.command.domain.store.StoreId;
 import com.albert.commerce.command.domain.user.UserId;
 import com.albert.commerce.common.exception.CommentNotFoundException;
+import com.albert.commerce.shared.messaging.application.CommentCreateCommand;
+import com.albert.commerce.shared.messaging.application.CommentDeleteCommand;
+import com.albert.commerce.shared.messaging.application.CommentUpdateCommand;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,31 +27,43 @@ public class CommentService {
     private final StoreService storeService;
 
     @Transactional
-    public CommentId create(String userEmail, CommentRequest commentRequest) {
-        UserId userId = userService.findIdByEmail(userEmail);
+    @ServiceActivator(inputChannel = "CommentCreateCommand")
+    public String create(CommentCreateCommand commentCreateCommand) {
+        UserId userId = userService.getUserIdByEmail(commentCreateCommand.getUserEmail());
 
-        ProductId productId = ProductId.from(commentRequest.productId());
+        ProductId productId = ProductId.from(commentCreateCommand.getProductId());
         productService.checkId(productId);
 
-        StoreId storeId = StoreId.from(commentRequest.storeId());
+        StoreId storeId = StoreId.from(commentCreateCommand.getStoreId());
         storeService.checkId(storeId);
 
-        CommentId parentCommentId = getParentCommentId(commentRequest.parentCommentId());
-        Comment comment = toComment(commentRequest, userId, productId, storeId, parentCommentId);
-        return commentRepository.save(comment).getCommentId();
+        CommentId parentCommentId = getParentCommentId(commentCreateCommand.getParentCommentId());
+        Comment comment = toComment(productId, storeId, userId, commentCreateCommand.getDetail(), parentCommentId);
+        return commentRepository.save(comment)
+                .getCommentId()
+                .getValue();
     }
 
     @Transactional
-    public CommentId update(CommentId commentId, String detail) {
-        Comment comment = commentRepository.findById(commentId)
+    @ServiceActivator(inputChannel = "CommentUpdateCommand")
+    public String update(CommentUpdateCommand commentUpdateCommand) {
+        UserId userId = userService.getUserIdByEmail(commentUpdateCommand.getUserEmail());
+
+        CommentId commentId = CommentId.from(commentUpdateCommand.getCommandId());
+        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(CommentNotFoundException::new);
-        comment.update(detail, LocalDateTime.now());
-        return comment.getCommentId();
+        comment.update(commentUpdateCommand.getDetail(), LocalDateTime.now());
+        return comment.getCommentId()
+                .getValue();
     }
 
     @Transactional
-    public void delete(CommentId commentId) {
-        Comment comment = commentRepository.findById(commentId)
+    @ServiceActivator(inputChannel = "CommentDeleteCommand")
+    public void delete(CommentDeleteCommand commentDeleteCommand) {
+        UserId userId = userService.getUserIdByEmail(commentDeleteCommand.getUserEmail());
+
+        CommentId commentId = CommentId.from(commentDeleteCommand.getCommandId());
+        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(CommentNotFoundException::new);
         comment.delete(LocalDateTime.now());
     }
@@ -63,13 +78,13 @@ public class CommentService {
         return parentCommentId;
     }
 
-    private static Comment toComment(CommentRequest commentRequest, UserId userId, ProductId productId,
-            StoreId storeId, CommentId parentCommentId) {
+    private static Comment toComment(ProductId productId, StoreId storeId, UserId userId, String detail,
+            CommentId parentCommentId) {
         return Comment.builder()
                 .productId(productId)
                 .storeId(storeId)
                 .userId(userId)
-                .detail(commentRequest.detail())
+                .detail(detail)
                 .parentCommentId(parentCommentId)
                 .build();
     }

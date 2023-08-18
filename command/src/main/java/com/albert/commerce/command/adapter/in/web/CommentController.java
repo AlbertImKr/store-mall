@@ -1,9 +1,11 @@
 package com.albert.commerce.command.adapter.in.web;
 
-import com.albert.commerce.command.adapter.in.web.dto.CommentRequest;
+import com.albert.commerce.command.adapter.in.web.dto.CommentCreateRequest;
 import com.albert.commerce.command.adapter.in.web.dto.CommentUpdateRequest;
-import com.albert.commerce.command.application.service.CommentService;
-import com.albert.commerce.command.domain.comment.CommentId;
+import com.albert.commerce.shared.messaging.application.CommandGateway;
+import com.albert.commerce.shared.messaging.application.CommentCreateCommand;
+import com.albert.commerce.shared.messaging.application.CommentDeleteCommand;
+import com.albert.commerce.shared.messaging.application.CommentUpdateCommand;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -23,28 +25,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createComment(
-            @RequestBody CommentRequest commentRequest,
-            Principal principal) {
+    public ResponseEntity<Map<String, String>> create(
+            @RequestBody CommentCreateRequest commentCreateRequest,
+            Principal principal
+    ) {
         String userEmail = principal.getName();
-        CommentId commentId = commentService.create(userEmail, commentRequest);
+        CommentCreateCommand commentCreateCommand = new CommentCreateCommand(
+                userEmail,
+                commentCreateRequest.productId(),
+                commentCreateRequest.storeId(),
+                commentCreateRequest.parentCommentId(),
+                commentCreateRequest.detail()
+        );
+        String commentId = commandGateway.request(commentCreateCommand);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("commentId", commentId.getValue()));
+                .body(
+                        Map.of("commentId", commentId)
+                );
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<Map<String, String>> updateComment(@PathVariable String commentId,
-            @RequestBody CommentUpdateRequest commentUpdateRequest) {
-        commentService.update(CommentId.from(commentId), commentUpdateRequest.detail());
-        return ResponseEntity.ok().body(Map.of("commentId", commentId));
+    public ResponseEntity<Void> update(
+            Principal principal,
+            @PathVariable String commentId,
+            @RequestBody CommentUpdateRequest commentUpdateRequest
+    ) {
+        String userEmail = principal.getName();
+        CommentUpdateCommand commentUpdateCommand = new CommentUpdateCommand(
+                userEmail,
+                commentId,
+                commentUpdateRequest.detail()
+        );
+        commandGateway.request(commentUpdateCommand);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> delete(@PathVariable String commentId) {
-        commentService.delete(CommentId.from(commentId));
+    public ResponseEntity<Void> delete(
+            Principal principal,
+            @PathVariable String commentId
+    ) {
+        String userEmail = principal.getName();
+        CommentDeleteCommand commentDeleteCommand = new CommentDeleteCommand(
+                userEmail,
+                commentId
+        );
+        commandGateway.request(commentDeleteCommand);
         return ResponseEntity.noContent().build();
     }
 }

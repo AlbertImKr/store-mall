@@ -1,8 +1,9 @@
 package com.albert.commerce.command.adapter.in.web;
 
-import com.albert.commerce.command.adapter.in.web.dto.ProductRequest;
-import com.albert.commerce.command.application.service.ProductService;
-import com.albert.commerce.command.domain.product.ProductId;
+import com.albert.commerce.command.adapter.in.web.dto.ProductCreateRequest;
+import com.albert.commerce.shared.messaging.application.CommandGateway;
+import com.albert.commerce.shared.messaging.application.ProductCreateCommand;
+import com.albert.commerce.shared.messaging.application.ProductUpdateCommand;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +22,46 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/products", produces = MediaTypes.HAL_JSON_VALUE)
 public class ProductController {
 
-    private final ProductService productService;
+    private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addProduct(
-            @RequestBody ProductRequest productRequest,
-            Principal principal) {
+    public ResponseEntity<Map<String, String>> create(
+            @RequestBody ProductCreateRequest productCreateRequest,
+            Principal principal
+    ) {
         String userEmail = principal.getName();
-        ProductId productId = productService.addProduct(userEmail, productRequest);
+        ProductCreateCommand productCreateCommand = new ProductCreateCommand(
+                userEmail,
+                productCreateRequest.productName(),
+                productCreateRequest.price(),
+                productCreateRequest.description(),
+                productCreateRequest.brand(),
+                productCreateRequest.category()
+        );
+        String productId = commandGateway.request(productCreateCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(Map.of("productId", productId.getValue()));
+                .body(Map.of("productId", productId));
     }
 
 
     @PutMapping(value = "/{productId}")
-    public ResponseEntity<Map<String, String>> updateProduct(Principal principal,
-            @PathVariable String productId, @RequestBody ProductRequest productRequest) {
+    public ResponseEntity<Void> update(
+            Principal principal,
+            @PathVariable String productId,
+            @RequestBody ProductCreateRequest productCreateRequest
+    ) {
         String userEmail = principal.getName();
-        productService.update(userEmail, ProductId.from(productId), productRequest);
-        return ResponseEntity.ok(Map.of("productId", productId));
+        ProductUpdateCommand productUpdateCommand = new ProductUpdateCommand(
+                userEmail,
+                productId,
+                productCreateRequest.productName(),
+                productCreateRequest.price(),
+                productCreateRequest.description(),
+                productCreateRequest.brand(),
+                productCreateRequest.category()
+        );
+        commandGateway.request(productUpdateCommand);
+        return ResponseEntity.ok().build();
     }
 }

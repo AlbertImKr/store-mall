@@ -4,6 +4,7 @@ import com.albert.commerce.command.adapter.out.persistence.imports.CommentJpaRep
 import com.albert.commerce.command.application.port.out.CommentRepository;
 import com.albert.commerce.command.domain.comment.Comment;
 import com.albert.commerce.command.domain.comment.CommentId;
+import com.albert.commerce.command.domain.user.UserId;
 import com.albert.commerce.common.infra.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -31,6 +32,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public boolean existsById(CommentId commentId) {
         return commentJpaRepository.existsById(commentId);
+    }
+
+    @Override
+    public Optional<Comment> findByCommentIdAndUserId(CommentId commentId, UserId userId) {
+        return commentJpaRepository.findByCommentIdAndUserId(commentId, userId);
     }
 
     private CommentId nextId() {

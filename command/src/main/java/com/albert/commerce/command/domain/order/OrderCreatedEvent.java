@@ -13,18 +13,19 @@ public class OrderCreatedEvent extends DomainEvent {
     private final OrderId orderId;
     private final UserId userId;
     private final StoreId storeId;
-    private final List<OrderLine> orderLines;
+    private final List<OrderDetailRequest> orderDetailRequests;
     private final DeliveryStatus deliveryStatus;
     private final LocalDateTime createdTime;
     private final LocalDateTime updateTime;
 
     @Builder
-    private OrderCreatedEvent(OrderId orderId, UserId userId, StoreId storeId, List<OrderLine> orderLines,
+    private OrderCreatedEvent(OrderId orderId, UserId userId, StoreId storeId,
+            List<OrderDetailRequest> orderDetailRequests,
             DeliveryStatus deliveryStatus, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;
         this.userId = userId;
         this.storeId = storeId;
-        this.orderLines = orderLines;
+        this.orderDetailRequests = orderDetailRequests;
         this.deliveryStatus = deliveryStatus;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
@@ -42,8 +43,8 @@ public class OrderCreatedEvent extends DomainEvent {
         return storeId;
     }
 
-    public List<OrderLine> getOrderLines() {
-        return orderLines;
+    public List<OrderDetailRequest> getOrderDetailRequests() {
+        return orderDetailRequests;
     }
 
     public DeliveryStatus getDeliveryStatus() {

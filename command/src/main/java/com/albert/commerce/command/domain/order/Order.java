@@ -1,7 +1,10 @@
 package com.albert.commerce.command.domain.order;
 
+import com.albert.commerce.command.domain.product.Product;
 import com.albert.commerce.command.domain.store.StoreId;
+import com.albert.commerce.command.domain.user.User;
 import com.albert.commerce.command.domain.user.UserId;
+import com.albert.commerce.common.infra.persistence.Money;
 import com.albert.commerce.common.units.DeliveryStatus;
 import com.albert.commerce.shared.messaging.domain.event.Events;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,6 +25,8 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -67,6 +72,15 @@ public class Order {
         this.storeId = storeId;
     }
 
+    public static Order from(User user, StoreId storeId, Map<String, Long> productsIdAndQuantity,
+            List<Product> products) {
+        return Order.builder()
+                .storeId(storeId)
+                .userId(user.getUserId())
+                .orderLines(getOrderLines(productsIdAndQuantity, products))
+                .build();
+    }
+
     public void updateId(OrderId orderId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;
         this.createdTime = createdTime;
@@ -85,14 +99,49 @@ public class Order {
                 .orderId(orderId)
                 .userId(userId)
                 .storeId(storeId)
-                .orderLines(orderLines)
+                .orderDetailRequests(toOrderDetailRequests(orderLines))
                 .deliveryStatus(deliveryStatus)
                 .createdTime(createdTime)
                 .updateTime(updateTime)
                 .build();
     }
 
+    private static List<OrderDetailRequest> toOrderDetailRequests(List<OrderLine> orderLines) {
+        return orderLines.stream()
+                .map(Order::toOrderDetailRequests)
+                .toList();
+    }
+
+    private static OrderDetailRequest toOrderDetailRequests(OrderLine orderLine) {
+        return new OrderDetailRequest(
+                orderLine.getProductId(),
+                orderLine.getPrice(),
+                orderLine.getQuantity(),
+                orderLine.getAmount()
+        );
+    }
+
     private OrderCancelEvent toOrderCancelEvent() {
         return new OrderCancelEvent(this.orderId, this.updateTime);
+    }
+
+    private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {
+        return products.stream()
+                .map(toOrderLine(productsIdAndQuantity))
+                .toList();
+    }
+
+    private static Function<Product, OrderLine> toOrderLine(Map<String, Long> productsIdAndQuantity) {
+        return productData -> {
+            Money price = productData.getPrice();
+            Long quantity = productsIdAndQuantity.get(productData.getProductId().getValue());
+            Money amount = price.multiply(quantity);
+            return OrderLine.builder()
+                    .productId(productData.getProductId())
+                    .price(price)
+                    .quantity(quantity)
+                    .amount(amount)
+                    .build();
+        };
     }
 }

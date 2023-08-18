@@ -61,13 +61,13 @@ public class OrderFacade {
     private List<OrderDetail> getOrderDetails(List<OrderDetailRequest> orderDetailRequests) {
         return orderDetailRequests.stream()
                 .map(orderDetailRequest -> {
-                            ProductData product = productFacade.getByProductId(orderDetailRequest.getProductId());
+                            ProductData product = productFacade.getByProductId(orderDetailRequest.productId());
                             return OrderDetail.builder()
                                     .productId(product.getProductId())
                                     .productName(product.getProductName())
-                                    .quantity(orderDetailRequest.getQuantity())
-                                    .price(orderDetailRequest.getPrice())
-                                    .amount(orderDetailRequest.getAmount())
+                                    .quantity(orderDetailRequest.quantity())
+                                    .price(orderDetailRequest.price())
+                                    .amount(orderDetailRequest.amount())
                                     .productDescription(product.getDescription())
                                     .build();
                         }

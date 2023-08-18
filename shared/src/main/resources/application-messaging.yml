@@ -13,5 +13,7 @@ commerce:
       await-termination-seconds: 60
 spring:
   kafka:
+    consumer:
+      group-id: command
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

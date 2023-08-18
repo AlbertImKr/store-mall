@@ -1,13 +1,15 @@
 package com.albert.commerce.command.adapter.in.web;
 
-import com.albert.commerce.command.adapter.in.web.dto.NewStoreRequest;
-import com.albert.commerce.command.adapter.in.web.dto.UpdateStoreRequest;
-import com.albert.commerce.command.application.service.StoreService;
-import com.albert.commerce.command.domain.store.StoreId;
+import com.albert.commerce.command.adapter.in.web.dto.StoreCreateRequest;
+import com.albert.commerce.command.adapter.in.web.dto.StoreUpdateRequest;
+import com.albert.commerce.shared.messaging.application.CommandGateway;
+import com.albert.commerce.shared.messaging.application.StoreCreateCommand;
+import com.albert.commerce.shared.messaging.application.StoreUpdateCommand;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,22 +22,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/stores", produces = MediaTypes.HAL_JSON_VALUE)
 public class StoreController {
 
-    private final StoreService storeService;
+    private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createStore(@RequestBody NewStoreRequest newStoreRequest,
-            Principal principal) {
+    public ResponseEntity<Map<String, String>> create(
+            @RequestBody StoreCreateRequest storeCreateRequest,
+            Principal principal
+    ) {
         String userEmail = principal.getName();
-        StoreId storeId = storeService.createStore(userEmail, newStoreRequest);
-
-        return ResponseEntity.ok().body(Map.of("storeId", storeId.getValue()));
+        StoreCreateCommand storeCreateCommand = new StoreCreateCommand(
+                userEmail,
+                storeCreateRequest.storeName(),
+                storeCreateRequest.address(),
+                storeCreateRequest.phoneNumber(),
+                storeCreateRequest.email(),
+                storeCreateRequest.ownerName()
+        );
+        String storeId = commandGateway.request(storeCreateCommand);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        Map.of("id", storeId)
+                );
     }
 
     @PutMapping("/my")
-    public ResponseEntity<Void> updateMyStore(@RequestBody UpdateStoreRequest updateStoreRequest,
-            Principal principal) {
+    public ResponseEntity<Void> update(
+            @RequestBody StoreUpdateRequest storeUpdateRequest,
+            Principal principal
+    ) {
         String userEmail = principal.getName();
-        storeService.updateMyStore(updateStoreRequest, userEmail);
+        StoreUpdateCommand storeUpdateCommand = new StoreUpdateCommand(
+                userEmail,
+                storeUpdateRequest.storeName(),
+                storeUpdateRequest.address(),
+                storeUpdateRequest.phoneNumber(),
+                storeUpdateRequest.email(),
+                storeUpdateRequest.ownerName()
+        );
+        commandGateway.request(storeUpdateCommand);
         return ResponseEntity.ok().build();
     }
 

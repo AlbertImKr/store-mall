@@ -1,6 +1,5 @@
 package com.albert.commerce.command.application.service;
 
-
 import com.albert.commerce.command.application.port.out.UserRepository;
 import com.albert.commerce.command.domain.user.User;
 import com.albert.commerce.command.domain.user.UserId;
@@ -29,7 +28,7 @@ public class UserService {
 
     @Transactional
     @ServiceActivator(inputChannel = "UserUpdateCommand")
-    public void updateUserInfo(UserUpdateCommand userUpdateCommand) {
+    public void update(UserUpdateCommand userUpdateCommand) {
         User user = userRepository.findByEmail(userUpdateCommand.getUserEmail())
                 .orElseThrow(UserNotFoundException::new);
         user.update(
@@ -41,7 +40,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserId findIdByEmail(String userEmail) {
+    public UserId getUserIdByEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
         return user.getUserId();
