@@ -40,7 +40,7 @@ public class StoreService {
 
     @Transactional
     @ServiceActivator(inputChannel = "StoreUpdateCommand")
-    public void update(StoreUpdateCommand storeUpdateCommand) {
+    public boolean update(StoreUpdateCommand storeUpdateCommand) {
         UserId userId = userService.getUserIdByEmail(storeUpdateCommand.getUserEmail());
         Store store = storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
@@ -51,12 +51,20 @@ public class StoreService {
                 storeUpdateCommand.getEmail(),
                 storeUpdateCommand.getPhoneNumber()
         );
+        return true;
     }
 
     @Transactional(readOnly = true)
-    public Store getByUserId(UserId userId) {
+    public Store getStoreByUserId(UserId userId) {
         return storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public StoreId getStoreIdByUserId(UserId userId) {
+        return storeRepository.findByUserId(userId)
+                .orElseThrow(StoreNotFoundException::new)
+                .getStoreId();
     }
 
     @Transactional(readOnly = true)

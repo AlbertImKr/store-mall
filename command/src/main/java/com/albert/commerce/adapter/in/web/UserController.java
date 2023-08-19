@@ -22,7 +22,7 @@ public class UserController {
             @RequestBody UserUpdateRequest userUpdateRequest
     ) {
         String userEmail = principal.getName();
-        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(
+        var userUpdateCommand = new UserUpdateCommand(
                 userEmail,
                 userUpdateRequest.nickname(),
                 userUpdateRequest.dateOfBirth(),

@@ -30,7 +30,7 @@ public class StoreController {
             Principal principal
     ) {
         String userEmail = principal.getName();
-        StoreCreateCommand storeCreateCommand = new StoreCreateCommand(
+        var storeCreateCommand = new StoreCreateCommand(
                 userEmail,
                 storeCreateRequest.storeName(),
                 storeCreateRequest.address(),
@@ -52,7 +52,7 @@ public class StoreController {
             Principal principal
     ) {
         String userEmail = principal.getName();
-        StoreUpdateCommand storeUpdateCommand = new StoreUpdateCommand(
+        var storeUpdateCommand = new StoreUpdateCommand(
                 userEmail,
                 storeUpdateRequest.storeName(),
                 storeUpdateRequest.address(),
@@ -60,8 +60,11 @@ public class StoreController {
                 storeUpdateRequest.email(),
                 storeUpdateRequest.ownerName()
         );
-        commandGateway.request(storeUpdateCommand);
-        return ResponseEntity.ok().build();
+        boolean success = commandGateway.request(storeUpdateCommand);
+        if (success) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }

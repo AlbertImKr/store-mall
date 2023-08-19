@@ -26,7 +26,7 @@ public class ProductService {
     @ServiceActivator(inputChannel = "ProductCreateCommand")
     public String addProduct(ProductCreateCommand productCreateCommand) {
         UserId userId = userService.getUserIdByEmail(productCreateCommand.getUserEmail());
-        Store store = storeService.getByUserId(userId);
+        Store store = storeService.getStoreByUserId(userId);
 
         Product product = Product.builder()
                 .storeId(store.getStoreId())
@@ -45,7 +45,7 @@ public class ProductService {
     @ServiceActivator(inputChannel = "ProductUpdateCommand")
     public void update(ProductUpdateCommand productUpdateCommand) {
         UserId userId = userService.getUserIdByEmail(productUpdateCommand.getUserEmail());
-        Store store = storeService.getByUserId(userId);
+        Store store = storeService.getStoreByUserId(userId);
         StoreId storeId = store.getStoreId();
 
         ProductId productId = ProductId.from(productUpdateCommand.getProductId());
