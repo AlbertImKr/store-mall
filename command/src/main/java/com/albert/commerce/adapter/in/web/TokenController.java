@@ -23,32 +23,36 @@ public class TokenController {
 
     @GetMapping("/token")
     public OAuth2AccessToken getToken(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+        var authorizedClient = authorizedClientService.loadAuthorizedClient(
                 authentication.getAuthorizedClientRegistrationId(),
-                authentication.getName());
+                authentication.getName()
+        );
         return authorizedClient.getAccessToken();
     }
 
     @GetMapping(path = "/newAccessToken")
-    public OAuth2AccessToken newAccessToken(OAuth2AuthenticationToken authentication,
-            HttpServletRequest request, HttpServletResponse response) {
-        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+    public OAuth2AccessToken newAccessToken(
+            OAuth2AuthenticationToken authentication,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        var authorizedClient = authorizedClientService.loadAuthorizedClient(
                 authentication.getAuthorizedClientRegistrationId(),
                 authentication.getName());
 
         if (authorizedClient != null && authorizedClient.getRefreshToken() != null) {
 
-            ClientRegistration clientRegistration = ClientRegistration
+            var clientRegistration = ClientRegistration
                     .withClientRegistration(authorizedClient.getClientRegistration())
                     .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                     .build();
 
-            OAuth2AuthorizedClient oAuth2AuthorizedClient = new OAuth2AuthorizedClient(
+            var oAuth2AuthorizedClient = new OAuth2AuthorizedClient(
                     clientRegistration,
                     authorizedClient.getPrincipalName(),
                     authorizedClient.getAccessToken(), authorizedClient.getRefreshToken());
 
-            OAuth2AuthorizeRequest oAuth2AuthorizeRequest = OAuth2AuthorizeRequest
+            var oAuth2AuthorizeRequest = OAuth2AuthorizeRequest
                     .withAuthorizedClient(oAuth2AuthorizedClient)
                     .principal(authentication)
                     .attribute(HttpServletRequest.class.getName(), request)

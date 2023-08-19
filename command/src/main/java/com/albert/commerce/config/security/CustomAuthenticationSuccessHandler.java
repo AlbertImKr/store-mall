@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
@@ -17,11 +16,10 @@ import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
-public class CustomAuthenticationSuccessHandler extends
-        SavedRequestAwareAuthenticationSuccessHandler {
+public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private final UserService userService;
-    private RequestCache requestCache = new HttpSessionRequestCache();
+    private RequestCache requestCache;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -32,9 +30,8 @@ public class CustomAuthenticationSuccessHandler extends
             return;
         }
         String targetUrlParameter = getTargetUrlParameter();
-        if (isAlwaysUseDefaultTargetUrl()
-                || (targetUrlParameter != null && StringUtils.hasText(
-                request.getParameter(targetUrlParameter)))) {
+        if (isAlwaysUseDefaultTargetUrl() ||
+                (targetUrlParameter != null && StringUtils.hasText(request.getParameter(targetUrlParameter)))) {
             this.requestCache.removeRequest(request, response);
             super.onAuthenticationSuccess(request, response, authentication);
             return;
@@ -44,7 +41,6 @@ public class CustomAuthenticationSuccessHandler extends
             userService.createByEmail(oAuth2User.getName());
         }
         clearAuthenticationAttributes(request);
-        // Use the DefaultSavedRequest URL
         String targetUrl = savedRequest.getRedirectUrl();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
