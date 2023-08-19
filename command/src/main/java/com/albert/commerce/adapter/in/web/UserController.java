@@ -29,10 +29,7 @@ public class UserController {
                 userUpdateRequest.phoneNumber(),
                 userUpdateRequest.address()
         );
-        boolean success = commandGateway.request(userUpdateCommand);
-        if (!success) {
-            return ResponseEntity.badRequest().build();
-        }
+        commandGateway.request(userUpdateCommand);
         return ResponseEntity.ok().build();
     }
 }

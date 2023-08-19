@@ -42,7 +42,7 @@ public class StoreController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        Map.of("id", storeId)
+                        Map.of("storeId", storeId)
                 );
     }
 
@@ -60,10 +60,7 @@ public class StoreController {
                 storeUpdateRequest.email(),
                 storeUpdateRequest.ownerName()
         );
-        boolean success = commandGateway.request(storeUpdateCommand);
-        if (success) {
-            return ResponseEntity.ok().build();
-        }
+        commandGateway.request(storeUpdateCommand);
         return ResponseEntity.badRequest().build();
     }
 
