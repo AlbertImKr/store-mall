@@ -5,8 +5,6 @@ import com.albert.commerce.application.port.out.ProductRepository;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.Store;
-import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.ProductNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +22,11 @@ public class ProductService {
 
     @Transactional
     @ServiceActivator(inputChannel = "ProductCreateCommand")
-    public String addProduct(ProductCreateCommand productCreateCommand) {
-        UserId userId = userService.getUserIdByEmail(productCreateCommand.getUserEmail());
-        Store store = storeService.getStoreByUserId(userId);
+    public String register(ProductCreateCommand productCreateCommand) {
+        var userId = userService.getUserIdByEmail(productCreateCommand.getUserEmail());
+        var store = storeService.getStoreByUserId(userId);
 
-        Product product = Product.builder()
-                .storeId(store.getStoreId())
-                .productName(productCreateCommand.getProductName())
-                .price(new Money(productCreateCommand.getPrice()))
-                .description(productCreateCommand.getDescription())
-                .brand(productCreateCommand.getBrand())
-                .category(productCreateCommand.getCategory())
-                .build();
+        var product = toProduct(productCreateCommand, store);
         return productRepository.save(product)
                 .getProductId()
                 .getValue();
@@ -43,24 +34,16 @@ public class ProductService {
 
     @Transactional
     @ServiceActivator(inputChannel = "ProductUpdateCommand")
-    public void update(ProductUpdateCommand productUpdateCommand) {
-        UserId userId = userService.getUserIdByEmail(productUpdateCommand.getUserEmail());
-        Store store = storeService.getStoreByUserId(userId);
-        StoreId storeId = store.getStoreId();
+    public void upload(ProductUpdateCommand productUpdateCommand) {
+        var userId = userService.getUserIdByEmail(productUpdateCommand.getUserEmail());
+        var storeId = storeService.getStoreIdByUserId(userId);
 
-        ProductId productId = ProductId.from(productUpdateCommand.getProductId());
-        Product product = productRepository.findByStoreIdAndProductId(storeId, productId)
+        var productId = ProductId.from(productUpdateCommand.getProductId());
+        var product = productRepository.findByStoreIdAndProductId(storeId, productId)
                 .orElseThrow(ProductNotFoundException::new);
-
-        product.update(
-                productUpdateCommand.getProductName(),
-                new Money(productUpdateCommand.getPrice()),
-                productUpdateCommand.getBrand(),
-                productUpdateCommand.getCategory(),
-                productUpdateCommand.getDescription(),
-                LocalDateTime.now()
-        );
+        uploadProduct(productUpdateCommand, product);
     }
+
 
     @Transactional(readOnly = true)
     public Product getProductById(ProductId productId) {
@@ -74,5 +57,27 @@ public class ProductService {
             return;
         }
         throw new ProductNotFoundException();
+    }
+
+    private static Product toProduct(ProductCreateCommand productCreateCommand, Store store) {
+        return Product.builder()
+                .storeId(store.getStoreId())
+                .productName(productCreateCommand.getProductName())
+                .price(new Money(productCreateCommand.getPrice()))
+                .description(productCreateCommand.getDescription())
+                .brand(productCreateCommand.getBrand())
+                .category(productCreateCommand.getCategory())
+                .build();
+    }
+
+    private static void uploadProduct(ProductUpdateCommand productUpdateCommand, Product product) {
+        product.upload(
+                productUpdateCommand.getProductName(),
+                new Money(productUpdateCommand.getPrice()),
+                productUpdateCommand.getBrand(),
+                productUpdateCommand.getCategory(),
+                productUpdateCommand.getDescription(),
+                LocalDateTime.now()
+        );
     }
 }

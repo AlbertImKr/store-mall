@@ -64,7 +64,7 @@ public class Product {
         this.category = category;
     }
 
-    public void update(String productName, Money price, String brand, String category,
+    public void upload(String productName, Money price, String brand, String category,
             String description, LocalDateTime updateTime) {
         this.productName = productName;
         this.price = price;

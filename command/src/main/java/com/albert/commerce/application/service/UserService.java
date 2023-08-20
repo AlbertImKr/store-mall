@@ -21,27 +21,27 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             return;
         }
-        User user = User.createByEmail(email);
+        var user = User.createByEmail(email);
         userRepository.save(user);
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "UserUpdateCommand")
-    public boolean update(UserUpdateCommand userUpdateCommand) {
-        User user = userRepository.findByEmail(userUpdateCommand.getUserEmail())
+    @ServiceActivator(inputChannel = "UserUploadCommand")
+    public boolean upload(UserUploadCommand userUploadCommand) {
+        var user = userRepository.findByEmail(userUploadCommand.getUserEmail())
                 .orElseThrow(UserNotFoundException::new);
         user.update(
-                userUpdateCommand.getAddress(),
-                userUpdateCommand.getNickname(),
-                userUpdateCommand.getDateOfBirth(),
-                userUpdateCommand.getPhoneNumber()
+                userUploadCommand.getAddress(),
+                userUploadCommand.getNickname(),
+                userUploadCommand.getDateOfBirth(),
+                userUploadCommand.getPhoneNumber()
         );
         return true;
     }
 
     @Transactional(readOnly = true)
     public UserId getUserIdByEmail(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        var user = userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
         return user.getUserId();
     }

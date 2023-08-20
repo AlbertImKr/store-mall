@@ -6,8 +6,6 @@ import com.albert.commerce.domain.order.OrderId;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.domain.user.User;
-import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.OrderNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,12 +28,12 @@ public class OrderService {
     @Transactional
     @ServiceActivator(inputChannel = "OrderPlaceCommand")
     public String place(OrderPlaceCommand orderPlaceCommand) {
-        User user = userService.getUserByEmail(orderPlaceCommand.getUserEmail());
-        StoreId storeId = StoreId.from(orderPlaceCommand.getStoreId());
+        var user = userService.getUserByEmail(orderPlaceCommand.getUserEmail());
+        var storeId = StoreId.from(orderPlaceCommand.getStoreId());
         storeService.checkId(storeId);
-        Map<String, Long> productsIdAndQuantity = orderPlaceCommand.getProductsIdAndQuantity();
-        List<Product> products = getProducts(productsIdAndQuantity);
-        Order order = Order.from(user, storeId, productsIdAndQuantity, products);
+        var productsIdAndQuantity = orderPlaceCommand.getProductsIdAndQuantity();
+        var products = getProducts(productsIdAndQuantity);
+        var order = Order.from(user, storeId, productsIdAndQuantity, products);
         return orderRepository.save(order)
                 .getOrderId()
                 .getValue();
@@ -44,9 +42,9 @@ public class OrderService {
     @Transactional
     @ServiceActivator(inputChannel = "OrderCancelCommand")
     public void cancel(OrderCancelCommand orderCancelCommand) {
-        UserId userId = userService.getUserIdByEmail(orderCancelCommand.getUserEmail());
-        OrderId orderId = OrderId.from(orderCancelCommand.getStoreId());
-        Order order = orderRepository.findByUserIdAndOrderId(userId, orderId)
+        var userId = userService.getUserIdByEmail(orderCancelCommand.getUserEmail());
+        var orderId = OrderId.from(orderCancelCommand.getStoreId());
+        var order = orderRepository.findByUserIdAndOrderId(userId, orderId)
                 .orElseThrow(OrderNotFoundException::new);
         order.cancel(LocalDateTime.now());
     }

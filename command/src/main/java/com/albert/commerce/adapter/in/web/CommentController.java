@@ -1,10 +1,10 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.CommentCreateRequest;
+import com.albert.commerce.adapter.in.web.dto.CommentPostRequest;
 import com.albert.commerce.adapter.in.web.dto.CommentUpdateRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
-import com.albert.commerce.application.service.CommentCreateCommand;
 import com.albert.commerce.application.service.CommentDeleteCommand;
+import com.albert.commerce.application.service.CommentPostCommand;
 import com.albert.commerce.application.service.CommentUpdateCommand;
 import java.security.Principal;
 import java.util.Map;
@@ -28,19 +28,13 @@ public class CommentController {
     private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(
-            @RequestBody CommentCreateRequest commentCreateRequest,
+    public ResponseEntity<Map<String, String>> post(
+            @RequestBody CommentPostRequest commentPostRequest,
             Principal principal
     ) {
         String userEmail = principal.getName();
-        CommentCreateCommand commentCreateCommand = new CommentCreateCommand(
-                userEmail,
-                commentCreateRequest.productId(),
-                commentCreateRequest.storeId(),
-                commentCreateRequest.parentCommentId(),
-                commentCreateRequest.detail()
-        );
-        String commentId = commandGateway.request(commentCreateCommand);
+        var commentPostCommand = toCommentPostCommand(commentPostRequest, userEmail);
+        String commentId = commandGateway.request(commentPostCommand);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
                         Map.of("commentId", commentId)
@@ -54,11 +48,7 @@ public class CommentController {
             @RequestBody CommentUpdateRequest commentUpdateRequest
     ) {
         String userEmail = principal.getName();
-        CommentUpdateCommand commentUpdateCommand = new CommentUpdateCommand(
-                userEmail,
-                commentId,
-                commentUpdateRequest.detail()
-        );
+        var commentUpdateCommand = toCommentUpdateCommand(commentId, commentUpdateRequest, userEmail);
         commandGateway.request(commentUpdateCommand);
         return ResponseEntity.ok().build();
     }
@@ -69,11 +59,30 @@ public class CommentController {
             @PathVariable String commentId
     ) {
         String userEmail = principal.getName();
-        CommentDeleteCommand commentDeleteCommand = new CommentDeleteCommand(
+        var commentDeleteCommand = new CommentDeleteCommand(
                 userEmail,
                 commentId
         );
         commandGateway.request(commentDeleteCommand);
         return ResponseEntity.noContent().build();
+    }
+
+    private static CommentPostCommand toCommentPostCommand(CommentPostRequest commentPostRequest, String userEmail) {
+        return new CommentPostCommand(
+                userEmail,
+                commentPostRequest.productId(),
+                commentPostRequest.storeId(),
+                commentPostRequest.parentCommentId(),
+                commentPostRequest.detail()
+        );
+    }
+
+    private static CommentUpdateCommand toCommentUpdateCommand(String commentId,
+            CommentUpdateRequest commentUpdateRequest, String userEmail) {
+        return new CommentUpdateCommand(
+                userEmail,
+                commentId,
+                commentUpdateRequest.detail()
+        );
     }
 }

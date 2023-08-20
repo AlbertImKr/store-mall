@@ -76,7 +76,7 @@ public class Store {
         Events.raise(storeCreatedEvent);
     }
 
-    public void update(String storeName, String ownerName, String address, String email, String phoneNumber) {
+    public void upload(String storeName, String ownerName, String address, String email, String phoneNumber) {
         this.storeName = storeName;
         this.ownerName = ownerName;
         this.address = address;

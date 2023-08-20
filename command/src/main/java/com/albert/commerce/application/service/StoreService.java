@@ -19,38 +19,23 @@ public class StoreService {
     private final UserService userService;
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreCreateCommand")
-    public String create(StoreCreateCommand storeCreateCommand) {
-        UserId userId = userService.getUserIdByEmail(storeCreateCommand.getUserEmail());
-        if (storeRepository.existsByUserId(userId)) {
-            throw new StoreAlreadyExistsException();
-        }
-        Store store = Store.builder()
-                .userId(userId)
-                .storeName(storeCreateCommand.getStoreName())
-                .ownerName(storeCreateCommand.getOwnerName())
-                .address(storeCreateCommand.getAddress())
-                .phoneNumber(storeCreateCommand.getPhoneNumber())
-                .email(storeCreateCommand.getEmail())
-                .build();
+    @ServiceActivator(inputChannel = "StoreRegisterCommand")
+    public String create(StoreRegisterCommand storeRegisterCommand) {
+        var userId = userService.getUserIdByEmail(storeRegisterCommand.getUserEmail());
+        checkExistsByUserId(userId);
+        var store = toStore(storeRegisterCommand, userId);
         return storeRepository.save(store)
                 .getStoreId()
                 .getValue();
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreUpdateCommand")
-    public boolean update(StoreUpdateCommand storeUpdateCommand) {
-        UserId userId = userService.getUserIdByEmail(storeUpdateCommand.getUserEmail());
-        Store store = storeRepository.findByUserId(userId)
+    @ServiceActivator(inputChannel = "StoreUploadCommand")
+    public boolean upload(StoreUploadCommand storeUploadCommand) {
+        var userId = userService.getUserIdByEmail(storeUploadCommand.getUserEmail());
+        var store = storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
-        store.update(
-                storeUpdateCommand.getStoreName(),
-                storeUpdateCommand.getOwnerName(),
-                storeUpdateCommand.getAddress(),
-                storeUpdateCommand.getEmail(),
-                storeUpdateCommand.getPhoneNumber()
-        );
+        uploadStore(storeUploadCommand, store);
         return true;
     }
 
@@ -73,5 +58,32 @@ public class StoreService {
             return;
         }
         throw new StoreNotFoundException();
+    }
+
+    private void checkExistsByUserId(UserId userId) {
+        if (storeRepository.existsByUserId(userId)) {
+            throw new StoreAlreadyExistsException();
+        }
+    }
+
+    private static Store toStore(StoreRegisterCommand storeRegisterCommand, UserId userId) {
+        return Store.builder()
+                .userId(userId)
+                .storeName(storeRegisterCommand.getStoreName())
+                .ownerName(storeRegisterCommand.getOwnerName())
+                .address(storeRegisterCommand.getAddress())
+                .phoneNumber(storeRegisterCommand.getPhoneNumber())
+                .email(storeRegisterCommand.getEmail())
+                .build();
+    }
+
+    private static void uploadStore(StoreUploadCommand storeUploadCommand, Store store) {
+        store.upload(
+                storeUploadCommand.getStoreName(),
+                storeUploadCommand.getOwnerName(),
+                storeUploadCommand.getAddress(),
+                storeUploadCommand.getEmail(),
+                storeUploadCommand.getPhoneNumber()
+        );
     }
 }

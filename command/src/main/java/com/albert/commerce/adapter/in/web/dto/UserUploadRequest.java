@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
-public record UserUpdateRequest(
+public record UserUploadRequest(
         @Size(min = 2, max = 60) String nickname,
         @Past LocalDate dateOfBirth,
         @Pattern(regexp = "^[0-9]{11}$") String phoneNumber,

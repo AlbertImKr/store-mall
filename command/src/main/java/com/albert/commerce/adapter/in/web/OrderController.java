@@ -31,11 +31,7 @@ public class OrderController {
             @RequestBody OrderPlaceRequest orderPlaceRequest
     ) {
         String userEmail = principal.getName();
-        OrderPlaceCommand orderPlaceCommand = new OrderPlaceCommand(
-                userEmail,
-                orderPlaceRequest.storeId(),
-                orderPlaceRequest.productsIdAndQuantity()
-        );
+        var orderPlaceCommand = toOrderPlaceCommand(orderPlaceRequest, userEmail);
         String orderId = commandGateway.request(orderPlaceCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -50,13 +46,25 @@ public class OrderController {
             @RequestBody(required = false) OrderCancelRequest orderCancelRequest
     ) {
         String userEmail = principal.getName();
-        OrderCancelCommand orderCancelCommand = new OrderCancelCommand(
-                userEmail,
-                storeId,
-                orderCancelRequest.description()
-        );
+        var orderCancelCommand = toOrderCancelCommand(storeId, orderCancelRequest, userEmail);
         commandGateway.request(orderCancelCommand);
         return ResponseEntity.noContent().build();
     }
 
+    private static OrderPlaceCommand toOrderPlaceCommand(OrderPlaceRequest orderPlaceRequest, String userEmail) {
+        return new OrderPlaceCommand(
+                userEmail,
+                orderPlaceRequest.storeId(),
+                orderPlaceRequest.productsIdAndQuantity()
+        );
+    }
+
+    private static OrderCancelCommand toOrderCancelCommand(String storeId, OrderCancelRequest orderCancelRequest,
+            String userEmail) {
+        return new OrderCancelCommand(
+                userEmail,
+                storeId,
+                orderCancelRequest.description()
+        );
+    }
 }

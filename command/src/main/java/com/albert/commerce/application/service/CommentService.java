@@ -13,7 +13,6 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -24,18 +23,18 @@ public class CommentService {
     private final StoreService storeService;
 
     @Transactional
-    @ServiceActivator(inputChannel = "CommentCreateCommand")
-    public String create(CommentCreateCommand commentCreateCommand) {
-        UserId userId = userService.getUserIdByEmail(commentCreateCommand.getUserEmail());
+    @ServiceActivator(inputChannel = "CommentPostCommand")
+    public String post(CommentPostCommand commentPostCommand) {
+        var userId = userService.getUserIdByEmail(commentPostCommand.getUserEmail());
 
-        ProductId productId = ProductId.from(commentCreateCommand.getProductId());
+        var productId = ProductId.from(commentPostCommand.getProductId());
         productService.checkId(productId);
 
-        StoreId storeId = StoreId.from(commentCreateCommand.getStoreId());
+        var storeId = StoreId.from(commentPostCommand.getStoreId());
         storeService.checkId(storeId);
 
-        CommentId parentCommentId = getParentCommentId(commentCreateCommand.getParentCommentId());
-        Comment comment = toComment(productId, storeId, userId, commentCreateCommand.getDetail(), parentCommentId);
+        var parentCommentId = getParentCommentId(commentPostCommand.getParentCommentId());
+        var comment = toComment(productId, storeId, userId, commentPostCommand.getDetail(), parentCommentId);
         return commentRepository.save(comment)
                 .getCommentId()
                 .getValue();
@@ -44,10 +43,10 @@ public class CommentService {
     @Transactional
     @ServiceActivator(inputChannel = "CommentUpdateCommand")
     public String update(CommentUpdateCommand commentUpdateCommand) {
-        UserId userId = userService.getUserIdByEmail(commentUpdateCommand.getUserEmail());
+        var userId = userService.getUserIdByEmail(commentUpdateCommand.getUserEmail());
 
-        CommentId commentId = CommentId.from(commentUpdateCommand.getCommandId());
-        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
+        var commentId = CommentId.from(commentUpdateCommand.getCommandId());
+        var comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(CommentNotFoundException::new);
         comment.update(commentUpdateCommand.getDetail(), LocalDateTime.now());
         return comment.getCommentId()
@@ -57,16 +56,16 @@ public class CommentService {
     @Transactional
     @ServiceActivator(inputChannel = "CommentDeleteCommand")
     public void delete(CommentDeleteCommand commentDeleteCommand) {
-        UserId userId = userService.getUserIdByEmail(commentDeleteCommand.getUserEmail());
+        var userId = userService.getUserIdByEmail(commentDeleteCommand.getUserEmail());
 
-        CommentId commentId = CommentId.from(commentDeleteCommand.getCommandId());
-        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
+        var commentId = CommentId.from(commentDeleteCommand.getCommandId());
+        var comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(CommentNotFoundException::new);
         comment.delete(LocalDateTime.now());
     }
 
     private CommentId getParentCommentId(String parentCommentIdValue) {
-        CommentId parentCommentId = parentCommentIdValue != null ?
+        var parentCommentId = parentCommentIdValue != null ?
                 CommentId.from(parentCommentIdValue) :
                 null;
         if (parentCommentId != null && !commentRepository.existsById(parentCommentId)) {

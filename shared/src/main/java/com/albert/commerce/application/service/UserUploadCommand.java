@@ -2,7 +2,7 @@ package com.albert.commerce.application.service;
 
 import java.time.LocalDate;
 
-public class UserUpdateCommand extends Command {
+public class UserUploadCommand extends Command {
 
     private final String userEmail;
     private final String nickname;
@@ -10,7 +10,7 @@ public class UserUpdateCommand extends Command {
     private final String phoneNumber;
     private final String address;
 
-    public UserUpdateCommand(String userEmail, String nickname, LocalDate dateOfBirth, String phoneNumber,
+    public UserUploadCommand(String userEmail, String nickname, LocalDate dateOfBirth, String phoneNumber,
             String address) {
         this.userEmail = userEmail;
         this.nickname = nickname;

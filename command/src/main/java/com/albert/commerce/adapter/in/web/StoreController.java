@@ -1,10 +1,10 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.StoreCreateRequest;
-import com.albert.commerce.adapter.in.web.dto.StoreUpdateRequest;
+import com.albert.commerce.adapter.in.web.dto.StoreRegisterRequest;
+import com.albert.commerce.adapter.in.web.dto.StoreUploadRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
-import com.albert.commerce.application.service.StoreCreateCommand;
-import com.albert.commerce.application.service.StoreUpdateCommand;
+import com.albert.commerce.application.service.StoreRegisterCommand;
+import com.albert.commerce.application.service.StoreUploadCommand;
 import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +25,13 @@ public class StoreController {
     private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(
-            @RequestBody StoreCreateRequest storeCreateRequest,
+    public ResponseEntity<Map<String, String>> register(
+            @RequestBody StoreRegisterRequest storeRegisterRequest,
             Principal principal
     ) {
         String userEmail = principal.getName();
-        var storeCreateCommand = new StoreCreateCommand(
-                userEmail,
-                storeCreateRequest.storeName(),
-                storeCreateRequest.address(),
-                storeCreateRequest.phoneNumber(),
-                storeCreateRequest.email(),
-                storeCreateRequest.ownerName()
-        );
-        String storeId = commandGateway.request(storeCreateCommand);
+        var storeRegisterCommand = toStoreRegisterCommand(storeRegisterRequest, userEmail);
+        String storeId = commandGateway.request(storeRegisterCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
@@ -47,21 +40,37 @@ public class StoreController {
     }
 
     @PutMapping("/my")
-    public ResponseEntity<Void> update(
-            @RequestBody StoreUpdateRequest storeUpdateRequest,
+    public ResponseEntity<Void> upload(
+            @RequestBody StoreUploadRequest storeUploadRequest,
             Principal principal
     ) {
         String userEmail = principal.getName();
-        var storeUpdateCommand = new StoreUpdateCommand(
-                userEmail,
-                storeUpdateRequest.storeName(),
-                storeUpdateRequest.address(),
-                storeUpdateRequest.phoneNumber(),
-                storeUpdateRequest.email(),
-                storeUpdateRequest.ownerName()
-        );
-        commandGateway.request(storeUpdateCommand);
+        var storeUploadCommand = toStoreUploadCommand(storeUploadRequest, userEmail);
+        commandGateway.request(storeUploadCommand);
         return ResponseEntity.badRequest().build();
+    }
+
+    private static StoreRegisterCommand toStoreRegisterCommand(StoreRegisterRequest storeRegisterRequest,
+            String userEmail) {
+        return new StoreRegisterCommand(
+                userEmail,
+                storeRegisterRequest.storeName(),
+                storeRegisterRequest.address(),
+                storeRegisterRequest.phoneNumber(),
+                storeRegisterRequest.email(),
+                storeRegisterRequest.ownerName()
+        );
+    }
+
+    private static StoreUploadCommand toStoreUploadCommand(StoreUploadRequest storeUploadRequest, String userEmail) {
+        return new StoreUploadCommand(
+                userEmail,
+                storeUploadRequest.storeName(),
+                storeUploadRequest.address(),
+                storeUploadRequest.phoneNumber(),
+                storeUploadRequest.email(),
+                storeUploadRequest.ownerName()
+        );
     }
 
 }

@@ -25,19 +25,12 @@ public class ProductController {
     private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(
+    public ResponseEntity<Map<String, String>> register(
             @RequestBody ProductCreateRequest productCreateRequest,
             Principal principal
     ) {
         String userEmail = principal.getName();
-        ProductCreateCommand productCreateCommand = new ProductCreateCommand(
-                userEmail,
-                productCreateRequest.productName(),
-                productCreateRequest.price(),
-                productCreateRequest.description(),
-                productCreateRequest.brand(),
-                productCreateRequest.category()
-        );
+        var productCreateCommand = toProductCreateCommand(productCreateRequest, userEmail);
         String productId = commandGateway.request(productCreateCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,13 +39,32 @@ public class ProductController {
 
 
     @PutMapping(value = "/{productId}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Void> upload(
             Principal principal,
             @PathVariable String productId,
             @RequestBody ProductCreateRequest productCreateRequest
     ) {
         String userEmail = principal.getName();
-        ProductUpdateCommand productUpdateCommand = new ProductUpdateCommand(
+        var productUpdateCommand = toProductUpdateCommand(productId, productCreateRequest, userEmail);
+        commandGateway.request(productUpdateCommand);
+        return ResponseEntity.ok().build();
+    }
+
+    private static ProductCreateCommand toProductCreateCommand(ProductCreateRequest productCreateRequest,
+            String userEmail) {
+        return new ProductCreateCommand(
+                userEmail,
+                productCreateRequest.productName(),
+                productCreateRequest.price(),
+                productCreateRequest.description(),
+                productCreateRequest.brand(),
+                productCreateRequest.category()
+        );
+    }
+
+    private static ProductUpdateCommand toProductUpdateCommand(String productId,
+            ProductCreateRequest productCreateRequest, String userEmail) {
+        return new ProductUpdateCommand(
                 userEmail,
                 productId,
                 productCreateRequest.productName(),
@@ -61,7 +73,5 @@ public class ProductController {
                 productCreateRequest.brand(),
                 productCreateRequest.category()
         );
-        commandGateway.request(productUpdateCommand);
-        return ResponseEntity.ok().build();
     }
 }

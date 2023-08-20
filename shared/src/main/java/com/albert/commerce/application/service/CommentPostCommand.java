@@ -1,6 +1,6 @@
 package com.albert.commerce.application.service;
 
-public class CommentCreateCommand extends Command {
+public class CommentPostCommand extends Command {
 
     private final String userEmail;
     private final String productId;
@@ -8,7 +8,7 @@ public class CommentCreateCommand extends Command {
     private final String parentCommentId;
     private final String detail;
 
-    public CommentCreateCommand(String userEmail, String productId, String storeId, String parentCommentId,
+    public CommentPostCommand(String userEmail, String productId, String storeId, String parentCommentId,
             String detail) {
         this.userEmail = userEmail;
         this.productId = productId;
