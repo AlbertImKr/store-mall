@@ -2,6 +2,7 @@ package com.albert.commerce.domain.product;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.domain.event.DomainEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -13,7 +14,8 @@ public class ProductUpdatedEvent extends DomainEvent {
     private final String brand;
     private final String category;
     private final String description;
-    private final LocalDateTime updateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private final LocalDateTime updatedTime;
 
     @Builder
     private ProductUpdatedEvent(
@@ -23,7 +25,7 @@ public class ProductUpdatedEvent extends DomainEvent {
             String brand,
             String category,
             String description,
-            LocalDateTime updateTime
+            LocalDateTime updatedTime
     ) {
         this.productId = productId;
         this.productName = productName;
@@ -31,7 +33,7 @@ public class ProductUpdatedEvent extends DomainEvent {
         this.brand = brand;
         this.category = category;
         this.description = description;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
     }
 
     public ProductId getProductId() {
@@ -58,7 +60,7 @@ public class ProductUpdatedEvent extends DomainEvent {
         return description;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
     }
 }

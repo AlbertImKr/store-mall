@@ -1,9 +1,6 @@
 package com.albert.commerce.domain.user;
 
 import com.albert.commerce.domain.event.Events;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -15,11 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
 @Table(name = "user")
 public class User {
@@ -42,14 +37,8 @@ public class User {
     private String address;
     @Column(nullable = false)
     private boolean isActive;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
 
     @Builder
     private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
@@ -74,8 +63,34 @@ public class User {
     public void updateId(UserId userId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.userId = userId;
         this.createdTime = createdTime;
-        this.updateTime = updateTime;
-        UserRegisteredEvent userRegisteredEvent = UserRegisteredEvent.builder()
+        this.updatedTime = updateTime;
+        Events.raise(toUserRegisteredEvent());
+    }
+
+    public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber,
+            LocalDateTime updatedTime) {
+        this.address = address;
+        this.nickname = nickname;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.updatedTime = updatedTime;
+        Events.raise(toUserUpdateEvent());
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    private UserRegisteredEvent toUserRegisteredEvent() {
+        return UserRegisteredEvent.builder()
                 .userId(userId)
                 .nickname(nickname)
                 .email(email)
@@ -84,22 +99,19 @@ public class User {
                 .phoneNumber(phoneNumber)
                 .address(address)
                 .isActive(isActive)
+                .createdTime(createdTime)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(userRegisteredEvent);
     }
 
-    public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber) {
-        this.address = address;
-        this.nickname = nickname;
-        this.dateOfBirth = dateOfBirth;
-        this.phoneNumber = phoneNumber;
-        UserUpdateEvent userUpdateEvent = UserUpdateEvent.builder()
+    private UserUpdatedEvent toUserUpdateEvent() {
+        return UserUpdatedEvent.builder()
                 .userId(userId)
                 .address(address)
                 .nickname(nickname)
                 .dateOfBirth(dateOfBirth)
                 .phoneNumber(phoneNumber)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(userUpdateEvent);
     }
 }

@@ -2,9 +2,6 @@ package com.albert.commerce.domain.store;
 
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.user.UserId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -13,12 +10,10 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
 @Table(name = "store")
 public class Store {
@@ -39,18 +34,13 @@ public class Store {
     private String phoneNumber;
     @Column(nullable = false)
     private String email;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    protected LocalDateTime updatedTime;
 
     @Builder
-    private Store(StoreId storeId, String storeName, UserId userId, String ownerName,
-            String address, String phoneNumber, String email) {
+    private Store(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
+            String phoneNumber,
+            String email, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.userId = userId;
@@ -58,13 +48,34 @@ public class Store {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
-    public void updateId(StoreId storeId) {
+    public void updateId(StoreId storeId, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.storeId = storeId;
-        this.createdTime = LocalDateTime.now();
-        this.updateTime = LocalDateTime.now();
-        StoreRegisteredEvent storeRegisteredEvent = StoreRegisteredEvent.builder()
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
+        Events.raise(toStoreRegisteredEvent());
+    }
+
+    public void upload(String storeName, String ownerName, String address, String email, String phoneNumber,
+            LocalDateTime updatedTime) {
+        this.storeName = storeName;
+        this.ownerName = ownerName;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.updatedTime = updatedTime;
+        Events.raise(toStoreUploadedEvent());
+    }
+
+    public StoreId getStoreId() {
+        return storeId;
+    }
+
+    private StoreRegisteredEvent toStoreRegisteredEvent() {
+        return StoreRegisteredEvent.builder()
                 .storeId(storeId)
                 .userId(userId)
                 .storeName(storeName)
@@ -72,24 +83,20 @@ public class Store {
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .email(email)
+                .createdTime(createdTime)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(storeRegisteredEvent);
     }
 
-    public void upload(String storeName, String ownerName, String address, String email, String phoneNumber) {
-        this.storeName = storeName;
-        this.ownerName = ownerName;
-        this.address = address;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        StoreUploadedEvent storeUploadedEvent = StoreUploadedEvent.builder()
+    private StoreUploadedEvent toStoreUploadedEvent() {
+        return StoreUploadedEvent.builder()
                 .storeId(storeId)
                 .storeName(storeName)
                 .ownerName(ownerName)
                 .address(address)
                 .email(email)
                 .phoneNumber(phoneNumber)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(storeUploadedEvent);
     }
 }

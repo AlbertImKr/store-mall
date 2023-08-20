@@ -4,6 +4,7 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -15,12 +16,14 @@ public class CommentPostedEvent extends DomainEvent {
     private final UserId userId;
     private final CommentId parentCommentId;
     private final String detail;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private final LocalDateTime createdTime;
-    private final LocalDateTime updateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private final LocalDateTime updatedTime;
 
     @Builder
     private CommentPostedEvent(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
-            CommentId parentCommentId, String detail, LocalDateTime createdTime, LocalDateTime updateTime) {
+            CommentId parentCommentId, String detail, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
@@ -28,7 +31,7 @@ public class CommentPostedEvent extends DomainEvent {
         this.parentCommentId = parentCommentId;
         this.detail = detail;
         this.createdTime = createdTime;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
     }
 
     public CommentId getCommentId() {
@@ -59,7 +62,7 @@ public class CommentPostedEvent extends DomainEvent {
         return createdTime;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
     }
 }

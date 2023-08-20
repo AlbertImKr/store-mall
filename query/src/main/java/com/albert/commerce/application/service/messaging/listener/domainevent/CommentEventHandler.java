@@ -2,7 +2,7 @@ package com.albert.commerce.application.service.messaging.listener.domainevent;
 
 import com.albert.commerce.application.service.comment.CommentFacade;
 import com.albert.commerce.application.service.comment.dto.CommentDeletedEvent;
-import com.albert.commerce.application.service.comment.dto.CommentPostedCommand;
+import com.albert.commerce.application.service.comment.dto.CommentPostedEvent;
 import com.albert.commerce.application.service.comment.dto.CommentUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,9 +14,9 @@ public class CommentEventHandler {
 
     private final CommentFacade commentFacade;
 
-    @KafkaListener(topics = "CommentPostedCommand")
-    public void handleCommentPostedCommand(CommentPostedCommand commentPostedCommand) {
-        commentFacade.post(commentPostedCommand);
+    @KafkaListener(topics = "CommentPostedEvent")
+    public void handleCommentPostedCommand(CommentPostedEvent commentPostedEvent) {
+        commentFacade.post(commentPostedEvent);
     }
 
     @KafkaListener(topics = "CommentUpdatedEvent")

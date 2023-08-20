@@ -82,6 +82,7 @@ public class OrderFacade {
                 .deliveryStatus(orderPlacedEvent.deliveryStatus())
                 .amount(totalAmount)
                 .createdTime(orderPlacedEvent.createdTime())
+                .updatedTime(orderPlacedEvent.updatedTime())
                 .build();
     }
 }

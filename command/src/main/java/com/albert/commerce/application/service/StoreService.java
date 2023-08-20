@@ -6,6 +6,7 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.StoreAlreadyExistsException;
 import com.albert.commerce.exception.StoreNotFoundException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
@@ -74,16 +75,20 @@ public class StoreService {
                 .address(storeRegisterCommand.getAddress())
                 .phoneNumber(storeRegisterCommand.getPhoneNumber())
                 .email(storeRegisterCommand.getEmail())
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
                 .build();
     }
 
     private static void uploadStore(StoreUploadCommand storeUploadCommand, Store store) {
+        LocalDateTime updatedTime = LocalDateTime.now();
         store.upload(
                 storeUploadCommand.getStoreName(),
                 storeUploadCommand.getOwnerName(),
                 storeUploadCommand.getAddress(),
                 storeUploadCommand.getEmail(),
-                storeUploadCommand.getPhoneNumber()
+                storeUploadCommand.getPhoneNumber(),
+                updatedTime
         );
     }
 }

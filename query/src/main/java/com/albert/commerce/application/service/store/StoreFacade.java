@@ -39,7 +39,8 @@ public class StoreFacade {
                 storeUploadedEvent.ownerName(),
                 storeUploadedEvent.address(),
                 storeUploadedEvent.phoneNumber(),
-                storeUploadedEvent.email()
+                storeUploadedEvent.email(),
+                storeUploadedEvent.updatedTime()
         );
     }
 
@@ -52,6 +53,8 @@ public class StoreFacade {
                 .address(storeRegisteredEvent.address())
                 .phoneNumber(storeRegisteredEvent.phoneNumber())
                 .email(storeRegisteredEvent.email())
+                .createdTime(storeRegisteredEvent.createdTime())
+                .updatedTime(storeRegisteredEvent.updatedTime())
                 .build();
     }
 }

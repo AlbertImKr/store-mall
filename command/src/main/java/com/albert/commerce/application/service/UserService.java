@@ -4,6 +4,7 @@ import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.UserNotFoundException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,7 @@ public class UserService {
     public boolean upload(UserUploadCommand userUploadCommand) {
         var user = userRepository.findByEmail(userUploadCommand.getUserEmail())
                 .orElseThrow(UserNotFoundException::new);
-        user.update(
-                userUploadCommand.getAddress(),
-                userUploadCommand.getNickname(),
-                userUploadCommand.getDateOfBirth(),
-                userUploadCommand.getPhoneNumber()
-        );
+        upload(userUploadCommand, user);
         return true;
     }
 
@@ -50,5 +46,15 @@ public class UserService {
     public User getUserByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private static void upload(UserUploadCommand userUploadCommand, User user) {
+        user.update(
+                userUploadCommand.getAddress(),
+                userUploadCommand.getNickname(),
+                userUploadCommand.getDateOfBirth(),
+                userUploadCommand.getPhoneNumber(),
+                LocalDateTime.now()
+        );
     }
 }

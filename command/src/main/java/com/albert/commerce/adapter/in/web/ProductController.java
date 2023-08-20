@@ -1,6 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
 import com.albert.commerce.adapter.in.web.dto.ProductCreateRequest;
+import com.albert.commerce.adapter.in.web.dto.ProductUpdateRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.ProductCreateCommand;
 import com.albert.commerce.application.service.ProductUpdateCommand;
@@ -42,10 +43,10 @@ public class ProductController {
     public ResponseEntity<Void> upload(
             Principal principal,
             @PathVariable String productId,
-            @RequestBody ProductCreateRequest productCreateRequest
+            @RequestBody ProductUpdateRequest productUpdateRequest
     ) {
         String userEmail = principal.getName();
-        var productUpdateCommand = toProductUpdateCommand(productId, productCreateRequest, userEmail);
+        var productUpdateCommand = toProductUpdateCommand(productId, productUpdateRequest, userEmail);
         commandGateway.request(productUpdateCommand);
         return ResponseEntity.ok().build();
     }
@@ -63,15 +64,15 @@ public class ProductController {
     }
 
     private static ProductUpdateCommand toProductUpdateCommand(String productId,
-            ProductCreateRequest productCreateRequest, String userEmail) {
+            ProductUpdateRequest productUpdateRequest, String userEmail) {
         return new ProductUpdateCommand(
                 userEmail,
                 productId,
-                productCreateRequest.productName(),
-                productCreateRequest.price(),
-                productCreateRequest.description(),
-                productCreateRequest.brand(),
-                productCreateRequest.category()
+                productUpdateRequest.productName(),
+                productUpdateRequest.price(),
+                productUpdateRequest.description(),
+                productUpdateRequest.brand(),
+                productUpdateRequest.category()
         );
     }
 }

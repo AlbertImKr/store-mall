@@ -6,8 +6,6 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.units.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -42,22 +40,21 @@ public class Order {
     private String storeName;
     @Embedded
     private OrderDetails orderDetails;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime createdTime;
+    private LocalDateTime createdTime;
     @Convert(converter = MoneyConverter.class)
     @Column(name = "amount")
     private Money amount;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
     @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
     @Builder
     private Order(OrderId orderId, UserId userId, String orderUserNickName, StoreId storeId, String storeName,
-            OrderDetails orderDetails, DeliveryStatus deliveryStatus, Money amount, LocalDateTime createdTime) {
+            OrderDetails orderDetails, DeliveryStatus deliveryStatus, Money amount, LocalDateTime createdTime,
+            LocalDateTime updatedTime) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderUserNickName = orderUserNickName;
@@ -67,10 +64,11 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
         this.amount = amount;
         this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public void cancel(LocalDateTime updatedTime) {
         this.deliveryStatus = DeliveryStatus.CANCELED;
-        this.updateTime = updatedTime;
+        this.updatedTime = updatedTime;
     }
 }

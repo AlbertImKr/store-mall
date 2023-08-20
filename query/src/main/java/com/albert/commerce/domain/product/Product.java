@@ -4,8 +4,6 @@ import com.albert.commerce.adapter.out.persistance.Money;
 import com.albert.commerce.adapter.out.persistance.MoneyConverter;
 import com.albert.commerce.domain.store.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -40,18 +38,14 @@ public class Product {
     private String brand;
     @Column
     private String category;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
 
     @Builder
     public Product(ProductId productId, StoreId storeId, String productName, Money price, String description,
-            String brand, String category) {
+            String brand, String category, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.productId = productId;
         this.storeId = storeId;
         this.productName = productName;
@@ -59,6 +53,8 @@ public class Product {
         this.description = description;
         this.brand = brand;
         this.category = category;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public ProductId getProductId() {
@@ -89,6 +85,14 @@ public class Product {
         return category;
     }
 
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
+    }
+
     public void update(String productName, String description, String brand, Money price, String category,
             LocalDateTime updateTime) {
         this.productName = productName;
@@ -96,6 +100,6 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.category = category;
-        this.updateTime = updateTime;
+        this.updatedTime = updateTime;
     }
 }

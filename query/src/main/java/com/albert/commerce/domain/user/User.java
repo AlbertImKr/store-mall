@@ -1,5 +1,6 @@
 package com.albert.commerce.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -8,6 +9,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -35,11 +37,15 @@ public class User {
     private String address;
     @Column(nullable = false)
     private boolean isActive;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private LocalDateTime createdTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private LocalDateTime updatedTime;
 
     @Builder
     private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber,
-            String address, boolean isActive) {
+            String address, boolean isActive, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.email = email;
@@ -48,6 +54,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.isActive = isActive;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public UserId getUserId() {
@@ -82,10 +90,12 @@ public class User {
         return isActive;
     }
 
-    public void update(LocalDate dateOfBirth, String address, String nickname, String phoneNumber) {
+    public void update(LocalDate dateOfBirth, String address, String nickname, String phoneNumber,
+            LocalDateTime updatedTime) {
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
+        this.updatedTime = updatedTime;
     }
 }

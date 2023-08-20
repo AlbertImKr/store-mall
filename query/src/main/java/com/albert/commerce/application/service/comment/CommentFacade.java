@@ -1,7 +1,7 @@
 package com.albert.commerce.application.service.comment;
 
 import com.albert.commerce.application.service.comment.dto.CommentDeletedEvent;
-import com.albert.commerce.application.service.comment.dto.CommentPostedCommand;
+import com.albert.commerce.application.service.comment.dto.CommentPostedEvent;
 import com.albert.commerce.application.service.comment.dto.CommentUpdatedEvent;
 import com.albert.commerce.application.service.product.ProductFacade;
 import com.albert.commerce.application.service.store.StoreFacade;
@@ -27,12 +27,14 @@ public class CommentFacade {
 
 
     @Transactional
-    public Comment post(CommentPostedCommand commentPostedCommand) {
-        var product = productFacade.getProductByProductId(commentPostedCommand.productId());
-        var user = userFacade.getUserById(commentPostedCommand.userId());
-        var store = storeFacade.getStoreById(commentPostedCommand.storeId());
-        var comment = toComment(commentPostedCommand, product, user, store);
-        return commentDao.save(comment);
+    public String post(CommentPostedEvent commentPostedEvent) {
+        var product = productFacade.getProductByProductId(commentPostedEvent.productId());
+        var user = userFacade.getUserById(commentPostedEvent.userId());
+        var store = storeFacade.getStoreById(commentPostedEvent.storeId());
+        var comment = toComment(commentPostedEvent, product, user, store);
+        return commentDao.save(comment)
+                .getCommentId()
+                .getValue();
     }
 
     @Transactional
@@ -49,20 +51,20 @@ public class CommentFacade {
         comment.delete(commentDeletedEvent.updatedTime());
     }
 
-    private static Comment toComment(CommentPostedCommand commentPostedCommand, Product product,
+    private static Comment toComment(CommentPostedEvent commentPostedEvent, Product product,
             User user, Store store) {
         return Comment.builder()
-                .commentId(commentPostedCommand.commentId())
-                .productId(commentPostedCommand.productId())
+                .commentId(commentPostedEvent.commentId())
+                .productId(commentPostedEvent.productId())
                 .productName(product.getProductName())
-                .userId(commentPostedCommand.userId())
+                .userId(commentPostedEvent.userId())
                 .nickname(user.getNickname())
-                .storeId(commentPostedCommand.storeId())
+                .storeId(commentPostedEvent.storeId())
                 .storeName(store.getStoreName())
-                .detail(commentPostedCommand.detail())
-                .parentCommentId(commentPostedCommand.parentCommentId())
-                .createdTime(commentPostedCommand.createdTime())
-                .updatedTime(commentPostedCommand.updatedTime())
+                .detail(commentPostedEvent.detail())
+                .parentCommentId(commentPostedEvent.parentCommentId())
+                .createdTime(commentPostedEvent.createdTime())
+                .updatedTime(commentPostedEvent.updatedTime())
                 .build();
     }
 }

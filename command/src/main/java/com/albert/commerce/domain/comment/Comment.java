@@ -4,9 +4,6 @@ import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -15,10 +12,8 @@ import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Comment {
@@ -38,16 +33,9 @@ public class Comment {
     @AttributeOverride(name = "value", column = @Column(name = "parent_comment_id"))
     @Embedded
     private CommentId parentCommentId;
-
     private String detail;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    protected LocalDateTime updatedTime;
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
@@ -63,14 +51,25 @@ public class Comment {
     public void updateId(CommentId commentId, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.commentId = commentId;
         this.createdTime = createdTime;
-        this.updateTime = updateTime;
+        this.updatedTime = updateTime;
         Events.raise(toCommentCreatedEvent());
     }
 
     public void update(String detail, LocalDateTime updateTime) {
         this.detail = detail;
-        this.updateTime = updateTime;
+        this.updatedTime = updateTime;
         Events.raise(toCommentUpdatedEvent());
+    }
+
+    public CommentId getCommentId() {
+        return commentId;
+    }
+
+    public void delete(LocalDateTime updateTime) {
+        this.detail = "";
+        this.userId = null;
+        this.updatedTime = updateTime;
+        Events.raise(toCommentDeletedEvent());
     }
 
     private CommentPostedEvent toCommentCreatedEvent() {
@@ -82,22 +81,15 @@ public class Comment {
                 .parentCommentId(parentCommentId)
                 .createdTime(createdTime)
                 .detail(detail)
-                .updateTime(updateTime)
+                .updatedTime(updatedTime)
                 .build();
     }
 
     private CommentUpdatedEvent toCommentUpdatedEvent() {
-        return new CommentUpdatedEvent(commentId, this.detail, this.updateTime);
-    }
-
-    public void delete(LocalDateTime updateTime) {
-        this.detail = "";
-        this.userId = null;
-        this.updateTime = updateTime;
-        Events.raise(toCommentDeletedEvent());
+        return new CommentUpdatedEvent(commentId, this.detail, this.updatedTime);
     }
 
     private CommentDeletedEvent toCommentDeletedEvent() {
-        return new CommentDeletedEvent(this.commentId, this.updateTime);
+        return new CommentDeletedEvent(this.commentId, this.updatedTime);
     }
 }

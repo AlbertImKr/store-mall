@@ -20,11 +20,6 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public boolean exists(CommentId commentId) {
-        return false;
-    }
-
-    @Override
     public Comment save(Comment comment) {
         return commentDataJpaRepository.save(comment);
     }

@@ -41,7 +41,7 @@ public class ProductFacade {
                 productUpdatedEvent.brand(),
                 productUpdatedEvent.price(),
                 productUpdatedEvent.category(),
-                productUpdatedEvent.updateTime()
+                productUpdatedEvent.updatedTime()
         );
     }
 
@@ -54,6 +54,8 @@ public class ProductFacade {
                 .brand(productCreatedEvent.brand())
                 .price(productCreatedEvent.price())
                 .storeId(productCreatedEvent.storeId())
+                .createdTime(productCreatedEvent.createdTime())
+                .updatedTime(productCreatedEvent.updatedTime())
                 .build();
     }
 }

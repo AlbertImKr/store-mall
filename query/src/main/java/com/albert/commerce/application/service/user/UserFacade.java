@@ -1,6 +1,7 @@
 package com.albert.commerce.application.service.user;
 
-import com.albert.commerce.application.service.user.dto.UserUpdateEvent;
+import com.albert.commerce.application.service.user.dto.UserRegisteredEvent;
+import com.albert.commerce.application.service.user.dto.UserUpdatedEvent;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserDao;
 import com.albert.commerce.domain.user.UserId;
@@ -16,20 +17,15 @@ public class UserFacade {
     private final UserDao userDao;
 
     @Transactional
-    public void save(User user) {
-        userDao.save(user);
+    public void save(UserRegisteredEvent userRegisteredEvent) {
+        userDao.save(toUser(userRegisteredEvent));
     }
 
     @Transactional
-    public void update(UserUpdateEvent userUpdateEvent) {
-        User user = userDao.findById(userUpdateEvent.userId())
+    public void update(UserUpdatedEvent userUpdatedEvent) {
+        User user = userDao.findById(userUpdatedEvent.userId())
                 .orElseThrow(UserNotFoundException::new);
-        user.update(
-                userUpdateEvent.dateOfBirth(),
-                userUpdateEvent.address(),
-                userUpdateEvent.nickname(),
-                userUpdateEvent.phoneNumber()
-        );
+        update(userUpdatedEvent, user);
     }
 
     @Transactional(readOnly = true)
@@ -37,7 +33,28 @@ public class UserFacade {
         return userDao.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
-    public User getUserByEmail(String email) {
-        return userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    private static User toUser(UserRegisteredEvent userRegisteredEvent) {
+        return User.builder()
+                .userId(userRegisteredEvent.userId())
+                .nickname(userRegisteredEvent.nickname())
+                .email(userRegisteredEvent.email())
+                .address(userRegisteredEvent.address())
+                .role(userRegisteredEvent.role())
+                .phoneNumber(userRegisteredEvent.nickname())
+                .dateOfBirth(userRegisteredEvent.dateOfBirth())
+                .isActive(userRegisteredEvent.isActive())
+                .createdTime(userRegisteredEvent.createdTime())
+                .updatedTime(userRegisteredEvent.updatedTime())
+                .build();
+    }
+
+    private static void update(UserUpdatedEvent userUpdatedEvent, User user) {
+        user.update(
+                userUpdatedEvent.dateOfBirth(),
+                userUpdatedEvent.address(),
+                userUpdatedEvent.nickname(),
+                userUpdatedEvent.phoneNumber(),
+                userUpdatedEvent.updatedTime()
+        );
     }
 }

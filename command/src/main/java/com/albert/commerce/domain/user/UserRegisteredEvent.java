@@ -1,7 +1,9 @@
 package com.albert.commerce.domain.user;
 
 import com.albert.commerce.domain.event.DomainEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 
 public class UserRegisteredEvent extends DomainEvent {
@@ -14,10 +16,15 @@ public class UserRegisteredEvent extends DomainEvent {
     private final String phoneNumber;
     private final String address;
     private final boolean isActive;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private final LocalDateTime createdTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
+    private final LocalDateTime updatedTime;
 
     @Builder
     private UserRegisteredEvent(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
-            String phoneNumber, String address, boolean isActive) {
+            String phoneNumber, String address, boolean isActive, LocalDateTime createdTime,
+            LocalDateTime updatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.email = email;
@@ -26,6 +33,8 @@ public class UserRegisteredEvent extends DomainEvent {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.isActive = isActive;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public UserId getUserId() {
@@ -58,5 +67,13 @@ public class UserRegisteredEvent extends DomainEvent {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
     }
 }

@@ -7,9 +7,6 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.units.DeliveryStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -29,10 +26,8 @@ import java.util.Map;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "purchase_order")
@@ -54,14 +49,8 @@ public class Order {
     @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    protected LocalDateTime updatedTime;
 
     @Builder
     private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, StoreId storeId) {
@@ -81,17 +70,21 @@ public class Order {
                 .build();
     }
 
-    public void updateId(OrderId orderId, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public void updateId(OrderId orderId, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.orderId = orderId;
         this.createdTime = createdTime;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         Events.raise(toOrderCreatedEvent());
     }
 
-    public void cancel(LocalDateTime updateTime) {
+    public void cancel(LocalDateTime updatedTime) {
         this.deliveryStatus = DeliveryStatus.CANCELED;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         Events.raise(toOrderCancelEvent());
+    }
+
+    public OrderId getOrderId() {
+        return orderId;
     }
 
     private OrderPlacedEvent toOrderCreatedEvent() {
@@ -102,7 +95,7 @@ public class Order {
                 .orderDetailRequests(toOrderDetailRequests(orderLines))
                 .deliveryStatus(deliveryStatus)
                 .createdTime(createdTime)
-                .updateTime(updateTime)
+                .updatedTime(updatedTime)
                 .build();
     }
 
@@ -122,7 +115,7 @@ public class Order {
     }
 
     private OrderCanceledEvent toOrderCancelEvent() {
-        return new OrderCanceledEvent(this.orderId, this.updateTime);
+        return new OrderCanceledEvent(this.orderId, this.updatedTime);
     }
 
     private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {
@@ -132,12 +125,12 @@ public class Order {
     }
 
     private static Function<Product, OrderLine> toOrderLine(Map<String, Long> productsIdAndQuantity) {
-        return productData -> {
-            Money price = productData.getPrice();
-            Long quantity = productsIdAndQuantity.get(productData.getProductId().getValue());
+        return product -> {
+            Money price = product.getPrice();
+            Long quantity = productsIdAndQuantity.get(product.getProductId().getValue());
             Money amount = price.multiply(quantity);
             return OrderLine.builder()
-                    .productId(productData.getProductId())
+                    .productId(product.getProductId())
                     .price(price)
                     .quantity(quantity)
                     .amount(amount)

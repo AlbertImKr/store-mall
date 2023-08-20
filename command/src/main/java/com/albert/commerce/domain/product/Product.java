@@ -4,9 +4,6 @@ import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.store.StoreId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -17,11 +14,9 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Table(name = "product")
 @Entity
 public class Product {
@@ -43,18 +38,12 @@ public class Product {
     private String brand;
     @Column
     private String category;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime createdTime;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
-    protected LocalDateTime updateTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
 
     @Builder
-    public Product(ProductId productId, StoreId storeId, String productName, Money price,
-            String description, String brand, String category) {
+    private Product(ProductId productId, StoreId storeId, String productName, Money price,
+            String description, String brand, String category, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.productId = productId;
         this.storeId = storeId;
         this.productName = productName;
@@ -62,6 +51,8 @@ public class Product {
         this.description = description;
         this.brand = brand;
         this.category = category;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public void upload(String productName, Money price, String brand, String category,
@@ -71,24 +62,39 @@ public class Product {
         this.brand = brand;
         this.category = category;
         this.description = description;
-        this.updateTime = updateTime;
-        ProductUpdatedEvent productUpdatedEvent = ProductUpdatedEvent.builder()
-                .productId(productId)
+        this.updatedTime = updateTime;
+        Events.raise(toProductUpdatedEvent());
+    }
+
+    public ProductId getProductId() {
+        return productId;
+    }
+
+    public Money getPrice() {
+        return price;
+    }
+
+    public void updateId(ProductId productId, LocalDateTime createdTime, LocalDateTime updatedTime) {
+        this.productId = productId;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
+        Events.raise(toProductCreatedEvent());
+    }
+
+    private ProductUpdatedEvent toProductUpdatedEvent() {
+        return ProductUpdatedEvent.builder()
+                .productId(this.productId)
                 .productName(productName)
                 .price(price)
                 .brand(brand)
                 .category(category)
                 .description(description)
-                .updateTime(updateTime)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(productUpdatedEvent);
     }
 
-    public void updateId(ProductId productId, LocalDateTime createdTime, LocalDateTime updateTime) {
-        this.productId = productId;
-        this.createdTime = createdTime;
-        this.updateTime = updateTime;
-        ProductCreatedEvent productCreatedEvent = ProductCreatedEvent.builder()
+    private ProductCreatedEvent toProductCreatedEvent() {
+        return ProductCreatedEvent.builder()
                 .productId(productId)
                 .productName(productName)
                 .description(description)
@@ -96,7 +102,8 @@ public class Product {
                 .brand(brand)
                 .category(category)
                 .price(price)
+                .createdTime(createdTime)
+                .updatedTime(updatedTime)
                 .build();
-        Events.raise(productCreatedEvent);
     }
 }
