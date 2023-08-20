@@ -15,7 +15,7 @@ public class ProductEventHandler {
 
     @KafkaListener(topics = "ProductCreatedEvent")
     public void handleProductCreatedEvent(ProductCreatedEvent productCreatedEvent) {
-        productFacade.save(productCreatedEvent);
+        productFacade.create(productCreatedEvent);
     }
 
     @KafkaListener(topics = "ProductUpdatedEvent")

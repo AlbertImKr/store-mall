@@ -4,7 +4,7 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.user.UserId;
 import lombok.Builder;
 
-public class StoreCreatedEvent extends DomainEvent {
+public class StoreRegisteredEvent extends DomainEvent {
 
     private final StoreId storeId;
     private final String storeName;
@@ -15,7 +15,7 @@ public class StoreCreatedEvent extends DomainEvent {
     private final String email;
 
     @Builder
-    private StoreCreatedEvent(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
+    private StoreRegisteredEvent(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
             String phoneNumber, String email) {
         this.storeId = storeId;
         this.storeName = storeName;

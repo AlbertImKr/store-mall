@@ -2,7 +2,7 @@ package com.albert.commerce.application.service.messaging.listener.domainevent;
 
 import com.albert.commerce.application.service.order.OrderFacade;
 import com.albert.commerce.application.service.order.dto.OrderCanceledEvent;
-import com.albert.commerce.application.service.order.dto.OrderCreatedEvent;
+import com.albert.commerce.application.service.order.dto.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,13 @@ public class OrderEventHandler {
 
     private final OrderFacade orderFacade;
 
-    @KafkaListener(topics = "OrderCreatedEvent")
-    public void handleOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
-        orderFacade.save(orderCreatedEvent);
+    @KafkaListener(topics = "OrderPlacedEvent")
+    public void handleOrderPlacedEvent(OrderPlacedEvent orderPlacedEvent) {
+        orderFacade.place(orderPlacedEvent);
     }
 
-    @KafkaListener(topics = "OrderCancelEvent")
-    public void handleOrderCancelEvent(OrderCanceledEvent orderCancelEvent) {
+    @KafkaListener(topics = "OrderCanceledEvent")
+    public void handleOrderCanceledEvent(OrderCanceledEvent orderCancelEvent) {
         orderFacade.cancel(orderCancelEvent);
     }
 }

@@ -6,7 +6,7 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDateTime;
 
-public record CommentCreatedEvent(
+public record CommentPostedCommand(
         CommentId commentId,
         ProductId productId,
         StoreId storeId,

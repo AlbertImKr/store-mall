@@ -4,7 +4,7 @@ import com.albert.commerce.domain.store.StoreId;
 import lombok.Builder;
 
 @Builder
-public record StoreUpdatedEvent(
+public record StoreUploadedEvent(
         StoreId storeId,
         String storeName,
         String address,

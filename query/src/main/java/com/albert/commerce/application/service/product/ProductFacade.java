@@ -16,31 +16,25 @@ public class ProductFacade {
 
     private final ProductDao productDao;
 
-    @Transactional(readOnly = true)
-    public void checkId(ProductId productId) {
-        if (!productDao.exists(productId)) {
-            throw new ProductNotFoundException();
-        }
-    }
-
     @Transactional
-    public void save(ProductCreatedEvent productCreatedEvent) {
-        Product product = Product.builder()
-                .productId(productCreatedEvent.productId())
-                .productName(productCreatedEvent.productName())
-                .description(productCreatedEvent.description())
-                .category(productCreatedEvent.category())
-                .brand(productCreatedEvent.brand())
-                .price(productCreatedEvent.price())
-                .storeId(productCreatedEvent.storeId())
-                .build();
+    public void create(ProductCreatedEvent productCreatedEvent) {
+        var product = toProduct(productCreatedEvent);
         productDao.save(product);
     }
 
     @Transactional
     public void update(ProductUpdatedEvent productUpdatedEvent) {
-        Product product = productDao.findById(productUpdatedEvent.productId())
+        var product = getProductByProductId(productUpdatedEvent.productId());
+        update(productUpdatedEvent, product);
+    }
+
+    @Transactional(readOnly = true)
+    public Product getProductByProductId(ProductId productId) {
+        return productDao.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
+    }
+
+    private static void update(ProductUpdatedEvent productUpdatedEvent, Product product) {
         product.update(
                 productUpdatedEvent.productName(),
                 productUpdatedEvent.description(),
@@ -51,8 +45,15 @@ public class ProductFacade {
         );
     }
 
-    public Product getByProductId(ProductId productId) {
-        return productDao.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+    private static Product toProduct(ProductCreatedEvent productCreatedEvent) {
+        return Product.builder()
+                .productId(productCreatedEvent.productId())
+                .productName(productCreatedEvent.productName())
+                .description(productCreatedEvent.description())
+                .category(productCreatedEvent.category())
+                .brand(productCreatedEvent.brand())
+                .price(productCreatedEvent.price())
+                .storeId(productCreatedEvent.storeId())
+                .build();
     }
 }

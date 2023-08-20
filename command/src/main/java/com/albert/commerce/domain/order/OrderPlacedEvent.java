@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 
-public class OrderCreatedEvent extends DomainEvent {
+public class OrderPlacedEvent extends DomainEvent {
 
     private final OrderId orderId;
     private final UserId userId;
@@ -19,7 +19,7 @@ public class OrderCreatedEvent extends DomainEvent {
     private final LocalDateTime updateTime;
 
     @Builder
-    private OrderCreatedEvent(OrderId orderId, UserId userId, StoreId storeId,
+    private OrderPlacedEvent(OrderId orderId, UserId userId, StoreId storeId,
             List<OrderDetailRequest> orderDetailRequests,
             DeliveryStatus deliveryStatus, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.orderId = orderId;

@@ -3,7 +3,7 @@ package com.albert.commerce.domain.store;
 import com.albert.commerce.domain.event.DomainEvent;
 import lombok.Builder;
 
-public class StoreUpdateEvent extends DomainEvent {
+public class StoreUploadedEvent extends DomainEvent {
 
     StoreId storeId;
     String storeName;
@@ -13,7 +13,7 @@ public class StoreUpdateEvent extends DomainEvent {
     String ownerName;
 
     @Builder
-    private StoreUpdateEvent(StoreId storeId, String storeName, String address, String phoneNumber, String email,
+    private StoreUploadedEvent(StoreId storeId, String storeName, String address, String phoneNumber, String email,
             String ownerName) {
         this.storeId = storeId;
         this.storeName = storeName;

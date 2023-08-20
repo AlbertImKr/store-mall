@@ -94,8 +94,8 @@ public class Order {
         Events.raise(toOrderCancelEvent());
     }
 
-    private OrderCreatedEvent toOrderCreatedEvent() {
-        return OrderCreatedEvent.builder()
+    private OrderPlacedEvent toOrderCreatedEvent() {
+        return OrderPlacedEvent.builder()
                 .orderId(orderId)
                 .userId(userId)
                 .storeId(storeId)
@@ -121,8 +121,8 @@ public class Order {
         );
     }
 
-    private OrderCancelEvent toOrderCancelEvent() {
-        return new OrderCancelEvent(this.orderId, this.updateTime);
+    private OrderCanceledEvent toOrderCancelEvent() {
+        return new OrderCanceledEvent(this.orderId, this.updateTime);
     }
 
     private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {

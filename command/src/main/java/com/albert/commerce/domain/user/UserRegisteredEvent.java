@@ -4,7 +4,7 @@ import com.albert.commerce.domain.event.DomainEvent;
 import java.time.LocalDate;
 import lombok.Builder;
 
-public class UserCreatedEvent extends DomainEvent {
+public class UserRegisteredEvent extends DomainEvent {
 
     private final UserId userId;
     private final String nickname;
@@ -16,7 +16,7 @@ public class UserCreatedEvent extends DomainEvent {
     private final boolean isActive;
 
     @Builder
-    private UserCreatedEvent(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
+    private UserRegisteredEvent(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber, String address, boolean isActive) {
         this.userId = userId;
         this.nickname = nickname;

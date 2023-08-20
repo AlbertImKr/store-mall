@@ -64,7 +64,7 @@ public class Store {
         this.storeId = storeId;
         this.createdTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();
-        StoreCreatedEvent storeCreatedEvent = StoreCreatedEvent.builder()
+        StoreRegisteredEvent storeRegisteredEvent = StoreRegisteredEvent.builder()
                 .storeId(storeId)
                 .userId(userId)
                 .storeName(storeName)
@@ -73,7 +73,7 @@ public class Store {
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .build();
-        Events.raise(storeCreatedEvent);
+        Events.raise(storeRegisteredEvent);
     }
 
     public void upload(String storeName, String ownerName, String address, String email, String phoneNumber) {
@@ -82,7 +82,7 @@ public class Store {
         this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        StoreUpdateEvent storeUpdateEvent = StoreUpdateEvent.builder()
+        StoreUploadedEvent storeUploadedEvent = StoreUploadedEvent.builder()
                 .storeId(storeId)
                 .storeName(storeName)
                 .ownerName(ownerName)
@@ -90,6 +90,6 @@ public class Store {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .build();
-        Events.raise(storeUpdateEvent);
+        Events.raise(storeUploadedEvent);
     }
 }

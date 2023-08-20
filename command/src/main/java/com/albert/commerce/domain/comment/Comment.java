@@ -73,8 +73,8 @@ public class Comment {
         Events.raise(toCommentUpdatedEvent());
     }
 
-    private CommentCreatedEvent toCommentCreatedEvent() {
-        return CommentCreatedEvent.builder()
+    private CommentPostedEvent toCommentCreatedEvent() {
+        return CommentPostedEvent.builder()
                 .commentId(commentId)
                 .productId(productId)
                 .storeId(storeId)

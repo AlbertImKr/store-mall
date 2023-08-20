@@ -75,7 +75,7 @@ public class User {
         this.userId = userId;
         this.createdTime = createdTime;
         this.updateTime = updateTime;
-        UserCreatedEvent userCreatedEvent = UserCreatedEvent.builder()
+        UserRegisteredEvent userRegisteredEvent = UserRegisteredEvent.builder()
                 .userId(userId)
                 .nickname(nickname)
                 .email(email)
@@ -85,7 +85,7 @@ public class User {
                 .address(address)
                 .isActive(isActive)
                 .build();
-        Events.raise(userCreatedEvent);
+        Events.raise(userRegisteredEvent);
     }
 
     public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber) {

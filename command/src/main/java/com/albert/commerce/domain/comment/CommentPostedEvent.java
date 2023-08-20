@@ -7,7 +7,7 @@ import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
-public class CommentCreatedEvent extends DomainEvent {
+public class CommentPostedEvent extends DomainEvent {
 
     private final CommentId commentId;
     private final ProductId productId;
@@ -19,7 +19,7 @@ public class CommentCreatedEvent extends DomainEvent {
     private final LocalDateTime updateTime;
 
     @Builder
-    private CommentCreatedEvent(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
+    private CommentPostedEvent(CommentId commentId, ProductId productId, StoreId storeId, UserId userId,
             CommentId parentCommentId, String detail, LocalDateTime createdTime, LocalDateTime updateTime) {
         this.commentId = commentId;
         this.productId = productId;

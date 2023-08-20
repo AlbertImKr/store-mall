@@ -7,7 +7,7 @@ import com.albert.commerce.units.DeliveryStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record OrderCreatedEvent(
+public record OrderPlacedEvent(
         OrderId orderId,
         UserId userId,
         StoreId storeId,

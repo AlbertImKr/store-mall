@@ -1,7 +1,7 @@
 package com.albert.commerce.application.service.comment;
 
-import com.albert.commerce.application.service.comment.dto.CommentCreatedEvent;
 import com.albert.commerce.application.service.comment.dto.CommentDeletedEvent;
+import com.albert.commerce.application.service.comment.dto.CommentPostedCommand;
 import com.albert.commerce.application.service.comment.dto.CommentUpdatedEvent;
 import com.albert.commerce.application.service.product.ProductFacade;
 import com.albert.commerce.application.service.store.StoreFacade;
@@ -27,42 +27,42 @@ public class CommentFacade {
 
 
     @Transactional
-    public Comment create(CommentCreatedEvent commentCreatedEvent) {
-        Product product = productFacade.getByProductId(commentCreatedEvent.productId());
-        User user = userFacade.getUserById(commentCreatedEvent.userId());
-        Store store = storeFacade.getStoreById(commentCreatedEvent.storeId());
-        Comment comment = toComment(commentCreatedEvent, product, user, store);
+    public Comment post(CommentPostedCommand commentPostedCommand) {
+        var product = productFacade.getProductByProductId(commentPostedCommand.productId());
+        var user = userFacade.getUserById(commentPostedCommand.userId());
+        var store = storeFacade.getStoreById(commentPostedCommand.storeId());
+        var comment = toComment(commentPostedCommand, product, user, store);
         return commentDao.save(comment);
     }
 
     @Transactional
     public void update(CommentUpdatedEvent commentUpdatedEvent) {
-        Comment comment = commentDao.findById(commentUpdatedEvent.commentId())
+        var comment = commentDao.findById(commentUpdatedEvent.commentId())
                 .orElseThrow(CommentNotFoundException::new);
         comment.update(commentUpdatedEvent.detail(), commentUpdatedEvent.updatedTime());
     }
 
     @Transactional
     public void delete(CommentDeletedEvent commentDeletedEvent) {
-        Comment comment = commentDao.findById(commentDeletedEvent.commentId())
+        var comment = commentDao.findById(commentDeletedEvent.commentId())
                 .orElseThrow(CommentNotFoundException::new);
         comment.delete(commentDeletedEvent.updatedTime());
     }
 
-    private static Comment toComment(CommentCreatedEvent commentCreatedEvent, Product product,
+    private static Comment toComment(CommentPostedCommand commentPostedCommand, Product product,
             User user, Store store) {
         return Comment.builder()
-                .commentId(commentCreatedEvent.commentId())
-                .productId(commentCreatedEvent.productId())
+                .commentId(commentPostedCommand.commentId())
+                .productId(commentPostedCommand.productId())
                 .productName(product.getProductName())
-                .userId(commentCreatedEvent.userId())
+                .userId(commentPostedCommand.userId())
                 .nickname(user.getNickname())
-                .storeId(commentCreatedEvent.storeId())
+                .storeId(commentPostedCommand.storeId())
                 .storeName(store.getStoreName())
-                .detail(commentCreatedEvent.detail())
-                .parentCommentId(commentCreatedEvent.parentCommentId())
-                .createdTime(commentCreatedEvent.createdTime())
-                .updatedTime(commentCreatedEvent.updatedTime())
+                .detail(commentPostedCommand.detail())
+                .parentCommentId(commentPostedCommand.parentCommentId())
+                .createdTime(commentPostedCommand.createdTime())
+                .updatedTime(commentPostedCommand.updatedTime())
                 .build();
     }
 }

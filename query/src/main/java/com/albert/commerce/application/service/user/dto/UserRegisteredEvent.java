@@ -4,7 +4,7 @@ import com.albert.commerce.domain.user.Role;
 import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDate;
 
-public record UserCreatedEvent(
+public record UserRegisteredEvent(
         UserId userId,
         String nickname,
         String email,
