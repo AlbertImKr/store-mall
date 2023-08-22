@@ -1,6 +1,8 @@
-package com.albert.commerce.application.service;
+package com.albert.commerce.application.service.command;
 
-public class StoreRegisterCommand extends Command {
+import com.albert.commerce.application.service.Command;
+
+public class StoreUploadCommand extends Command {
 
     private final String userEmail;
     private final String storeName;
@@ -9,7 +11,7 @@ public class StoreRegisterCommand extends Command {
     private final String email;
     private final String ownerName;
 
-    public StoreRegisterCommand(String userEmail, String storeName, String address, String phoneNumber, String email,
+    public StoreUploadCommand(String userEmail, String storeName, String address, String phoneNumber, String email,
             String ownerName) {
         this.userEmail = userEmail;
         this.storeName = storeName;

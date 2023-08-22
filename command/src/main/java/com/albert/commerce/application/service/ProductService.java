@@ -2,6 +2,8 @@ package com.albert.commerce.application.service;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.port.out.ProductRepository;
+import com.albert.commerce.application.service.command.ProductCreateCommand;
+import com.albert.commerce.application.service.command.ProductUpdateCommand;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.exception.error.ProductNotFoundException;

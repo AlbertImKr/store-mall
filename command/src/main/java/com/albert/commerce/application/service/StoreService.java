@@ -1,6 +1,8 @@
 package com.albert.commerce.application.service;
 
 import com.albert.commerce.application.port.out.StoreRepository;
+import com.albert.commerce.application.service.command.StoreRegisterCommand;
+import com.albert.commerce.application.service.command.StoreUploadCommand;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;

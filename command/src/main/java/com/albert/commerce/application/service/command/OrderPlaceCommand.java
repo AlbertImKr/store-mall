@@ -1,5 +1,6 @@
-package com.albert.commerce.application.service;
+package com.albert.commerce.application.service.command;
 
+import com.albert.commerce.application.service.Command;
 import java.util.Map;
 
 public class OrderPlaceCommand extends Command {
