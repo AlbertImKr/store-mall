@@ -1,33 +1,19 @@
 package com.albert.commerce.domain.store;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.albert.commerce.domain.AggregateId;
 import jakarta.persistence.Embeddable;
-import java.io.Serializable;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "value")
 @Embeddable
-public class StoreId implements Serializable {
-
-    @JsonValue
-    private String value;
+public class StoreId extends AggregateId {
 
     private StoreId(String value) {
-        this.value = value;
+        super(value);
     }
 
     public static StoreId from(String value) {
         return new StoreId(value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

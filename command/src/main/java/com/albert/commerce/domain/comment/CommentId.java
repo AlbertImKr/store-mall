@@ -1,33 +1,19 @@
 package com.albert.commerce.domain.comment;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.albert.commerce.domain.AggregateId;
 import jakarta.persistence.Embeddable;
-import java.io.Serializable;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "value")
 @Embeddable
-public class CommentId implements Serializable {
-
-    @JsonValue
-    private String value;
+public class CommentId extends AggregateId {
 
     private CommentId(String value) {
-        this.value = value;
+        setValue(value);
     }
 
     public static CommentId from(String value) {
         return new CommentId(value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

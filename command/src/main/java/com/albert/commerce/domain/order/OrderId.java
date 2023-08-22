@@ -1,33 +1,19 @@
 package com.albert.commerce.domain.order;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.albert.commerce.domain.AggregateId;
 import jakarta.persistence.Embeddable;
-import java.io.Serializable;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "value")
 @Embeddable
-public class OrderId implements Serializable {
-
-    @JsonValue
-    private String value;
+public class OrderId extends AggregateId {
 
     private OrderId(String value) {
-        this.value = value;
+        super(value);
     }
 
     public static OrderId from(String value) {
         return new OrderId(value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }
