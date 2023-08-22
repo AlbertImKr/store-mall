@@ -3,7 +3,7 @@ package com.albert.commerce.application.service;
 import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.exception.UserNotFoundException;
+import com.albert.commerce.exception.error.UserNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;

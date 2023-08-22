@@ -5,7 +5,7 @@ import com.albert.commerce.application.service.store.dto.StoreUploadedEvent;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreDao;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.exception.StoreNotFoundException;
+import com.albert.commerce.exception.error.StoreNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

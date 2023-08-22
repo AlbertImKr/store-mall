@@ -5,7 +5,7 @@ import com.albert.commerce.application.port.out.ProductRepository;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.Store;
-import com.albert.commerce.exception.ProductNotFoundException;
+import com.albert.commerce.exception.error.ProductNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;

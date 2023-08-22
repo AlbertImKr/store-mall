@@ -11,7 +11,7 @@ import com.albert.commerce.domain.comment.CommentDao;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.user.User;
-import com.albert.commerce.exception.CommentNotFoundException;
+import com.albert.commerce.exception.error.CommentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -14,7 +14,7 @@ import com.albert.commerce.domain.order.OrderDetails;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.user.User;
-import com.albert.commerce.exception.OrderNotFoundException;
+import com.albert.commerce.exception.error.OrderNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

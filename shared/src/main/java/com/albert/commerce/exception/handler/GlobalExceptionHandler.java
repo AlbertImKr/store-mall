@@ -1,11 +1,11 @@
-package com.albert.commerce.handler;
+package com.albert.commerce.exception.handler;
 
-import com.albert.commerce.exception.ErrorResponse;
-import com.albert.commerce.exception.MyStoreNotFoundException;
-import com.albert.commerce.exception.ProductNotFoundException;
-import com.albert.commerce.exception.StoreAlreadyExistsException;
-import com.albert.commerce.exception.StoreNotFoundException;
-import com.albert.commerce.exception.UnauthorizedModificationException;
+import com.albert.commerce.exception.error.ErrorResponse;
+import com.albert.commerce.exception.error.MyStoreNotFoundException;
+import com.albert.commerce.exception.error.ProductNotFoundException;
+import com.albert.commerce.exception.error.StoreAlreadyExistsException;
+import com.albert.commerce.exception.error.StoreNotFoundException;
+import com.albert.commerce.exception.error.UnauthorizedModificationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;

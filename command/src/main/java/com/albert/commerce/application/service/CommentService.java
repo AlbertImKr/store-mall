@@ -6,7 +6,7 @@ import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.exception.CommentNotFoundException;
+import com.albert.commerce.exception.error.CommentNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;

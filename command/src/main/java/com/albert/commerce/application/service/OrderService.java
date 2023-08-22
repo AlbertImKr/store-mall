@@ -6,7 +6,7 @@ import com.albert.commerce.domain.order.OrderId;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.exception.OrderNotFoundException;
+import com.albert.commerce.exception.error.OrderNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

@@ -5,7 +5,7 @@ import com.albert.commerce.application.service.product.dto.ProductUpdatedEvent;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductDao;
 import com.albert.commerce.domain.product.ProductId;
-import com.albert.commerce.exception.ProductNotFoundException;
+import com.albert.commerce.exception.error.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.albert.commerce.exception;
+package com.albert.commerce.exception.error;
 
 public abstract class BusinessException extends RuntimeException {
 
