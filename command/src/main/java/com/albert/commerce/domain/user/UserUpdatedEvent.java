@@ -4,7 +4,6 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.Builder;
 
 public class UserUpdatedEvent extends DomainEvent {
 
@@ -16,8 +15,7 @@ public class UserUpdatedEvent extends DomainEvent {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private final LocalDateTime updatedTime;
 
-    @Builder
-    private UserUpdatedEvent(UserId userId, String address, String nickname, LocalDate dateOfBirth,
+    public UserUpdatedEvent(UserId userId, String address, String nickname, LocalDate dateOfBirth,
             String phoneNumber, LocalDateTime updatedTime) {
         this.userId = userId;
         this.address = address;

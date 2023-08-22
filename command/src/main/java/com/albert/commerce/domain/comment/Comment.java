@@ -73,16 +73,16 @@ public class Comment {
     }
 
     private CommentPostedEvent toCommentCreatedEvent() {
-        return CommentPostedEvent.builder()
-                .commentId(commentId)
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .parentCommentId(parentCommentId)
-                .createdTime(createdTime)
-                .detail(detail)
-                .updatedTime(updatedTime)
-                .build();
+        return new CommentPostedEvent(
+                commentId,
+                productId,
+                storeId,
+                userId,
+                parentCommentId,
+                detail,
+                createdTime,
+                updatedTime
+        );
     }
 
     private CommentUpdatedEvent toCommentUpdatedEvent() {

@@ -88,15 +88,15 @@ public class Order {
     }
 
     private OrderPlacedEvent toOrderCreatedEvent() {
-        return OrderPlacedEvent.builder()
-                .orderId(orderId)
-                .userId(userId)
-                .storeId(storeId)
-                .orderDetailRequests(toOrderDetailRequests(orderLines))
-                .deliveryStatus(deliveryStatus)
-                .createdTime(createdTime)
-                .updatedTime(updatedTime)
-                .build();
+        return new OrderPlacedEvent(
+                orderId,
+                userId,
+                storeId,
+                toOrderDetailRequests(orderLines),
+                deliveryStatus,
+                createdTime,
+                updatedTime
+        );
     }
 
     private static List<OrderDetailRequest> toOrderDetailRequests(List<OrderLine> orderLines) {

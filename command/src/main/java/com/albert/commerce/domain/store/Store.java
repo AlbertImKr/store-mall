@@ -75,28 +75,29 @@ public class Store {
     }
 
     private StoreRegisteredEvent toStoreRegisteredEvent() {
-        return StoreRegisteredEvent.builder()
-                .storeId(storeId)
-                .userId(userId)
-                .storeName(storeName)
-                .ownerName(ownerName)
-                .address(address)
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .createdTime(createdTime)
-                .updatedTime(updatedTime)
-                .build();
+        return new StoreRegisteredEvent(
+                storeId,
+                storeName,
+                userId,
+                ownerName,
+                address,
+                phoneNumber,
+                email,
+                createdTime,
+                updatedTime
+        );
     }
 
     private StoreUploadedEvent toStoreUploadedEvent() {
-        return StoreUploadedEvent.builder()
-                .storeId(storeId)
-                .storeName(storeName)
-                .ownerName(ownerName)
-                .address(address)
-                .email(email)
-                .phoneNumber(phoneNumber)
-                .updatedTime(updatedTime)
-                .build();
+        return new StoreUploadedEvent(
+                storeId,
+                storeName,
+                address,
+                phoneNumber,
+                email,
+                ownerName,
+                updatedTime
+        );
     }
+
 }

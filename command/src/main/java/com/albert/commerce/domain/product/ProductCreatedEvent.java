@@ -5,7 +5,6 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.store.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import lombok.Builder;
 
 public class ProductCreatedEvent extends DomainEvent {
 
@@ -21,8 +20,7 @@ public class ProductCreatedEvent extends DomainEvent {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private final LocalDateTime updatedTime;
 
-    @Builder
-    private ProductCreatedEvent(ProductId productId, StoreId storeId, String productName, Money price,
+    public ProductCreatedEvent(ProductId productId, StoreId storeId, String productName, Money price,
             String description,
             String brand, String category, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.productId = productId;

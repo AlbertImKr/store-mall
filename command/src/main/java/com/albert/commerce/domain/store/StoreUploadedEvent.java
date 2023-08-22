@@ -3,7 +3,6 @@ package com.albert.commerce.domain.store;
 import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import lombok.Builder;
 
 public class StoreUploadedEvent extends DomainEvent {
 
@@ -16,8 +15,7 @@ public class StoreUploadedEvent extends DomainEvent {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private final LocalDateTime updatedTime;
 
-    @Builder
-    private StoreUploadedEvent(StoreId storeId, String storeName, String address, String phoneNumber, String email,
+    public StoreUploadedEvent(StoreId storeId, String storeName, String address, String phoneNumber, String email,
             String ownerName, LocalDateTime updatedTime) {
         this.storeId = storeId;
         this.storeName = storeName;

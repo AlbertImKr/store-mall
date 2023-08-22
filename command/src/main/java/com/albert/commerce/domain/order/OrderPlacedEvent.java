@@ -7,7 +7,6 @@ import com.albert.commerce.units.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.Builder;
 
 public class OrderPlacedEvent extends DomainEvent {
 
@@ -21,8 +20,7 @@ public class OrderPlacedEvent extends DomainEvent {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss")
     private final LocalDateTime updatedTime;
 
-    @Builder
-    private OrderPlacedEvent(OrderId orderId, UserId userId, StoreId storeId,
+    public OrderPlacedEvent(OrderId orderId, UserId userId, StoreId storeId,
             List<OrderDetailRequest> orderDetailRequests,
             DeliveryStatus deliveryStatus, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.orderId = orderId;

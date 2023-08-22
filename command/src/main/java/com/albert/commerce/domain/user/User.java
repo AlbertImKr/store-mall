@@ -90,28 +90,29 @@ public class User {
     }
 
     private UserRegisteredEvent toUserRegisteredEvent() {
-        return UserRegisteredEvent.builder()
-                .userId(userId)
-                .nickname(nickname)
-                .email(email)
-                .role(role)
-                .dateOfBirth(dateOfBirth)
-                .phoneNumber(phoneNumber)
-                .address(address)
-                .isActive(isActive)
-                .createdTime(createdTime)
-                .updatedTime(updatedTime)
-                .build();
+        return new UserRegisteredEvent(
+                userId,
+                nickname,
+                email,
+                role,
+                dateOfBirth,
+                phoneNumber,
+                address,
+                isActive,
+                createdTime,
+                updatedTime
+        );
     }
 
     private UserUpdatedEvent toUserUpdateEvent() {
-        return UserUpdatedEvent.builder()
-                .userId(userId)
-                .address(address)
-                .nickname(nickname)
-                .dateOfBirth(dateOfBirth)
-                .phoneNumber(phoneNumber)
-                .updatedTime(updatedTime)
-                .build();
+        return new UserUpdatedEvent(
+                userId,
+                address,
+                nickname,
+                dateOfBirth,
+                phoneNumber,
+                updatedTime
+        );
     }
+
 }

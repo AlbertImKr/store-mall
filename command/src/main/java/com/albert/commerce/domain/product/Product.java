@@ -82,28 +82,28 @@ public class Product {
     }
 
     private ProductUpdatedEvent toProductUpdatedEvent() {
-        return ProductUpdatedEvent.builder()
-                .productId(this.productId)
-                .productName(productName)
-                .price(price)
-                .brand(brand)
-                .category(category)
-                .description(description)
-                .updatedTime(updatedTime)
-                .build();
+        return new ProductUpdatedEvent(
+                productId,
+                productName,
+                price,
+                brand,
+                category,
+                description,
+                updatedTime
+        );
     }
 
     private ProductCreatedEvent toProductCreatedEvent() {
-        return ProductCreatedEvent.builder()
-                .productId(productId)
-                .productName(productName)
-                .description(description)
-                .storeId(storeId)
-                .brand(brand)
-                .category(category)
-                .price(price)
-                .createdTime(createdTime)
-                .updatedTime(updatedTime)
-                .build();
+        return new ProductCreatedEvent(
+                productId,
+                storeId,
+                productName,
+                price,
+                description,
+                brand,
+                category,
+                createdTime,
+                updatedTime
+        );
     }
 }
