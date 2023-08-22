@@ -6,7 +6,9 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class CommentPostedEvent extends DomainEvent {
 
     private final CommentId commentId;
@@ -30,37 +32,5 @@ public class CommentPostedEvent extends DomainEvent {
         this.detail = detail;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
-    }
-
-    public CommentId getCommentId() {
-        return commentId;
-    }
-
-    public ProductId getProductId() {
-        return productId;
-    }
-
-    public StoreId getStoreId() {
-        return storeId;
-    }
-
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public CommentId getParentCommentId() {
-        return parentCommentId;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

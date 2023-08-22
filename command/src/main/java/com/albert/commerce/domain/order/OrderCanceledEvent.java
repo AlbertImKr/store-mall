@@ -3,7 +3,9 @@ package com.albert.commerce.domain.order;
 import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class OrderCanceledEvent extends DomainEvent {
 
     private final OrderId orderId;
@@ -13,13 +15,5 @@ public class OrderCanceledEvent extends DomainEvent {
     public OrderCanceledEvent(OrderId orderId, LocalDateTime updatedTime) {
         this.orderId = orderId;
         this.updatedTime = updatedTime;
-    }
-
-    public OrderId getOrderId() {
-        return orderId;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

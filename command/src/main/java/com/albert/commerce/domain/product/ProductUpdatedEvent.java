@@ -4,7 +4,9 @@ import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class ProductUpdatedEvent extends DomainEvent {
 
     private final ProductId productId;
@@ -32,33 +34,5 @@ public class ProductUpdatedEvent extends DomainEvent {
         this.category = category;
         this.description = description;
         this.updatedTime = updatedTime;
-    }
-
-    public ProductId getProductId() {
-        return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

@@ -7,7 +7,9 @@ import com.albert.commerce.units.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
 
+@Getter
 public class OrderPlacedEvent extends DomainEvent {
 
     private final OrderId orderId;
@@ -30,33 +32,5 @@ public class OrderPlacedEvent extends DomainEvent {
         this.deliveryStatus = deliveryStatus;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
-    }
-
-    public OrderId getOrderId() {
-        return orderId;
-    }
-
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public StoreId getStoreId() {
-        return storeId;
-    }
-
-    public List<OrderDetailRequest> getOrderDetailRequests() {
-        return orderDetailRequests;
-    }
-
-    public DeliveryStatus getDeliveryStatus() {
-        return deliveryStatus;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updatedTime;
     }
 }

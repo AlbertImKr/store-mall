@@ -4,7 +4,9 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class UserUpdatedEvent extends DomainEvent {
 
     private final UserId userId;
@@ -23,29 +25,5 @@ public class UserUpdatedEvent extends DomainEvent {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.updatedTime = updatedTime;
-    }
-
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

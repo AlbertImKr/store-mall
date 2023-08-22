@@ -4,7 +4,9 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class UserRegisteredEvent extends DomainEvent {
 
     private final UserId userId;
@@ -33,45 +35,5 @@ public class UserRegisteredEvent extends DomainEvent {
         this.isActive = isActive;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
-    }
-
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

@@ -3,7 +3,9 @@ package com.albert.commerce.domain.comment;
 import com.albert.commerce.domain.event.DomainEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class CommentUpdatedEvent extends DomainEvent {
 
     private final CommentId commentId;
@@ -15,17 +17,5 @@ public class CommentUpdatedEvent extends DomainEvent {
         this.commentId = commentId;
         this.detail = detail;
         this.updatedTime = updatedTime;
-    }
-
-    public CommentId getCommentId() {
-        return commentId;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }

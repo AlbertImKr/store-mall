@@ -5,7 +5,9 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.store.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class ProductCreatedEvent extends DomainEvent {
 
     private final ProductId productId;
@@ -32,41 +34,5 @@ public class ProductCreatedEvent extends DomainEvent {
         this.category = category;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
-    }
-
-    public ProductId getProductId() {
-        return productId;
-    }
-
-    public StoreId getStoreId() {
-        return storeId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
     }
 }
