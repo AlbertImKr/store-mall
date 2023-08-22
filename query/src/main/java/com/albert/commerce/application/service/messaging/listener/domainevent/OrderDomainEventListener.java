@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class OrderEventHandler {
+public class OrderDomainEventListener {
 
     private final OrderFacade orderFacade;
 

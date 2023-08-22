@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UserEventHandler {
+public class UserDomainEventListener {
 
     private final UserFacade userFacade;
 

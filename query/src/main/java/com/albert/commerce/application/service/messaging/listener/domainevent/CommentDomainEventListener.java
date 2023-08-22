@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CommentEventHandler {
+public class CommentDomainEventListener {
 
     private final CommentFacade commentFacade;
 
