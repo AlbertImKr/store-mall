@@ -1,6 +1,6 @@
 package com.albert.commerce.application.service;
 
-import com.albert.commerce.adapter.in.web.dto.CustomUserDetails;
+import com.albert.commerce.adapter.in.web.request.CustomUserDetails;
 import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.domain.user.User;
 import java.util.Optional;

@@ -116,3 +116,9 @@ project(':command') {
         implementation project(":shared")
     }
 }
+
+project(':query') {
+    dependencies {
+        implementation project(":shared")
+    }
+}

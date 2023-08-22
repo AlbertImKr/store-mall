@@ -1,7 +1,7 @@
 package com.albert.commerce.domain.product;
 
-import com.albert.commerce.adapter.out.persistance.Money;
-import com.albert.commerce.adapter.out.persistance.MoneyConverter;
+import com.albert.commerce.adapter.out.persistence.Money;
+import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
 import com.albert.commerce.domain.store.StoreId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.AttributeOverride;

@@ -1,7 +1,7 @@
 package com.albert.commerce.domain.order;
 
-import com.albert.commerce.adapter.out.persistance.Money;
-import com.albert.commerce.adapter.out.persistance.MoneyConverter;
+import com.albert.commerce.adapter.out.persistence.Money;
+import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
 import com.albert.commerce.domain.product.ProductId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;

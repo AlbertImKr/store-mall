@@ -1,7 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.OrderCancelRequest;
-import com.albert.commerce.adapter.in.web.dto.OrderPlaceRequest;
+import com.albert.commerce.adapter.in.web.request.OrderCancelRequest;
+import com.albert.commerce.adapter.in.web.request.OrderPlaceRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.OrderCancelCommand;
 import com.albert.commerce.application.service.OrderPlaceCommand;

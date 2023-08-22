@@ -1,7 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.StoreRegisterRequest;
-import com.albert.commerce.adapter.in.web.dto.StoreUploadRequest;
+import com.albert.commerce.adapter.in.web.request.StoreRegisterRequest;
+import com.albert.commerce.adapter.in.web.request.StoreUploadRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.StoreRegisterCommand;
 import com.albert.commerce.application.service.StoreUploadCommand;

@@ -1,7 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.CommentPostRequest;
-import com.albert.commerce.adapter.in.web.dto.CommentUpdateRequest;
+import com.albert.commerce.adapter.in.web.request.CommentPostRequest;
+import com.albert.commerce.adapter.in.web.request.CommentUpdateRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.CommentDeleteCommand;
 import com.albert.commerce.application.service.CommentPostCommand;

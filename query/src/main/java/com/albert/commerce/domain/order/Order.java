@@ -1,7 +1,7 @@
 package com.albert.commerce.domain.order;
 
-import com.albert.commerce.adapter.out.persistance.Money;
-import com.albert.commerce.adapter.out.persistance.MoneyConverter;
+import com.albert.commerce.adapter.out.persistence.Money;
+import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.units.DeliveryStatus;

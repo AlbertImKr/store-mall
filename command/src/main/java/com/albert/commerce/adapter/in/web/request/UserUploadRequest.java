@@ -1,4 +1,4 @@
-package com.albert.commerce.adapter.in.web.dto;
+package com.albert.commerce.adapter.in.web.request;
 
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;

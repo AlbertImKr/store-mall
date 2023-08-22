@@ -1,4 +1,4 @@
-package com.albert.commerce.adapter.in.web.dto;
+package com.albert.commerce.adapter.in.web.request;
 
 import com.albert.commerce.domain.user.User;
 import java.util.List;

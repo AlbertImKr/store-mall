@@ -1,7 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
-import com.albert.commerce.adapter.in.web.dto.ProductCreateRequest;
-import com.albert.commerce.adapter.in.web.dto.ProductUpdateRequest;
+import com.albert.commerce.adapter.in.web.request.ProductCreateRequest;
+import com.albert.commerce.adapter.in.web.request.ProductUpdateRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.ProductCreateCommand;
 import com.albert.commerce.application.service.ProductUpdateCommand;

@@ -1,6 +1,6 @@
 package com.albert.commerce.application.service.order;
 
-import com.albert.commerce.adapter.out.persistance.Money;
+import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.service.order.dto.OrderCanceledEvent;
 import com.albert.commerce.application.service.order.dto.OrderDetailRequest;
 import com.albert.commerce.application.service.order.dto.OrderPlacedEvent;
