@@ -22,7 +22,8 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             return;
         }
-        var user = User.createByEmail(email);
+        UserId userId = getNewUserId();
+        var user = User.createByEmail(userId, email, LocalDateTime.now());
         userRepository.save(user);
     }
 
@@ -46,6 +47,10 @@ public class UserService {
     public User getUserByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private UserId getNewUserId() {
+        return userRepository.nextId();
     }
 
     private static void upload(UserUploadCommand userUploadCommand, User user) {

@@ -42,7 +42,7 @@ public class User {
 
     @Builder
     private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
-            String phoneNumber, String address) {
+            String phoneNumber, String address, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.email = email;
@@ -50,21 +50,19 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
+        Events.raise(toUserRegisteredEvent());
     }
 
-    public static User createByEmail(String email) {
+    public static User createByEmail(UserId userId, String email, LocalDateTime createdTime) {
         return User.builder()
+                .userId(userId)
                 .nickname(email)
                 .email(email)
                 .role(Role.USER)
+                .createdTime(createdTime)
                 .build();
-    }
-
-    public void updateId(UserId userId, LocalDateTime createdTime, LocalDateTime updateTime) {
-        this.userId = userId;
-        this.createdTime = createdTime;
-        this.updatedTime = updateTime;
-        Events.raise(toUserRegisteredEvent());
     }
 
     public void update(String address, String nickname, LocalDate dateOfBirth, String phoneNumber,

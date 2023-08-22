@@ -24,7 +24,7 @@ public class StoreService {
     public String create(StoreRegisterCommand storeRegisterCommand) {
         var userId = userService.getUserIdByEmail(storeRegisterCommand.getUserEmail());
         checkExistsByUserId(userId);
-        var store = toStore(storeRegisterCommand, userId);
+        var store = Store.from(getNewStoreId(), storeRegisterCommand, userId);
         return storeRepository.save(store)
                 .getStoreId()
                 .getValue();
@@ -61,23 +61,14 @@ public class StoreService {
         throw new StoreNotFoundException();
     }
 
+    private StoreId getNewStoreId() {
+        return storeRepository.nextId();
+    }
+
     private void checkExistsByUserId(UserId userId) {
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
-    }
-
-    private static Store toStore(StoreRegisterCommand storeRegisterCommand, UserId userId) {
-        return Store.builder()
-                .userId(userId)
-                .storeName(storeRegisterCommand.getStoreName())
-                .ownerName(storeRegisterCommand.getOwnerName())
-                .address(storeRegisterCommand.getAddress())
-                .phoneNumber(storeRegisterCommand.getPhoneNumber())
-                .email(storeRegisterCommand.getEmail())
-                .createdTime(LocalDateTime.now())
-                .updatedTime(LocalDateTime.now())
-                .build();
     }
 
     private static void uploadStore(StoreUploadCommand storeUploadCommand, Store store) {

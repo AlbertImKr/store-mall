@@ -6,7 +6,6 @@ import com.albert.commerce.application.port.out.persistence.SequenceGenerator;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,7 +29,6 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
 
     @Override
     public Store save(Store store) {
-        store.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return storeJpaRepository.save(store);
     }
 
@@ -39,7 +37,8 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
         return storeJpaRepository.existsById(storeId);
     }
 
-    private StoreId nextId() {
+    @Override
+    public StoreId nextId() {
         return StoreId.from(sequenceGenerator.generate());
     }
 }

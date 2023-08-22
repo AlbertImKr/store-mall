@@ -49,32 +49,32 @@ public class Order {
     @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
-    protected LocalDateTime createdTime;
-    protected LocalDateTime updatedTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
 
     @Builder
-    private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, StoreId storeId) {
+    private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, StoreId storeId,
+            LocalDateTime createdTime,
+            LocalDateTime updatedTime) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderLines = orderLines;
         this.deliveryStatus = DeliveryStatus.PENDING;
         this.storeId = storeId;
-    }
-
-    public static Order from(User user, StoreId storeId, Map<String, Long> productsIdAndQuantity,
-            List<Product> products) {
-        return Order.builder()
-                .storeId(storeId)
-                .userId(user.getUserId())
-                .orderLines(getOrderLines(productsIdAndQuantity, products))
-                .build();
-    }
-
-    public void updateId(OrderId orderId, LocalDateTime createdTime, LocalDateTime updatedTime) {
-        this.orderId = orderId;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
         Events.raise(toOrderCreatedEvent());
+    }
+
+    public static Order from(OrderId orderId, User user, StoreId storeId, Map<String, Long> productsIdAndQuantity,
+            List<Product> products, LocalDateTime createdTime) {
+        return Order.builder()
+                .orderId(orderId)
+                .storeId(storeId)
+                .userId(user.getUserId())
+                .orderLines(getOrderLines(productsIdAndQuantity, products))
+                .createdTime(createdTime)
+                .build();
     }
 
     public void cancel(LocalDateTime updatedTime) {

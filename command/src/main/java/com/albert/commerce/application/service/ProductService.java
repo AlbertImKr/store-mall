@@ -4,7 +4,6 @@ import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.port.out.ProductRepository;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
-import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.exception.error.ProductNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,7 @@ public class ProductService {
     public String register(ProductCreateCommand productCreateCommand) {
         var userId = userService.getUserIdByEmail(productCreateCommand.getUserEmail());
         var store = storeService.getStoreByUserId(userId);
-
-        var product = toProduct(productCreateCommand, store);
+        var product = Product.from(getNewProductId(), productCreateCommand, store, LocalDateTime.now());
         return productRepository.save(product)
                 .getProductId()
                 .getValue();
@@ -59,17 +57,6 @@ public class ProductService {
         throw new ProductNotFoundException();
     }
 
-    private static Product toProduct(ProductCreateCommand productCreateCommand, Store store) {
-        return Product.builder()
-                .storeId(store.getStoreId())
-                .productName(productCreateCommand.getProductName())
-                .price(new Money(productCreateCommand.getPrice()))
-                .description(productCreateCommand.getDescription())
-                .brand(productCreateCommand.getBrand())
-                .category(productCreateCommand.getCategory())
-                .build();
-    }
-
     private static void uploadProduct(ProductUpdateCommand productUpdateCommand, Product product) {
         product.upload(
                 productUpdateCommand.getProductName(),
@@ -79,5 +66,9 @@ public class ProductService {
                 productUpdateCommand.getDescription(),
                 LocalDateTime.now()
         );
+    }
+
+    private ProductId getNewProductId() {
+        return productRepository.nextId();
     }
 }

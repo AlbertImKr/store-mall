@@ -5,7 +5,6 @@ import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.error.CommentNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,15 @@ public class CommentService {
         storeService.checkId(storeId);
 
         var parentCommentId = getParentCommentId(commentPostCommand.getParentCommentId());
-        var comment = toComment(productId, storeId, userId, commentPostCommand.getDetail(), parentCommentId);
+        var comment = Comment.from(
+                getNewCommentId(),
+                productId,
+                storeId,
+                userId,
+                commentPostCommand.getDetail(),
+                parentCommentId,
+                LocalDateTime.now()
+        );
         return commentRepository.save(comment)
                 .getCommentId()
                 .getValue();
@@ -74,14 +81,7 @@ public class CommentService {
         return parentCommentId;
     }
 
-    private static Comment toComment(ProductId productId, StoreId storeId, UserId userId, String detail,
-            CommentId parentCommentId) {
-        return Comment.builder()
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
-                .parentCommentId(parentCommentId)
-                .build();
+    private CommentId getNewCommentId() {
+        return commentRepository.nextId();
     }
 }

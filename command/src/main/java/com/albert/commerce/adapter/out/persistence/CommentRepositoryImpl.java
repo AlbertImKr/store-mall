@@ -6,7 +6,6 @@ import com.albert.commerce.application.port.out.persistence.SequenceGenerator;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.user.UserId;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,13 +18,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     private final SequenceGenerator sequenceGenerator;
 
     @Override
-    public Optional<Comment> findById(CommentId commentId) {
-        return commentJpaRepository.findById(commentId);
-    }
-
-    @Override
     public Comment save(Comment comment) {
-        comment.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return commentJpaRepository.save(comment);
     }
 
@@ -39,7 +32,8 @@ public class CommentRepositoryImpl implements CommentRepository {
         return commentJpaRepository.findByCommentIdAndUserId(commentId, userId);
     }
 
-    private CommentId nextId() {
+    @Override
+    public CommentId nextId() {
         return CommentId.from(sequenceGenerator.generate());
     }
 

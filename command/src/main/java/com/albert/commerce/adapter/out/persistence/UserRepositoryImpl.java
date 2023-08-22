@@ -5,7 +5,6 @@ import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.application.port.out.persistence.SequenceGenerator;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
+
     private final UserJpaRepository userJpaRepository;
     private final SequenceGenerator sequenceGenerator;
 
@@ -23,11 +23,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        user.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return userJpaRepository.save(user);
     }
 
-    private UserId nextId() {
+    @Override
+    public UserId nextId() {
         return UserId.from(sequenceGenerator.generate());
     }
 

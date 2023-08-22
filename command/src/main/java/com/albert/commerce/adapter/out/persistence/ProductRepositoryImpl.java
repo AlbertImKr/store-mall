@@ -6,7 +6,6 @@ import com.albert.commerce.application.port.out.persistence.SequenceGenerator;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        product.updateId(nextId(), LocalDateTime.now(), LocalDateTime.now());
         return productJpaRepository.save(product);
     }
 
@@ -40,7 +38,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         return productJpaRepository.findByStoreIdAndProductId(storeId, productId);
     }
 
-    private ProductId nextId() {
+    @Override
+    public ProductId nextId() {
         return ProductId.from(sequenceGenerator.generate());
     }
 }

@@ -33,7 +33,7 @@ public class OrderService {
         storeService.checkId(storeId);
         var productsIdAndQuantity = orderPlaceCommand.getProductsIdAndQuantity();
         var products = getProducts(productsIdAndQuantity);
-        var order = Order.from(user, storeId, productsIdAndQuantity, products);
+        var order = Order.from(getnewOrderId(), user, storeId, productsIdAndQuantity, products, LocalDateTime.now());
         return orderRepository.save(order)
                 .getOrderId()
                 .getValue();
@@ -47,6 +47,10 @@ public class OrderService {
         var order = orderRepository.findByUserIdAndOrderId(userId, orderId)
                 .orElseThrow(OrderNotFoundException::new);
         order.cancel(LocalDateTime.now());
+    }
+
+    private OrderId getnewOrderId() {
+        return orderRepository.nextId();
     }
 
     private List<Product> getProducts(Map<String, Long> productsIdAndQuantity) {

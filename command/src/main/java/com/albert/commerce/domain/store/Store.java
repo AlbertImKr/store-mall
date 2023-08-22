@@ -1,5 +1,6 @@
 package com.albert.commerce.domain.store;
 
+import com.albert.commerce.application.service.StoreRegisterCommand;
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.user.UserId;
 import jakarta.persistence.AttributeOverride;
@@ -50,12 +51,6 @@ public class Store {
         this.email = email;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
-    }
-
-    public void updateId(StoreId storeId, LocalDateTime createdTime, LocalDateTime updatedTime) {
-        this.storeId = storeId;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
         Events.raise(toStoreRegisteredEvent());
     }
 
@@ -98,6 +93,20 @@ public class Store {
                 ownerName,
                 updatedTime
         );
+    }
+
+    public static Store from(StoreId storeId, StoreRegisterCommand storeRegisterCommand, UserId userId) {
+        return Store.builder()
+                .storeId(storeId)
+                .userId(userId)
+                .storeName(storeRegisterCommand.getStoreName())
+                .ownerName(storeRegisterCommand.getOwnerName())
+                .address(storeRegisterCommand.getAddress())
+                .phoneNumber(storeRegisterCommand.getPhoneNumber())
+                .email(storeRegisterCommand.getEmail())
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
+                .build();
     }
 
 }

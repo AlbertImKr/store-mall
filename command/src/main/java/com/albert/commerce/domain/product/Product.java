@@ -2,7 +2,9 @@ package com.albert.commerce.domain.product;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
+import com.albert.commerce.application.service.ProductCreateCommand;
 import com.albert.commerce.domain.event.Events;
+import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -53,6 +55,7 @@ public class Product {
         this.category = category;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
+        Events.raise(toProductCreatedEvent());
     }
 
     public void upload(String productName, Money price, String brand, String category,
@@ -72,13 +75,6 @@ public class Product {
 
     public Money getPrice() {
         return price;
-    }
-
-    public void updateId(ProductId productId, LocalDateTime createdTime, LocalDateTime updatedTime) {
-        this.productId = productId;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-        Events.raise(toProductCreatedEvent());
     }
 
     private ProductUpdatedEvent toProductUpdatedEvent() {
@@ -105,5 +101,19 @@ public class Product {
                 createdTime,
                 updatedTime
         );
+    }
+
+    public static Product from(ProductId productId, ProductCreateCommand productCreateCommand, Store store,
+            LocalDateTime createdTime) {
+        return Product.builder()
+                .productId(productId)
+                .storeId(store.getStoreId())
+                .productName(productCreateCommand.getProductName())
+                .price(new Money(productCreateCommand.getPrice()))
+                .description(productCreateCommand.getDescription())
+                .brand(productCreateCommand.getBrand())
+                .category(productCreateCommand.getCategory())
+                .createdTime(createdTime)
+                .build();
     }
 }

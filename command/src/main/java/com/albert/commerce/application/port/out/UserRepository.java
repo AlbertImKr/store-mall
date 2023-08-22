@@ -1,6 +1,7 @@
 package com.albert.commerce.application.port.out;
 
 import com.albert.commerce.domain.user.User;
+import com.albert.commerce.domain.user.UserId;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -10,4 +11,6 @@ public interface UserRepository {
     User save(User user);
 
     Optional<User> findByEmail(String email);
+
+    UserId nextId();
 }

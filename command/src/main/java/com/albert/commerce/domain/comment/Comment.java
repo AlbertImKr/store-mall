@@ -39,19 +39,16 @@ public class Comment {
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
-            UserId userId, CommentId parentCommentId, String detail) {
+            UserId userId, CommentId parentCommentId, String detail, LocalDateTime createdTime,
+            LocalDateTime updatedTime) {
         this.commentId = commentId;
         this.productId = productId;
         this.storeId = storeId;
         this.userId = userId;
         this.parentCommentId = parentCommentId;
         this.detail = detail;
-    }
-
-    public void updateId(CommentId commentId, LocalDateTime createdTime, LocalDateTime updateTime) {
-        this.commentId = commentId;
         this.createdTime = createdTime;
-        this.updatedTime = updateTime;
+        this.updatedTime = updatedTime;
         Events.raise(toCommentCreatedEvent());
     }
 
@@ -91,5 +88,18 @@ public class Comment {
 
     private CommentDeletedEvent toCommentDeletedEvent() {
         return new CommentDeletedEvent(this.commentId, this.updatedTime);
+    }
+
+    public static Comment from(CommentId commentId, ProductId productId, StoreId storeId, UserId userId, String detail,
+            CommentId parentCommentId, LocalDateTime createdTime) {
+        return Comment.builder()
+                .commentId(commentId)
+                .productId(productId)
+                .storeId(storeId)
+                .userId(userId)
+                .detail(detail)
+                .parentCommentId(parentCommentId)
+                .createdTime(createdTime)
+                .build();
     }
 }

@@ -11,7 +11,7 @@ public interface CommentRepository {
 
     boolean existsById(CommentId commentId);
 
-    Optional<Comment> findById(CommentId commentId);
-
     Optional<Comment> findByCommentIdAndUserId(CommentId commentId, UserId userId);
+
+    CommentId nextId();
 }

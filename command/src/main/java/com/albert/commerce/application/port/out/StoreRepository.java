@@ -14,4 +14,6 @@ public interface StoreRepository {
     Optional<Store> findByUserId(UserId userId);
 
     boolean existsById(StoreId storeId);
+
+    StoreId nextId();
 }
