@@ -1,12 +1,17 @@
 commerce:
   messaging:
     base-package:
-      command: com.albert.commerce.shared.messaging.application
-      api: com.albert.commerce.api
-      domain-event: com.albert.commerce.api.*.command.domain
-      domain-event-listener: com.albert.commerce.api.*.infra.messaging.listener.domainevent
+      command: com.albert.commerce.application.service
+      domain-event: com.albert.commerce.domain
     task-executor:
       core-pool-size: 8
       max-pool-size: 16
       queue-capacity: 100
       thread-name-prefix: "task-executor-"
+      await-termination-seconds: 60
+spring:
+  kafka:
+    consumer:
+      group-id: command
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
