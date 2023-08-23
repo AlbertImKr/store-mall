@@ -2,7 +2,7 @@ package com.albert.commerce.adapter.in.web;
 
 import com.albert.commerce.adapter.in.web.request.UserUploadRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
-import com.albert.commerce.application.service.command.UserUploadCommand;
+import com.albert.commerce.application.service.user.UserUploadCommand;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

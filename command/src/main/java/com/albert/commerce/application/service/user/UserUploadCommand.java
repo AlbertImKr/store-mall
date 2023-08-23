@@ -1,4 +1,4 @@
-package com.albert.commerce.application.service.command;
+package com.albert.commerce.application.service.user;
 
 import com.albert.commerce.application.service.Command;
 import java.time.LocalDate;

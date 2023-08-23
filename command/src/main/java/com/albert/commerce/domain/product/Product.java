@@ -2,7 +2,7 @@ package com.albert.commerce.domain.product;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
-import com.albert.commerce.application.service.command.ProductCreateCommand;
+import com.albert.commerce.application.service.product.ProductCreateCommand;
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;

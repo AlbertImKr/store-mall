@@ -1,9 +1,9 @@
-package com.albert.commerce.application.service;
+package com.albert.commerce.application.service.comment;
 
 import com.albert.commerce.application.port.out.CommentRepository;
-import com.albert.commerce.application.service.command.CommentDeleteCommand;
-import com.albert.commerce.application.service.command.CommentPostCommand;
-import com.albert.commerce.application.service.command.CommentUpdateCommand;
+import com.albert.commerce.application.service.product.ProductService;
+import com.albert.commerce.application.service.store.StoreService;
+import com.albert.commerce.application.service.user.UserService;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.product.ProductId;

@@ -1,4 +1,4 @@
-package com.albert.commerce.application.service;
+package com.albert.commerce.application.service.user;
 
 import com.albert.commerce.adapter.in.web.request.CustomUserDetails;
 import com.albert.commerce.application.port.out.UserRepository;

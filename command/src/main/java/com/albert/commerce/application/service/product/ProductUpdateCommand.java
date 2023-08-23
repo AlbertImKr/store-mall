@@ -1,4 +1,4 @@
-package com.albert.commerce.application.service.command;
+package com.albert.commerce.application.service.product;
 
 import com.albert.commerce.application.service.Command;
 

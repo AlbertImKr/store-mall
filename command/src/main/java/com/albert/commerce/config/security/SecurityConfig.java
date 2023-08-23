@@ -1,6 +1,6 @@
 package com.albert.commerce.config.security;
 
-import com.albert.commerce.application.service.CustomUserDetailsService;
+import com.albert.commerce.application.service.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

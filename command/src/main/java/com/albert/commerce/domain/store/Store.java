@@ -1,6 +1,6 @@
 package com.albert.commerce.domain.store;
 
-import com.albert.commerce.application.service.command.StoreRegisterCommand;
+import com.albert.commerce.application.service.store.StoreRegisterCommand;
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.user.UserId;
 import jakarta.persistence.AttributeOverride;

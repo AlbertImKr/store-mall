@@ -1,4 +1,4 @@
-package com.albert.commerce.application.service.command;
+package com.albert.commerce.application.service.order;
 
 import com.albert.commerce.application.service.Command;
 import java.util.Map;
