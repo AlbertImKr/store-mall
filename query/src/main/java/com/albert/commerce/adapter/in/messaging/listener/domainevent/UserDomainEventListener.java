@@ -2,12 +2,14 @@ package com.albert.commerce.adapter.in.messaging.listener.domainevent;
 
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.UserRegisteredEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.UserUpdatedEvent;
-import com.albert.commerce.adapter.out.persistance.imports.UserJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.exception.error.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +22,8 @@ public class UserDomainEventListener {
         userJpaRepository.save(toUser(userRegisteredEvent));
     }
 
+    @Transactional
+    @CacheEvict(value = "user", key = "#userUpdatedEvent.userId().value")
     @KafkaListener(topics = "UserUpdatedEvent")
     public void handleUserUpdateEvent(UserUpdatedEvent userUpdatedEvent) {
         User user = userJpaRepository.findById(userUpdatedEvent.userId())

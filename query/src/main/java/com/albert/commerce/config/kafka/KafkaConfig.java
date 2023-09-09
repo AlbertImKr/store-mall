@@ -17,5 +17,4 @@ public class KafkaConfig {
         factory.setRecordMessageConverter(new StringJsonMessageConverter());
         return factory;
     }
-
 }

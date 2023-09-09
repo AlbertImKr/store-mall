@@ -8,6 +8,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "store")
-public class Store {
+public class Store implements Serializable {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "store_id"))

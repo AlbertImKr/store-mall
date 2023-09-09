@@ -1,6 +1,6 @@
-package com.albert.commerce.adapter.out.persistance;
+package com.albert.commerce.adapter.out.persistence;
 
-import com.albert.commerce.adapter.out.persistance.imports.OrderJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.application.port.out.OrderDao;
 import com.albert.commerce.domain.order.Order;
 import com.albert.commerce.domain.order.OrderId;

@@ -1,4 +1,4 @@
-package com.albert.commerce.adapter.out.persistance.imports;
+package com.albert.commerce.adapter.out.persistence.imports;
 
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;

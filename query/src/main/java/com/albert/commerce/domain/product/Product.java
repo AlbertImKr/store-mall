@@ -11,6 +11,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product implements Serializable {
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))

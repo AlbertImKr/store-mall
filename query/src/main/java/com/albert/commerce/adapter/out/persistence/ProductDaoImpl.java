@@ -1,6 +1,6 @@
-package com.albert.commerce.adapter.out.persistance;
+package com.albert.commerce.adapter.out.persistence;
 
-import com.albert.commerce.adapter.out.persistance.imports.ProductJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.application.port.out.ProductDao;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
