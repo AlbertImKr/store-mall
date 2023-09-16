@@ -3,6 +3,7 @@ package com.albert.commerce.adapter.in.messaging.listener.domainevent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.StoreRegisteredEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.StoreUploadedEvent;
 import com.albert.commerce.adapter.out.persistence.imports.StoreJpaRepository;
+import com.albert.commerce.config.cache.CacheValue;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.exception.error.StoreNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class StoreDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "str", key = "#storeUploadedEvent.storeId().value")
+    @CacheEvict(value = CacheValue.STORE, key = "#storeUploadedEvent.storeId().value")
     @KafkaListener(topics = "StoreUploadedEvent")
     public void handleStoreUploadedEvent(StoreUploadedEvent storeUploadedEvent) {
         var store = storeJpaRepository.findById((storeUploadedEvent.storeId()))

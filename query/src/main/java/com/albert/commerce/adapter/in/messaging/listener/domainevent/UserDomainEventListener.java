@@ -3,6 +3,7 @@ package com.albert.commerce.adapter.in.messaging.listener.domainevent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.UserRegisteredEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.UserUpdatedEvent;
 import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
+import com.albert.commerce.config.cache.CacheValue;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.exception.error.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "usr", key = "#userUpdatedEvent.userId().value")
+    @CacheEvict(value = CacheValue.USER, key = "#userUpdatedEvent.userId().value")
     @KafkaListener(topics = "UserUpdatedEvent")
     public void handleUserUpdateEvent(UserUpdatedEvent userUpdatedEvent) {
         User user = userJpaRepository.findById(userUpdatedEvent.userId())

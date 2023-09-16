@@ -8,6 +8,7 @@ import com.albert.commerce.adapter.out.persistence.imports.OrderJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.StoreJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
+import com.albert.commerce.config.cache.CacheValue;
 import com.albert.commerce.domain.order.Order;
 import com.albert.commerce.domain.order.OrderDetail;
 import com.albert.commerce.domain.order.OrderDetails;
@@ -45,7 +46,7 @@ public class OrderDomainEventListener {
         orderJpaRepository.save(order);
     }
 
-    @CacheEvict(value = "ord", key = "#orderCanceledEvent.orderId().value")
+    @CacheEvict(value = CacheValue.ORDER, key = "#orderCanceledEvent.orderId().value")
     @KafkaListener(topics = "OrderCanceledEvent")
     public void handleOrderCanceledEvent(OrderCanceledEvent orderCanceledEvent) {
         var order = orderJpaRepository.findById(orderCanceledEvent.orderId())

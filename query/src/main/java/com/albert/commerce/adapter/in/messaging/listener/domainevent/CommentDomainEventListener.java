@@ -7,6 +7,7 @@ import com.albert.commerce.adapter.out.persistence.imports.CommentJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.StoreJpaRepository;
 import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
+import com.albert.commerce.config.cache.CacheValue;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
@@ -43,7 +44,7 @@ public class CommentDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "cmnt", key = "#commentUpdatedEvent.commentId().value")
+    @CacheEvict(value = CacheValue.COMMENT, key = "#commentUpdatedEvent.commentId().value")
     @KafkaListener(topics = "CommentUpdatedEvent")
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         var comment = commentJpaRepository.findById(commentUpdatedEvent.commentId())
@@ -52,7 +53,7 @@ public class CommentDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "cmnt", key = "#commentDeletedEvent.commentId().value")
+    @CacheEvict(value = CacheValue.COMMENT, key = "#commentDeletedEvent.commentId().value")
     @KafkaListener(topics = "CommentDeletedEvent")
     public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
         var comment = commentJpaRepository.findById(commentDeletedEvent.commentId())
