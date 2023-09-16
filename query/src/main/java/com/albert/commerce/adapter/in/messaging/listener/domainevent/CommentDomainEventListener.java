@@ -3,10 +3,10 @@ package com.albert.commerce.adapter.in.messaging.listener.domainevent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.CommentDeletedEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.CommentPostedEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.CommentUpdatedEvent;
-import com.albert.commerce.adapter.out.persistance.imports.CommentJpaRepository;
-import com.albert.commerce.adapter.out.persistance.imports.ProductJpaRepository;
-import com.albert.commerce.adapter.out.persistance.imports.StoreJpaRepository;
-import com.albert.commerce.adapter.out.persistance.imports.UserJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.CommentJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.StoreJpaRepository;
+import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
@@ -16,8 +16,10 @@ import com.albert.commerce.exception.error.ProductNotFoundException;
 import com.albert.commerce.exception.error.StoreNotFoundException;
 import com.albert.commerce.exception.error.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,6 +42,8 @@ public class CommentDomainEventListener {
         commentJpaRepository.save(comment);
     }
 
+    @Transactional
+    @CacheEvict(value = "comment", key = "#commentUpdatedEvent.commentId().value")
     @KafkaListener(topics = "CommentUpdatedEvent")
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         var comment = commentJpaRepository.findById(commentUpdatedEvent.commentId())
@@ -47,6 +51,8 @@ public class CommentDomainEventListener {
         comment.update(commentUpdatedEvent.detail(), commentUpdatedEvent.updatedTime());
     }
 
+    @Transactional
+    @CacheEvict(value = "comment", key = "#commentDeletedEvent.commentId().value")
     @KafkaListener(topics = "CommentDeletedEvent")
     public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
         var comment = commentJpaRepository.findById(commentDeletedEvent.commentId())

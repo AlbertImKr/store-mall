@@ -1,4 +1,4 @@
-version: "1.1"
+version: "1.2"
 services:
   commerce-project-api-dev-db:
     image: mysql:8.0.32
@@ -91,3 +91,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: local-environment # 클러스터 이름
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092 # 부트스트랩 서버 정보
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181 # Zookeeper 연결 정보
+  query-redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
