@@ -24,7 +24,7 @@ public class ProductDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "product", key = "#productUpdatedEvent.productId().value")
+    @CacheEvict(value = "prd", key = "#productUpdatedEvent.productId().value")
     @KafkaListener(topics = "ProductUpdatedEvent")
     public void handleProductUpdatedEvent(ProductUpdatedEvent productUpdatedEvent) {
         var product = productJpaRepository.findById(productUpdatedEvent.productId())

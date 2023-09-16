@@ -15,7 +15,7 @@ public class StoreFacade implements CacheConfig {
 
     private final StoreDao storeDao;
 
-    @Cacheable(value = "store", key = "#id")
+    @Cacheable(value = "str", key = "#id")
     public Store getById(String id) {
         return storeDao.findById(StoreId.from(id))
                 .orElseThrow(StoreNotFoundException::new);
@@ -23,7 +23,7 @@ public class StoreFacade implements CacheConfig {
 
     @Override
     public String getCacheName() {
-        return "store";
+        return "str";
     }
 
     @Override

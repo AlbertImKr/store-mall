@@ -15,7 +15,7 @@ public class OrderFacade implements CacheConfig {
 
     private final OrderDao orderDao;
 
-    @Cacheable(value = "order", key = "#id")
+    @Cacheable(value = "ord", key = "#id")
     public Order getById(String id) {
         return orderDao.findById(OrderId.from(id))
                 .orElseThrow(OrderNotFoundException::new);
@@ -23,7 +23,7 @@ public class OrderFacade implements CacheConfig {
 
     @Override
     public String getCacheName() {
-        return "order";
+        return "ord";
     }
 
     @Override

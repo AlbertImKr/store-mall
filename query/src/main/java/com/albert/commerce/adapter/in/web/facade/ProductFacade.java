@@ -15,7 +15,7 @@ public class ProductFacade implements CacheConfig {
 
     private final ProductDao productDao;
 
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "prd", key = "#id")
     public Product getById(String id) {
         return productDao.findById(ProductId.from(id))
                 .orElseThrow(ProductNotFoundException::new);
@@ -23,7 +23,7 @@ public class ProductFacade implements CacheConfig {
 
     @Override
     public String getCacheName() {
-        return "product";
+        return "prd";
     }
 
     @Override

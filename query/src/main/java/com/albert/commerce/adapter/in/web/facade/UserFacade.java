@@ -15,7 +15,7 @@ public class UserFacade implements CacheConfig {
 
     private final UserDao userDao;
 
-    @Cacheable(value = "user", key = "#userId")
+    @Cacheable(value = "usr", key = "#userId")
     public User getInfoById(String userId) {
         return userDao.findById(UserId.from(userId))
                 .orElseThrow(UserNotFoundException::new);
@@ -23,7 +23,7 @@ public class UserFacade implements CacheConfig {
 
     @Override
     public String getCacheName() {
-        return "user";
+        return "usr";
     }
 
     @Override

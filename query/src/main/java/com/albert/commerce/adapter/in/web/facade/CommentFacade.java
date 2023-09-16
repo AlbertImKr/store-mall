@@ -15,7 +15,7 @@ public class CommentFacade implements CacheConfig {
 
     private final CommentDao commentDao;
 
-    @Cacheable(value = "comment", key = "#productId")
+    @Cacheable(value = "cmnt")
     public List<Comment> getAllByProductId(String productId) {
         return commentDao.findAllByProductId(ProductId.from(productId));
     }
@@ -23,7 +23,7 @@ public class CommentFacade implements CacheConfig {
 
     @Override
     public String getCacheName() {
-        return "comment";
+        return "cmnt";
     }
 
     @Override

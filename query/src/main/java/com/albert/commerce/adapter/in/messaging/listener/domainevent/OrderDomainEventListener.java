@@ -45,7 +45,7 @@ public class OrderDomainEventListener {
         orderJpaRepository.save(order);
     }
 
-    @CacheEvict(value = "order", key = "#orderCanceledEvent.orderId().value")
+    @CacheEvict(value = "ord", key = "#orderCanceledEvent.orderId().value")
     @KafkaListener(topics = "OrderCanceledEvent")
     public void handleOrderCanceledEvent(OrderCanceledEvent orderCanceledEvent) {
         var order = orderJpaRepository.findById(orderCanceledEvent.orderId())

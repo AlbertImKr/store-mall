@@ -23,7 +23,7 @@ public class UserDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "user", key = "#userUpdatedEvent.userId().value")
+    @CacheEvict(value = "usr", key = "#userUpdatedEvent.userId().value")
     @KafkaListener(topics = "UserUpdatedEvent")
     public void handleUserUpdateEvent(UserUpdatedEvent userUpdatedEvent) {
         User user = userJpaRepository.findById(userUpdatedEvent.userId())

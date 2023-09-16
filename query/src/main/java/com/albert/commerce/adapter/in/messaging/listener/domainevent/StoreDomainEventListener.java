@@ -24,7 +24,7 @@ public class StoreDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "store", key = "#storeUploadedEvent.storeId().value")
+    @CacheEvict(value = "str", key = "#storeUploadedEvent.storeId().value")
     @KafkaListener(topics = "StoreUploadedEvent")
     public void handleStoreUploadedEvent(StoreUploadedEvent storeUploadedEvent) {
         var store = storeJpaRepository.findById((storeUploadedEvent.storeId()))

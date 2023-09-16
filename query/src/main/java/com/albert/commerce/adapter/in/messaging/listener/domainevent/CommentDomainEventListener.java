@@ -43,7 +43,7 @@ public class CommentDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "comment", key = "#commentUpdatedEvent.commentId().value")
+    @CacheEvict(value = "cmnt", key = "#commentUpdatedEvent.commentId().value")
     @KafkaListener(topics = "CommentUpdatedEvent")
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         var comment = commentJpaRepository.findById(commentUpdatedEvent.commentId())
@@ -52,7 +52,7 @@ public class CommentDomainEventListener {
     }
 
     @Transactional
-    @CacheEvict(value = "comment", key = "#commentDeletedEvent.commentId().value")
+    @CacheEvict(value = "cmnt", key = "#commentDeletedEvent.commentId().value")
     @KafkaListener(topics = "CommentDeletedEvent")
     public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
         var comment = commentJpaRepository.findById(commentDeletedEvent.commentId())
