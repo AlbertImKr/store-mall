@@ -1,4 +1,4 @@
-package com.albert.commerce.config.app;
+package com.albert.commerce.adapter.in.web.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

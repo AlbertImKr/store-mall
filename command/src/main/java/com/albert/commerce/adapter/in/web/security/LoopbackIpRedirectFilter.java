@@ -1,4 +1,4 @@
-package com.albert.commerce.config.security;
+package com.albert.commerce.adapter.in.web.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

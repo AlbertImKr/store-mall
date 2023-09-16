@@ -1,4 +1,4 @@
-package com.albert.commerce.config.security;
+package com.albert.commerce.adapter.in.web.security;
 
 import com.albert.commerce.application.service.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
