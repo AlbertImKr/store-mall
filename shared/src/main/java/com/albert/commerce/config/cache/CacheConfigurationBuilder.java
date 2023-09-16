@@ -1,8 +1,8 @@
 package com.albert.commerce.config.cache;
 
-import java.util.HashMap;
+import static com.albert.commerce.config.cache.CacheDefinition.getCacheConfigurations;
+
 import java.util.List;
-import java.util.Map;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -17,14 +17,8 @@ public class CacheConfigurationBuilder {
     }
 
     public CacheManager buildCacheManager(List<CacheDefinition> cacheDefinitions) {
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
-
-        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-
-        for (CacheDefinition definition : cacheDefinitions) {
-            cacheConfigurations.put(definition.cacheName(), defaultCacheConfig.entryTtl(definition.ttl()));
-        }
-
+        var defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
+        var cacheConfigurations = getCacheConfigurations(cacheDefinitions, defaultCacheConfig);
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultCacheConfig)
                 .withInitialCacheConfigurations(cacheConfigurations)
