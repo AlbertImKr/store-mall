@@ -5,10 +5,6 @@ spring:
       host: localhost
   cache:
     type: redis
-commerce:
-  messaging:
-    base-package:
-      cache-config: com.albert.commerce.adapter.out.persistence
 logging:
   level:
     org.springframework.data.redis: DEBUG

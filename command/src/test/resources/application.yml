@@ -3,4 +3,5 @@ spring:
     active: test
     group:
       test: testdb,oauth2,messaging
-
+server:
+  port: 8080

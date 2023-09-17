@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.channel.DirectChannel;
@@ -15,6 +16,7 @@ import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
+@Profile("messaging")
 @Configuration
 @IntegrationComponentScan(basePackageClasses = {CommandGateway.class})
 @ConditionalOnProperty(name = "commerce.messaging.base-package.command")

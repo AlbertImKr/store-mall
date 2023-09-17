@@ -39,6 +39,7 @@ public class StoreController {
                 );
     }
 
+
     @PutMapping("/my")
     public ResponseEntity<Void> upload(
             @RequestBody StoreUploadRequest storeUploadRequest,

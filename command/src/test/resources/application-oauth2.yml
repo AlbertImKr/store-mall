@@ -1,0 +1,30 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          test-client:
+            client-id: test-client
+            client-secret: test_secret
+            client-name: test-client
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/test-client
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope: openid,profile
+        provider:
+          test-client:
+            authorization-uri: http://localhost:8080/test-client/authorization
+            token-uri: http://localhost:8080/test-client/token
+            user-info-uri: http://localhost:8080/test-client/user
+            jwk-set-uri: http://localhost:8080/test-client/jwks
+            user-name-attribute: email
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web:
+          client:
+            RestTemplate: DEBUG
+
+

@@ -1,6 +1,6 @@
-package com.albert.commerce.adapter.in.web;
+package com.albert.commerce.adapter.in.web.user;
 
-import com.albert.commerce.adapter.in.web.request.UserUploadRequest;
+import com.albert.commerce.adapter.in.web.user.request.UserUploadRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.user.UserUploadCommand;
 import java.security.Principal;

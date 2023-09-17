@@ -8,11 +8,13 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.event.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
+@Profile("messaging")
 @Component
 public class MessagePublisherImpl implements MessagePublisher {
 

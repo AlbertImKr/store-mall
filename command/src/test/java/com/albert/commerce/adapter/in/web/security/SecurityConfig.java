@@ -1,45 +1,52 @@
 package com.albert.commerce.adapter.in.web.security;
 
+import com.albert.commerce.adapter.in.utils.AuthSuccessHandler;
 import com.albert.commerce.application.service.user.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Profile("api")
-@RequiredArgsConstructor
+@Profile("test")
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
+
+    @Bean
+    public AuthSuccessHandler authSuccessHandler() {
+        return new AuthSuccessHandler();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
-                                .requestMatchers(HttpMethod.POST, "/test-client/token")
-                                .permitAll()
-                                .requestMatchers("/index")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(customUserDetailsService)
                 .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer
-                        .successHandler(customAuthenticationSuccessHandler))
+                        .authorizationEndpoint(
+                                config -> config.authorizationRequestRepository(
+                                        customAuthorizationRequestRepository())
+                        )
+                        .successHandler(authSuccessHandler())
+
+                )
                 .build();
     }
 
@@ -61,6 +68,11 @@ public class SecurityConfig {
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
+    }
+
+    @Bean
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> customAuthorizationRequestRepository() {
+        return new CustomAuthorizationRequestRepository();
     }
 
 }
