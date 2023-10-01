@@ -30,17 +30,17 @@ public class UserService {
     @Transactional
     @ServiceActivator(inputChannel = USER_UPLOAD_CHANNEL)
     public Success upload(UserUploadCommand userUploadCommand) {
-        var user = getUserByEmail(userUploadCommand.getUserEmail());
+        var user = getByEmail(userUploadCommand.getUserEmail());
         upload(userUploadCommand, user);
         return Success.getInstance();
     }
 
     public UserId getUserIdByEmail(String userEmail) {
-        var user = getUserByEmail(userEmail);
+        var user = getByEmail(userEmail);
         return user.getUserId();
     }
 
-    public User getUserByEmail(String userEmail) {
+    public User getByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
     }

@@ -9,7 +9,8 @@ public enum ErrorMessage {
     PRODUCT_NOT_FOUND_ERROR("존재하지 않는 PRODUCT 입니다."),
     COMMENT_NOT_FOUND_ERROR("존재하지 않는 COMMENT 입니다."),
     USER_NOT_FOUND_ERROR("유저가 존재 하지 않습니다."),
-    ORDER_NOT_FOUND_ERROR("오더가 존재 하지 않습니다.");
+    ORDER_NOT_FOUND_ERROR("오더가 존재 하지 않습니다."),
+    UNAUTHORIZED_USER_ERROR("인증되지 않은 사용자입니다.");
 
     private final String message;
 

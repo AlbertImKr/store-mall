@@ -31,7 +31,7 @@ class UserServiceTest {
                 .willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> userService.getUserByEmail(USER_EMAIL))
+        assertThatThrownBy(() -> userService.getByEmail(USER_EMAIL))
                 .isInstanceOf(UserNotFoundException.class);
     }
 }

@@ -31,7 +31,7 @@ public class OrderService {
     @Transactional
     @ServiceActivator(inputChannel = "OrderPlaceCommand")
     public String place(OrderPlaceCommand orderPlaceCommand) {
-        var user = userService.getUserByEmail(orderPlaceCommand.getUserEmail());
+        var user = userService.getByEmail(orderPlaceCommand.getUserEmail());
         var storeId = StoreId.from(orderPlaceCommand.getStoreId());
         storeService.checkId(storeId);
         var productsIdAndQuantity = orderPlaceCommand.getProductsIdAndQuantity();
