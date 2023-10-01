@@ -2,8 +2,8 @@ package com.albert.commerce.domain.order;
 
 import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.store.StoreId;
+import com.albert.commerce.domain.units.DeliveryStatus;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.units.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;

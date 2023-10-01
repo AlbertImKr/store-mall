@@ -1,6 +1,7 @@
 package com.albert.commerce.application.service.comment;
 
 import com.albert.commerce.application.port.out.CommentRepository;
+import com.albert.commerce.application.service.exception.error.CommentNotFoundException;
 import com.albert.commerce.application.service.product.ProductService;
 import com.albert.commerce.application.service.store.StoreService;
 import com.albert.commerce.application.service.user.UserService;
@@ -8,7 +9,6 @@ import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.exception.error.CommentNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;

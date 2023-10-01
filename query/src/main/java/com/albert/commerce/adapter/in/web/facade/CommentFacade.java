@@ -1,7 +1,7 @@
 package com.albert.commerce.adapter.in.web.facade;
 
+import com.albert.commerce.adapter.out.config.cache.CacheValue;
 import com.albert.commerce.application.port.out.CommentDao;
-import com.albert.commerce.config.cache.CacheValue;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.product.ProductId;
 import java.util.List;

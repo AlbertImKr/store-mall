@@ -1,18 +1,17 @@
 package com.albert.commerce.application.service.user;
 
+import static com.albert.commerce.domain.units.MessageChannelName.USER_UPLOAD_CHANNEL;
+
 import com.albert.commerce.application.port.out.UserRepository;
+import com.albert.commerce.application.service.exception.error.UserNotFoundException;
 import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.exception.error.UserNotFoundException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static com.albert.commerce.units.MessageChannelName.USER_UPLOAD_CHANNEL;
 
 
 @RequiredArgsConstructor

@@ -1,12 +1,12 @@
 package com.albert.commerce.application.service.store;
 
 import com.albert.commerce.application.port.out.StoreRepository;
+import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;
+import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
 import com.albert.commerce.application.service.user.UserService;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.exception.error.StoreAlreadyExistsException;
-import com.albert.commerce.exception.error.StoreNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;

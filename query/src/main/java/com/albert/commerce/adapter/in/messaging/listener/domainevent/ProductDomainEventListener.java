@@ -2,10 +2,10 @@ package com.albert.commerce.adapter.in.messaging.listener.domainevent;
 
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.ProductCreatedEvent;
 import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.ProductUpdatedEvent;
+import com.albert.commerce.adapter.out.config.cache.CacheValue;
 import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
-import com.albert.commerce.config.cache.CacheValue;
+import com.albert.commerce.application.service.exception.error.ProductNotFoundException;
 import com.albert.commerce.domain.product.Product;
-import com.albert.commerce.exception.error.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.annotation.KafkaListener;
