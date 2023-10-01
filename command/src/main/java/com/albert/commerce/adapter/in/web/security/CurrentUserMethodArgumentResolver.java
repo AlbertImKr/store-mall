@@ -25,10 +25,10 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null ||
-                authentication.getPrincipal().getClass().isAssignableFrom(CustomOauth2User.class)) {
+                !authentication.getPrincipal().getClass().isAssignableFrom(CustomOauth2User.class)) {
             throw new UnauthorizedUserException();
         }
-        return ((CustomOauth2User) authentication.getPrincipal()).getUser();
+        return ((CustomOauth2User) authentication.getPrincipal()).user();
     }
 }
 

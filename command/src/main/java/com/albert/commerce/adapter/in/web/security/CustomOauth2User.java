@@ -9,13 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-public class CustomOauth2User implements OAuth2User {
-
-    private final User user;
-
-    public CustomOauth2User(User user) {
-        this.user = user;
-    }
+public record CustomOauth2User(User user) implements OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -32,7 +26,4 @@ public class CustomOauth2User implements OAuth2User {
         return user.getEmail();
     }
 
-    public User getUser() {
-        return user;
-    }
 }

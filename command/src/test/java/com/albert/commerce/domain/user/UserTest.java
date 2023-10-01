@@ -29,7 +29,7 @@ class UserTest {
         LocalDateTime createdTime = DomainFixture.getCreatedTime();
 
         // when
-        User user = User.createByEmail(userId, userEmail, createdTime);
+        User.createByEmail(userId, userEmail, createdTime);
 
         // then
         List<DomainEvent> events = Events.getEvents();
