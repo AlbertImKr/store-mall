@@ -1,0 +1,12 @@
+spring:
+  data:
+    redis:
+      port: 6380
+      host: localhost
+  cache:
+    type: redis
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+
+

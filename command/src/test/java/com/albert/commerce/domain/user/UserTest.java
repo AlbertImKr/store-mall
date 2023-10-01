@@ -9,10 +9,16 @@ import com.albert.commerce.domain.event.Events;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class UserTest {
+
+    @BeforeEach
+    void setUp() {
+        Events.clear();
+    }
 
     @DisplayName("Test user create by email test")
     @Test
