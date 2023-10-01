@@ -2,8 +2,10 @@ package com.albert.commerce.adapter.in.web;
 
 import static com.albert.commerce.adapter.in.web.AcceptanceFixture.TEST_EMAIL;
 
+import com.albert.commerce.adapter.in.web.unit.DatabaseCleanup;
 import com.albert.commerce.application.service.user.UserService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,9 +27,18 @@ public abstract class AcceptanceTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    @Autowired
+    DatabaseCleanup databaseCleanup;
+
     @BeforeEach
     void setUp() {
+        databaseCleanup.execute();
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
         userService.createByEmail(TEST_EMAIL);
+    }
+
+    @AfterEach
+    void tearDown() {
+        databaseCleanup.execute();
     }
 }

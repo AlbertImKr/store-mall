@@ -4,6 +4,7 @@ import com.albert.commerce.application.port.out.StoreRepository;
 import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;
 import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
 import com.albert.commerce.application.service.user.UserService;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
@@ -24,7 +25,7 @@ public class StoreService {
     @ServiceActivator(inputChannel = "StoreRegisterCommand")
     public String create(StoreRegisterCommand storeRegisterCommand) {
         var userId = userService.getUserIdByEmail(storeRegisterCommand.getUserEmail());
-        checkExistsByUserId(userId);
+        validateAlreadyExists(userId);
         var store = Store.from(getNewStoreId(), storeRegisterCommand, userId);
         return storeRepository.save(store)
                 .getStoreId()
@@ -33,28 +34,39 @@ public class StoreService {
 
     @Transactional
     @ServiceActivator(inputChannel = "StoreUploadCommand")
-    public boolean upload(StoreUploadCommand storeUploadCommand) {
+    public Success upload(StoreUploadCommand storeUploadCommand) {
         var userId = userService.getUserIdByEmail(storeUploadCommand.getUserEmail());
-        var store = storeRepository.findByUserId(userId)
-                .orElseThrow(StoreNotFoundException::new);
+        var store = getStoreByUserId(userId);
         uploadStore(storeUploadCommand, store);
-        return true;
+        return Success.getInstance();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @ServiceActivator(inputChannel = "StoreDeleteCommand")
+    public Success delete(StoreDeleteCommand storeDeleteCommand) {
+        var userId = userService.getUserIdByEmail(storeDeleteCommand.getUserEmail());
+        validateExistsByUserId(userId);
+        storeRepository.deleteByUserId(userId);
+        return Success.getInstance();
+    }
+
+    private void validateExistsByUserId(UserId userId) {
+        if (!storeRepository.existsByUserId(userId)) {
+            throw new StoreNotFoundException();
+        }
+    }
+
     public Store getStoreByUserId(UserId userId) {
         return storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
     }
 
-    @Transactional(readOnly = true)
     public StoreId getStoreIdByUserId(UserId userId) {
         return storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new)
                 .getStoreId();
     }
 
-    @Transactional(readOnly = true)
     public void checkId(StoreId storeId) {
         if (storeRepository.existsById(storeId)) {
             return;
@@ -66,7 +78,7 @@ public class StoreService {
         return storeRepository.nextId();
     }
 
-    private void checkExistsByUserId(UserId userId) {
+    private void validateAlreadyExists(UserId userId) {
         if (storeRepository.existsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }

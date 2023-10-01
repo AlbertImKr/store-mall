@@ -11,4 +11,6 @@ public interface StoreJpaRepository extends JpaRepository<Store, StoreId> {
     boolean existsByUserId(UserId userId);
 
     Optional<Store> findByUserId(UserId userId);
+
+    void deleteByUserId(UserId userId);
 }

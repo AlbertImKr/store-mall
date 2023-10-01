@@ -2,16 +2,18 @@ package com.albert.commerce.adapter.in.web;
 
 import com.albert.commerce.adapter.in.web.request.StoreRegisterRequest;
 import com.albert.commerce.adapter.in.web.request.StoreUploadRequest;
+import com.albert.commerce.adapter.in.web.security.UserEmail;
 import com.albert.commerce.application.port.in.CommandGateway;
+import com.albert.commerce.application.service.store.StoreDeleteCommand;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
 import com.albert.commerce.application.service.store.StoreUploadCommand;
-import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,10 +29,9 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<Map<String, String>> register(
             @RequestBody StoreRegisterRequest storeRegisterRequest,
-            Principal principal
+            @UserEmail String email
     ) {
-        String userEmail = principal.getName();
-        var storeRegisterCommand = toStoreRegisterCommand(storeRegisterRequest, userEmail);
+        var storeRegisterCommand = toStoreRegisterCommand(storeRegisterRequest, email);
         String storeId = commandGateway.request(storeRegisterCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -39,16 +40,21 @@ public class StoreController {
                 );
     }
 
-
     @PutMapping("/my")
     public ResponseEntity<Void> upload(
             @RequestBody StoreUploadRequest storeUploadRequest,
-            Principal principal
+            @UserEmail String email
     ) {
-        String userEmail = principal.getName();
-        var storeUploadCommand = toStoreUploadCommand(storeUploadRequest, userEmail);
+        var storeUploadCommand = toStoreUploadCommand(storeUploadRequest, email);
         commandGateway.request(storeUploadCommand);
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/my")
+    public ResponseEntity<Void> delete(@UserEmail String email) {
+        StoreDeleteCommand storeDeleteCommand = new StoreDeleteCommand(email);
+        commandGateway.request(storeDeleteCommand);
+        return ResponseEntity.noContent().build();
     }
 
     private static StoreRegisterCommand toStoreRegisterCommand(StoreRegisterRequest storeRegisterRequest,

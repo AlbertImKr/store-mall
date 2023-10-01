@@ -19,8 +19,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "product")
 @Entity
+@Table(name = "product")
 public class Product {
 
     @EmbeddedId
