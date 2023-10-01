@@ -1,9 +1,7 @@
 package com.albert.commerce.application.service.user;
 
 import com.albert.commerce.adapter.in.web.request.CustomUserDetails;
-import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.domain.user.User;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,15 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException(email);
+        if (!userService.exists(email)) {
+            userService.createByEmail(email);
         }
-        return new CustomUserDetails(user.get());
+        User user = userService.getUserByEmail(email);
+        return new CustomUserDetails(user);
     }
 }
