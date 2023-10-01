@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.albert.commerce.application.service.utils.ApplicationCommand.USER_UPLOAD_COMMAND;
+import static com.albert.commerce.units.MessageChannelName.USER_UPLOAD_CHANNEL;
 
 
 @RequiredArgsConstructor
@@ -22,14 +22,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createByEmail(String email) {
+    public User createByEmail(String email) {
         UserId userId = getNewUserId();
         var user = User.createByEmail(userId, email, LocalDateTime.now());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = USER_UPLOAD_COMMAND)
+    @ServiceActivator(inputChannel = USER_UPLOAD_CHANNEL)
     public Success upload(UserUploadCommand userUploadCommand) {
         var user = getUserByEmail(userUploadCommand.getUserEmail());
         upload(userUploadCommand, user);

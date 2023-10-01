@@ -18,10 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if (!userService.exists(email)) {
-            userService.createByEmail(email);
+        if (userService.exists(email)) {
+            User user = userService.getUserByEmail(email);
+            return new CustomUserDetails(user);
         }
-        User user = userService.getUserByEmail(email);
+        User user = userService.createByEmail(email);
         return new CustomUserDetails(user);
     }
 }
