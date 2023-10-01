@@ -3,12 +3,13 @@ package com.albert.commerce.adapter.in.web.user;
 import com.albert.commerce.adapter.in.web.user.request.UserUploadRequest;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.user.UserUploadCommand;
-import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class UserController {
         String userEmail = principal.getName();
         var userUploadCommand = toUserUploadCommand(userUploadRequest, userEmail);
         commandGateway.request(userUploadCommand);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     private static UserUploadCommand toUserUploadCommand(UserUploadRequest userUploadRequest, String userEmail) {

@@ -4,7 +4,6 @@ import com.albert.commerce.application.service.user.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,6 +14,8 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -24,7 +25,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws ServletException, IOException {
+                                        Authentication authentication) throws ServletException, IOException {
         SavedRequest savedRequest = this.requestCache.getRequest(request, response);
         if (savedRequest == null) {
             super.onAuthenticationSuccess(request, response, authentication);
@@ -39,7 +40,9 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         }
         if (authentication.isAuthenticated()) {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            userService.createByEmail(oAuth2User.getName());
+            if (!userService.exists(oAuth2User.getName())) {
+                userService.createByEmail(oAuth2User.getName());
+            }
         }
         clearAuthenticationAttributes(request);
         String targetUrl = savedRequest.getRedirectUrl();

@@ -1,41 +1,37 @@
 package com.albert.commerce.adapter.in.web;
 
-import static com.albert.commerce.adapter.in.web.AcceptanceTestUtils.TEST_USER_EMAIL;
-
 import com.albert.commerce.application.service.user.UserService;
-import io.restassured.RestAssured;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.context.WebApplicationContext;
+
+import static com.albert.commerce.adapter.in.web.AcceptanceFixture.TEST_EMAIL;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
+@ContextConfiguration
 public abstract class AcceptanceTest {
 
     @Autowired
     UserService userService;
-    String accessToken;
-    @LocalServerPort
-    private int port;
 
-    private void createTestUser() {
-        userService.createByEmail(TEST_USER_EMAIL);
-    }
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
-    private static String getAccessToken() {
-        return RestAssured.given().log().all()
-                .when().post("http://localhost:8080/test-client/token")
-                .then().log().all()
-                .extract().jsonPath().getString("access_token");
-    }
 
     @BeforeEach
     void setUp() {
-        RestAssured.port = port;
-        accessToken = getAccessToken();
+        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
 
-        // 유저 저장
-        createTestUser();
+        createdTestUser();
+    }
+
+    private void createdTestUser() {
+        userService.createByEmail(TEST_EMAIL);
     }
 }

@@ -1,15 +1,18 @@
 package com.albert.commerce.application.service.user;
 
 import com.albert.commerce.application.port.out.UserRepository;
-import com.albert.commerce.application.service.user.UserUploadCommand;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.user.User;
 import com.albert.commerce.domain.user.UserId;
 import com.albert.commerce.exception.error.UserNotFoundException;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+import static com.albert.commerce.application.service.utils.ApplicationCommand.USER_UPLOAD_COMMAND;
 
 
 @RequiredArgsConstructor
@@ -20,31 +23,24 @@ public class UserService {
 
     @Transactional
     public void createByEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
-            return;
-        }
         UserId userId = getNewUserId();
         var user = User.createByEmail(userId, email, LocalDateTime.now());
         userRepository.save(user);
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "UserUploadCommand")
-    public boolean upload(UserUploadCommand userUploadCommand) {
-        var user = userRepository.findByEmail(userUploadCommand.getUserEmail())
-                .orElseThrow(UserNotFoundException::new);
+    @ServiceActivator(inputChannel = USER_UPLOAD_COMMAND)
+    public Success upload(UserUploadCommand userUploadCommand) {
+        var user = getUserByEmail(userUploadCommand.getUserEmail());
         upload(userUploadCommand, user);
-        return true;
+        return Success.getInstance();
     }
 
-    @Transactional(readOnly = true)
     public UserId getUserIdByEmail(String userEmail) {
-        var user = userRepository.findByEmail(userEmail)
-                .orElseThrow(UserNotFoundException::new);
+        var user = getUserByEmail(userEmail);
         return user.getUserId();
     }
 
-    @Transactional(readOnly = true)
     public User getUserByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
@@ -52,6 +48,10 @@ public class UserService {
 
     private UserId getNewUserId() {
         return userRepository.nextId();
+    }
+
+    public boolean exists(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     private static void upload(UserUploadCommand userUploadCommand, User user) {
