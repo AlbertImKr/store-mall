@@ -1,5 +1,7 @@
 package com.albert.commerce.adapter.in.web;
 
+import static com.albert.commerce.adapter.in.web.AcceptanceFixture.TEST_EMAIL;
+
 import com.albert.commerce.application.service.user.UserService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +25,9 @@ public abstract class AcceptanceTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
-
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
+        userService.createByEmail(TEST_EMAIL);
     }
 }
