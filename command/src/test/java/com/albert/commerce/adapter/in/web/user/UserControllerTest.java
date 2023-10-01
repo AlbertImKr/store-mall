@@ -1,15 +1,15 @@
 package com.albert.commerce.adapter.in.web.user;
 
 
+import static com.albert.commerce.adapter.in.web.AcceptanceFixture.TEST_EMAIL;
+import static com.albert.commerce.adapter.in.web.user.UserSteps.유저_정보를_수정한다;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.albert.commerce.adapter.in.web.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import static com.albert.commerce.adapter.in.web.AcceptanceFixture.TEST_EMAIL;
-import static com.albert.commerce.adapter.in.web.user.UserSteps.유저_정보를_수정한다;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest extends AcceptanceTest {
 

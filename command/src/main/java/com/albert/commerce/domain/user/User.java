@@ -40,7 +40,7 @@ public class User {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private User(UserId userId, String nickname, String email, Role role, LocalDate dateOfBirth,
             String phoneNumber, String address, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.userId = userId;
