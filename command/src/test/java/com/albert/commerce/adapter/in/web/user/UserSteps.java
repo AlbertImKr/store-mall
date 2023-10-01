@@ -1,12 +1,14 @@
 package com.albert.commerce.adapter.in.web.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.response.ExtractableResponse;
-import org.springframework.http.MediaType;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 public class UserSteps {
 
@@ -22,5 +24,9 @@ public class UserSteps {
                 .when().put("/users/profile")
                 .then().log().all()
                 .extract();
+    }
+
+    public static void 유저_정보_응답_검증(ExtractableResponse<MockMvcResponse> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }
