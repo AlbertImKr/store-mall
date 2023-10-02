@@ -17,4 +17,6 @@ public interface ProductRepository {
     Optional<Product> findByStoreIdAndProductId(StoreId storeId, ProductId productId);
 
     ProductId nextId();
+
+    void delete(Product product);
 }

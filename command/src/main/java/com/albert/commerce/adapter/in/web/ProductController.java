@@ -2,15 +2,17 @@ package com.albert.commerce.adapter.in.web;
 
 import com.albert.commerce.adapter.in.web.request.ProductCreateRequest;
 import com.albert.commerce.adapter.in.web.request.ProductUpdateRequest;
+import com.albert.commerce.adapter.in.web.response.ProductId;
+import com.albert.commerce.adapter.in.web.security.UserEmail;
 import com.albert.commerce.application.port.in.CommandGateway;
 import com.albert.commerce.application.service.product.ProductCreateCommand;
+import com.albert.commerce.application.service.product.ProductDeleteCommand;
 import com.albert.commerce.application.service.product.ProductUpdateCommand;
-import java.security.Principal;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,29 +28,37 @@ public class ProductController {
     private final CommandGateway commandGateway;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> register(
+    public ResponseEntity<ProductId> register(
             @RequestBody ProductCreateRequest productCreateRequest,
-            Principal principal
+            @UserEmail String userEmail
     ) {
-        String userEmail = principal.getName();
         var productCreateCommand = toProductCreateCommand(productCreateRequest, userEmail);
         String productId = commandGateway.request(productCreateCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(Map.of("productId", productId));
+                .body(new ProductId(productId));
     }
 
 
     @PutMapping(value = "/{productId}")
     public ResponseEntity<Void> upload(
-            Principal principal,
+            @UserEmail String userEmail,
             @PathVariable String productId,
             @RequestBody ProductUpdateRequest productUpdateRequest
     ) {
-        String userEmail = principal.getName();
         var productUpdateCommand = toProductUpdateCommand(productId, productUpdateRequest, userEmail);
         commandGateway.request(productUpdateCommand);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{productId}")
+    public ResponseEntity<Void> delete(
+            @UserEmail String userEmail,
+            @PathVariable String productId
+    ) {
+        var productDeleteCommand = new ProductDeleteCommand(userEmail, productId);
+        commandGateway.request(productDeleteCommand);
+        return ResponseEntity.noContent().build();
     }
 
     private static ProductCreateCommand toProductCreateCommand(ProductCreateRequest productCreateRequest,

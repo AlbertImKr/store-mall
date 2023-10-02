@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeExceptionHandler(ProductNotFoundException productNotFoundException) {
         return new ErrorResponse(productNotFoundException.getErrorMessage());
     }

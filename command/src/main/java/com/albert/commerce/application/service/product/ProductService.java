@@ -5,6 +5,7 @@ import com.albert.commerce.application.port.out.ProductRepository;
 import com.albert.commerce.application.service.exception.error.ProductNotFoundException;
 import com.albert.commerce.application.service.store.StoreService;
 import com.albert.commerce.application.service.user.UserService;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class ProductService {
 
     @Transactional
     @ServiceActivator(inputChannel = "ProductUpdateCommand")
-    public void upload(ProductUpdateCommand productUpdateCommand) {
+    public Success upload(ProductUpdateCommand productUpdateCommand) {
         var userId = userService.getUserIdByEmail(productUpdateCommand.getUserEmail());
         var storeId = storeService.getStoreIdByUserId(userId);
 
@@ -42,16 +43,28 @@ public class ProductService {
         var product = productRepository.findByStoreIdAndProductId(storeId, productId)
                 .orElseThrow(ProductNotFoundException::new);
         uploadProduct(productUpdateCommand, product);
+        return Success.getInstance();
+    }
+
+    @Transactional
+    @ServiceActivator(inputChannel = "ProductDeleteCommand")
+    public Success delete(ProductDeleteCommand productDeleteCommand) {
+        var userId = userService.getUserIdByEmail(productDeleteCommand.getUserEmail());
+        var storeId = storeService.getStoreIdByUserId(userId);
+
+        var productId = ProductId.from(productDeleteCommand.getProductId());
+        var product = productRepository.findByStoreIdAndProductId(storeId, productId)
+                .orElseThrow(ProductNotFoundException::new);
+        productRepository.delete(product);
+        return Success.getInstance();
     }
 
 
-    @Transactional(readOnly = true)
     public Product getProductById(ProductId productId) {
         return productRepository.findByProductId(productId)
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    @Transactional(readOnly = true)
     public void checkId(ProductId productId) {
         if (productRepository.existsById(productId)) {
             return;

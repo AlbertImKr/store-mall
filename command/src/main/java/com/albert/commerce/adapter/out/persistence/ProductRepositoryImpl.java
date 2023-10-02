@@ -42,4 +42,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     public ProductId nextId() {
         return ProductId.from(sequenceGenerator.generate());
     }
+
+    @Override
+    public void delete(Product product) {
+        productJpaRepository.delete(product);
+    }
 }
