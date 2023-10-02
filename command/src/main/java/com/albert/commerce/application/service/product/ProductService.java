@@ -42,7 +42,9 @@ public class ProductService {
     @Transactional
     @ServiceActivator(inputChannel = PRODUCT_UPDATE_CHANNEL)
     public Success upload(ProductUpdateCommand productUpdateCommand) {
-        var product = getProduct(productUpdateCommand.getUserEmail(), productUpdateCommand.getProductId());
+        var userEmail = productUpdateCommand.getUserEmail();
+        var productId = productUpdateCommand.getProductId();
+        var product = getProduct(userEmail, productId);
         uploadProduct(productUpdateCommand, product);
         return Success.getInstance();
     }
@@ -50,7 +52,9 @@ public class ProductService {
     @Transactional
     @ServiceActivator(inputChannel = PRODUCT_DELETE_CHANNEL)
     public Success delete(ProductDeleteCommand productDeleteCommand) {
-        var product = getProduct(productDeleteCommand.getUserEmail(), productDeleteCommand.getProductId());
+        var userEmail = productDeleteCommand.getUserEmail();
+        var productId = productDeleteCommand.getProductId();
+        var product = getProduct(userEmail, productId);
         productRepository.delete(product);
         return Success.getInstance();
     }
@@ -60,28 +64,27 @@ public class ProductService {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public void checkId(ProductId productId) {
+    public void checkProductExist(ProductId productId) {
         if (productRepository.existsById(productId)) {
             return;
         }
         throw new ProductNotFoundException();
     }
 
+    public Product getProductByIdAndStoreId(ProductId productId, StoreId storeId) {
+        return productRepository.findByIdAndStoreId(productId, storeId)
+                .orElseThrow(ProductNotFoundException::new);
+    }
+
     private ProductId getNewProductId() {
         return productRepository.nextId();
     }
 
-    private Product getProduct(String productUpdateCommand, String productUpdateCommand1) {
-        var userId = userService.getUserIdByEmail(productUpdateCommand);
+    private Product getProduct(String email, String productIdValue) {
+        var userId = userService.getUserIdByEmail(email);
         var storeId = storeService.getStoreIdByUserId(userId);
-        var productId = ProductId.from(productUpdateCommand1);
-        var product = getProduct(storeId, productId);
-        return product;
-    }
-
-    private Product getProduct(StoreId storeId, ProductId productId) {
-        return productRepository.findByStoreIdAndProductId(storeId, productId)
-                .orElseThrow(ProductNotFoundException::new);
+        var productId = ProductId.from(productIdValue);
+        return getProductByIdAndStoreId(productId, storeId);
     }
 
     private static void uploadProduct(ProductUpdateCommand productUpdateCommand, Product product) {

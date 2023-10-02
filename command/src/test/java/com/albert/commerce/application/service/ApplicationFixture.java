@@ -2,6 +2,7 @@ package com.albert.commerce.application.service;
 
 import com.albert.commerce.application.service.store.StoreDeleteCommand;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
+import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class ApplicationFixture {
     public static final String UPLOAD_STORE_OWNER_NAME = "GoodDay co.,ltd";
     public static final String USER_ID = "1";
     public static final String STORE_ID = "1";
+    public static final String NOT_EXISTS_ID = "not_exists_id";
 
     public static UserId getUserId() {
         return UserId.from(USER_ID);
@@ -41,5 +43,13 @@ public class ApplicationFixture {
 
     public static StoreDeleteCommand getStoreDeleteCommand() {
         return new StoreDeleteCommand(USER_EMAIL);
+    }
+
+    public static ProductId getNotExistsProductId() {
+        return ProductId.from(NOT_EXISTS_ID);
+    }
+
+    public static StoreId getNotExistsStoreId() {
+        return StoreId.from(NOT_EXISTS_ID);
     }
 }

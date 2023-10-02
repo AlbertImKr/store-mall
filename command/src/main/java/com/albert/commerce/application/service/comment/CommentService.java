@@ -30,7 +30,7 @@ public class CommentService {
         var userId = userService.getUserIdByEmail(commentPostCommand.getUserEmail());
 
         var productId = ProductId.from(commentPostCommand.getProductId());
-        productService.checkId(productId);
+        productService.checkProductExist(productId);
 
         var storeId = StoreId.from(commentPostCommand.getStoreId());
         storeService.checkExist(storeId);
