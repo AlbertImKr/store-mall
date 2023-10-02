@@ -38,10 +38,9 @@ public class Store {
     protected LocalDateTime createdTime;
     protected LocalDateTime updatedTime;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Store(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
-            String phoneNumber,
-            String email, LocalDateTime createdTime, LocalDateTime updatedTime) {
+            String phoneNumber, String email, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.userId = userId;
