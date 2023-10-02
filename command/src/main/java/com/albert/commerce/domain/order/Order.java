@@ -99,6 +99,10 @@ public class Order {
         );
     }
 
+    private OrderCanceledEvent toOrderCancelEvent() {
+        return new OrderCanceledEvent(this.orderId, this.updatedTime);
+    }
+
     private static List<OrderDetailRequest> toOrderDetailRequests(List<OrderLine> orderLines) {
         return orderLines.stream()
                 .map(Order::toOrderDetailRequests)
@@ -112,10 +116,6 @@ public class Order {
                 orderLine.getQuantity(),
                 orderLine.getAmount()
         );
-    }
-
-    private OrderCanceledEvent toOrderCancelEvent() {
-        return new OrderCanceledEvent(this.orderId, this.updatedTime);
     }
 
     private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {

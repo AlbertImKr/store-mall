@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "comment")
 public class Comment {
 
+    protected LocalDateTime createdTime;
+    protected LocalDateTime updatedTime;
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "comment_id", nullable = false))
     private CommentId commentId;
@@ -36,8 +38,6 @@ public class Comment {
     @Embedded
     private CommentId parentCommentId;
     private String detail;
-    protected LocalDateTime createdTime;
-    protected LocalDateTime updatedTime;
 
     @Builder
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
@@ -52,6 +52,19 @@ public class Comment {
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
         Events.raise(toCommentCreatedEvent());
+    }
+
+    public static Comment from(CommentId commentId, ProductId productId, StoreId storeId, UserId userId, String detail,
+            CommentId parentCommentId, LocalDateTime createdTime) {
+        return Comment.builder()
+                .commentId(commentId)
+                .productId(productId)
+                .storeId(storeId)
+                .userId(userId)
+                .detail(detail)
+                .parentCommentId(parentCommentId)
+                .createdTime(createdTime)
+                .build();
     }
 
     public void update(String detail, LocalDateTime updateTime) {
@@ -90,18 +103,5 @@ public class Comment {
 
     private CommentDeletedEvent toCommentDeletedEvent() {
         return new CommentDeletedEvent(this.commentId, this.updatedTime);
-    }
-
-    public static Comment from(CommentId commentId, ProductId productId, StoreId storeId, UserId userId, String detail,
-            CommentId parentCommentId, LocalDateTime createdTime) {
-        return Comment.builder()
-                .commentId(commentId)
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
-                .parentCommentId(parentCommentId)
-                .createdTime(createdTime)
-                .build();
     }
 }

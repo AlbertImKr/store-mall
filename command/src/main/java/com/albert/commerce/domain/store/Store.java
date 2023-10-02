@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "store")
 public class Store {
 
+    protected LocalDateTime createdTime;
+    protected LocalDateTime updatedTime;
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "store_id"))
     private StoreId storeId;
@@ -35,8 +37,6 @@ public class Store {
     private String phoneNumber;
     @Column(nullable = false)
     private String email;
-    protected LocalDateTime createdTime;
-    protected LocalDateTime updatedTime;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Store(StoreId storeId, String storeName, UserId userId, String ownerName, String address,
@@ -51,6 +51,20 @@ public class Store {
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
         Events.raise(toStoreRegisteredEvent());
+    }
+
+    public static Store from(StoreId storeId, StoreRegisterCommand storeRegisterCommand, UserId userId) {
+        return Store.builder()
+                .storeId(storeId)
+                .userId(userId)
+                .storeName(storeRegisterCommand.getStoreName())
+                .ownerName(storeRegisterCommand.getOwnerName())
+                .address(storeRegisterCommand.getAddress())
+                .phoneNumber(storeRegisterCommand.getPhoneNumber())
+                .email(storeRegisterCommand.getEmail())
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
+                .build();
     }
 
     public void upload(String storeName, String ownerName, String address, String email, String phoneNumber,
@@ -92,20 +106,6 @@ public class Store {
                 ownerName,
                 updatedTime
         );
-    }
-
-    public static Store from(StoreId storeId, StoreRegisterCommand storeRegisterCommand, UserId userId) {
-        return Store.builder()
-                .storeId(storeId)
-                .userId(userId)
-                .storeName(storeRegisterCommand.getStoreName())
-                .ownerName(storeRegisterCommand.getOwnerName())
-                .address(storeRegisterCommand.getAddress())
-                .phoneNumber(storeRegisterCommand.getPhoneNumber())
-                .email(storeRegisterCommand.getEmail())
-                .createdTime(LocalDateTime.now())
-                .updatedTime(LocalDateTime.now())
-                .build();
     }
 
 }

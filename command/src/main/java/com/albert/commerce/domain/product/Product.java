@@ -58,6 +58,20 @@ public class Product {
         Events.raise(toProductCreatedEvent());
     }
 
+    public static Product from(ProductId productId, ProductCreateCommand productCreateCommand, Store store,
+            LocalDateTime createdTime) {
+        return Product.builder()
+                .productId(productId)
+                .storeId(store.getStoreId())
+                .productName(productCreateCommand.getProductName())
+                .price(new Money(productCreateCommand.getPrice()))
+                .description(productCreateCommand.getDescription())
+                .brand(productCreateCommand.getBrand())
+                .category(productCreateCommand.getCategory())
+                .createdTime(createdTime)
+                .build();
+    }
+
     public void upload(String productName, Money price, String brand, String category,
             String description, LocalDateTime updateTime) {
         this.productName = productName;
@@ -101,19 +115,5 @@ public class Product {
                 createdTime,
                 updatedTime
         );
-    }
-
-    public static Product from(ProductId productId, ProductCreateCommand productCreateCommand, Store store,
-            LocalDateTime createdTime) {
-        return Product.builder()
-                .productId(productId)
-                .storeId(store.getStoreId())
-                .productName(productCreateCommand.getProductName())
-                .price(new Money(productCreateCommand.getPrice()))
-                .description(productCreateCommand.getDescription())
-                .brand(productCreateCommand.getBrand())
-                .category(productCreateCommand.getCategory())
-                .createdTime(createdTime)
-                .build();
     }
 }

@@ -72,6 +72,10 @@ public class ProductService {
         throw new ProductNotFoundException();
     }
 
+    private ProductId getNewProductId() {
+        return productRepository.nextId();
+    }
+
     private static void uploadProduct(ProductUpdateCommand productUpdateCommand, Product product) {
         product.upload(
                 productUpdateCommand.getProductName(),
@@ -81,9 +85,5 @@ public class ProductService {
                 productUpdateCommand.getDescription(),
                 LocalDateTime.now()
         );
-    }
-
-    private ProductId getNewProductId() {
-        return productRepository.nextId();
     }
 }

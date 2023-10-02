@@ -45,12 +45,12 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    private UserId getNewUserId() {
-        return userRepository.nextId();
-    }
-
     public boolean exists(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    private UserId getNewUserId() {
+        return userRepository.nextId();
     }
 
     private static void upload(UserUploadCommand userUploadCommand, User user) {
