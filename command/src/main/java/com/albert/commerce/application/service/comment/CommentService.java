@@ -33,7 +33,7 @@ public class CommentService {
         productService.checkId(productId);
 
         var storeId = StoreId.from(commentPostCommand.getStoreId());
-        storeService.checkId(storeId);
+        storeService.checkExist(storeId);
 
         var parentCommentId = getParentCommentId(commentPostCommand.getParentCommentId());
         var comment = Comment.from(

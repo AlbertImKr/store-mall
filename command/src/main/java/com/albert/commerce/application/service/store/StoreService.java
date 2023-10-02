@@ -1,5 +1,9 @@
 package com.albert.commerce.application.service.store;
 
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_DELETE_CHANNEL;
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_REGISTER_CHANNEL;
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_UPLOAD_CHANNEL;
+
 import com.albert.commerce.application.port.out.StoreRepository;
 import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;
 import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
@@ -22,7 +26,7 @@ public class StoreService {
     private final UserService userService;
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreRegisterCommand")
+    @ServiceActivator(inputChannel = STORE_REGISTER_CHANNEL)
     public String create(StoreRegisterCommand storeRegisterCommand) {
         var userId = userService.getUserIdByEmail(storeRegisterCommand.getUserEmail());
         validateAlreadyExists(userId);
@@ -33,7 +37,7 @@ public class StoreService {
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreUploadCommand")
+    @ServiceActivator(inputChannel = STORE_UPLOAD_CHANNEL)
     public Success upload(StoreUploadCommand storeUploadCommand) {
         var userId = userService.getUserIdByEmail(storeUploadCommand.getUserEmail());
         var store = getStoreByUserId(userId);
@@ -42,18 +46,12 @@ public class StoreService {
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreDeleteCommand")
+    @ServiceActivator(inputChannel = STORE_DELETE_CHANNEL)
     public Success delete(StoreDeleteCommand storeDeleteCommand) {
         var userId = userService.getUserIdByEmail(storeDeleteCommand.getUserEmail());
         validateExistsByUserId(userId);
         storeRepository.deleteByUserId(userId);
         return Success.getInstance();
-    }
-
-    private void validateExistsByUserId(UserId userId) {
-        if (!storeRepository.existsByUserId(userId)) {
-            throw new StoreNotFoundException();
-        }
     }
 
     public Store getStoreByUserId(UserId userId) {
@@ -67,21 +65,32 @@ public class StoreService {
                 .getStoreId();
     }
 
-    public void checkId(StoreId storeId) {
+    public void checkExist(StoreId storeId) {
         if (storeRepository.existsById(storeId)) {
             return;
         }
         throw new StoreNotFoundException();
     }
 
+
     private StoreId getNewStoreId() {
         return storeRepository.nextId();
     }
 
     private void validateAlreadyExists(UserId userId) {
-        if (storeRepository.existsByUserId(userId)) {
+        if (isExistsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
+    }
+
+    private void validateExistsByUserId(UserId userId) {
+        if (!isExistsByUserId(userId)) {
+            throw new StoreNotFoundException();
+        }
+    }
+
+    private boolean isExistsByUserId(UserId userId) {
+        return storeRepository.existsByUserId(userId);
     }
 
     private static void uploadStore(StoreUploadCommand storeUploadCommand, Store store) {

@@ -33,7 +33,7 @@ public class OrderService {
     public String place(OrderPlaceCommand orderPlaceCommand) {
         var user = userService.getByEmail(orderPlaceCommand.getUserEmail());
         var storeId = StoreId.from(orderPlaceCommand.getStoreId());
-        storeService.checkId(storeId);
+        storeService.checkExist(storeId);
         var productsIdAndQuantity = orderPlaceCommand.getProductsIdAndQuantity();
         var products = getProducts(productsIdAndQuantity);
         var order = Order.from(getnewOrderId(), user, storeId, productsIdAndQuantity, products, LocalDateTime.now());
