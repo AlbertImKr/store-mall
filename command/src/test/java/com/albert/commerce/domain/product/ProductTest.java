@@ -28,6 +28,7 @@ class ProductTest {
         String productCategory = DomainFixture.PRODUCT_CATEGORY;
         LocalDateTime createdTime = DomainFixture.getCreatedTime();
         LocalDateTime updatedTime = DomainFixture.getUpdatedTime();
+        Events.clear();
 
         // when
         new Product(

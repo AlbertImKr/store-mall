@@ -56,10 +56,11 @@ class OrderTest {
         Events.clear();
 
         // when
-        order.cancel(DomainFixture.getUpdatedTime());
+        LocalDateTime updatedTime = DomainFixture.getUpdatedTime();
+        order.cancel(updatedTime);
 
         // then
-        checkCancelOrderEvent(orderId, createdTime);
+        checkCancelOrderEvent(orderId, updatedTime);
     }
 
     private void checkCancelOrderEvent(OrderId orderId, LocalDateTime createdTime) {
