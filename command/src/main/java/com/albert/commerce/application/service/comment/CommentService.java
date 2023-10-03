@@ -5,6 +5,7 @@ import com.albert.commerce.application.service.exception.error.CommentNotFoundEx
 import com.albert.commerce.application.service.product.ProductService;
 import com.albert.commerce.application.service.store.StoreService;
 import com.albert.commerce.application.service.user.UserService;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.product.ProductId;
@@ -65,13 +66,14 @@ public class CommentService {
 
     @Transactional
     @ServiceActivator(inputChannel = "CommentDeleteCommand")
-    public void delete(CommentDeleteCommand commentDeleteCommand) {
+    public Success delete(CommentDeleteCommand commentDeleteCommand) {
         var userId = userService.getUserIdByEmail(commentDeleteCommand.getUserEmail());
 
         var commentId = CommentId.from(commentDeleteCommand.getCommandId());
         var comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(CommentNotFoundException::new);
         comment.delete(LocalDateTime.now());
+        return Success.getInstance();
     }
 
     private CommentId getParentCommentId(String parentCommentIdValue) {

@@ -14,6 +14,10 @@ import org.springframework.http.MediaType;
 
 public class ProductSteps {
 
+    public static String 상품을_등록하고_상품_아이디를_반환한다() {
+        return 상품을_등록한다().body().jsonPath().getString("productId");
+    }
+
     public static ExtractableResponse<MockMvcResponse> 상품을_등록한다() {
         Map<String, Object> body = new HashMap<>();
         body.put("productName", "productName");
@@ -21,12 +25,11 @@ public class ProductSteps {
         body.put("description", "description");
         body.put("brand", "brand");
         body.put("category", "category");
-        var response = RestAssuredMockMvc.given().log().all()
+        return RestAssuredMockMvc.given().log().all()
                 .body(body).contentType(MediaType.APPLICATION_JSON)
                 .when().post("/products")
                 .then().log().all()
                 .extract();
-        return response;
     }
 
     public static void 상품_등록_성공_결과_검증한다(ExtractableResponse<MockMvcResponse> response) {
@@ -47,12 +50,11 @@ public class ProductSteps {
         body.put("description", "updatedDescription");
         body.put("brand", "updatedBrand");
         body.put("category", "updatedCategory");
-        var response = RestAssuredMockMvc.given().log().all()
+        return RestAssuredMockMvc.given().log().all()
                 .body(body).contentType(MediaType.APPLICATION_JSON)
                 .put("/products/" + productId)
                 .then().log().all()
                 .extract();
-        return response;
     }
 
     public static void 스토어가_존재_하지_않는_예외_결과_검증한다(ExtractableResponse<MockMvcResponse> response) {
