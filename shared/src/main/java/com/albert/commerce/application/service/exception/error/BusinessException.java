@@ -6,5 +6,5 @@ public abstract class BusinessException extends RuntimeException {
         super(message);
     }
 
-    protected abstract ErrorMessage getErrorMessage();
+    public abstract ErrorMessage getErrorMessage();
 }

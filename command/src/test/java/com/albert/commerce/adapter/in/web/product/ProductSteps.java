@@ -2,6 +2,7 @@ package com.albert.commerce.adapter.in.web.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.albert.commerce.application.service.exception.error.ErrorMessage;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.response.ExtractableResponse;
@@ -57,14 +58,20 @@ public class ProductSteps {
     public static void 스토어가_존재_하지_않는_예외_결과_검증한다(ExtractableResponse<MockMvcResponse> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value()),
-                () -> assertThat(response.jsonPath().getString("error-message")).isEqualTo("스토어가 존재 하지 않습니다.")
+                () -> assertThat(response.jsonPath().getString("error-message"))
+                        .isEqualTo(
+                                ErrorMessage.STORE_NOT_FOUND_ERROR.getMessage()
+                        )
         );
     }
 
     public static void 존재하지_않는_상품_예외_결과_검증한다(ExtractableResponse<MockMvcResponse> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value()),
-                () -> assertThat(response.jsonPath().getString("error-message")).isEqualTo("존재하지 않는 PRODUCT 입니다.")
+                () -> assertThat(response.jsonPath().getString("error-message"))
+                        .isEqualTo(
+                                ErrorMessage.PRODUCT_NOT_FOUND_ERROR.getMessage()
+                        )
         );
     }
 

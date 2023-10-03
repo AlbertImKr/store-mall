@@ -9,7 +9,7 @@ public class CommentNotFoundException extends BusinessException {
     }
 
     @Override
-    protected ErrorMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         return null;
     }
 }

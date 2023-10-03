@@ -13,6 +13,10 @@ import org.springframework.http.MediaType;
 
 public class StoreSteps {
 
+    public static String my_스토어를_등록하고_등록된_스토어_아이디를_반환한다() {
+        return my_스토어를_등록한다().jsonPath().getString("storeId");
+    }
+
     public static ExtractableResponse<MockMvcResponse> my_스토어를_등록한다() {
         Map<String, String> body = new HashMap<>();
         body.put("storeName", "GoodTime");
@@ -42,7 +46,7 @@ public class StoreSteps {
         );
     }
 
-    public static MockMvcResponse my_스토어를_업로드_한다() {
+    public static ExtractableResponse<MockMvcResponse> my_스토어를_업로드_한다() {
         Map<String, Object> body = new HashMap<>();
         body.put("storeName", "goodLife");
         body.put("address", "서울시 강남구 대치4동");
@@ -54,17 +58,17 @@ public class StoreSteps {
                 .body(body).contentType(MediaType.APPLICATION_JSON)
                 .when().put("/stores/my")
                 .then().log().all()
-                .extract().response();
+                .extract();
     }
 
-    public static void my_스토어_업로드_결과_검증(MockMvcResponse response) {
+    public static void my_스토어_업로드_결과_검증(ExtractableResponse<MockMvcResponse> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(204)
         );
     }
 
 
-    public static void my_스토어_존재하지_않은_결과_검증(MockMvcResponse response) {
+    public static void my_스토어_존재하지_않은_결과_검증(ExtractableResponse<MockMvcResponse> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(400),
                 () -> assertThat(response.jsonPath().getString("error-message")).isEqualTo("스토어가 존재 하지 않습니다.")

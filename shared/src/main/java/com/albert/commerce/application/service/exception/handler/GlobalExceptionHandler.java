@@ -1,10 +1,7 @@
 package com.albert.commerce.application.service.exception.handler;
 
+import com.albert.commerce.application.service.exception.error.BusinessException;
 import com.albert.commerce.application.service.exception.error.ErrorResponse;
-import com.albert.commerce.application.service.exception.error.MyStoreNotFoundException;
-import com.albert.commerce.application.service.exception.error.ProductNotFoundException;
-import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;
-import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
 import com.albert.commerce.application.service.exception.error.UnauthorizedModificationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.Link;
@@ -16,46 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(StoreAlreadyExistsException.class)
+    @ExceptionHandler(BusinessException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ErrorResponse storeAlreadyExistsExceptionHandler(
-            StoreAlreadyExistsException storeAlreadyExistsException,
-            HttpServletRequest httpServletRequest) {
-        Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
-        ErrorResponse errorResponse = new ErrorResponse(
-                storeAlreadyExistsException.getErrorMessage());
-        return errorResponse.add(
-                selfRel
-        );
-    }
-
-    @ExceptionHandler(StoreNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ErrorResponse storeExceptionHandler(StoreNotFoundException storeNotFoundException,
-            HttpServletRequest httpServletRequest) {
-        Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
-        ErrorResponse errorResponse = new ErrorResponse(storeNotFoundException.getErrorMessage());
-        return errorResponse.add(
-                selfRel
-        );
-    }
-
-    @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ErrorResponse storeExceptionHandler(ProductNotFoundException productNotFoundException) {
-        return new ErrorResponse(productNotFoundException.getErrorMessage());
-    }
-
-
-    @ExceptionHandler(MyStoreNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ErrorResponse storeExceptionHandler(MyStoreNotFoundException myStoreNotFoundException,
-            HttpServletRequest httpServletRequest) {
-        Link selfRel = Link.of(httpServletRequest.getRequestURL().toString()).withSelfRel();
-        ErrorResponse errorResponse = new ErrorResponse(myStoreNotFoundException.getErrorMessage());
-        return errorResponse.add(
-                selfRel
-        );
+            BusinessException businessException
+    ) {
+        return new ErrorResponse(businessException.getErrorMessage());
     }
 
     @ExceptionHandler(UnauthorizedModificationException.class)

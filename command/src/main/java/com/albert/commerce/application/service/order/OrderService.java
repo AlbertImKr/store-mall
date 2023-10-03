@@ -5,11 +5,13 @@ import com.albert.commerce.application.service.exception.error.OrderNotFoundExce
 import com.albert.commerce.application.service.product.ProductService;
 import com.albert.commerce.application.service.store.StoreService;
 import com.albert.commerce.application.service.user.UserService;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.order.Order;
 import com.albert.commerce.domain.order.OrderId;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
+import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +46,17 @@ public class OrderService {
 
     @Transactional
     @ServiceActivator(inputChannel = "OrderCancelCommand")
-    public void cancel(OrderCancelCommand orderCancelCommand) {
+    public Success cancel(OrderCancelCommand orderCancelCommand) {
         var userId = userService.getUserIdByEmail(orderCancelCommand.getUserEmail());
-        var orderId = OrderId.from(orderCancelCommand.getStoreId());
-        var order = orderRepository.findByUserIdAndOrderId(userId, orderId)
-                .orElseThrow(OrderNotFoundException::new);
+        var orderId = OrderId.from(orderCancelCommand.getOrderId());
+        var order = getOrderByUserIdAndOrderId(userId, orderId);
         order.cancel(LocalDateTime.now());
+        return Success.getInstance();
+    }
+
+    public Order getOrderByUserIdAndOrderId(UserId userId, OrderId orderId) {
+        return orderRepository.findByUserIdAndOrderId(userId, orderId)
+                .orElseThrow(OrderNotFoundException::new);
     }
 
     private OrderId getnewOrderId() {

@@ -55,7 +55,7 @@ class StoreAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("스토어 정보를 업로드 요청시 스토어가 존재하지 않으면 에러를 반환하다")
     @Test
-    void upload_store_info_failed_by_not_exist_store() {
+    void when_upload_store_info_if_store_not_exist_then_return_error() {
         // when
         var response = my_스토어를_업로드_한다();
 

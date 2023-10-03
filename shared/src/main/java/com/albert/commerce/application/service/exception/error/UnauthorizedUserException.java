@@ -9,7 +9,7 @@ public class UnauthorizedUserException extends BusinessException {
     }
 
     @Override
-    protected ErrorMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         return null;
     }
 }
