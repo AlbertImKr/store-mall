@@ -19,7 +19,7 @@ class ProductTest {
     @Test
     void create_product_publish_event() {
         // given
-        ProductId productId = DomainFixture.getProductId();
+        ProductId productId = DomainFixture.getProductId(DomainFixture.PRODUCT_ID_1);
         StoreId storeId = DomainFixture.getStoreId();
         String productName = DomainFixture.PRODUCT_NAME;
         Money productPrice = DomainFixture.getProductPrice();
@@ -64,7 +64,7 @@ class ProductTest {
     @Test
     void upload_product_publish_event() {
         // given
-        Product product = DomainFixture.createProduct();
+        Product product = DomainFixture.createProduct(DomainFixture.PRODUCT_ID_1);
         Events.clear();
 
         String updatedProductName = DomainFixture.UPDATED_PRODUCT_NAME;

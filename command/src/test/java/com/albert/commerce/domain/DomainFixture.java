@@ -2,6 +2,9 @@ package com.albert.commerce.domain;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
+import com.albert.commerce.domain.order.Order;
+import com.albert.commerce.domain.order.OrderDetailRequest;
+import com.albert.commerce.domain.order.OrderId;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.Store;
@@ -9,6 +12,10 @@ import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DomainFixture {
 
@@ -29,7 +36,9 @@ public class DomainFixture {
     public static final String UPLOAD_STORE_PHONE_NUMBER = "010-1111-1111";
     public static final String UPLOAD_STORE_EMAIL = "goodday@email.com";
     public static final String UPLOAD_STORE_OWNER_NAME = "GoodDay co.,ltd";
-    public static final String PRODUCT_ID = "1";
+    public static final String PRODUCT_ID_1 = "1";
+    public static final String PRODUCT_ID_2 = "2";
+    public static final String PRODUCT_ID_3 = "3";
     public static final String PRODUCT_NAME = "흰 티셔츠";
     public static final String PRODUCT_DESCRIPTION = "부드럽다";
     public static final String PRODUCT_BRAND = "GoodLife";
@@ -38,6 +47,7 @@ public class DomainFixture {
     public static final String UPDATED_PRODUCT_BRAND = "GoodDay";
     public static final String UPDATED_PRODUCT_CATEGORY = "면 100%";
     public static final String UPDATED_PRODUCT_DESCRIPTION = "매우 부드럽다";
+    public static final String ORDER_ID = "1L";
 
     public static UserId getUserId() {
         return UserId.from(USER_ID);
@@ -82,16 +92,16 @@ public class DomainFixture {
         return Store.from(storeId, storeRegisterCommand, userId);
     }
 
-    public static ProductId getProductId() {
-        return ProductId.from(PRODUCT_ID);
+    public static ProductId getProductId(String productId) {
+        return ProductId.from(productId);
     }
 
     public static Money getProductPrice() {
         return new Money(100000);
     }
 
-    public static Product createProduct() {
-        ProductId productId = DomainFixture.getProductId();
+    public static Product createProduct(String productIdValue) {
+        ProductId productId = DomainFixture.getProductId(productIdValue);
         StoreId storeId = DomainFixture.getStoreId();
         String productName = DomainFixture.PRODUCT_NAME;
         Money productPrice = DomainFixture.getProductPrice();
@@ -116,5 +126,58 @@ public class DomainFixture {
 
     public static Money getUpdatedProductPrice() {
         return new Money(200000);
+    }
+
+    public static OrderId getOrderId() {
+        return OrderId.from(ORDER_ID);
+    }
+
+    public static Map<String, Long> getProductsIdAndQuantity() {
+        Map<String, Long> productsIdAndQuantity = new HashMap<>();
+        productsIdAndQuantity.put("1", 1L);
+        productsIdAndQuantity.put("2", 2L);
+        productsIdAndQuantity.put("3", 3L);
+        return productsIdAndQuantity;
+    }
+
+    public static List<Product> getProducts() {
+        List<Product> products = new ArrayList<>();
+        products.add(DomainFixture.createProduct(PRODUCT_ID_1));
+        products.add(DomainFixture.createProduct(PRODUCT_ID_2));
+        products.add(DomainFixture.createProduct(PRODUCT_ID_3));
+        return products;
+    }
+
+    public static List<OrderDetailRequest> getExpectedOrderDetailRequests() {
+        List<OrderDetailRequest> orderDetailRequests = new ArrayList<>();
+
+        orderDetailRequests.add(new OrderDetailRequest(DomainFixture.getProductId(
+                DomainFixture.PRODUCT_ID_1),
+                DomainFixture.getProductPrice(), 1,
+                DomainFixture.getProductPrice().multiply(1L)));
+        orderDetailRequests.add(new OrderDetailRequest(DomainFixture.getProductId(
+                DomainFixture.PRODUCT_ID_2),
+                DomainFixture.getProductPrice(), 2,
+                DomainFixture.getProductPrice().multiply(2L)));
+        orderDetailRequests.add(new OrderDetailRequest(DomainFixture.getProductId(
+                DomainFixture.PRODUCT_ID_3),
+                DomainFixture.getProductPrice(), 3,
+                DomainFixture.getProductPrice().multiply(3L)));
+        return orderDetailRequests;
+    }
+
+    public static Order createOrder(OrderId orderId, LocalDateTime createdTime) {
+        StoreId storeId = DomainFixture.getStoreId();
+        Map<String, Long> productsIdAndQuantity = DomainFixture.getProductsIdAndQuantity();
+        List<Product> products = DomainFixture.getProducts();
+        UserId userId = DomainFixture.getUserId();
+        return Order.from(
+                orderId,
+                storeId,
+                productsIdAndQuantity,
+                products,
+                createdTime,
+                userId
+        );
     }
 }
