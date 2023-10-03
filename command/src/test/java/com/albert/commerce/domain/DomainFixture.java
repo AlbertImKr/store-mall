@@ -2,6 +2,7 @@ package com.albert.commerce.domain;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
+import com.albert.commerce.domain.comment.CommentId;
 import com.albert.commerce.domain.order.Order;
 import com.albert.commerce.domain.order.OrderDetailRequest;
 import com.albert.commerce.domain.order.OrderId;
@@ -48,6 +49,9 @@ public class DomainFixture {
     public static final String UPDATED_PRODUCT_CATEGORY = "면 100%";
     public static final String UPDATED_PRODUCT_DESCRIPTION = "매우 부드럽다";
     public static final String ORDER_ID = "1L";
+    public static final String COMMENT_ID = "1";
+    public static final String COMMENT_DETAIL = "매우 좋아요";
+    public static final String PARENT_ID = "1000";
 
     public static UserId getUserId() {
         return UserId.from(USER_ID);
@@ -179,5 +183,13 @@ public class DomainFixture {
                 createdTime,
                 userId
         );
+    }
+
+    public static CommentId getCommentId() {
+        return CommentId.from(COMMENT_ID);
+    }
+
+    public static CommentId getParentCommentId() {
+        return CommentId.from(PARENT_ID);
     }
 }

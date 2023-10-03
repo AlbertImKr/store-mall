@@ -39,7 +39,7 @@ public class Comment {
     private CommentId parentCommentId;
     private String detail;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
             UserId userId, CommentId parentCommentId, String detail, LocalDateTime createdTime,
             LocalDateTime updatedTime) {

@@ -1,5 +1,6 @@
 package com.albert.commerce.application.service.comment;
 
+import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_DELETE_CHANNEL;
 import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_POST_CHANNEL;
 import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_UPDATE_CHANNEL;
 
@@ -68,7 +69,7 @@ public class CommentService {
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = COMMENT_UPDATE_CHANNEL)
+    @ServiceActivator(inputChannel = COMMENT_DELETE_CHANNEL)
     public Success delete(CommentDeleteCommand commentDeleteCommand) {
         var userId = userService.getUserIdByEmail(commentDeleteCommand.getUserEmail());
 
