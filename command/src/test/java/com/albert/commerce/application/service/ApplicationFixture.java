@@ -2,6 +2,7 @@ package com.albert.commerce.application.service;
 
 import com.albert.commerce.application.service.store.StoreDeleteCommand;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
+import com.albert.commerce.domain.order.OrderId;
 import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
@@ -27,6 +28,7 @@ public class ApplicationFixture {
     public static final String USER_ID = "1";
     public static final String STORE_ID = "1";
     public static final String NOT_EXISTS_ID = "not_exists_id";
+    public static final String ORDER_ID = "1";
 
     public static UserId getUserId() {
         return UserId.from(USER_ID);
@@ -51,5 +53,9 @@ public class ApplicationFixture {
 
     public static StoreId getNotExistsStoreId() {
         return StoreId.from(NOT_EXISTS_ID);
+    }
+
+    public static OrderId getOrderId() {
+        return OrderId.from(ORDER_ID);
     }
 }
