@@ -56,9 +56,7 @@ allprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
         testImplementation 'org.springframework.security:spring-security-test:6.0.2'
 
-        // querydsl
-        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+        // annotationProcessor
         annotationProcessor 'jakarta.annotation:jakarta.annotation-api:2.1.1'
         annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 
@@ -135,6 +133,8 @@ project(':command') {
 
 project(':query') {
     dependencies {
+        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
         implementation project(":shared")
         testImplementation project(':shared')
     }
