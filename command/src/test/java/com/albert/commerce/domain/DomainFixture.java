@@ -1,6 +1,9 @@
 package com.albert.commerce.domain;
 
+import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.service.store.StoreRegisterCommand;
+import com.albert.commerce.domain.product.Product;
+import com.albert.commerce.domain.product.ProductId;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
@@ -26,6 +29,15 @@ public class DomainFixture {
     public static final String UPLOAD_STORE_PHONE_NUMBER = "010-1111-1111";
     public static final String UPLOAD_STORE_EMAIL = "goodday@email.com";
     public static final String UPLOAD_STORE_OWNER_NAME = "GoodDay co.,ltd";
+    public static final String PRODUCT_ID = "1";
+    public static final String PRODUCT_NAME = "흰 티셔츠";
+    public static final String PRODUCT_DESCRIPTION = "부드럽다";
+    public static final String PRODUCT_BRAND = "GoodLife";
+    public static final String PRODUCT_CATEGORY = "면 80%";
+    public static final String UPDATED_PRODUCT_NAME = "검증 티셔츠";
+    public static final String UPDATED_PRODUCT_BRAND = "GoodDay";
+    public static final String UPDATED_PRODUCT_CATEGORY = "면 100%";
+    public static final String UPDATED_PRODUCT_DESCRIPTION = "매우 부드럽다";
 
     public static UserId getUserId() {
         return UserId.from(USER_ID);
@@ -68,5 +80,41 @@ public class DomainFixture {
         StoreRegisterCommand storeRegisterCommand = DomainFixture.getStoreRegisterCommand();
         UserId userId = DomainFixture.getUserId();
         return Store.from(storeId, storeRegisterCommand, userId);
+    }
+
+    public static ProductId getProductId() {
+        return ProductId.from(PRODUCT_ID);
+    }
+
+    public static Money getProductPrice() {
+        return new Money(100000);
+    }
+
+    public static Product createProduct() {
+        ProductId productId = DomainFixture.getProductId();
+        StoreId storeId = DomainFixture.getStoreId();
+        String productName = DomainFixture.PRODUCT_NAME;
+        Money productPrice = DomainFixture.getProductPrice();
+        String productDescription = DomainFixture.PRODUCT_DESCRIPTION;
+        String productBrand = DomainFixture.PRODUCT_BRAND;
+        String productCategory = DomainFixture.PRODUCT_CATEGORY;
+        LocalDateTime createdTime = DomainFixture.getCreatedTime();
+        LocalDateTime updatedTime = DomainFixture.getCreatedTime();
+
+        return new Product(
+                productId,
+                storeId,
+                productName,
+                productPrice,
+                productDescription,
+                productBrand,
+                productCategory,
+                createdTime,
+                updatedTime
+        );
+    }
+
+    public static Money getUpdatedProductPrice() {
+        return new Money(200000);
     }
 }

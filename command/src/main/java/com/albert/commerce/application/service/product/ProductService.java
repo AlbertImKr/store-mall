@@ -12,6 +12,7 @@ import com.albert.commerce.application.service.user.UserService;
 import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.product.ProductId;
+import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ProductService {
         var userId = userService.getUserIdByEmail(productCreateCommand.getUserEmail());
         var store = storeService.getStoreByUserId(userId);
         var now = LocalDateTime.now();
-        var product = Product.from(getNewProductId(), productCreateCommand, store, now);
+        var product = createFrom(productCreateCommand, store, now);
         return productRepository.save(product)
                 .getProductId()
                 .getValue();
@@ -85,6 +86,20 @@ public class ProductService {
         var storeId = storeService.getStoreIdByUserId(userId);
         var productId = ProductId.from(productIdValue);
         return getProductByIdAndStoreId(productId, storeId);
+    }
+
+    private Product createFrom(ProductCreateCommand productCreateCommand, Store store, LocalDateTime createdTime) {
+        return new Product(
+                getNewProductId(),
+                store.getStoreId(),
+                productCreateCommand.getProductName(),
+                new Money(productCreateCommand.getPrice()),
+                productCreateCommand.getDescription(),
+                productCreateCommand.getBrand(),
+                productCreateCommand.getCategory(),
+                createdTime,
+                createdTime
+        );
     }
 
     private static void uploadProduct(ProductUpdateCommand productUpdateCommand, Product product) {
