@@ -11,6 +11,9 @@ public class MessageChannelName {
     public static final String PRODUCT_DELETE_CHANNEL = "ProductDeleteCommand";
     public static final String ORDER_PLACE_CHANNEL = "OrderPlaceCommand";
     public static final String ORDER_CANCEL_CHANNEL = "OrderCancelCommand";
+    public static final String COMMENT_POST_CHANNEL = "CommentPostCommand";
+    public static final String COMMENT_UPDATE_CHANNEL = "CommentUpdateCommand";
+    public static final String COMMENT_DELETE_CHANNEL = "CommentDeleteCommand";
 
 
     private MessageChannelName() {
