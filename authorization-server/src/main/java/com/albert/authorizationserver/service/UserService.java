@@ -24,11 +24,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    private boolean isEmailExists(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
     public void login(User user) {
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
@@ -51,5 +46,9 @@ public class UserService {
         }
         User user = joinRequest.toUser(bCryptPasswordEncoder, BCRYPT, USER);
         return userRepository.save(user);
+    }
+
+    private boolean isEmailExists(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

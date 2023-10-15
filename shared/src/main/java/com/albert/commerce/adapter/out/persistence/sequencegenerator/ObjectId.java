@@ -60,8 +60,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
 
 
     /**
-     * Creates an ObjectId using the given time, machine identifier, process identifier, and
-     * counter.
+     * Creates an ObjectId using the given time, machine identifier, process identifier, and counter.
      *
      * @param timestamp the time in seconds
      * @param counter   the counter
@@ -89,20 +88,6 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         this.randomValue2 = randomValue2;
     }
 
-
-    private static void isTrueArgument(String error, boolean flag) {
-        if (!flag) {
-            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
-        }
-    }
-
-    private static Object notNull(String error, Object object) {
-        if (object == null) {
-            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
-        }
-        return object;
-    }
-
     /**
      * Gets a new object id.
      *
@@ -110,34 +95,6 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
      */
     public static ObjectId get() {
         return new ObjectId();
-    }
-
-    private static int dateToTimestampSeconds(final Date time) {
-        return (int) (time.getTime() / 1000);
-    }
-
-    private static byte int3(final int x) {
-        return (byte) (x >> 24);
-    }
-
-    private static byte int2(final int x) {
-        return (byte) (x >> 16);
-    }
-
-    private static byte int1(final int x) {
-        return (byte) (x >> 8);
-    }
-
-    private static byte int0(final int x) {
-        return (byte) (x);
-    }
-
-    private static byte short1(final short x) {
-        return (byte) (x >> 8);
-    }
-
-    private static byte short0(final short x) {
-        return (byte) (x);
     }
 
     /**
@@ -151,15 +108,12 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         return buffer.array();  // using .allocate ensures there is a backing array that can be returned
     }
 
-    // Big-Endian helpers, in this class because all other BSON numbers are little-endian
-
     /**
-     * Convert to bytes and put those bytes to the provided ByteBuffer. Note that the numbers are
-     * stored in big-endian order.
+     * Convert to bytes and put those bytes to the provided ByteBuffer. Note that the numbers are stored in big-endian
+     * order.
      *
      * @param buffer the ByteBuffer
-     * @throws IllegalArgumentException if the buffer is null or does not have at least 12 bytes
-     *                                  remaining
+     * @throws IllegalArgumentException if the buffer is null or does not have at least 12 bytes remaining
      * @since 3.4
      */
     public void putToByteBuffer(final ByteBuffer buffer) {
@@ -179,7 +133,6 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         buffer.put(int1(counter));
         buffer.put(int0(counter));
     }
-
 
     /**
      * Converts this instance into a 24-byte hexadecimal string representation.
@@ -249,6 +202,49 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
     @Override
     public String toString() {
         return toHexString();
+    }
+
+    private static void isTrueArgument(String error, boolean flag) {
+        if (!flag) {
+            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
+        }
+    }
+
+    private static Object notNull(String error, Object object) {
+        if (object == null) {
+            throw new IllegalArgumentException(error + "이 null이면 안됩니다.");
+        }
+        return object;
+    }
+
+    private static int dateToTimestampSeconds(final Date time) {
+        return (int) (time.getTime() / 1000);
+    }
+
+    // Big-Endian helpers, in this class because all other BSON numbers are little-endian
+
+    private static byte int3(final int x) {
+        return (byte) (x >> 24);
+    }
+
+    private static byte int2(final int x) {
+        return (byte) (x >> 16);
+    }
+
+    private static byte int1(final int x) {
+        return (byte) (x >> 8);
+    }
+
+    private static byte int0(final int x) {
+        return (byte) (x);
+    }
+
+    private static byte short1(final short x) {
+        return (byte) (x >> 8);
+    }
+
+    private static byte short0(final short x) {
+        return (byte) (x);
     }
 
 }

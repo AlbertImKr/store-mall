@@ -4,4 +4,3 @@ spring:
     group:
       api: db,oauth2,messaging
 
-

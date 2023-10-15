@@ -39,6 +39,11 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         };
     }
 
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+    }
+
     private void validatePasswordType(String password) {
         if (!Pattern.matches(PASSWORD_PATTERN, password)) {
             throw new PasswordTypeMismatchException("Password Type가 맞지 않습니다");
@@ -59,10 +64,5 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         } else {
             throw new BadCredentialsException("비번이 일치하지 않습니다.");
         }
-    }
-
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

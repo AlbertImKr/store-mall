@@ -14,7 +14,9 @@ public interface ProductRepository {
 
     boolean existsById(ProductId productId);
 
-    Optional<Product> findByStoreIdAndProductId(StoreId storeId, ProductId productId);
+    Optional<Product> findByIdAndStoreId(ProductId productId, StoreId storeId);
 
     ProductId nextId();
+
+    void delete(Product product);
 }

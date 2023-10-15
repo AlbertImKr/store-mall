@@ -2,9 +2,7 @@ package com.albert.commerce.domain.product;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.adapter.out.persistence.converters.MoneyConverter;
-import com.albert.commerce.application.service.product.ProductCreateCommand;
 import com.albert.commerce.domain.event.Events;
-import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -15,12 +13,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "product")
 @Entity
+@Table(name = "product")
 public class Product {
 
     @EmbeddedId
@@ -43,8 +40,7 @@ public class Product {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 
-    @Builder
-    private Product(ProductId productId, StoreId storeId, String productName, Money price,
+    public Product(ProductId productId, StoreId storeId, String productName, Money price,
             String description, String brand, String category, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.productId = productId;
         this.storeId = storeId;
@@ -101,19 +97,5 @@ public class Product {
                 createdTime,
                 updatedTime
         );
-    }
-
-    public static Product from(ProductId productId, ProductCreateCommand productCreateCommand, Store store,
-            LocalDateTime createdTime) {
-        return Product.builder()
-                .productId(productId)
-                .storeId(store.getStoreId())
-                .productName(productCreateCommand.getProductName())
-                .price(new Money(productCreateCommand.getPrice()))
-                .description(productCreateCommand.getDescription())
-                .brand(productCreateCommand.getBrand())
-                .category(productCreateCommand.getCategory())
-                .createdTime(createdTime)
-                .build();
     }
 }

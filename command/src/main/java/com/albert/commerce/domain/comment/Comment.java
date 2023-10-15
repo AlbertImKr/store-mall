@@ -9,6 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,8 +17,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "comment")
 public class Comment {
 
+    protected LocalDateTime createdTime;
+    protected LocalDateTime updatedTime;
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "comment_id", nullable = false))
     private CommentId commentId;
@@ -34,10 +38,8 @@ public class Comment {
     @Embedded
     private CommentId parentCommentId;
     private String detail;
-    protected LocalDateTime createdTime;
-    protected LocalDateTime updatedTime;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Comment(CommentId commentId, ProductId productId, StoreId storeId,
             UserId userId, CommentId parentCommentId, String detail, LocalDateTime createdTime,
             LocalDateTime updatedTime) {
@@ -50,6 +52,19 @@ public class Comment {
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
         Events.raise(toCommentCreatedEvent());
+    }
+
+    public static Comment from(CommentId commentId, ProductId productId, StoreId storeId, UserId userId, String detail,
+            CommentId parentCommentId, LocalDateTime createdTime) {
+        return Comment.builder()
+                .commentId(commentId)
+                .productId(productId)
+                .storeId(storeId)
+                .userId(userId)
+                .detail(detail)
+                .parentCommentId(parentCommentId)
+                .createdTime(createdTime)
+                .build();
     }
 
     public void update(String detail, LocalDateTime updateTime) {
@@ -88,18 +103,5 @@ public class Comment {
 
     private CommentDeletedEvent toCommentDeletedEvent() {
         return new CommentDeletedEvent(this.commentId, this.updatedTime);
-    }
-
-    public static Comment from(CommentId commentId, ProductId productId, StoreId storeId, UserId userId, String detail,
-            CommentId parentCommentId, LocalDateTime createdTime) {
-        return Comment.builder()
-                .commentId(commentId)
-                .productId(productId)
-                .storeId(storeId)
-                .userId(userId)
-                .detail(detail)
-                .parentCommentId(parentCommentId)
-                .createdTime(createdTime)
-                .build();
     }
 }

@@ -34,12 +34,17 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findByStoreIdAndProductId(StoreId storeId, ProductId productId) {
-        return productJpaRepository.findByStoreIdAndProductId(storeId, productId);
+    public Optional<Product> findByIdAndStoreId(ProductId productId, StoreId storeId) {
+        return productJpaRepository.findByProductIdAndStoreId(productId, storeId);
     }
 
     @Override
     public ProductId nextId() {
         return ProductId.from(sequenceGenerator.generate());
+    }
+
+    @Override
+    public void delete(Product product) {
+        productJpaRepository.delete(product);
     }
 }

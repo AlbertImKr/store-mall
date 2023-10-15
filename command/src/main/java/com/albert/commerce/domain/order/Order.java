@@ -4,9 +4,8 @@ import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.domain.event.Events;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.StoreId;
-import com.albert.commerce.domain.user.User;
+import com.albert.commerce.domain.units.DeliveryStatus;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.units.DeliveryStatus;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -52,7 +51,7 @@ public class Order {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Order(OrderId orderId, UserId userId, List<OrderLine> orderLines, StoreId storeId,
             LocalDateTime createdTime,
             LocalDateTime updatedTime) {
@@ -66,13 +65,14 @@ public class Order {
         Events.raise(toOrderCreatedEvent());
     }
 
-    public static Order from(OrderId orderId, User user, StoreId storeId, Map<String, Long> productsIdAndQuantity,
-            List<Product> products, LocalDateTime createdTime) {
+    public static Order from(OrderId orderId, StoreId storeId, Map<String, Long> productsIdAndQuantity,
+            List<Product> products, LocalDateTime createdTime, UserId userId) {
+        List<OrderLine> orderLines = getOrderLines(productsIdAndQuantity, products);
         return Order.builder()
                 .orderId(orderId)
                 .storeId(storeId)
-                .userId(user.getUserId())
-                .orderLines(getOrderLines(productsIdAndQuantity, products))
+                .userId(userId)
+                .orderLines(orderLines)
                 .createdTime(createdTime)
                 .build();
     }
@@ -99,6 +99,10 @@ public class Order {
         );
     }
 
+    private OrderCanceledEvent toOrderCancelEvent() {
+        return new OrderCanceledEvent(this.orderId, this.updatedTime);
+    }
+
     private static List<OrderDetailRequest> toOrderDetailRequests(List<OrderLine> orderLines) {
         return orderLines.stream()
                 .map(Order::toOrderDetailRequests)
@@ -112,10 +116,6 @@ public class Order {
                 orderLine.getQuantity(),
                 orderLine.getAmount()
         );
-    }
-
-    private OrderCanceledEvent toOrderCancelEvent() {
-        return new OrderCanceledEvent(this.orderId, this.updatedTime);
     }
 
     private static List<OrderLine> getOrderLines(Map<String, Long> productsIdAndQuantity, List<Product> products) {

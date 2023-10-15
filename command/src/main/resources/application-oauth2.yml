@@ -15,7 +15,14 @@ spring:
           oidc-client:
             issuer-uri: http://localhost:9000
             user-name-attribute: sub
-
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web:
+          client:
+            RestTemplate: DEBUG
 
 
 

@@ -39,14 +39,14 @@ public class OrderController {
     }
 
 
-    @DeleteMapping("/{storeId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> cancel(
             Principal principal,
-            @PathVariable String storeId,
+            @PathVariable String orderId,
             @RequestBody(required = false) OrderCancelRequest orderCancelRequest
     ) {
         String userEmail = principal.getName();
-        var orderCancelCommand = toOrderCancelCommand(storeId, orderCancelRequest, userEmail);
+        var orderCancelCommand = toOrderCancelCommand(orderId, orderCancelRequest, userEmail);
         commandGateway.request(orderCancelCommand);
         return ResponseEntity.noContent().build();
     }
@@ -59,11 +59,11 @@ public class OrderController {
         );
     }
 
-    private static OrderCancelCommand toOrderCancelCommand(String storeId, OrderCancelRequest orderCancelRequest,
+    private static OrderCancelCommand toOrderCancelCommand(String orderId, OrderCancelRequest orderCancelRequest,
             String userEmail) {
         return new OrderCancelCommand(
                 userEmail,
-                storeId,
+                orderId,
                 orderCancelRequest.description()
         );
     }

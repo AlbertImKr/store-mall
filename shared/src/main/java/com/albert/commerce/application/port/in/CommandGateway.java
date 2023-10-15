@@ -1,6 +1,6 @@
 package com.albert.commerce.application.port.in;
 
-import static com.albert.commerce.config.messaging.command.CommandMessageConfig.COMMAND_CHANNEL;
+import static com.albert.commerce.adapter.out.config.messaging.command.CommandMessageConfig.COMMAND_CHANNEL;
 
 import com.albert.commerce.application.service.Command;
 import org.springframework.integration.annotation.MessagingGateway;

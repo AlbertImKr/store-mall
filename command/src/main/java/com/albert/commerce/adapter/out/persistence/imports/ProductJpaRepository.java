@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductJpaRepository extends JpaRepository<Product, ProductId> {
 
-    Optional<Product> findByStoreIdAndProductId(StoreId storeId, ProductId productId);
+    Optional<Product> findByProductIdAndStoreId(ProductId productId, StoreId storeId);
 }

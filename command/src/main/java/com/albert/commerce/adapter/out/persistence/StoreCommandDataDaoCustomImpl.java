@@ -41,4 +41,9 @@ public class StoreCommandDataDaoCustomImpl implements StoreRepository {
     public StoreId nextId() {
         return StoreId.from(sequenceGenerator.generate());
     }
+
+    @Override
+    public void deleteByUserId(UserId userId) {
+        storeJpaRepository.deleteByUserId(userId);
+    }
 }

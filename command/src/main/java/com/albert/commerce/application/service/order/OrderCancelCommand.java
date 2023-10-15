@@ -5,12 +5,12 @@ import com.albert.commerce.application.service.Command;
 public class OrderCancelCommand extends Command {
 
     private final String userEmail;
-    private final String storeId;
+    private final String orderId;
     private final String description;
 
-    public OrderCancelCommand(String userEmail, String storeId, String description) {
+    public OrderCancelCommand(String userEmail, String orderId, String description) {
         this.userEmail = userEmail;
-        this.storeId = storeId;
+        this.orderId = orderId;
         this.description = description;
     }
 
@@ -18,8 +18,8 @@ public class OrderCancelCommand extends Command {
         return userEmail;
     }
 
-    public String getStoreId() {
-        return storeId;
+    public String getOrderId() {
+        return orderId;
     }
 
     public String getDescription() {

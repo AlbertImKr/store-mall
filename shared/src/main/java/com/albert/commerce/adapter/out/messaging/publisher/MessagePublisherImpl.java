@@ -1,6 +1,6 @@
 package com.albert.commerce.adapter.out.messaging.publisher;
 
-import static com.albert.commerce.config.messaging.command.CommandMessageConfig.COMMAND_CHANNEL;
+import static com.albert.commerce.adapter.out.config.messaging.command.CommandMessageConfig.COMMAND_CHANNEL;
 
 import com.albert.commerce.application.port.out.messaging.MessagePublisher;
 import com.albert.commerce.application.service.Command;
@@ -8,11 +8,13 @@ import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.event.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
+@Profile("messaging")
 @Component
 public class MessagePublisherImpl implements MessagePublisher {
 

@@ -16,4 +16,6 @@ public interface StoreRepository {
     boolean existsById(StoreId storeId);
 
     StoreId nextId();
+
+    void deleteByUserId(UserId userId);
 }

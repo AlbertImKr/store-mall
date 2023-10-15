@@ -1,12 +1,17 @@
 package com.albert.commerce.application.service.store;
 
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_DELETE_CHANNEL;
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_REGISTER_CHANNEL;
+import static com.albert.commerce.domain.units.MessageChannelName.STORE_UPLOAD_CHANNEL;
+
 import com.albert.commerce.application.port.out.StoreRepository;
+import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;
+import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
 import com.albert.commerce.application.service.user.UserService;
+import com.albert.commerce.application.service.utils.Success;
 import com.albert.commerce.domain.store.Store;
 import com.albert.commerce.domain.store.StoreId;
 import com.albert.commerce.domain.user.UserId;
-import com.albert.commerce.exception.error.StoreAlreadyExistsException;
-import com.albert.commerce.exception.error.StoreNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -21,10 +26,10 @@ public class StoreService {
     private final UserService userService;
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreRegisterCommand")
+    @ServiceActivator(inputChannel = STORE_REGISTER_CHANNEL)
     public String create(StoreRegisterCommand storeRegisterCommand) {
         var userId = userService.getUserIdByEmail(storeRegisterCommand.getUserEmail());
-        checkExistsByUserId(userId);
+        validateAlreadyExists(userId);
         var store = Store.from(getNewStoreId(), storeRegisterCommand, userId);
         return storeRepository.save(store)
                 .getStoreId()
@@ -32,44 +37,60 @@ public class StoreService {
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "StoreUploadCommand")
-    public boolean upload(StoreUploadCommand storeUploadCommand) {
+    @ServiceActivator(inputChannel = STORE_UPLOAD_CHANNEL)
+    public Success upload(StoreUploadCommand storeUploadCommand) {
         var userId = userService.getUserIdByEmail(storeUploadCommand.getUserEmail());
-        var store = storeRepository.findByUserId(userId)
-                .orElseThrow(StoreNotFoundException::new);
+        var store = getStoreByUserId(userId);
         uploadStore(storeUploadCommand, store);
-        return true;
+        return Success.getInstance();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @ServiceActivator(inputChannel = STORE_DELETE_CHANNEL)
+    public Success delete(StoreDeleteCommand storeDeleteCommand) {
+        var userId = userService.getUserIdByEmail(storeDeleteCommand.getUserEmail());
+        validateExistsByUserId(userId);
+        storeRepository.deleteByUserId(userId);
+        return Success.getInstance();
+    }
+
     public Store getStoreByUserId(UserId userId) {
         return storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new);
     }
 
-    @Transactional(readOnly = true)
     public StoreId getStoreIdByUserId(UserId userId) {
         return storeRepository.findByUserId(userId)
                 .orElseThrow(StoreNotFoundException::new)
                 .getStoreId();
     }
 
-    @Transactional(readOnly = true)
-    public void checkId(StoreId storeId) {
+    public void checkExist(StoreId storeId) {
         if (storeRepository.existsById(storeId)) {
             return;
         }
         throw new StoreNotFoundException();
     }
 
+
     private StoreId getNewStoreId() {
         return storeRepository.nextId();
     }
 
-    private void checkExistsByUserId(UserId userId) {
-        if (storeRepository.existsByUserId(userId)) {
+    private void validateAlreadyExists(UserId userId) {
+        if (isExistsByUserId(userId)) {
             throw new StoreAlreadyExistsException();
         }
+    }
+
+    private void validateExistsByUserId(UserId userId) {
+        if (!isExistsByUserId(userId)) {
+            throw new StoreNotFoundException();
+        }
+    }
+
+    private boolean isExistsByUserId(UserId userId) {
+        return storeRepository.existsByUserId(userId);
     }
 
     private static void uploadStore(StoreUploadCommand storeUploadCommand, Store store) {

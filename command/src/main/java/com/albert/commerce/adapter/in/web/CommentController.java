@@ -50,7 +50,7 @@ public class CommentController {
         String userEmail = principal.getName();
         var commentUpdateCommand = toCommentUpdateCommand(commentId, commentUpdateRequest, userEmail);
         commandGateway.request(commentUpdateCommand);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{commentId}")
