@@ -2,9 +2,9 @@ package com.albert.commerce.adapter.in.web.security;
 
 import com.albert.commerce.application.service.user.UserService;
 import com.albert.commerce.domain.user.Role;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +31,7 @@ public class WithMockOAuth2UserSecurityContextFactory implements WithSecurityCon
     public SecurityContext createSecurityContext(WithMockOAuth2User annotation) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        Collection<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(Role.USER.getKey()));
+        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(Role.USER.getKey()));
 
         OAuth2User oAuth2User = new DefaultOAuth2User(authorities,
                 Collections.singletonMap(ATTRIBUTE_EMAIL_KEY, annotation.username()), NAME_ATTRIBUTE_KEY);
