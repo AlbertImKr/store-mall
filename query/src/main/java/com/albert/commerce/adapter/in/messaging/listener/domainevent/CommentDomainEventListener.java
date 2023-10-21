@@ -34,12 +34,12 @@ public class CommentDomainEventListener {
 
     @ServiceActivator(inputChannel = DomainEventChannelNames.COMMENT_POSTED_EVENT)
     public void handleCommentPostedCommand(CommentPostedEvent commentPostedEvent) {
-        var product = productJpaRepository.findById(commentPostedEvent.productId())
-                .orElseThrow(ProductNotFoundException::new);
         var user = userJpaRepository.findById(commentPostedEvent.userId())
                 .orElseThrow(UserNotFoundException::new);
         var store = storeJpaRepository.findById(commentPostedEvent.storeId())
                 .orElseThrow(StoreNotFoundException::new);
+        var product = productJpaRepository.findById(commentPostedEvent.productId())
+                .orElseThrow(ProductNotFoundException::new);
         var comment = toComment(commentPostedEvent, product, user, store);
         commentJpaRepository.save(comment);
     }
