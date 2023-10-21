@@ -71,6 +71,41 @@ services:
       KAFKA_MESSAGE_MAX_BYTES: 10485760
       KAFKA_REPLICA_FETCH_MAX_BYTES: 10485760
 
+  kafka-destination:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper-destination # 대상 Kafka는 별도의 Zookeeper에 종속적임
+    ports:
+      - "9093:9092" # 원본 Kafka와 포트 충돌을 피하기 위해 외부 포트를 9093으로 설정
+    environment:
+      KAFKA_BROKER_ID: 2 # 고유한 브로커 ID로 설정
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-destination:2181 # 대상 Zookeeper 연결
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-destination:29092,PLAINTEXT_HOST://${DOCKER_HOST_IP:-localhost}:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_MESSAGE_MAX_BYTES: 10485760
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 10485760
+
+  zookeeper-destination:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2182:2181" # 기존 Zookeeper와 포트 충돌을 피하기 위해 2182 포트 사용
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # 내부 클라이언트와의 통신 포트는 동일하게 유지
+      ZOOKEEPER_TICK_TIME: 2000 # 타이머 틱 시간은 동일하게 유지
+
+  mirror-maker:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka
+      - kafka-destination
+    command: kafka-mirror-maker --consumer.config /etc/kafka/source-cluster-consumer.properties --producer.config /etc/kafka/target-cluster-producer.properties --whitelist=".*"
+    volumes:
+      - ./source-cluster-consumer.properties:/etc/kafka/source-cluster-consumer.properties
+      - ./target-cluster-producer.properties:/etc/kafka/target-cluster-producer.properties
+
   # Dev 환경의 Kafka UI 설정 (Kafka 클러스터 모니터링 도구)
   kafka-ui:
     image: provectuslabs/kafka-ui:latest # Kafka UI 이미지
@@ -80,6 +115,16 @@ services:
       KAFKA_CLUSTERS_0_NAME: local-environment # 클러스터 이름
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092 # 부트스트랩 서버 정보
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181 # Zookeeper 연결 정보
+
+  # Dev 환경의 Kafka UI 설정 (Kafka 클러스터 모니터링 도구)
+  kafka-destination-ui:
+    image: provectuslabs/kafka-ui:latest # Kafka UI 이미지
+    ports:
+      - "9998:8080"  # Kafka UI 포트 매핑
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-environment # 클러스터 이름
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-destination:29092 # 부트스트랩 서버 정보
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper-destination:2181 # Zookeeper 연결 정보
 
   # Dev 환경의 Redis 설정 (인메모리 데이터 저장소)
   query-redis:
