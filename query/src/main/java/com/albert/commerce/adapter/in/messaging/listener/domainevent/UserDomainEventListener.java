@@ -5,10 +5,11 @@ import com.albert.commerce.adapter.in.messaging.listener.domainevent.dto.UserUpd
 import com.albert.commerce.adapter.out.config.cache.CacheValue;
 import com.albert.commerce.adapter.out.persistence.imports.UserJpaRepository;
 import com.albert.commerce.application.service.exception.error.UserNotFoundException;
+import com.albert.commerce.domain.units.DomainEventChannelNames;
 import com.albert.commerce.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +19,14 @@ public class UserDomainEventListener {
 
     private final UserJpaRepository userJpaRepository;
 
-    @KafkaListener(topics = "UserRegisteredEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.USER_REGISTERED_EVENT)
     public void handleUserRegisteredEvent(UserRegisteredEvent userRegisteredEvent) {
         userJpaRepository.save(toUser(userRegisteredEvent));
     }
 
     @Transactional
     @CacheEvict(value = CacheValue.USER, key = "#userUpdatedEvent.userId().value")
-    @KafkaListener(topics = "UserUpdatedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.USER_UPDATED_EVENT)
     public void handleUserUpdateEvent(UserUpdatedEvent userUpdatedEvent) {
         User user = userJpaRepository.findById(userUpdatedEvent.userId())
                 .orElseThrow(UserNotFoundException::new);

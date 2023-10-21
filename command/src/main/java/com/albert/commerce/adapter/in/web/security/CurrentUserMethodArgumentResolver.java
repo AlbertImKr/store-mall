@@ -14,8 +14,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-    public static final String EMAIL = "email";
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().isAssignableFrom(String.class) &&
@@ -29,7 +27,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
         if (authentication == null || !isOAuth2UserPrincipal(authentication)) {
             throw new UnauthorizedUserException();
         }
-        String email = ((OAuth2User) authentication.getPrincipal()).getAttribute(EMAIL);
+        String email = ((OAuth2User) authentication.getPrincipal()).getName();
         if (email == null) {
             throw new UnauthorizedUserException();
         }

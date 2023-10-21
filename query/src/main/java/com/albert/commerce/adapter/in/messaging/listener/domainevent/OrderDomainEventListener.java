@@ -18,11 +18,12 @@ import com.albert.commerce.domain.order.OrderDetail;
 import com.albert.commerce.domain.order.OrderDetails;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
+import com.albert.commerce.domain.units.DomainEventChannelNames;
 import com.albert.commerce.domain.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class OrderDomainEventListener {
     private final ProductJpaRepository productJpaRepository;
     private final StoreJpaRepository storeJpaRepository;
 
-    @KafkaListener(topics = "OrderPlacedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.ORDER_PLACED_EVENT)
     public void handleOrderPlacedEvent(OrderPlacedEvent orderPlacedEvent) {
         var user = userJpaRepository.findById(orderPlacedEvent.userId())
                 .orElseThrow(UserNotFoundException::new);
@@ -47,7 +48,7 @@ public class OrderDomainEventListener {
     }
 
     @CacheEvict(value = CacheValue.ORDER, key = "#orderCanceledEvent.orderId().value")
-    @KafkaListener(topics = "OrderCanceledEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.ORDER_CANCELED_EVENT)
     public void handleOrderCanceledEvent(OrderCanceledEvent orderCanceledEvent) {
         var order = orderJpaRepository.findById(orderCanceledEvent.orderId())
                 .orElseThrow(OrderNotFoundException::new);

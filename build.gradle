@@ -133,8 +133,6 @@ project(':command') {
 
 project(':query') {
     dependencies {
-        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
         implementation project(":shared")
         testImplementation project(':shared')
     }

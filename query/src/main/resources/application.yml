@@ -4,4 +4,4 @@ spring:
   profiles:
     active: query
     group:
-      query: db,kafka,messaging,cache
+      query: db,kafka,messaging,cache,listener

@@ -6,9 +6,10 @@ import com.albert.commerce.adapter.out.config.cache.CacheValue;
 import com.albert.commerce.adapter.out.persistence.imports.StoreJpaRepository;
 import com.albert.commerce.application.service.exception.error.StoreNotFoundException;
 import com.albert.commerce.domain.store.Store;
+import com.albert.commerce.domain.units.DomainEventChannelNames;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ public class StoreDomainEventListener {
 
     private final StoreJpaRepository storeJpaRepository;
 
-    @KafkaListener(topics = "StoreRegisteredEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.STORE_REGISTERED_EVENT)
     public void handleStoreRegisteredEvent(StoreRegisteredEvent storeRegisteredEvent) {
         var store = toStore(storeRegisteredEvent);
         storeJpaRepository.save(store);
@@ -26,13 +27,12 @@ public class StoreDomainEventListener {
 
     @Transactional
     @CacheEvict(value = CacheValue.STORE, key = "#storeUploadedEvent.storeId().value")
-    @KafkaListener(topics = "StoreUploadedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.STORE_UPLOADED_EVENT)
     public void handleStoreUploadedEvent(StoreUploadedEvent storeUploadedEvent) {
         var store = storeJpaRepository.findById((storeUploadedEvent.storeId()))
                 .orElseThrow(StoreNotFoundException::new);
         upload(storeUploadedEvent, store);
     }
-
 
     private static void upload(StoreUploadedEvent storeUploadedEvent, Store store) {
         store.update(

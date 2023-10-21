@@ -15,10 +15,11 @@ import com.albert.commerce.application.service.exception.error.UserNotFoundExcep
 import com.albert.commerce.domain.comment.Comment;
 import com.albert.commerce.domain.product.Product;
 import com.albert.commerce.domain.store.Store;
+import com.albert.commerce.domain.units.DomainEventChannelNames;
 import com.albert.commerce.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class CommentDomainEventListener {
     private final StoreJpaRepository storeJpaRepository;
     private final UserJpaRepository userJpaRepository;
 
-    @KafkaListener(topics = "CommentPostedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.COMMENT_POSTED_EVENT)
     public void handleCommentPostedCommand(CommentPostedEvent commentPostedEvent) {
         var product = productJpaRepository.findById(commentPostedEvent.productId())
                 .orElseThrow(ProductNotFoundException::new);
@@ -45,7 +46,7 @@ public class CommentDomainEventListener {
 
     @Transactional
     @CacheEvict(value = CacheValue.COMMENT, key = "#commentUpdatedEvent.commentId().value")
-    @KafkaListener(topics = "CommentUpdatedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.COMMENT_UPDATED_EVENT)
     public void handleCommentUpdatedEvent(CommentUpdatedEvent commentUpdatedEvent) {
         var comment = commentJpaRepository.findById(commentUpdatedEvent.commentId())
                 .orElseThrow(CommentNotFoundException::new);
@@ -54,7 +55,7 @@ public class CommentDomainEventListener {
 
     @Transactional
     @CacheEvict(value = CacheValue.COMMENT, key = "#commentDeletedEvent.commentId().value")
-    @KafkaListener(topics = "CommentDeletedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.COMMENT_DELETED_EVENT)
     public void handleCommentDeletedEvent(CommentDeletedEvent commentDeletedEvent) {
         var comment = commentJpaRepository.findById(commentDeletedEvent.commentId())
                 .orElseThrow(CommentNotFoundException::new);

@@ -3,6 +3,7 @@ commerce:
     base-package:
       command: com.albert.commerce.application.service
       domain-event: com.albert.commerce.domain
+      domain-event-dto: com.albert.commerce.adapter.in.messaging.listener.domainevent.dto
     task-executor:
       core-pool-size: 8
       max-pool-size: 16
@@ -12,7 +13,7 @@ commerce:
 spring:
   kafka:
     consumer:
-      group-id: command
+      group-id: domain-event
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     bootstrap-servers: localhost:9092

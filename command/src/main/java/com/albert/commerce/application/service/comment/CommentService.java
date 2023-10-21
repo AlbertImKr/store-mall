@@ -1,8 +1,8 @@
 package com.albert.commerce.application.service.comment;
 
-import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_DELETE_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_POST_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.COMMENT_UPDATE_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.COMMENT_DELETE_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.COMMENT_POST_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.COMMENT_UPDATE_CHANNEL;
 
 import com.albert.commerce.application.port.out.CommentRepository;
 import com.albert.commerce.application.service.exception.error.CommentNotFoundException;

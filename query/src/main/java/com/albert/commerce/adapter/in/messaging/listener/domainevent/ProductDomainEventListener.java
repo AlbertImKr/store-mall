@@ -6,9 +6,10 @@ import com.albert.commerce.adapter.out.config.cache.CacheValue;
 import com.albert.commerce.adapter.out.persistence.imports.ProductJpaRepository;
 import com.albert.commerce.application.service.exception.error.ProductNotFoundException;
 import com.albert.commerce.domain.product.Product;
+import com.albert.commerce.domain.units.DomainEventChannelNames;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ public class ProductDomainEventListener {
 
     private final ProductJpaRepository productJpaRepository;
 
-    @KafkaListener(topics = "ProductCreatedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.PRODUCT_CREATED_EVENT)
     public void handleProductCreatedEvent(ProductCreatedEvent productCreatedEvent) {
         var product = toProduct(productCreatedEvent);
         productJpaRepository.save(product);
@@ -26,7 +27,7 @@ public class ProductDomainEventListener {
 
     @Transactional
     @CacheEvict(value = CacheValue.PRODUCT, key = "#productUpdatedEvent.productId().value")
-    @KafkaListener(topics = "ProductUpdatedEvent")
+    @ServiceActivator(inputChannel = DomainEventChannelNames.PRODUCT_UPDATED_EVENT)
     public void handleProductUpdatedEvent(ProductUpdatedEvent productUpdatedEvent) {
         var product = productJpaRepository.findById(productUpdatedEvent.productId())
                 .orElseThrow(ProductNotFoundException::new);

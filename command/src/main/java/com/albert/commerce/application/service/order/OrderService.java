@@ -1,7 +1,8 @@
 package com.albert.commerce.application.service.order;
 
-import static com.albert.commerce.domain.units.MessageChannelName.ORDER_CANCEL_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.ORDER_PLACE_CHANNEL;
+
+import static com.albert.commerce.domain.units.CommandChannelNames.ORDER_CANCEL_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.ORDER_PLACE_CHANNEL;
 
 import com.albert.commerce.application.port.out.OrderRepository;
 import com.albert.commerce.application.service.exception.error.OrderNotFoundException;
