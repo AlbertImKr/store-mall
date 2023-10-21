@@ -1,6 +1,7 @@
 package com.albert.commerce.adapter.out.config.messaging.domainevent;
 
 import static com.albert.commerce.domain.units.DomainEventChannelNames.DOMAIN_EVENT_CHANNEL;
+import static com.albert.commerce.domain.units.DomainEventChannelNames.ERROR_CHANNEL;
 
 import com.albert.commerce.domain.event.DomainEvent;
 import com.albert.commerce.domain.event.DomainEventDTO;
@@ -87,7 +88,6 @@ public class DomainEventMessageConfig {
             DomainEventDTOResolver domainEventDTOResolver,
             IntegrationFlowContext flowContext,
             ConsumerFactory<Object, Object> consumerFactory
-
     ) {
         for (String channelName : domainEventDTOResolver.getChannelNames()) {
             Class<?> payloadType = domainEventDTOResolver.get(channelName);
@@ -115,12 +115,12 @@ public class DomainEventMessageConfig {
     private KafkaMessageDrivenChannelAdapterListenerContainerSpec<Object, Object> getChannelAdapterListenerContainerSpec(
             String channelName,
             ConsumerFactory<Object, Object> consumerFactory,
-            Class<?> payloadType
-    ) {
-        var messageProducerSpec = Kafka.messageDrivenChannelAdapter(consumerFactory, channelName);
+            Class<?> payloadType) {
+        var messageDrivenChannelAdapter = Kafka.messageDrivenChannelAdapter(consumerFactory, channelName);
         StringJsonMessageConverter messageConverter = new StringJsonMessageConverter(objectMapper);
-        messageProducerSpec.messageConverter(messageConverter);
-        messageProducerSpec.payloadType(payloadType);
-        return messageProducerSpec;
+        messageDrivenChannelAdapter.messageConverter(messageConverter);
+        messageDrivenChannelAdapter.payloadType(payloadType);
+        messageDrivenChannelAdapter.errorChannel(ERROR_CHANNEL);
+        return messageDrivenChannelAdapter;
     }
 }
