@@ -21,27 +21,8 @@ jobs:
         run: ./gradlew :command:build
       - name: Run gradle query build
         run: ./gradlew :query:build
-  coveralls:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-      - name: Run Docker.yml file with docker compose
-        run: docker compose -f docker.yml up -d
-      - name: Give gradlew permission
-        run: chmod +x gradlew
-      - name: Run gradle authorization-server test
-        run: ./gradlew :authorization-server:test
-      - name: Run gradle command test
-        run: ./gradlew :command:test
-      - name: Run gradle query test
-        run: ./gradlew :query:test
       - name: Push to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           base-path: '**/build/reports/jacoco/test'
+
