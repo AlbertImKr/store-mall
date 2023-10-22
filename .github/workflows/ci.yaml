@@ -12,7 +12,7 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
       - name: Run Docker.yml file with docker compose
-        run: docker compose -f docker.yml up
+        run: docker compose -f docker.yml up -d
       - name: Give gradlew permission
         run: chmod +x gradlew
       - name: Run gradle authorization-server build
