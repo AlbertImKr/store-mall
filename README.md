@@ -32,3 +32,6 @@
 ![erd](https://user-images.githubusercontent.com/99056666/240258445-fda99f99-7041-4ed2-a972-a1569a31c4cb.png)
 
 
+## Cloud 구조 설계
+![image](https://github.com/AlbertImKr/spring-boot-commerce-project/assets/99056666/f3e9727f-a386-454f-a7a6-993354db7d02)
+
