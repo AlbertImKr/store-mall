@@ -1,8 +1,9 @@
 package com.albert.commerce.application.service.store;
 
-import static com.albert.commerce.domain.units.MessageChannelName.STORE_DELETE_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.STORE_REGISTER_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.STORE_UPLOAD_CHANNEL;
+
+import static com.albert.commerce.domain.units.CommandChannelNames.STORE_DELETE_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.STORE_REGISTER_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.STORE_UPLOAD_CHANNEL;
 
 import com.albert.commerce.application.port.out.StoreRepository;
 import com.albert.commerce.application.service.exception.error.StoreAlreadyExistsException;

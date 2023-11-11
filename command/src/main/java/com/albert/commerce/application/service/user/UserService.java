@@ -1,6 +1,6 @@
 package com.albert.commerce.application.service.user;
 
-import static com.albert.commerce.domain.units.MessageChannelName.USER_UPLOAD_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.USER_UPLOAD_CHANNEL;
 
 import com.albert.commerce.application.port.out.UserRepository;
 import com.albert.commerce.application.service.exception.error.UserNotFoundException;

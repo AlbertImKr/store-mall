@@ -1,8 +1,14 @@
 package com.albert.commerce.adapter.out.config.messaging.domainevent;
 
+import static com.albert.commerce.domain.units.DomainEventChannelNames.DOMAIN_EVENT_CHANNEL;
+import static com.albert.commerce.domain.units.DomainEventChannelNames.ERROR_CHANNEL;
+
 import com.albert.commerce.domain.event.DomainEvent;
+import com.albert.commerce.domain.event.DomainEventDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,41 +16,34 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.integration.channel.PublishSubscribeChannel;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.context.IntegrationFlowContext;
 import org.springframework.integration.endpoint.EventDrivenConsumer;
+import org.springframework.integration.kafka.dsl.Kafka;
+import org.springframework.integration.kafka.dsl.KafkaMessageDrivenChannelAdapterSpec.KafkaMessageDrivenChannelAdapterListenerContainerSpec;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 
 @Profile("messaging")
+@RequiredArgsConstructor
 @Configuration
 public class DomainEventMessageConfig {
 
-    public static final String DOMAIN_EVENT_CHANNEL = "domainEventChannel";
-
+    private final ObjectMapper objectMapper;
     @Value("${commerce.messaging.base-package.domain-event}")
     private String domainEventBasePackage;
+    @Value("${commerce.messaging.base-package.domain-event-dto}")
+    private String domainEventDTOPackage;
 
     @Bean
     public DomainEventClassResolver domainEventClassResolver() {
         Reflections reflections = new Reflections(domainEventBasePackage);
-        Set<Class<? extends DomainEvent>> domainEventClasses = reflections.getSubTypesOf(DomainEvent.class);
-        return new DomainEventClassResolver(domainEventClasses);
-    }
-
-    @Bean
-    public boolean registerChannel(
-            GenericWebApplicationContext context,
-            @Qualifier("messageTaskExecutor") TaskExecutor messageTaskExecutor,
-            DomainEventClassResolver domainEventClassResolver
-    ) {
-        for (String className : domainEventClassResolver.getClassNames()) {
-            PublishSubscribeChannel channel = new PublishSubscribeChannel(messageTaskExecutor);
-            context.registerBean(className, PublishSubscribeChannel.class, () -> channel);
-        }
-        return true;
+        Set<Class<? extends DomainEvent>> classes = reflections.getSubTypesOf(DomainEvent.class);
+        return new DomainEventClassResolver(classes);
     }
 
     @Bean(DOMAIN_EVENT_CHANNEL)
@@ -75,5 +74,53 @@ public class DomainEventMessageConfig {
             MessageChannel messageChannel = applicationContext.getBean(domainEventClassName, MessageChannel.class);
             messageChannel.send(message);
         };
+    }
+
+    @Bean
+    public DomainEventDTOResolver domainEventDTOResolver() {
+        Reflections reflections = new Reflections(domainEventDTOPackage);
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(DomainEventDTO.class);
+        return new DomainEventDTOResolver(classes);
+    }
+
+    @Bean
+    public boolean registerFlow(
+            DomainEventDTOResolver domainEventDTOResolver,
+            IntegrationFlowContext flowContext,
+            ConsumerFactory<Object, Object> consumerFactory
+    ) {
+        for (String channelName : domainEventDTOResolver.getChannelNames()) {
+            Class<?> payloadType = domainEventDTOResolver.get(channelName);
+            var messageProducerSpec = getChannelAdapterListenerContainerSpec(
+                    channelName,
+                    consumerFactory,
+                    payloadType
+            );
+            IntegrationFlow flow = createFlowForChannel(channelName, messageProducerSpec);
+            flowContext.registration(flow).register();
+        }
+        return true;
+    }
+
+    private IntegrationFlow createFlowForChannel(
+            String channelName,
+            KafkaMessageDrivenChannelAdapterListenerContainerSpec<Object, Object> producerSpec
+    ) {
+        return IntegrationFlow
+                .from(producerSpec)
+                .channel(channelName)
+                .get();
+    }
+
+    private KafkaMessageDrivenChannelAdapterListenerContainerSpec<Object, Object> getChannelAdapterListenerContainerSpec(
+            String channelName,
+            ConsumerFactory<Object, Object> consumerFactory,
+            Class<?> payloadType) {
+        var messageDrivenChannelAdapter = Kafka.messageDrivenChannelAdapter(consumerFactory, channelName);
+        StringJsonMessageConverter messageConverter = new StringJsonMessageConverter(objectMapper);
+        messageDrivenChannelAdapter.messageConverter(messageConverter);
+        messageDrivenChannelAdapter.payloadType(payloadType);
+        messageDrivenChannelAdapter.errorChannel(ERROR_CHANNEL);
+        return messageDrivenChannelAdapter;
     }
 }

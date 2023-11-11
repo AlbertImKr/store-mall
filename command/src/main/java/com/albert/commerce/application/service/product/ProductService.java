@@ -1,8 +1,9 @@
 package com.albert.commerce.application.service.product;
 
-import static com.albert.commerce.domain.units.MessageChannelName.PRODUCT_CREATE_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.PRODUCT_DELETE_CHANNEL;
-import static com.albert.commerce.domain.units.MessageChannelName.PRODUCT_UPDATE_CHANNEL;
+
+import static com.albert.commerce.domain.units.CommandChannelNames.PRODUCT_CREATE_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.PRODUCT_DELETE_CHANNEL;
+import static com.albert.commerce.domain.units.CommandChannelNames.PRODUCT_UPDATE_CHANNEL;
 
 import com.albert.commerce.adapter.out.persistence.Money;
 import com.albert.commerce.application.port.out.ProductRepository;

@@ -1,6 +1,6 @@
 package com.albert.commerce.domain.units;
 
-public class MessageChannelName {
+public class CommandChannelNames {
 
     public static final String USER_UPLOAD_CHANNEL = "UserUploadCommand";
     public static final String STORE_REGISTER_CHANNEL = "StoreRegisterCommand";
@@ -14,9 +14,9 @@ public class MessageChannelName {
     public static final String COMMENT_POST_CHANNEL = "CommentPostCommand";
     public static final String COMMENT_UPDATE_CHANNEL = "CommentUpdateCommand";
     public static final String COMMENT_DELETE_CHANNEL = "CommentDeleteCommand";
+    public static final String LOGIN_CHANNEL = "LoginCommand";
 
-
-    private MessageChannelName() {
+    private CommandChannelNames() {
         throw new IllegalStateException("Utility class");
     }
 }

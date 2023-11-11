@@ -5,21 +5,22 @@ import com.albert.authorizationserver.dto.JoinRequest;
 import com.albert.authorizationserver.service.CustomUserDetails;
 import com.albert.authorizationserver.service.CustomUserDetailsService;
 import com.albert.authorizationserver.service.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
+import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
+@Component
 public class TestSecurityContextFactory implements WithSecurityContextFactory<WithTestUser> {
 
     private static final String RIGHT_8_PASSWORD = "kkkkk!1S";
-
-    private final UserService userService;
-    private final CustomUserDetailsService customUserDetailsService;
-
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     public SecurityContext createSecurityContext(WithTestUser withTestUser) {

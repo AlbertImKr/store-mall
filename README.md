@@ -1,5 +1,7 @@
 # Toy Project
 
+[![Coverage Status](https://coveralls.io/repos/github/AlbertImKr/spring-boot-commerce-project/badge.svg)](https://coveralls.io/github/AlbertImKr/spring-boot-commerce-project)
+
 ## 프로젝트 구성
 
 - API Server
