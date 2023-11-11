@@ -15,12 +15,11 @@ jobs:
         run: docker compose -f docker.yml up -d
       - name: Give gradlew permission
         run: chmod +x gradlew
-      - name: Run gradle authorization-server build
-        run: ./gradlew :authorization-server:build
-      - name: Run gradle command build
-        run: ./gradlew :command:build
-      - name: Run gradle query build
-        run: ./gradlew :query:build
+      - name: Build Projects
+        run: |
+          ./gradlew :authorization-server:build
+          ./gradlew :command:build
+          ./gradlew :query:build
       - name: Push to Coveralls
         uses: coverallsapp/github-action@v2
         with:
